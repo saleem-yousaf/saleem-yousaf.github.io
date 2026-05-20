@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise Zero Trust Secure Landing Zone Reference Architecture | Saleem Yousaf</title>
+<meta name="description" content="A technical deep dive into enterprise Zero Trust secure landing zone design across AWS and Azure. Covering network segmentation, Palo Alto, Fortinet, Zscaler SSE, SIEM and XSOAR integration. By Saleem Yousaf.">
+<meta name="author" content="Saleem Yousaf">
+<link rel="canonical" href="https://saleem-yousaf.github.io/articles/zero-trust-landing-zone/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:         #090c10;
+  --bg2:        #0f1318;
+  --bg3:        #161b22;
+  --border:     rgba(255,255,255,0.07);
+  --border2:    rgba(255,255,255,0.12);
+  --text:       #e6eaf0;
+  --muted:      #7a8694;
+  --muted2:     #4a5568;
+  --teal:       #2dd4bf;
+  --teal-dim:   rgba(45,212,191,0.12);
+  --amber:      #f59e0b;
+  --amber-dim:  rgba(245,158,11,0.10);
+  --purple:     #a78bfa;
+  --purple-dim: rgba(167,139,250,0.10);
+  --mono:       'DM Mono', monospace;
+  --display:    'Syne', sans-serif;
+  --body:       'Inter', sans-serif;
+  --prose-max:  680px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--body); font-size: 16px; line-height: 1.7;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image: linear-gradient(rgba(45,212,191,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(45,212,191,0.015) 1px, transparent 1px);
+  background-size: 40px 40px; pointer-events: none; z-index: 0;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(9,12,16,0.88); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+}
+.nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+.nav-logo { font-family: var(--display); font-size: 15px; font-weight: 700; color: var(--text); text-decoration: none; letter-spacing: 0.02em; }
+.nav-logo span { color: var(--teal); }
+.nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+.nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; letter-spacing: 0.03em; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+.nav-links a.active { color: var(--teal); }
+.nav-dropdown { position: relative; }
+.nav-dropdown-toggle { font-size: 13px; color: var(--muted); background: none; border: none; cursor: pointer; letter-spacing: 0.03em; display: flex; align-items: center; gap: 5px; font-family: var(--body); padding: 0; transition: color 0.2s; }
+.nav-dropdown-toggle:hover { color: var(--text); }
+.nav-dropdown-toggle svg { transition: transform 0.2s; }
+.nav-dropdown:hover .nav-dropdown-toggle svg { transform: rotate(180deg); }
+.nav-dropdown-menu { position: absolute; top: calc(100% + 16px); left: 50%; transform: translateX(-50%); background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 8px; min-width: 220px; opacity: 0; pointer-events: none; transition: opacity 0.15s, top 0.15s; z-index: 200; }
+.nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: all; top: calc(100% + 8px); }
+.nav-dropdown-menu a { display: block; padding: 9px 14px; font-size: 13px; color: var(--muted); text-decoration: none; border-radius: 5px; transition: background 0.15s, color 0.15s; white-space: nowrap; }
+.nav-dropdown-menu a:hover { background: var(--bg3); color: var(--text); }
+.nav-dropdown-menu a.active { color: var(--teal); }
+.nav-cta { font-size: 13px; font-weight: 500; color: var(--teal) !important; border: 1px solid rgba(45,212,191,0.3); padding: 6px 16px; border-radius: 4px; transition: background 0.2s, border-color 0.2s !important; }
+.nav-cta:hover { background: var(--teal-dim); border-color: var(--teal) !important; }
+
+/* ── ARTICLE HERO ── */
+.article-hero {
+  padding: 120px 0 64px; border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.article-hero-glow {
+  position: absolute; top: -120px; right: -120px;
+  width: 560px; height: 560px;
+  background: radial-gradient(circle, rgba(45,212,191,0.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero-wrap { max-width: 860px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+.article-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+.article-eyebrow-line { width: 24px; height: 1px; background: var(--teal); }
+.article-tag { font-family: var(--mono); font-size: 10px; padding: 4px 10px; border-radius: 3px; letter-spacing: 0.06em; text-transform: uppercase; }
+.article-tag.teal   { background: var(--teal-dim);   color: var(--teal); }
+.article-tag.amber  { background: var(--amber-dim);  color: var(--amber); }
+.article-tag.purple { background: var(--purple-dim); color: var(--purple); }
+.article-title {
+  font-family: var(--display); font-size: clamp(28px, 3.5vw, 46px);
+  font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; color: #fff;
+  margin-bottom: 20px;
+}
+.article-intro { font-size: 18px; line-height: 1.75; color: var(--muted); margin-bottom: 32px; }
+.article-meta-bar {
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  padding-top: 24px; border-top: 1px solid var(--border);
+}
+.meta-item { display: flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 12px; color: var(--muted2); }
+.meta-item svg { color: var(--teal); }
+.meta-divider { width: 1px; height: 14px; background: var(--border2); }
+
+/* ── ARTICLE LAYOUT ── */
+.article-layout {
+  max-width: 1100px; margin: 0 auto; padding: 64px 32px;
+  display: grid; grid-template-columns: 1fr 240px;
+  gap: 64px; align-items: start; position: relative; z-index: 1;
+}
+
+/* ── TOC SIDEBAR ── */
+.toc {
+  position: sticky; top: 80px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 24px; max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+.toc::-webkit-scrollbar { width: 4px; }
+.toc::-webkit-scrollbar-track { background: transparent; }
+.toc::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+.toc-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); margin-bottom: 16px; }
+.toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+.toc-item a {
+  font-size: 12px; color: var(--muted); text-decoration: none;
+  display: block; padding: 6px 10px; border-radius: 4px;
+  border-left: 2px solid transparent; transition: all 0.15s; line-height: 1.4;
+}
+.toc-item a:hover { color: var(--text); background: var(--bg3); border-left-color: var(--border2); }
+.toc-item a.active { color: var(--teal); border-left-color: var(--teal); background: var(--teal-dim); }
+.toc-item.sub a { padding-left: 20px; font-size: 11px; }
+
+/* ── PROSE ── */
+.prose { min-width: 0; }
+
+.prose h2 {
+  font-family: var(--display); font-size: 26px; font-weight: 700;
+  color: #fff; line-height: 1.2; letter-spacing: -0.01em;
+  margin: 56px 0 16px; padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.prose h2:first-child { margin-top: 0; border-top: none; }
+
+.prose h3 {
+  font-family: var(--display); font-size: 18px; font-weight: 700;
+  color: #fff; line-height: 1.3; margin: 32px 0 12px;
+}
+
+.prose h4 {
+  font-family: var(--mono); font-size: 12px; font-weight: 500;
+  color: var(--teal); letter-spacing: 0.1em; text-transform: uppercase;
+  margin: 24px 0 10px;
+}
+
+.prose p {
+  font-size: 15px; color: var(--muted); line-height: 1.8;
+  margin-bottom: 18px; max-width: var(--prose-max);
+}
+
+.prose ul, .prose ol {
+  margin: 0 0 20px 0; padding-left: 0; list-style: none;
+  max-width: var(--prose-max);
+}
+.prose li {
+  font-size: 14px; color: var(--muted); line-height: 1.7;
+  padding: 5px 0 5px 20px; position: relative;
+}
+.prose li::before {
+  content: ''; position: absolute; left: 0; top: 14px;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--teal); opacity: 0.6;
+}
+
+/* capability blocks */
+.capability-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 12px; margin: 24px 0 32px;
+}
+.capability-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 20px;
+}
+.capability-card-title {
+  font-family: var(--display); font-size: 14px; font-weight: 700;
+  color: #fff; margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.capability-card-title::before {
+  content: ''; display: block; width: 8px; height: 8px;
+  border-radius: 2px; background: var(--teal); flex-shrink: 0;
+}
+.capability-card ul { margin: 0; }
+.capability-card li { font-size: 13px; padding: 3px 0 3px 16px; }
+.capability-card li::before { top: 12px; width: 4px; height: 4px; }
+
+/* section intro highlight */
+.section-intro {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-left: 3px solid var(--teal); border-radius: 0 8px 8px 0;
+  padding: 18px 22px; margin: 0 0 28px;
+  font-size: 15px; color: var(--text); line-height: 1.7;
+  max-width: var(--prose-max);
+}
+
+/* pull quote */
+.pull-quote {
+  border-left: 3px solid var(--amber); border-radius: 0 8px 8px 0;
+  padding: 18px 22px; margin: 28px 0;
+  font-size: 16px; color: var(--text); font-style: italic;
+  line-height: 1.7; background: var(--amber-dim);
+  max-width: var(--prose-max);
+}
+
+/* architecture image */
+.arch-image {
+  margin: 32px 0; border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden; background: var(--bg2);
+}
+.arch-image img {
+  width: 100%; display: block;
+  transition: opacity 0.3s;
+}
+.arch-image img[src=""] { min-height: 200px; background: var(--bg3); }
+.arch-image-caption {
+  padding: 12px 16px; font-family: var(--mono); font-size: 11px;
+  color: var(--muted2); letter-spacing: 0.04em; border-top: 1px solid var(--border);
+  background: var(--bg2);
+}
+
+/* zone cards */
+.zone-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0 32px; }
+.zone-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 16px;
+}
+.zone-card-name {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 8px;
+}
+.zone-card-body { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+/* outcomes list */
+.outcomes-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 8px; margin: 20px 0;
+}
+.outcome-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 12px 14px; font-size: 13px; color: var(--muted);
+}
+.outcome-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); flex-shrink: 0; margin-top: 5px; }
+
+/* tech stack pills */
+.tech-stack { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0 24px; }
+.tech-pill {
+  font-family: var(--mono); font-size: 11px; padding: 5px 12px;
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--muted); border-radius: 4px;
+}
+
+/* github callout */
+.github-callout {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 24px 28px; margin: 32px 0;
+  display: flex; align-items: center; gap: 20px;
+}
+.github-callout-icon { color: var(--teal); flex-shrink: 0; }
+.github-callout-title { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.github-callout-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.github-callout-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 12px; color: var(--teal);
+  text-decoration: none; margin-top: 10px;
+  transition: gap 0.2s;
+}
+.github-callout-link:hover { gap: 9px; }
+
+/* disclaimer */
+.disclaimer {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 20px 24px; margin-top: 48px;
+  font-size: 13px; color: var(--muted2); line-height: 1.6;
+}
+.disclaimer strong { color: var(--muted); font-weight: 500; }
+
+/* article nav */
+.article-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 32px 0; margin-top: 48px; border-top: 1px solid var(--border);
+}
+.article-nav a {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 12px; color: var(--muted);
+  text-decoration: none; transition: color 0.2s;
+}
+.article-nav a:hover { color: var(--teal); }
+
+/* related */
+.related-section { border-top: 1px solid var(--border); padding: 64px 0; position: relative; z-index: 1; }
+.related-wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+.related-label { font-family: var(--mono); font-size: 11px; color: var(--teal); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+.related-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--teal); }
+.related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.rel-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 24px; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 10px; transition: border-color 0.2s; }
+.rel-card:hover { border-color: var(--border2); }
+.rel-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.rel-tag { font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 3px; }
+.rel-tag.teal  { background: var(--teal-dim);  color: var(--teal); }
+.rel-tag.amber { background: var(--amber-dim); color: var(--amber); }
+.rel-title { font-family: var(--display); font-size: 15px; font-weight: 700; color: #fff; line-height: 1.3; }
+.rel-meta { font-family: var(--mono); font-size: 11px; color: var(--muted2); margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border); }
+
+/* CTA strip */
+.cta-strip { background: var(--bg2); border-top: 1px solid var(--border); padding: 64px 0; position: relative; z-index: 1; }
+.cta-wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
+.cta-heading { font-family: var(--display); font-size: clamp(20px, 2.2vw, 26px); font-weight: 700; color: #fff; margin-bottom: 8px; }
+.cta-sub { font-size: 15px; color: var(--muted); }
+.cta-actions { display: flex; gap: 12px; flex-shrink: 0; }
+.btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #090c10; font-size: 14px; font-weight: 600; padding: 12px 24px; border-radius: 4px; text-decoration: none; transition: opacity 0.2s, transform 0.15s; }
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-outline { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border2); color: var(--muted); font-size: 14px; padding: 11px 24px; border-radius: 4px; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+.btn-outline:hover { border-color: var(--teal); color: var(--teal); }
+
+/* footer */
+footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: relative; z-index: 1; }
+.footer-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
+.footer-logo { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.footer-logo span { color: var(--teal); }
+.footer-desc { font-size: 13px; color: var(--muted); max-width: 380px; line-height: 1.6; }
+.footer-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--teal); }
+.footer-bottom { max-width: 1100px; margin: 32px auto 0; padding: 24px 32px 0; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.footer-copy { font-size: 12px; color: var(--muted2); }
+
+/* responsive */
+@media (max-width: 960px) {
+  .article-layout { grid-template-columns: 1fr; }
+  .toc { display: none; }
+  .capability-grid { grid-template-columns: 1fr; }
+  .zone-grid { grid-template-columns: repeat(2, 1fr); }
+  .outcomes-grid { grid-template-columns: 1fr; }
+  .related-grid { grid-template-columns: repeat(2, 1fr); }
+  .cta-wrap { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .hero-wrap, .related-wrap { padding: 0 20px; }
+  .article-layout { padding: 40px 20px; }
+  .nav-links { display: none; }
+  .zone-grid { grid-template-columns: 1fr; }
+  .related-grid { grid-template-columns: 1fr; }
+  .cta-wrap { padding: 0 20px; }
+  .footer-inner, .footer-bottom { padding: 0 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="https://saleem-yousaf.github.io/" class="nav-logo">Saleem <span>Yousaf</span></a>
+    <ul class="nav-links">
+      <li><a href="https://saleem-yousaf.github.io/about/">About</a></li>
+      <li><a href="https://saleem-yousaf.github.io/experience/">Experience</a></li>
+      <li><a href="https://saleem-yousaf.github.io/projects/">Projects</a></li>
+      <li class="nav-dropdown">
+        <button class="nav-dropdown-toggle" style="color:var(--teal);">
+          Articles
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="nav-dropdown-menu">
+          <a href="https://saleem-yousaf.github.io/articles/" class="active">All Articles</a>
+          <a href="https://saleem-yousaf.github.io/assume-breach/">Assume Breach</a>
+          <a href="https://saleem-yousaf.github.io/ai-security-governance/">AI Security &amp; Governance</a>
+        </div>
+      </li>
+      <li><a href="https://saleem-yousaf.github.io/connect/" class="nav-cta">Connect</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ARTICLE HERO -->
+<div class="article-hero">
+  <div class="article-hero-glow"></div>
+  <div class="hero-wrap">
+    <div class="article-eyebrow">
+      <div class="article-eyebrow-line"></div>
+      <span class="article-tag teal">Zero Trust</span>
+      <span class="article-tag teal">AWS</span>
+      <span class="article-tag teal">Azure</span>
+      <span class="article-tag amber">Firewall Engineering</span>
+      <span class="article-tag teal">SIEM</span>
+    </div>
+    <h1 class="article-title">Enterprise Zero Trust Secure Landing Zone Reference Architecture</h1>
+    <p class="article-intro">A technical deep dive into secure landing zone design, network segmentation, SIEM and SOAR integration, Zero Trust access control, and operational security engineering across AWS, Azure, Palo Alto, Fortinet, and Zscaler SSE environments.</p>
+    <div class="article-meta-bar">
+      <div class="meta-item">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        14 May 2026
+      </div>
+      <div class="meta-divider"></div>
+      <div class="meta-item">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        ~30 min read
+      </div>
+      <div class="meta-divider"></div>
+      <div class="meta-item">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Saleem Yousaf
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ARTICLE LAYOUT -->
+<div class="article-layout">
+
+  <!-- PROSE -->
+  <article class="prose">
+
+    <!-- 1. Overview -->
+    <h2 id="overview">Overview</h2>
+    <div class="section-intro">This reference architecture demonstrates a practical enterprise implementation approach for secure AWS and Azure landing zones using Zero Trust security principles, network segmentation, SIEM and SOAR integration, and centralised security operations.</div>
+    <p>The design showcases how organisations can modernize legacy perimeter-based security models by implementing identity-aware access controls, cloud-native security services, next-generation firewalls, and automated incident response workflows across hybrid environments.</p>
+
+    <div class="tech-stack">
+      <span class="tech-pill">Palo Alto NGFW &amp; Panorama</span>
+      <span class="tech-pill">Fortinet FortiGate &amp; FortiManager</span>
+      <span class="tech-pill">Zscaler SSE (ZIA/ZPA)</span>
+      <span class="tech-pill">AWS Secure Landing Zone</span>
+      <span class="tech-pill">Azure Secure Landing Zone</span>
+      <span class="tech-pill">SIEM &amp; XSOAR Integration</span>
+      <span class="tech-pill">Infrastructure as Code</span>
+      <span class="tech-pill">Zero Trust Architecture</span>
+    </div>
+
+    <!-- 2. Key Capabilities -->
+    <h2 id="capabilities">Key Capabilities Delivered</h2>
+    <div class="capability-grid">
+      <div class="capability-card">
+        <div class="capability-card-title">Cloud Security &amp; Landing Zones</div>
+        <ul>
+          <li>AWS and Azure secure landing zone architecture</li>
+          <li>Multi-cloud network segmentation</li>
+          <li>Secure ingress and egress design</li>
+          <li>Transit Gateway and Virtual WAN integration</li>
+          <li>Private endpoint architecture</li>
+          <li>Cloud-native security telemetry integration</li>
+        </ul>
+      </div>
+      <div class="capability-card">
+        <div class="capability-card-title">Zero Trust Network Architecture</div>
+        <ul>
+          <li>Identity-aware access controls</li>
+          <li>Least privilege firewall policy design</li>
+          <li>East-west traffic segmentation</li>
+          <li>Application-level access enforcement</li>
+          <li>Continuous trust validation</li>
+          <li>Device posture-aware access</li>
+        </ul>
+      </div>
+      <div class="capability-card">
+        <div class="capability-card-title">Firewall Engineering</div>
+        <ul>
+          <li>Palo Alto NGFW perimeter and VPN zoning</li>
+          <li>FortiGate internal segmentation and edge security</li>
+          <li>Panorama and FortiManager centralised governance</li>
+          <li>Threat prevention, SSL inspection, and IPS policies</li>
+          <li>NAT and VPN policy management</li>
+        </ul>
+      </div>
+      <div class="capability-card">
+        <div class="capability-card-title">SIEM &amp; SOAR Integration</div>
+        <ul>
+          <li>Centralised log aggregation</li>
+          <li>Firewall, cloud, and identity telemetry</li>
+          <li>SOC alert correlation workflows</li>
+          <li>XSOAR automation and playbooks</li>
+          <li>Incident response orchestration</li>
+          <li>Threat intelligence enrichment</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="arch-image">
+      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/f909b30f-1fca-48cd-8fae-d34d334ccfe3/image-1024x683.png" alt="Enterprise Zero Trust Secure Landing Zone Reference Architecture overview" loading="lazy">
+      <div class="arch-image-caption">// Enterprise secure landing zone architecture overview</div>
+    </div>
+
+    <!-- 3. Technical Design Objectives -->
+    <h2 id="design-objectives">Technical Design Objectives</h2>
+    <p>The secure landing zone architecture was designed to support enterprise-scale cloud transformation, Zero Trust security enforcement, and operational SOC modernization across hybrid AWS, Azure, and on-premise environments. The primary objective was to establish a repeatable, security-governed architecture capable of supporting secure workload migration, centralised visibility, and automated incident response while reducing attack surface and operational risk.</p>
+
+    <h3>Core Objectives</h3>
+    <div class="outcomes-grid">
+      <div class="outcome-item"><div class="outcome-dot"></div>Remove implicit trust between all network zones</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Eliminate broad flat-network VPN access</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Standardize firewall governance across hybrid environments</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Improve SOC visibility across hybrid infrastructure</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Enable centralised SIEM and XSOAR operations</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Reduce lateral movement risk through micro-segmentation</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Enforce least privilege access across all identities</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Implement repeatable IaC-driven cloud security patterns</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Automate security operations and incident response</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Support scalable enterprise cloud migration programmes</div>
+    </div>
+
+    <div class="arch-image">
+      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/c7d6d00c-002f-4ced-8c5c-27159c53ce80/image.png" alt="Zero Trust design principles applied across the architecture" loading="lazy">
+      <div class="arch-image-caption">// Zero Trust design principles applied across the security domains</div>
+    </div>
+
+    <!-- 4. Zero Trust Segmentation -->
+    <h2 id="segmentation">Zero Trust Network Segmentation</h2>
+    <div class="section-intro">The architecture applies Zero Trust segmentation to remove implicit trust between users, workloads, cloud services, and network zones across AWS, Azure, and on-premise environments. Traffic between zones is denied by default unless explicitly authorized through policy-based controls.</div>
+
+    <div class="zone-grid">
+      <div class="zone-card">
+        <div class="zone-card-name">Edge Security</div>
+        <div class="zone-card-body">Internet ingress and egress inspection, DDoS protection, SSL/TLS inspection, threat prevention, DNS security, and geo-blocking via Palo Alto, FortiGate, and Zscaler ZIA.</div>
+      </div>
+      <div class="zone-card">
+        <div class="zone-card-name">Perimeter Zones</div>
+        <div class="zone-card-body">Isolated publicly accessible services from internal tiers. Reverse proxies, WAFs, public APIs, DMZ workloads. Restricted inbound services with TLS termination and API inspection.</div>
+      </div>
+      <div class="zone-card">
+        <div class="zone-card-name">Application Tiers</div>
+        <div class="zone-card-body">Segmented by business criticality and environment. Micro-segmentation, security groups, App-ID-based firewall rules, Layer 7 policy enforcement.</div>
+      </div>
+      <div class="zone-card">
+        <div class="zone-card-name">Data Tiers</div>
+        <div class="zone-card-body">Highly restricted zones with strict least-privilege firewall rules. No direct internet or user access. Private endpoint access only. Database access monitoring and DLP integration.</div>
+      </div>
+      <div class="zone-card">
+        <div class="zone-card-name">Management Zones</div>
+        <div class="zone-card-body">Isolated administrative services, bastion hosts, PAM platforms, SIEM and XSOAR infrastructure. MFA, certificate auth, PAM, device posture, and time-bound admin access.</div>
+      </div>
+      <div class="zone-card">
+        <div class="zone-card-name">VPN Zones</div>
+        <div class="zone-card-body">Segmented by user type: corporate, privileged admin, third-party, partners, SOC analysts. Identity-aware, application-level access only. No broad network trust.</div>
+      </div>
+    </div>
+
+    <div class="arch-image">
+      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/ca9d79f5-2602-4e9c-9b5f-d0da32f81f33/image-1024x683.png" alt="Zero Trust network segmentation architecture showing trust zones" loading="lazy">
+      <div class="arch-image-caption">// Zero Trust network segmentation and trust zone architecture</div>
+    </div>
+
+    <!-- 5. Firewall Engineering -->
+    <h2 id="firewall">Firewall Engineering &amp; Connectivity</h2>
+    <div class="section-intro">The connectivity model enforces a deny-by-default posture across all network zones and routes all trusted and untrusted traffic through designated inspection and policy enforcement points. All traffic crossing security boundaries is logged and forwarded into SIEM and XSOAR workflows.</div>
+
+    <h3>Palo Alto Networks</h3>
+    <p>Deployed as the primary perimeter inspection and VPN segmentation layer. Application-aware controls enforced using App-ID, User-ID, Device-ID, URL Filtering, DNS Security, Threat Prevention, and WildFire. Panorama provides centralised firewall governance, policy lifecycle management, and log forwarding configuration.</p>
+
+    <h3>FortiGate</h3>
+    <p>Deployed for enterprise edge security, internal segmentation, datacentre connectivity, SD-WAN routing, and IPSec site-to-site VPNs. FortiManager standardises policy governance and change control. FortiAnalyzer provides traffic analytics and SIEM forwarding. FortiAuthenticator handles MFA and certificate-based authentication.</p>
+
+    <h3>AWS Connectivity</h3>
+    <p>Segmented VPC architectures connected through AWS Transit Gateway for centralised routing and inspection. Public-facing workloads routed through AWS ALB, WAF inspection layers, and Palo Alto perimeter inspection. PrivateLink and VPC Endpoints remove unnecessary internet exposure. Cloud security telemetry from VPC Flow Logs, CloudTrail, GuardDuty, Security Hub, and WAF logs forwarded into centralised SIEM.</p>
+
+    <h3>Azure Connectivity</h3>
+    <p>Hub-and-spoke VNet connectivity with Azure Virtual WAN. Azure Application Gateway provides Layer 7 load balancing and WAF protection. Azure API Management secures API ingress. Private Endpoints implemented for all PaaS services, removing the need for internet-exposed management or data services.</p>
+
+    <div class="arch-image">
+      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/8c082143-788c-441f-8718-375618dda8dc/image-1024x683.png" alt="Firewall engineering and hybrid cloud connectivity architecture" loading="lazy">
+      <div class="arch-image-caption">// Firewall engineering and hybrid cloud connectivity model</div>
+    </div>
+
+    <!-- 6. Secure Remote Access -->
+    <h2 id="remote-access">Secure Remote Access &amp; SSE</h2>
+    <div class="section-intro">Traditional perimeter-based remote access was replaced with identity-aware, application-specific access controls. The architecture eliminates broad network-level trust and enforces continuous verification of users, devices, applications, and access context before access is granted.</div>
+
+    <h3>Zscaler Internet Access (ZIA)</h3>
+    <p>All outbound internet traffic routed through ZIA inspection nodes. Controls include secure web gateway filtering, URL categorisation, threat intelligence validation, SSL/TLS inspection, DNS security, malware sandboxing, CASB inspection, and DLP enforcement. Threat telemetry forwarded into SIEM alongside firewall, endpoint, identity, and cloud telemetry.</p>
+
+    <h3>Zscaler Private Access (ZPA)</h3>
+    <p>Zero Trust application access for internal applications across AWS, Azure, and on-premise. Applications remain non-internet routable. ZPA App Connectors deployed within AWS VPCs, Azure VNets, and datacentres broker secure outbound-only application connectivity. Third-party suppliers isolated into dedicated access groups with no lateral network access.</p>
+
+    <h3>Device Posture and MFA</h3>
+    <p>Endpoint health checks, OS validation, EDR verification, certificate validation, patch compliance, and disk encryption validation are enforced before access is granted. Non-compliant devices are blocked or redirected to remediation. Conditional access policies evaluate user identity, device trust state, geolocation, authentication risk, and threat intelligence indicators dynamically.</p>
+
+    <div class="arch-image">
+      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/03baadcd-c07e-4958-be72-38e2affeafd8/image-1024x683.png" alt="Secure remote access and SSE architecture using Zscaler and Palo Alto GlobalProtect" loading="lazy">
+      <div class="arch-image-caption">// Secure remote access and Secure Service Edge (SSE) architecture</div>
+    </div>
+
+    <!-- 7. SIEM & SOAR -->
+    <h2 id="siem-soar">SIEM &amp; SOAR Integration</h2>
+    <div class="section-intro">The SIEM and SOAR architecture consolidates telemetry from firewalls, VPN platforms, cloud-native security services, identity providers, endpoints, SaaS platforms, and DNS services into a centralised operational security platform supporting real-time threat detection, automated incident response, and SOC operations.</div>
+
+    <h3>Log Aggregation</h3>
+    <p>Centralised log aggregation covers network and firewall telemetry (Palo Alto, FortiGate, WildFire, VPN), cloud security telemetry (AWS CloudTrail, VPC Flow Logs, GuardDuty, Azure Defender, NSG Flow Logs), identity and access telemetry (MFA events, PAM sessions, conditional access decisions), and remote access telemetry (Zscaler ZIA and ZPA logs, DNS security events).</p>
+
+    <h3>XSOAR Playbooks</h3>
+    <p>Automated playbooks handle phishing response (URL extraction, threat intelligence lookups, domain blocking), malware callback detection (endpoint isolation, firewall blocking), VPN abuse detection (account suspension, MFA verification), and cloud compromise investigation (CloudTrail and Azure telemetry correlation, workload isolation). Automation reduces MTTD and MTTR while improving response consistency and SOC scalability.</p>
+
+    <div class="pull-quote">The value is not "we ran a simulation." The value is "we proved this control failed, fixed it, and can now show it works."</div>
+
+    <div class="arch-image">
+      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/33c4d0f8-f757-45a3-bc56-dec6d7e581dd/image-1024x683.png" alt="SIEM and SOAR integration architecture with XSOAR automation workflows" loading="lazy">
+      <div class="arch-image-caption">// Centralised SIEM and SOAR integration model with XSOAR orchestration</div>
+    </div>
+
+    <!-- 8. IaC -->
+    <h2 id="iac">Infrastructure as Code &amp; Policy Enforcement</h2>
+    <div class="section-intro">The IaC strategy ensures repeatable, version-controlled deployments with embedded security controls. All infrastructure provisioning is automated through approved templates and governed through centralised policy enforcement, creating a secure-by-default deployment model.</div>
+
+    <h3>Terraform</h3>
+    <p>Primary multi-cloud IaC platform covering AWS VPC architectures, Azure VNets, segmented subnets, route controls, NAT gateways, load balancers, VPN infrastructure, security groups, NSGs, logging integrations, and cloud-native security services. Reusable modules created for network segmentation, firewall integration, and SIEM onboarding. Terraform state stored in encrypted remote storage with RBAC-controlled access.</p>
+
+    <h3>Azure Policy and AWS SCPs</h3>
+    <p>Azure Policy enforces governance guardrails including denying public IP creation, restricting internet-exposed storage, enforcing diagnostic logging, and requiring resource tagging. AWS Service Control Policies prevent unrestricted security group rules, restrict public S3 exposure, enforce CloudTrail usage, and prevent IAM privilege escalation across AWS Organizations and landing zone accounts.</p>
+
+    <div class="arch-image">
+      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/50fccf3c-9f7e-4af5-8db2-2a9e81f58e95/image-1024x683.png" alt="Infrastructure as Code governance and policy enforcement across AWS and Azure" loading="lazy">
+      <div class="arch-image-caption">// Infrastructure as Code and policy enforcement model</div>
+    </div>
+
+    <div class="github-callout">
+      <div class="github-callout-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      </div>
+      <div>
+        <div class="github-callout-title">GitHub Reference Implementation</div>
+        <div class="github-callout-body">Terraform deployment examples, Azure Bicep templates, Palo Alto configuration standards, FortiGate policy examples, Zscaler SSE configuration patterns, VPN zoning examples, and SIEM/XSOAR integration examples are available in the accompanying repository.</div>
+        <a href="https://github.com/saleem-yousaf/saleem-yousaf-zero-trust-architecture" target="_blank" rel="noopener" class="github-callout-link">
+          github.com/saleem-yousaf/saleem-yousaf-zero-trust-architecture
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- 9. Firewall Rule Standards -->
+    <h2 id="firewall-rules">Firewall Rule Standards</h2>
+    <p>All firewall policies follow a deny-by-default security model with centralised governance enforced through Panorama, FortiManager, cloud-native policy controls, and Infrastructure as Code. All traffic traversing trust boundaries is explicitly authorized, application-aware, logged, inspected, and subject to threat prevention policies.</p>
+
+    <h4>Core Firewall Rule Requirements</h4>
+    <div class="arch-image">
+      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/bbcd897b-8bc0-45de-a57a-dbfca26a9401/image.png" alt="Core firewall rule requirements and standards" loading="lazy">
+      <div class="arch-image-caption">// Core firewall rule requirements matrix</div>
+    </div>
+
+    <h4>Palo Alto NGFW Rule Matrix</h4>
+    <div class="arch-image">
+      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/2db1793e-a82c-4973-bb79-3b7500d5c970/image-1024x102.png" alt="Palo Alto NGFW firewall rule matrix" loading="lazy">
+      <div class="arch-image-caption">// Palo Alto NGFW example rule matrix</div>
+    </div>
+
+    <h4>FortiGate NGFW Rule Matrix</h4>
+    <div class="arch-image">
+      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/9fea2cf1-60aa-4487-9fcf-11bf06f24d7c/image.png" alt="FortiGate NGFW firewall rule matrix" loading="lazy">
+      <div class="arch-image-caption">// FortiGate NGFW example rule matrix</div>
+    </div>
+
+    <h4>NAT Rule Matrix</h4>
+    <div class="arch-image">
+      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/f8b60e37-51a1-49be-af4f-9f13571bc682/image.png" alt="NAT rule matrix" loading="lazy">
+      <div class="arch-image-caption">// NAT rule standards matrix</div>
+    </div>
+
+    <h4>VPN Rule Matrix</h4>
+    <div class="arch-image">
+      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/7b669194-963e-4e4f-b9e6-30d53041de98/image.png" alt="VPN rule matrix" loading="lazy">
+      <div class="arch-image-caption">// VPN access rule matrix</div>
+    </div>
+
+    <h4>Zscaler SSE Policy Matrix</h4>
+    <div class="arch-image">
+      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/6060a6bd-5c2d-4115-953c-89c8066904d0/image.png" alt="Zscaler SSE policy matrix" loading="lazy">
+      <div class="arch-image-caption">// Zscaler SSE (ZIA/ZPA) policy standards matrix</div>
+    </div>
+
+    <!-- 10. Outcomes -->
+    <h2 id="outcomes">Operational Outcomes &amp; Security Benefits</h2>
+    <p>The secure landing zone architecture and Zero Trust operating model delivered measurable improvements across security operations, cloud governance, incident response, network segmentation, and hybrid cloud visibility.</p>
+
+    <h4>Measurable Security Outcomes</h4>
+    <div class="arch-image">
+      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/9916d7c1-1388-4bbb-8c41-8c2943e06f48/image.png" alt="Measurable security outcomes from the Zero Trust landing zone architecture" loading="lazy">
+      <div class="arch-image-caption">// Measurable security outcomes summary</div>
+    </div>
+
+    <div class="outcomes-grid">
+      <div class="outcome-item"><div class="outcome-dot"></div>Improved SOC operational visibility and faster threat detection</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Reduced phishing and malware exposure</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Scalable Zero Trust segmentation across hybrid environments</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Standardised firewall governance via Panorama and FortiManager</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Stronger cloud security posture across AWS and Azure</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Improved incident response times through XSOAR automation</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Reduced excessive VPN and lateral access</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Automated SOC workflows reducing analyst workload</div>
+    </div>
+
+    <!-- 11. Conclusion -->
+    <h2 id="conclusion">Conclusion</h2>
+    <p>This reference architecture demonstrates a scalable and repeatable enterprise security model designed to support modern hybrid cloud transformation across AWS, Azure, remote access, and on-premise environments.</p>
+    <p>By combining Zero Trust network segmentation, centralised SIEM and XSOAR operations, Palo Alto and Fortinet security platforms, Zscaler SSE secure access controls, and Infrastructure as Code governance, the architecture establishes a cloud-ready and operationally mature security framework capable of supporting enterprise-scale modernization programmes.</p>
+
+    <div class="arch-image">
+      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/fabe05b6-2b01-4866-9d5a-68c1c45a998e/image-1024x683.png" alt="Final strategic security outcomes and architecture overview" loading="lazy">
+      <div class="arch-image-caption">// Final architecture and strategic security outcomes</div>
+    </div>
+
+    <div class="disclaimer">
+      <strong>Reference Design Disclaimer.</strong> This reference architecture is provided for technical demonstration and capability showcase purposes only. All examples, network ranges, configurations, policies, and design patterns are illustrative and sanitised to avoid disclosure of any client-sensitive or production-specific information.
+    </div>
+
+    <div class="article-nav">
+      <a href="https://saleem-yousaf.github.io/articles/">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back to all articles
+      </a>
+      <a href="https://saleem-yousaf.github.io/assume-breach/">
+        Assume Breach framework
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+  </article>
+
+  <!-- TOC SIDEBAR -->
+  <aside>
+    <nav class="toc">
+      <div class="toc-label">// Contents</div>
+      <ul class="toc-list">
+        <li class="toc-item"><a href="#overview">Overview</a></li>
+        <li class="toc-item"><a href="#capabilities">Key Capabilities</a></li>
+        <li class="toc-item"><a href="#design-objectives">Design Objectives</a></li>
+        <li class="toc-item"><a href="#segmentation">Zero Trust Segmentation</a></li>
+        <li class="toc-item sub"><a href="#segmentation">Edge Security</a></li>
+        <li class="toc-item sub"><a href="#segmentation">Trust Zones</a></li>
+        <li class="toc-item"><a href="#firewall">Firewall &amp; Connectivity</a></li>
+        <li class="toc-item sub"><a href="#firewall">Palo Alto</a></li>
+        <li class="toc-item sub"><a href="#firewall">FortiGate</a></li>
+        <li class="toc-item sub"><a href="#firewall">AWS &amp; Azure</a></li>
+        <li class="toc-item"><a href="#remote-access">Secure Remote Access</a></li>
+        <li class="toc-item sub"><a href="#remote-access">Zscaler ZIA</a></li>
+        <li class="toc-item sub"><a href="#remote-access">Zscaler ZPA</a></li>
+        <li class="toc-item"><a href="#siem-soar">SIEM &amp; SOAR</a></li>
+        <li class="toc-item sub"><a href="#siem-soar">XSOAR Playbooks</a></li>
+        <li class="toc-item"><a href="#iac">Infrastructure as Code</a></li>
+        <li class="toc-item sub"><a href="#iac">Terraform</a></li>
+        <li class="toc-item sub"><a href="#iac">Azure Policy &amp; SCPs</a></li>
+        <li class="toc-item"><a href="#firewall-rules">Firewall Rule Standards</a></li>
+        <li class="toc-item sub"><a href="#firewall-rules">Palo Alto Matrix</a></li>
+        <li class="toc-item sub"><a href="#firewall-rules">FortiGate Matrix</a></li>
+        <li class="toc-item sub"><a href="#firewall-rules">Zscaler Matrix</a></li>
+        <li class="toc-item"><a href="#outcomes">Outcomes &amp; Benefits</a></li>
+        <li class="toc-item"><a href="#conclusion">Conclusion</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+</div>
+
+<!-- RELATED ARTICLES -->
+<div class="related-section">
+  <div class="related-wrap">
+    <div class="related-label">Related articles</div>
+    <div class="related-grid">
+      <a href="https://saleem-yousaf.github.io/articles/secure-cloud-landing-zone-architecture-private-apis-ecs-and-compliance-controls-saleem-yousaf/" class="rel-card">
+        <div class="rel-tags"><span class="rel-tag teal">AWS</span><span class="rel-tag teal">Landing Zone</span></div>
+        <div class="rel-title">Secure Cloud Landing Zone Architecture: Private APIs, ECS, and Compliance Controls</div>
+        <div class="rel-meta">4 May 2026 · ~10 min read</div>
+      </a>
+      <a href="https://saleem-yousaf.github.io/articles/zero-trust-in-practice-where-does-zscaler-fit-within-a-modern-security-architecture/" class="rel-card">
+        <div class="rel-tags"><span class="rel-tag teal">Zero Trust</span><span class="rel-tag teal">Zscaler</span></div>
+        <div class="rel-title">Zero Trust in Practice: Where Does Zscaler Fit Within a Modern Security Architecture?</div>
+        <div class="rel-meta">29 Apr 2026 · ~9 min read</div>
+      </a>
+      <a href="https://saleem-yousaf.github.io/articles/from-threat-modelling-to-threat-detection-making-stride-work-in-cloud-environments/" class="rel-card">
+        <div class="rel-tags"><span class="rel-tag amber">STRIDE</span><span class="rel-tag teal">Cloud</span></div>
+        <div class="rel-title">From Threat Modelling to Threat Detection: Making STRIDE Work in Cloud Environments</div>
+        <div class="rel-meta">22 Apr 2026 · ~10 min read</div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-strip">
+  <div class="cta-wrap">
+    <div>
+      <div class="cta-heading">Working on a Zero Trust or cloud security programme?</div>
+      <div class="cta-sub">Connect to discuss architecture, security design, or implementation strategy.</div>
+    </div>
+    <div class="cta-actions">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener" class="btn-primary">Connect on LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf/saleem-yousaf-zero-trust-architecture" target="_blank" rel="noopener" class="btn-outline">GitHub repo</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Saleem <span>Yousaf</span></div>
+      <div class="footer-desc">Cloud &amp; Cyber Security Architect · AWS · Azure · Zero Trust · AI Governance · OT Security · Enterprise Architecture</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
+      <a href="https://saleem-yousaf.blogspot.com/" target="_blank" rel="noopener">Blogger</a>
+      <a href="https://codepen.io/Saleem-Yousaf" target="_blank" rel="noopener">CodePen</a>
+      <a href="https://www.cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
+    <a href="https://saleem-yousaf.github.io/privacy-policy/" style="font-size:12px;color:var(--muted2);text-decoration:none;">Privacy Policy</a>
+  </div>
+</footer>
+
+<script>
+// Active TOC highlighting on scroll
+const sections = document.querySelectorAll('h2[id]');
+const tocLinks = document.querySelectorAll('.toc-item a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      tocLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + entry.target.id) {
+          link.classList.add('active');
+        }
+      });
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(section => observer.observe(section));
+</script>
+
+</body>
+</html>
