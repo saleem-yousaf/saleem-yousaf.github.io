@@ -996,5 +996,24 @@ function filterArticles(cat, btn) {
 }
 </script>
 
+<script>
+// Click-based dropdown
+(function() {
+  var toggle = document.querySelector('.nav-dropdown-toggle');
+  var menu   = document.querySelector('.nav-dropdown-menu');
+  if (!toggle || !menu) return;
+  toggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var isOpen = menu.classList.contains('open');
+    menu.classList.toggle('open', !isOpen);
+    toggle.classList.toggle('open', !isOpen);
+  });
+  document.addEventListener('click', function() {
+    menu.classList.remove('open');
+    toggle.classList.remove('open');
+  });
+  menu.addEventListener('click', function(e) { e.stopPropagation(); });
+})();
+</script>
 </body>
 </html>

@@ -26,9 +26,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(9,12,16,0.88
 .nav-dropdown-toggle{font-size:13px;color:var(--muted);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;font-family:var(--body);padding:0;transition:color 0.2s;}
 .nav-dropdown-toggle:hover{color:var(--text);}
 .nav-dropdown-toggle svg{transition:transform 0.2s;}
-.nav-dropdown:hover .nav-dropdown-toggle svg{transform:rotate(180deg);}
-.nav-dropdown-menu{position:absolute;top:calc(100% + 16px);left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px;min-width:220px;opacity:0;pointer-events:none;transition:opacity 0.15s,top 0.15s;z-index:200;}
-.nav-dropdown:hover .nav-dropdown-menu{opacity:1;pointer-events:all;top:calc(100% + 8px);}
+.nav-dropdown-toggle.open svg{transform:rotate(180deg);}
+.nav-dropdown-toggle.open{color:var(--teal);}
+.nav-dropdown-menu{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px;min-width:220px;opacity:0;pointer-events:none;transition:opacity 0.15s;z-index:200;}
+.nav-dropdown-menu.open{opacity:1;pointer-events:all;}
 .nav-dropdown-menu a{display:block;padding:9px 14px;font-size:13px;color:var(--muted);text-decoration:none;border-radius:5px;transition:background 0.15s,color 0.15s;white-space:nowrap;}
 .nav-dropdown-menu a:hover{background:var(--bg3);color:var(--text);}
 .nav-dropdown-menu a.active{color:var(--teal);}
@@ -156,7 +157,7 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 <div class="section-intro">Consultancies are often measured on three things at once: speed, consistency, and assurance. Clients want rapid delivery, but they also want architecture decisions robust enough for internal security review, audit scrutiny, and long-term operations. A secure AWS reference architecture bridges that gap.</div>
 
 <div class="arch-image">
-  <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/534/1953609d-f34a-434c-98f8-f1a2f842c0cc/image-1024x683.png" alt="Secure by design AWS reference architecture for consultancy delivery" loading="lazy">
+  <img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/534/1953609d-f34a-434c-98f8-f1a2f842c0cc/image-1024x683.png" alt="Secure by design AWS reference architecture for consultancy delivery" loading="lazy">
   <div class="arch-image-caption">// Secure by design AWS reference architecture</div>
 </div>
 
@@ -216,5 +217,24 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
     <a href="https://www.saleemyousaf.co.uk/privacy-policy/" style="font-size:12px;color:var(--muted2);text-decoration:none;">Privacy Policy</a>
   </div>
 </footer>
+<script>
+// Click-based dropdown
+(function() {
+  var toggle = document.querySelector('.nav-dropdown-toggle');
+  var menu   = document.querySelector('.nav-dropdown-menu');
+  if (!toggle || !menu) return;
+  toggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var isOpen = menu.classList.contains('open');
+    menu.classList.toggle('open', !isOpen);
+    toggle.classList.toggle('open', !isOpen);
+  });
+  document.addEventListener('click', function() {
+    menu.classList.remove('open');
+    toggle.classList.remove('open');
+  });
+  menu.addEventListener('click', function(e) { e.stopPropagation(); });
+})();
+</script>
 </body>
 </html>

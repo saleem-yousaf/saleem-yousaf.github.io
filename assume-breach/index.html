@@ -412,7 +412,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
         <p class="hero-sub">Pen tests and vulnerability scans answer the wrong question. Assume Breach changes the design mindset from hoping controls hold, to proving they work under realistic attacker conditions across AWS, Azure, and hybrid enterprise environments.</p>
         <div class="hero-actions">
           <a href="#bas-pipeline" class="btn-primary">Explore the framework</a>
-          <a href="https://saleem-yousaf.github.io/articles/assume-breach-continuous-validation/" class="btn-outline">Read the article</a>
+          <a href="https://saleem-yousaf.github.io/assume-breach/bas-framework/" class="btn-outline">Full paper and infographic</a>
         </div>
       </div>
       <div class="hero-card">
@@ -833,6 +833,24 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
   </div>
 </section>
 
+<!-- BAS DEEP-DIVE CALLOUT -->
+<section style="padding:0 0 48px;position:relative;z-index:1;">
+  <div class="wrap">
+    <a href="https://saleem-yousaf.github.io/assume-breach/bas-framework/" style="display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:36px 40px;text-decoration:none;color:inherit;position:relative;overflow:hidden;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.12)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.07)'">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red),var(--amber),var(--teal));"></div>
+      <div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--red);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">// Technical paper and infographic</div>
+        <div style="font-family:var(--display);font-size:22px;font-weight:800;color:#fff;margin-bottom:10px;">BAS Framework: The Complete Reference</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.65;max-width:560px;">The full technical paper covering the BAS validation pipeline, MITRE ATT&CK integration, SABSA alignment, and cloud-specific validation across AWS and Azure. Includes the visual infographic of the complete methodology.</div>
+      </div>
+      <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:8px;">
+        <div style="font-family:var(--mono);font-size:10px;color:var(--teal);letter-spacing:0.06em;">Read now</div>
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+    </a>
+  </div>
+</section>
+
 <!-- RELATED ARTICLES -->
 <section class="related">
   <div class="wrap">
@@ -873,7 +891,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
       </div>
       <div class="cta-actions">
         <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener" class="btn-primary">Connect on LinkedIn</a>
-        <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener" class="btn-outline">GitHub</a>
+        <a href="https://saleem-yousaf.github.io/assume-breach/bas-framework/" class="btn-outline">Full paper and infographic</a>
       </div>
     </div>
   </div>
@@ -905,5 +923,24 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
   </div>
 </footer>
 
+<script>
+// Click-based dropdown
+(function() {
+  var toggle = document.querySelector('.nav-dropdown-toggle');
+  var menu   = document.querySelector('.nav-dropdown-menu');
+  if (!toggle || !menu) return;
+  toggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var isOpen = menu.classList.contains('open');
+    menu.classList.toggle('open', !isOpen);
+    toggle.classList.toggle('open', !isOpen);
+  });
+  document.addEventListener('click', function() {
+    menu.classList.remove('open');
+    toggle.classList.remove('open');
+  });
+  menu.addEventListener('click', function(e) { e.stopPropagation(); });
+})();
+</script>
 </body>
 </html>

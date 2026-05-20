@@ -62,9 +62,10 @@ nav {
 .nav-dropdown-toggle { font-size: 13px; color: var(--muted); background: none; border: none; cursor: pointer; letter-spacing: 0.03em; display: flex; align-items: center; gap: 5px; font-family: var(--body); padding: 0; transition: color 0.2s; }
 .nav-dropdown-toggle:hover { color: var(--text); }
 .nav-dropdown-toggle svg { transition: transform 0.2s; }
-.nav-dropdown:hover .nav-dropdown-toggle svg { transform: rotate(180deg); }
-.nav-dropdown-menu { position: absolute; top: calc(100% + 16px); left: 50%; transform: translateX(-50%); background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 8px; min-width: 220px; opacity: 0; pointer-events: none; transition: opacity 0.15s, top 0.15s; z-index: 200; }
-.nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: all; top: calc(100% + 8px); }
+.nav-dropdown-toggle.open svg { transform: rotate(180deg); }
+.nav-dropdown-toggle.open { color: var(--teal); }
+.nav-dropdown-menu { position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 8px; min-width: 220px; opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 200; }
+.nav-dropdown-menu.open { opacity: 1; pointer-events: all; }
 .nav-dropdown-menu a { display: block; padding: 9px 14px; font-size: 13px; color: var(--muted); text-decoration: none; border-radius: 5px; transition: background 0.15s, color 0.15s; white-space: nowrap; }
 .nav-dropdown-menu a:hover { background: var(--bg3); color: var(--text); }
 .nav-dropdown-menu a.active { color: var(--teal); }
@@ -487,7 +488,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: re
     </div>
 
     <div class="arch-image">
-      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/f909b30f-1fca-48cd-8fae-d34d334ccfe3/image-1024x683.png" alt="Enterprise Zero Trust Secure Landing Zone Reference Architecture overview" loading="lazy">
+      <img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/1894/f909b30f-1fca-48cd-8fae-d34d334ccfe3/image-1024x683.png" alt="Enterprise Zero Trust Secure Landing Zone Reference Architecture overview" loading="lazy">
       <div class="arch-image-caption">// Enterprise secure landing zone architecture overview</div>
     </div>
 
@@ -510,7 +511,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: re
     </div>
 
     <div class="arch-image">
-      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/c7d6d00c-002f-4ced-8c5c-27159c53ce80/image.png" alt="Zero Trust design principles applied across the architecture" loading="lazy">
+      <img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/1894/c7d6d00c-002f-4ced-8c5c-27159c53ce80/image.png" alt="Zero Trust design principles applied across the architecture" loading="lazy">
       <div class="arch-image-caption">// Zero Trust design principles applied across the security domains</div>
     </div>
 
@@ -546,7 +547,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: re
     </div>
 
     <div class="arch-image">
-      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/ca9d79f5-2602-4e9c-9b5f-d0da32f81f33/image-1024x683.png" alt="Zero Trust network segmentation architecture showing trust zones" loading="lazy">
+      <img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/1894/ca9d79f5-2602-4e9c-9b5f-d0da32f81f33/image-1024x683.png" alt="Zero Trust network segmentation architecture showing trust zones" loading="lazy">
       <div class="arch-image-caption">// Zero Trust network segmentation and trust zone architecture</div>
     </div>
 
@@ -567,7 +568,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: re
     <p>Hub-and-spoke VNet connectivity with Azure Virtual WAN. Azure Application Gateway provides Layer 7 load balancing and WAF protection. Azure API Management secures API ingress. Private Endpoints implemented for all PaaS services, removing the need for internet-exposed management or data services.</p>
 
     <div class="arch-image">
-      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/8c082143-788c-441f-8718-375618dda8dc/image-1024x683.png" alt="Firewall engineering and hybrid cloud connectivity architecture" loading="lazy">
+      <img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/1894/8c082143-788c-441f-8718-375618dda8dc/image-1024x683.png" alt="Firewall engineering and hybrid cloud connectivity architecture" loading="lazy">
       <div class="arch-image-caption">// Firewall engineering and hybrid cloud connectivity model</div>
     </div>
 
@@ -585,7 +586,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: re
     <p>Endpoint health checks, OS validation, EDR verification, certificate validation, patch compliance, and disk encryption validation are enforced before access is granted. Non-compliant devices are blocked or redirected to remediation. Conditional access policies evaluate user identity, device trust state, geolocation, authentication risk, and threat intelligence indicators dynamically.</p>
 
     <div class="arch-image">
-      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/03baadcd-c07e-4958-be72-38e2affeafd8/image-1024x683.png" alt="Secure remote access and SSE architecture using Zscaler and Palo Alto GlobalProtect" loading="lazy">
+      <img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/1894/03baadcd-c07e-4958-be72-38e2affeafd8/image-1024x683.png" alt="Secure remote access and SSE architecture using Zscaler and Palo Alto GlobalProtect" loading="lazy">
       <div class="arch-image-caption">// Secure remote access and Secure Service Edge (SSE) architecture</div>
     </div>
 
@@ -602,7 +603,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: re
     <div class="pull-quote">The value is not "we ran a simulation." The value is "we proved this control failed, fixed it, and can now show it works."</div>
 
     <div class="arch-image">
-      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/33c4d0f8-f757-45a3-bc56-dec6d7e581dd/image-1024x683.png" alt="SIEM and SOAR integration architecture with XSOAR automation workflows" loading="lazy">
+      <img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/1894/33c4d0f8-f757-45a3-bc56-dec6d7e581dd/image-1024x683.png" alt="SIEM and SOAR integration architecture with XSOAR automation workflows" loading="lazy">
       <div class="arch-image-caption">// Centralised SIEM and SOAR integration model with XSOAR orchestration</div>
     </div>
 
@@ -617,7 +618,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: re
     <p>Azure Policy enforces governance guardrails including denying public IP creation, restricting internet-exposed storage, enforcing diagnostic logging, and requiring resource tagging. AWS Service Control Policies prevent unrestricted security group rules, restrict public S3 exposure, enforce CloudTrail usage, and prevent IAM privilege escalation across AWS Organizations and landing zone accounts.</p>
 
     <div class="arch-image">
-      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/50fccf3c-9f7e-4af5-8db2-2a9e81f58e95/image-1024x683.png" alt="Infrastructure as Code governance and policy enforcement across AWS and Azure" loading="lazy">
+      <img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/1894/50fccf3c-9f7e-4af5-8db2-2a9e81f58e95/image-1024x683.png" alt="Infrastructure as Code governance and policy enforcement across AWS and Azure" loading="lazy">
       <div class="arch-image-caption">// Infrastructure as Code and policy enforcement model</div>
     </div>
 
@@ -641,37 +642,37 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: re
 
     <h4>Core Firewall Rule Requirements</h4>
     <div class="arch-image">
-      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/bbcd897b-8bc0-45de-a57a-dbfca26a9401/image.png" alt="Core firewall rule requirements and standards" loading="lazy">
+      <img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/1894/bbcd897b-8bc0-45de-a57a-dbfca26a9401/image.png" alt="Core firewall rule requirements and standards" loading="lazy">
       <div class="arch-image-caption">// Core firewall rule requirements matrix</div>
     </div>
 
     <h4>Palo Alto NGFW Rule Matrix</h4>
     <div class="arch-image">
-      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/2db1793e-a82c-4973-bb79-3b7500d5c970/image-1024x102.png" alt="Palo Alto NGFW firewall rule matrix" loading="lazy">
+      <img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/1894/2db1793e-a82c-4973-bb79-3b7500d5c970/image-1024x102.png" alt="Palo Alto NGFW firewall rule matrix" loading="lazy">
       <div class="arch-image-caption">// Palo Alto NGFW example rule matrix</div>
     </div>
 
     <h4>FortiGate NGFW Rule Matrix</h4>
     <div class="arch-image">
-      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/9fea2cf1-60aa-4487-9fcf-11bf06f24d7c/image.png" alt="FortiGate NGFW firewall rule matrix" loading="lazy">
+      <img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/1894/9fea2cf1-60aa-4487-9fcf-11bf06f24d7c/image.png" alt="FortiGate NGFW firewall rule matrix" loading="lazy">
       <div class="arch-image-caption">// FortiGate NGFW example rule matrix</div>
     </div>
 
     <h4>NAT Rule Matrix</h4>
     <div class="arch-image">
-      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/f8b60e37-51a1-49be-af4f-9f13571bc682/image.png" alt="NAT rule matrix" loading="lazy">
+      <img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/1894/f8b60e37-51a1-49be-af4f-9f13571bc682/image.png" alt="NAT rule matrix" loading="lazy">
       <div class="arch-image-caption">// NAT rule standards matrix</div>
     </div>
 
     <h4>VPN Rule Matrix</h4>
     <div class="arch-image">
-      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/7b669194-963e-4e4f-b9e6-30d53041de98/image.png" alt="VPN rule matrix" loading="lazy">
+      <img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/1894/7b669194-963e-4e4f-b9e6-30d53041de98/image.png" alt="VPN rule matrix" loading="lazy">
       <div class="arch-image-caption">// VPN access rule matrix</div>
     </div>
 
     <h4>Zscaler SSE Policy Matrix</h4>
     <div class="arch-image">
-      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/6060a6bd-5c2d-4115-953c-89c8066904d0/image.png" alt="Zscaler SSE policy matrix" loading="lazy">
+      <img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/1894/6060a6bd-5c2d-4115-953c-89c8066904d0/image.png" alt="Zscaler SSE policy matrix" loading="lazy">
       <div class="arch-image-caption">// Zscaler SSE (ZIA/ZPA) policy standards matrix</div>
     </div>
 
@@ -681,7 +682,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: re
 
     <h4>Measurable Security Outcomes</h4>
     <div class="arch-image">
-      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/9916d7c1-1388-4bbb-8c41-8c2943e06f48/image.png" alt="Measurable security outcomes from the Zero Trust landing zone architecture" loading="lazy">
+      <img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/1894/9916d7c1-1388-4bbb-8c41-8c2943e06f48/image.png" alt="Measurable security outcomes from the Zero Trust landing zone architecture" loading="lazy">
       <div class="arch-image-caption">// Measurable security outcomes summary</div>
     </div>
 
@@ -702,7 +703,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: re
     <p>By combining Zero Trust network segmentation, centralised SIEM and XSOAR operations, Palo Alto and Fortinet security platforms, Zscaler SSE secure access controls, and Infrastructure as Code governance, the architecture establishes a cloud-ready and operationally mature security framework capable of supporting enterprise-scale modernization programmes.</p>
 
     <div class="arch-image">
-      <img src="https://saleem-yousaf.github.io/wp-content/uploads/go-x/b/1894/fabe05b6-2b01-4866-9d5a-68c1c45a998e/image-1024x683.png" alt="Final strategic security outcomes and architecture overview" loading="lazy">
+      <img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/1894/fabe05b6-2b01-4866-9d5a-68c1c45a998e/image-1024x683.png" alt="Final strategic security outcomes and architecture overview" loading="lazy">
       <div class="arch-image-caption">// Final architecture and strategic security outcomes</div>
     </div>
 
@@ -841,5 +842,24 @@ const observer = new IntersectionObserver((entries) => {
 sections.forEach(section => observer.observe(section));
 </script>
 
+<script>
+// Click-based dropdown
+(function() {
+  var toggle = document.querySelector('.nav-dropdown-toggle');
+  var menu   = document.querySelector('.nav-dropdown-menu');
+  if (!toggle || !menu) return;
+  toggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var isOpen = menu.classList.contains('open');
+    menu.classList.toggle('open', !isOpen);
+    toggle.classList.toggle('open', !isOpen);
+  });
+  document.addEventListener('click', function() {
+    menu.classList.remove('open');
+    toggle.classList.remove('open');
+  });
+  menu.addEventListener('click', function(e) { e.stopPropagation(); });
+})();
+</script>
 </body>
 </html>
