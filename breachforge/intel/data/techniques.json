@@ -1,26 +1,5 @@
 {
-  "generated": "2026-05-22T08:00:00Z",
+  "generated": "2026-05-22T20:35:24.252607+00:00",
   "window_days": 30,
-  "techniques": [
-    {"id": "T1190",     "name": "Exploit Public-Facing Application", "tactic": "Initial Access",       "count": 14, "trend": "up"},
-    {"id": "T1078",     "name": "Valid Accounts",                    "tactic": "Defense Evasion",      "count": 12, "trend": "up"},
-    {"id": "T1566.001", "name": "Spearphishing Attachment",          "tactic": "Initial Access",       "count": 11, "trend": "stable"},
-    {"id": "T1003.001", "name": "LSASS Memory Dump",                 "tactic": "Credential Access",    "count": 10, "trend": "up"},
-    {"id": "T1486",     "name": "Data Encrypted for Impact",         "tactic": "Impact",               "count": 9,  "trend": "stable"},
-    {"id": "T1528",     "name": "Steal Application Access Token",    "tactic": "Credential Access",    "count": 9,  "trend": "up"},
-    {"id": "T1133",     "name": "External Remote Services",          "tactic": "Initial Access",       "count": 8,  "trend": "stable"},
-    {"id": "T1611",     "name": "Escape to Host",                    "tactic": "Privilege Escalation", "count": 8,  "trend": "up"},
-    {"id": "T1562.001", "name": "Disable Security Tools",            "tactic": "Defense Evasion",      "count": 7,  "trend": "stable"},
-    {"id": "T1041",     "name": "Exfil Over C2 Channel",             "tactic": "Exfiltration",         "count": 7,  "trend": "stable"},
-    {"id": "T1490",     "name": "Inhibit System Recovery",           "tactic": "Impact",               "count": 6,  "trend": "up"},
-    {"id": "T1195.001", "name": "Compromise Software Supply Chain",  "tactic": "Initial Access",       "count": 6,  "trend": "up"},
-    {"id": "T1610",     "name": "Deploy Container",                  "tactic": "Execution",            "count": 5,  "trend": "up"},
-    {"id": "T1552.007", "name": "Container API Credentials",         "tactic": "Credential Access",    "count": 5,  "trend": "up"},
-    {"id": "T1070.001", "name": "Clear Windows Event Logs",          "tactic": "Defense Evasion",      "count": 5,  "trend": "stable"},
-    {"id": "T1059.001", "name": "PowerShell Execution",              "tactic": "Execution",            "count": 4,  "trend": "stable"},
-    {"id": "T1537",     "name": "Transfer Data to Cloud Account",    "tactic": "Exfiltration",         "count": 4,  "trend": "up"},
-    {"id": "T1550.001", "name": "Application Access Token",          "tactic": "Lateral Movement",     "count": 4,  "trend": "up"},
-    {"id": "T1496",     "name": "Resource Hijacking",                "tactic": "Impact",               "count": 3,  "trend": "stable"},
-    {"id": "T1530",     "name": "Data from Cloud Storage",           "tactic": "Collection",           "count": 3,  "trend": "stable"}
-  ]
+  "techniques": []
 }
