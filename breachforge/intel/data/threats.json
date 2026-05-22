@@ -1,0 +1,102 @@
+{
+  "generated": "2026-05-22T08:00:00Z",
+  "source": "BreachForge TI Feed Collector v1.0",
+  "threats": [
+    {
+      "id": "TI-001",
+      "title": "CISA KEV: Actively Exploited Ivanti Connect Secure Vulnerability",
+      "source": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "published": "2026-05-21T00:00:00Z",
+      "severity": "Critical",
+      "techniques": ["T1190", "T1059.001", "T1003.001"],
+      "actors": ["UNC5221"],
+      "sectors": ["Government", "Defence", "Technology"],
+      "summary": "CISA added CVE-2025-22457 to the Known Exploited Vulnerabilities catalog. Ivanti Connect Secure SSL-VPN being actively exploited for initial access by suspected nation-state actors."
+    },
+    {
+      "id": "TI-002",
+      "title": "Scattered Spider Targeting UK Financial Sector via MFA Fatigue",
+      "source": "AlienVault OTX",
+      "source_url": "https://otx.alienvault.com",
+      "published": "2026-05-20T00:00:00Z",
+      "severity": "High",
+      "techniques": ["T1621", "T1078", "T1528", "T1530"],
+      "actors": ["Scattered Spider"],
+      "sectors": ["Financial Services", "Insurance", "Retail"],
+      "summary": "Scattered Spider conducting MFA fatigue attacks against UK financial sector organisations. Post-compromise activity includes OAuth token theft and cloud storage exfiltration."
+    },
+    {
+      "id": "TI-003",
+      "title": "Volt Typhoon Pre-Positioning in Critical Infrastructure",
+      "source": "Cisco Talos",
+      "source_url": "https://blog.talosintelligence.com",
+      "published": "2026-05-19T00:00:00Z",
+      "severity": "Critical",
+      "techniques": ["T1078.001", "T1133", "T1562.001", "T1070.001", "T1041"],
+      "actors": ["Volt Typhoon"],
+      "sectors": ["Energy", "Water", "Communications", "Transport"],
+      "summary": "Volt Typhoon continuing living-off-the-land pre-positioning campaigns in Western critical infrastructure. No malware deployed — uses native tools only to avoid detection."
+    },
+    {
+      "id": "TI-004",
+      "title": "TeamTNT Cryptojacking Campaign Targeting Exposed Kubernetes APIs",
+      "source": "Abuse.ch",
+      "source_url": "https://abuse.ch",
+      "published": "2026-05-18T00:00:00Z",
+      "severity": "High",
+      "techniques": ["T1610", "T1611", "T1552.007", "T1496"],
+      "actors": ["TeamTNT"],
+      "sectors": ["Cloud Providers", "Technology", "Financial Services"],
+      "summary": "TeamTNT scanning for exposed Docker and Kubernetes APIs. Deploying cryptomining containers at scale. Credential harvesting from cloud metadata endpoints observed."
+    },
+    {
+      "id": "TI-005",
+      "title": "APT29 Targeting European Diplomatic Email via OAuth Abuse",
+      "source": "Microsoft Threat Intelligence",
+      "source_url": "https://www.microsoft.com/security/blog",
+      "published": "2026-05-17T00:00:00Z",
+      "severity": "Critical",
+      "techniques": ["T1528", "T1550.001", "T1114.002", "T1537"],
+      "actors": ["APT29"],
+      "sectors": ["Government", "Diplomacy", "Defence"],
+      "summary": "APT29 leveraging OAuth device code phishing to steal access tokens for Microsoft 365. Post-compromise email collection and exfiltration to attacker-controlled cloud storage observed."
+    },
+    {
+      "id": "TI-006",
+      "title": "Ransomware Group Targeting Healthcare via Unpatched VPN Appliances",
+      "source": "DFIR Report",
+      "source_url": "https://thedfirreport.com",
+      "published": "2026-05-16T00:00:00Z",
+      "severity": "Critical",
+      "techniques": ["T1190", "T1133", "T1486", "T1490", "T1003.001"],
+      "actors": ["FIN7"],
+      "sectors": ["Healthcare", "Pharmaceuticals"],
+      "summary": "FIN7-affiliated ransomware operators exploiting unpatched Fortinet VPN vulnerabilities for initial access. Full ransomware deployment within 4 hours of compromise. Backup destruction observed."
+    },
+    {
+      "id": "TI-007",
+      "title": "Supply Chain Attack via Compromised NPM Package",
+      "source": "Palo Alto Unit42",
+      "source_url": "https://unit42.paloaltonetworks.com",
+      "published": "2026-05-15T00:00:00Z",
+      "severity": "High",
+      "techniques": ["T1195.001", "T1059.001", "T1041"],
+      "actors": ["Unknown"],
+      "sectors": ["Technology", "Software Development", "Financial Services"],
+      "summary": "Malicious code injected into popular NPM package with 2.3M weekly downloads. Stealer payload exfiltrates environment variables and cloud credentials on installation."
+    },
+    {
+      "id": "TI-008",
+      "title": "CISA KEV: Actively Exploited Cisco IOS XE Web UI Vulnerability",
+      "source": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "published": "2026-05-14T00:00:00Z",
+      "severity": "Critical",
+      "techniques": ["T1190", "T1505.003", "T1059.004"],
+      "actors": ["Unknown"],
+      "sectors": ["Technology", "Telecommunications", "Government"],
+      "summary": "CISA added CVE-2025-20188 to KEV. Unauthenticated RCE in Cisco IOS XE web UI actively exploited for web shell deployment and persistent access."
+    }
+  ]
+}
