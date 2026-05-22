@@ -14,19 +14,15 @@ from datetime import datetime, timezone
 from dateutil import parser as dateparser
 from pathlib import Path
 
-# ── Configuration ─────────────────────────────────────────────────────────────
 OUTPUT_DIR = Path("breachforge/intel/data")
-MAX_THREATS = 20       # Keep most recent N threats
-MAX_TECHNIQUES = 20    # Top N techniques in heatmap
+MAX_THREATS = 20
+MAX_TECHNIQUES = 20
 
-# ── ATT&CK technique pattern ──────────────────────────────────────────────────
 ATTCK_PATTERN = re.compile(r'\bT\d{4}(?:\.\d{3})?\b')
 
-# ── Severity keywords ─────────────────────────────────────────────────────────
 CRITICAL_KEYWORDS = ['critical', 'zero-day', '0-day', 'actively exploited', 'nation-state', 'kev']
 HIGH_KEYWORDS = ['ransomware', 'data breach', 'supply chain', 'apt', 'espionage', 'backdoor']
 
-# ── Sector keywords ───────────────────────────────────────────────────────────
 SECTOR_MAP = {
     'government': 'Government', 'federal': 'Government', 'whitehouse': 'Government',
     'financial': 'Financial Services', 'bank': 'Financial Services', 'fintech': 'Financial Services',
@@ -40,7 +36,6 @@ SECTOR_MAP = {
     'telecom': 'Telecommunications', 'isp': 'Telecommunications',
 }
 
-# ── Known actor keywords ──────────────────────────────────────────────────────
 ACTOR_MAP = {
     'apt29': 'APT29', 'cozy bear': 'APT29', 'nobelium': 'APT29',
     'apt28': 'APT28', 'fancy bear': 'APT28',
@@ -57,13 +52,11 @@ ACTOR_MAP = {
 
 
 def extract_techniques(text):
-    """Extract MITRE ATT&CK technique IDs from text."""
     found = ATTCK_PATTERN.findall(text or '')
-    return list(dict.fromkeys(found))  # deduplicate preserving order
+    return list(dict.fromkeys(found))
 
 
 def extract_sectors(text):
-    """Extract sector mentions from text."""
     text_lower = (text or '').lower()
     found = []
     for keyword, sector in SECTOR_MAP.items():
@@ -73,7 +66,6 @@ def extract_sectors(text):
 
 
 def extract_actors(text):
-    """Extract known threat actor names from text."""
     text_lower = (text or '').lower()
     found = []
     for keyword, actor in ACTOR_MAP.items():
@@ -83,7 +75,6 @@ def extract_actors(text):
 
 
 def classify_severity(text):
-    """Classify severity based on keywords."""
     text_lower = (text or '').lower()
     if any(k in text_lower for k in CRITICAL_KEYWORDS):
         return 'Critical'
@@ -93,13 +84,11 @@ def classify_severity(text):
 
 
 def make_id(title, source):
-    """Generate stable ID for a threat item."""
     h = hashlib.md5(f"{title}{source}".encode()).hexdigest()[:8]
     return f"TI-{h.upper()}"
 
 
 def fetch_cisa_kev():
-    """Fetch CISA Known Exploited Vulnerabilities."""
     threats = []
     try:
         resp = requests.get(
@@ -110,9 +99,8 @@ def fetch_cisa_kev():
         vulns = sorted(data.get('vulnerabilities', []),
                        key=lambda x: x.get('dateAdded', ''),
                        reverse=True)[:5]
-
         for v in vulns:
-            title = f"CISA KEV: {v.get('vendorProject', '')} {v.get('product', '')} — {v.get('vulnerabilityName', '')}"
+            title = f"CISA KEV: {v.get('vendorProject', '')} {v.get('product', '')} - {v.get('vulnerabilityName', '')}"
             summary = v.get('shortDescription', '') + f" {v.get('requiredAction', '')}"
             threats.append({
                 "id": make_id(title, "CISA KEV"),
@@ -132,40 +120,31 @@ def fetch_cisa_kev():
 
 
 def fetch_rss(name, url, source_url):
-    """Generic RSS feed fetcher."""
     threats = []
     try:
         feed = feedparser.parse(url)
         for entry in feed.entries[:4]:
             title = entry.get('title', '')
             summary = entry.get('summary', entry.get('description', ''))
-            # Strip HTML tags
             summary = re.sub(r'<[^>]+>', ' ', summary)
             summary = re.sub(r'\s+', ' ', summary).strip()
-
             published = datetime.now(timezone.utc).isoformat()
             if hasattr(entry, 'published'):
                 try:
                     published = dateparser.parse(entry.published).isoformat()
                 except Exception:
                     pass
-
             full_text = f"{title} {summary}"
-            techniques = extract_techniques(full_text)
-            actors = extract_actors(full_text)
-            sectors = extract_sectors(full_text)
-            severity = classify_severity(full_text)
-
             threats.append({
                 "id": make_id(title, name),
                 "title": title[:200].strip(),
                 "source": name,
                 "source_url": source_url,
                 "published": published,
-                "severity": severity,
-                "techniques": techniques[:8],
-                "actors": actors,
-                "sectors": sectors,
+                "severity": classify_severity(full_text),
+                "techniques": extract_techniques(full_text)[:8],
+                "actors": extract_actors(full_text),
+                "sectors": extract_sectors(full_text),
                 "summary": summary[:400].strip()
             })
     except Exception as e:
@@ -174,7 +153,6 @@ def fetch_rss(name, url, source_url):
 
 
 def fetch_abuse_ch():
-    """Fetch recent malware URLs from Abuse.ch URLHaus."""
     threats = []
     try:
         resp = requests.post(
@@ -187,7 +165,7 @@ def fetch_abuse_ch():
             tags = list(set(u.get('tags', ['malware'])[0] for u in urls if u.get('tags')))[:3]
             threats.append({
                 "id": make_id("Abuse.ch URLHaus Recent", "Abuse.ch"),
-                "title": f"Abuse.ch URLHaus: Active malware distribution — {', '.join(tags) if tags else 'multiple families'}",
+                "title": f"Abuse.ch URLHaus: Active malware distribution - {', '.join(tags) if tags else 'multiple families'}",
                 "source": "Abuse.ch",
                 "source_url": "https://abuse.ch",
                 "published": datetime.now(timezone.utc).isoformat(),
@@ -195,7 +173,7 @@ def fetch_abuse_ch():
                 "techniques": ["T1071.001", "T1041", "T1059"],
                 "actors": [],
                 "sectors": ["Technology", "Financial Services"],
-                "summary": f"Abuse.ch URLHaus reporting {len(data.get('urls', []))} active malware distribution URLs. Recent tags include {', '.join(tags) if tags else 'various malware families'}."
+                "summary": f"Abuse.ch URLHaus reporting {len(data.get('urls', []))} active malware distribution URLs."
             })
     except Exception as e:
         print(f"Abuse.ch error: {e}")
@@ -203,13 +181,11 @@ def fetch_abuse_ch():
 
 
 def update_techniques(threats):
-    """Build technique frequency data from collected threats."""
     counts = {}
     for t in threats:
         for tp in t.get('techniques', []):
             counts[tp] = counts.get(tp, 0) + 1
 
-    # Load existing to track trends
     techniques_file = OUTPUT_DIR / "techniques.json"
     existing = {}
     if techniques_file.exists():
@@ -219,7 +195,6 @@ def update_techniques(threats):
         except Exception:
             pass
 
-    # ATT&CK technique names (subset of most common)
     NAMES = {
         "T1190": ("Exploit Public-Facing Application", "Initial Access"),
         "T1078": ("Valid Accounts", "Defense Evasion"),
@@ -266,35 +241,27 @@ def update_techniques(threats):
 
 
 def update_recommendations(threats, techniques_data):
-    """Generate BAS recommendations based on trending techniques."""
-
-    # Map techniques to scenarios
     SCENARIO_TECHNIQUES = {
-        "S1": {"name": "Ransomware Kill Chain",           "techniques": {"T1486","T1490","T1003.001","T1133","T1566.001"}},
-        "S2": {"name": "Cloud Control-Plane Pivot",       "techniques": {"T1078","T1528","T1530","T1537","T1098.001"}},
-        "S3": {"name": "Active Directory Compromise",     "techniques": {"T1558.003","T1003.001","T1003.006","T1550.002"}},
-        "S4": {"name": "WAF Bypass & Web Exploit",        "techniques": {"T1190","T1059.007","T1505.003"}},
-        "S5": {"name": "Lateral Movement Chain",          "techniques": {"T1021.002","T1047","T1570","T1557.001"}},
-        "S6": {"name": "Insider Threat - Data Theft",     "techniques": {"T1048","T1041","T1560.001","T1078"}},
-        "S7": {"name": "Supply Chain Compromise",         "techniques": {"T1195.002","T1195.001","T1059.001","T1553.002"}},
-        "S8": {"name": "Azure / Entra Identity Attack",   "techniques": {"T1528","T1550.001","T1078.004","T1098.003"}},
-        "S9": {"name": "Container & K8s Escape",          "techniques": {"T1610","T1611","T1552.007","T1496"}},
-        "S10":{"name": "API Abuse & Business Logic",      "techniques": {"T1190","T1059.007","T1110.003","T1041"}},
+        "S1":  {"name": "Ransomware Kill Chain",         "techniques": {"T1486","T1490","T1003.001","T1133","T1566.001"}},
+        "S2":  {"name": "Cloud Control-Plane Pivot",     "techniques": {"T1078","T1528","T1530","T1537","T1098.001"}},
+        "S3":  {"name": "Active Directory Compromise",   "techniques": {"T1558.003","T1003.001","T1003.006","T1550.002"}},
+        "S4":  {"name": "WAF Bypass & Web Exploit",      "techniques": {"T1190","T1059.007","T1505.003"}},
+        "S5":  {"name": "Lateral Movement Chain",        "techniques": {"T1021.002","T1047","T1570","T1557.001"}},
+        "S6":  {"name": "Insider Threat - Data Theft",   "techniques": {"T1048","T1041","T1560.001","T1078"}},
+        "S7":  {"name": "Supply Chain Compromise",       "techniques": {"T1195.002","T1195.001","T1059.001","T1553.002"}},
+        "S8":  {"name": "Azure / Entra Identity Attack", "techniques": {"T1528","T1550.001","T1078.004","T1098.003"}},
+        "S9":  {"name": "Container & K8s Escape",        "techniques": {"T1610","T1611","T1552.007","T1496"}},
+        "S10": {"name": "API Abuse & Business Logic",    "techniques": {"T1190","T1059.007","T1110.003","T1041"}},
     }
 
     trending = {t['id'] for t in techniques_data.get('techniques', []) if t.get('trend') == 'up'}
-    active_techniques = {t['id'] for threat in threats for t in [threat] for t in threat.get('techniques', [])}
+    active_techniques = {tp for threat in threats for tp in threat.get('techniques', [])}
 
     scores = []
     for sid, sc in SCENARIO_TECHNIQUES.items():
         matched = sc['techniques'] & (trending | active_techniques)
         if matched:
-            urgency = "Critical" if len(matched) >= 3 else "High"
-            # Find threat refs
-            refs = []
-            for threat in threats:
-                if any(tp in sc['techniques'] for tp in threat.get('techniques', [])):
-                    refs.append(threat['id'])
+            refs = [t['id'] for t in threats if any(tp in sc['techniques'] for tp in t.get('techniques', []))]
             scores.append({
                 "priority": 0,
                 "scenario_id": sid,
@@ -302,11 +269,11 @@ def update_recommendations(threats, techniques_data):
                 "reason": f"{', '.join(list(matched)[:3])} trending in recent threat intelligence. {len(matched)} matching techniques observed.",
                 "techniques_matched": list(matched)[:5],
                 "threat_refs": refs[:2],
-                "urgency": urgency,
+                "urgency": "Critical" if len(matched) >= 3 else "High",
                 "simulation_url": "../simulation/desktop/"
             })
 
-    scores.sort(key=lambda x: (0 if x['urgency']=='Critical' else 1, -len(x['techniques_matched'])))
+    scores.sort(key=lambda x: (0 if x['urgency'] == 'Critical' else 1, -len(x['techniques_matched'])))
     for i, s in enumerate(scores[:5]):
         s['priority'] = i + 1
 
@@ -317,35 +284,28 @@ def update_recommendations(threats, techniques_data):
 
 
 def update_feeds(feed_results):
-    """Update feed health status."""
     feeds = [
-        {"name": "CISA KEV",                   "url": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"},
-        {"name": "Cisco Talos RSS",             "url": "https://feeds.feedburner.com/feedburner/Talos"},
-        {"name": "Microsoft Threat Intel RSS",  "url": "https://www.microsoft.com/security/blog/feed/"},
-        {"name": "Palo Alto Unit42 RSS",        "url": "https://unit42.paloaltonetworks.com/feed/"},
-        {"name": "DFIR Report RSS",             "url": "https://thedfirreport.com/feed/"},
-        {"name": "Abuse.ch URLHaus",            "url": "https://urlhaus-api.abuse.ch/v1/urls/recent/"},
-        {"name": "AlienVault OTX",              "url": "https://otx.alienvault.com"},
-        {"name": "MITRE ATT&CK STIX",          "url": "https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json"},
+        {"name": "CISA KEV",                  "url": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"},
+        {"name": "Cisco Talos RSS",            "url": "https://feeds.feedburner.com/feedburner/Talos"},
+        {"name": "Microsoft Threat Intel RSS", "url": "https://www.microsoft.com/security/blog/feed/"},
+        {"name": "Palo Alto Unit42 RSS",       "url": "https://unit42.paloaltonetworks.com/feed/"},
+        {"name": "DFIR Report RSS",            "url": "https://thedfirreport.com/feed/"},
+        {"name": "Abuse.ch URLHaus",           "url": "https://urlhaus-api.abuse.ch/v1/urls/recent/"},
+        {"name": "AlienVault OTX",             "url": "https://otx.alienvault.com"},
+        {"name": "MITRE ATT&CK STIX",         "url": "https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json"},
     ]
-
     now = datetime.now(timezone.utc).isoformat()
     result = []
     for f in feeds:
-        name = f['name']
-        items = feed_results.get(name, {})
+        items = feed_results.get(f['name'], {})
         result.append({
-            "name": name,
+            "name": f['name'],
             "url": f['url'],
             "status": "healthy" if items.get('count', 0) >= 0 else "error",
             "last_updated": now,
             "items_today": items.get('count', 0)
         })
-
-    return {
-        "generated": now,
-        "feeds": result
-    }
+    return {"generated": now, "feeds": result}
 
 
 def main():
@@ -355,18 +315,16 @@ def main():
     all_threats = []
     feed_results = {}
 
-    # CISA KEV
     print("Fetching CISA KEV...")
     kev = fetch_cisa_kev()
     all_threats.extend(kev)
     feed_results["CISA KEV"] = {"count": len(kev)}
 
-    # RSS Feeds
     rss_feeds = [
-        ("Cisco Talos RSS",            "https://feeds.feedburner.com/feedburner/Talos",      "https://blog.talosintelligence.com"),
-        ("Microsoft Threat Intel RSS", "https://www.microsoft.com/security/blog/feed/",      "https://www.microsoft.com/security/blog"),
-        ("Palo Alto Unit42 RSS",       "https://unit42.paloaltonetworks.com/feed/",           "https://unit42.paloaltonetworks.com"),
-        ("DFIR Report RSS",            "https://thedfirreport.com/feed/",                    "https://thedfirreport.com"),
+        ("Cisco Talos RSS",            "https://feeds.feedburner.com/feedburner/Talos",    "https://blog.talosintelligence.com"),
+        ("Microsoft Threat Intel RSS", "https://www.microsoft.com/security/blog/feed/",    "https://www.microsoft.com/security/blog"),
+        ("Palo Alto Unit42 RSS",       "https://unit42.paloaltonetworks.com/feed/",         "https://unit42.paloaltonetworks.com"),
+        ("DFIR Report RSS",            "https://thedfirreport.com/feed/",                  "https://thedfirreport.com"),
     ]
 
     for name, url, source_url in rss_feeds:
@@ -375,20 +333,17 @@ def main():
         all_threats.extend(items)
         feed_results[name] = {"count": len(items)}
 
-    # Abuse.ch
     print("Fetching Abuse.ch...")
     abuse = fetch_abuse_ch()
     all_threats.extend(abuse)
     feed_results["Abuse.ch URLHaus"] = {"count": len(abuse)}
 
-    # Mark other feeds
     feed_results["AlienVault OTX"] = {"count": 0}
     feed_results["MITRE ATT&CK STIX"] = {"count": 0}
 
-    # Sort by date descending, deduplicate by ID
     seen_ids = set()
     unique_threats = []
-    for t in sorted(all_threats, key=lambda x: x.get('published',''), reverse=True):
+    for t in sorted(all_threats, key=lambda x: x.get('published', ''), reverse=True):
         if t['id'] not in seen_ids:
             seen_ids.add(t['id'])
             unique_threats.append(t)
@@ -396,31 +351,21 @@ def main():
     unique_threats = unique_threats[:MAX_THREATS]
     print(f"Collected {len(unique_threats)} unique threats")
 
-    # Update technique frequencies
     techniques_data = update_techniques(unique_threats)
-
-    # Update BAS recommendations
     recs_data = update_recommendations(unique_threats, techniques_data)
-
-    # Update feed health
     feeds_data = update_feeds(feed_results)
-
-    # Build threats JSON
     threats_data = {
         "generated": datetime.now(timezone.utc).isoformat(),
         "source": "BreachForge TI Feed Collector v1.0",
         "threats": unique_threats
     }
 
-    # Write all JSON files
-    files = {
-        "threats.json":         threats_data,
-        "techniques.json":      techniques_data,
-        "recommendations.json": recs_data,
-        "feeds.json":           feeds_data,
-    }
-
-    for filename, data in files.items():
+    for filename, data in [
+        ("threats.json", threats_data),
+        ("techniques.json", techniques_data),
+        ("recommendations.json", recs_data),
+        ("feeds.json", feeds_data),
+    ]:
         path = OUTPUT_DIR / filename
         path.write_text(json.dumps(data, indent=2, ensure_ascii=False))
         print(f"Written: {path} ({path.stat().st_size} bytes)")
