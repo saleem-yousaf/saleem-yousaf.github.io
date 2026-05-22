@@ -58,6 +58,13 @@ tr:hover>td{background:rgba(255,255,255,.018);}
 })();
 </script>
 <script>
+/* BreachForge v4.0 — colour constants, must load before scenario data */
+var C={bg:"#07090d",surface:"#0c1018",card:"#101520",border:"#1c2535",
+  accent:"#00d4ff",green:"#00e87a",red:"#ff3355",amber:"#ffaa00",
+  purple:"#a78bfa",pink:"#f472b6",cyan:"#22d3ee",orange:"#ff7c3a",
+  text:"#dde4ef",dim:"#55677a",muted:"#2a3545"};
+</script>
+<script>
 /* BreachForge v4.0 — scenario data, no transpilation needed */
 
 const TN={"T1566.001":"Spearphishing Attachment","T1059.001":"PowerShell Execution","T1078":"Valid Accounts","T1055.001":"DLL Injection","T1003.001":"LSASS Memory Dump","T1021.001":"Remote Desktop Protocol","T1021.002":"SMB/Admin Shares","T1047":"WMI Execution","T1486":"Data Encrypted for Impact","T1190":"Exploit Public-Facing App","T1110.003":"Password Spraying","T1562.001":"Disable Security Tools","T1041":"Exfil Over C2 Channel","T1558.003":"Kerberoasting","T1550.003":"Pass the Ticket","T1048":"Exfil Alternate Protocol","T1526":"Cloud Service Discovery","T1098":"Account Manipulation","T1570":"Lateral Tool Transfer","T1204.002":"Malicious File Execution","T1566.004":"Spearphishing Voice"};
@@ -786,7 +793,7 @@ function Onboarding({onDone}){
     {title:"Welcome to BreachForge",sub:"Breach Attack Simulation Platform · v4.0",body:<div style={{textAlign:"center",padding:"10px 0"}}>
       <div style={{fontSize:56,marginBottom:16}}>⚡</div>
       <div style={{fontSize:12,color:C.text,lineHeight:1.8,maxWidth:500,margin:"0 auto"}}>BreachForge runs continuous simulated attack campaigns against your security controls — without touching production systems. Every test maps to MITRE ATT&CK and closes the loop from simulation to remediation.</div>
-      <div style={{marginTop:24,display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>{[["No live exploits","Synthetic telemetry only"],["MITRE-mapped","Every TTP catalogued"],["Multi-persona","SOC, CISO, Architect views"],["6 Scenarios","Endpoint to cloud"]].map(([h,s])=><div key={h} style={{padding:"12px 16px",background:`${C.accent}09`,border:`1px solid ${C.accent}28`,borderRadius:5,textAlign:"center",minWidth:130}}><div style={{fontSize:11,fontWeight:700,color:C.accent}}>{h}</div><div style={{fontSize:9,color:C.dim,marginTop:3}}>{s}</div></div>)}</div>
+      <div style={{marginTop:24,display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>{[["No live exploits","Synthetic telemetry only"],["MITRE-mapped","Every TTP catalogued"],["Multi-persona","SOC, CISO, Architect views"],["10 Scenarios","Endpoint to cloud"]].map(([h,s])=><div key={h} style={{padding:"12px 16px",background:`${C.accent}09`,border:`1px solid ${C.accent}28`,borderRadius:5,textAlign:"center",minWidth:130}}><div style={{fontSize:11,fontWeight:700,color:C.accent}}>{h}</div><div style={{fontSize:9,color:C.dim,marginTop:3}}>{s}</div></div>)}</div>
     </div>},
     {title:"Select your role",sub:"Personalise your dashboard",body:<div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10}}>
       {[["CISO / CIO","🎯","Executive risk, compliance, board reporting"],["SOC Analyst","🔍","Alerts, detection rules, incident triage"],["Security Architect","🏗","Attack surface, control gaps, integrations"],["Project Manager","📋","Remediation roadmaps, sprint planning"],["Developer","💻","API access, agent deployment, docs"],["Security Engineer","⚙️","Rule tuning, playbook updates, TTPs"]].map(([r,ic,d])=>(
