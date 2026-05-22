@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://saleemyousaf.co.uk/sitemap.xml
