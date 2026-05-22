@@ -60,9 +60,11 @@
     .site-nav-links a.active { color: var(--heading); }
     .nav-dropdown { position: relative; }
     .nav-dropdown-toggle { color: var(--dim); font-size: 13px; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
-    .nav-dropdown-toggle:hover { color: var(--text); }
-    .nav-dropdown-menu { display: none; position: absolute; top: calc(100% + 12px); left: 0; background: var(--surf); border: 1px solid var(--border); border-radius: 6px; padding: 6px; min-width: 220px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
-    .nav-dropdown:hover .nav-dropdown-menu { display: flex; flex-direction: column; gap: 2px; }
+    .nav-dropdown-toggle:hover { color: var(--accent); }
+    .nav-dropdown:hover .nav-dropdown-toggle { color: var(--accent); }
+    .nav-dropdown-menu { position: absolute; top: 100%; left: 0; padding-top: 12px; opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 200; }
+    .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: all; }
+    .nav-dropdown-menu-inner { background: var(--surf); border: 1px solid var(--border); border-radius: 6px; padding: 6px; min-width: 220px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; }
     .nav-dropdown-menu a { padding: 7px 12px; border-radius: 4px; font-size: 13px; color: var(--dim); display: block; }
     .nav-dropdown-menu a:hover { background: var(--muted); color: var(--text); text-decoration: none; }
 
@@ -216,12 +218,12 @@
     <li><a href="https://saleemyousaf.co.uk/projects/">Projects</a></li>
     <li class="nav-dropdown">
       <span class="nav-dropdown-toggle">Articles ▾</span>
-      <div class="nav-dropdown-menu">
+      <div class="nav-dropdown-menu"><div class="nav-dropdown-menu-inner">
         <a href="https://saleemyousaf.co.uk/articles/">All Articles</a>
         <a href="https://saleemyousaf.co.uk/assume-breach/">Assume Breach</a>
         <a href="https://saleemyousaf.co.uk/ai-security-governance/">AI Security &amp; Governance</a>
         <a href="https://saleemyousaf.co.uk/breachforge/" style="color:#4a9eff;border-top:1px solid #1e2533;margin-top:4px;padding-top:10px;">⬡ BreachForge BAS</a>
-      </div>
+      </div></div>
     </li>
     <li><a href="https://saleemyousaf.co.uk/connect/">Connect</a></li>
   </ul>
