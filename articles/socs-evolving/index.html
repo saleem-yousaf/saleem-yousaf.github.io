@@ -112,7 +112,17 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 .footer-copy{font-size:12px;color:var(--muted2);}
 @media(max-width:960px){.related-grid{grid-template-columns:repeat(2,1fr);}.cta-wrap{grid-template-columns:1fr;}.footer-inner{grid-template-columns:1fr;}.key-points{grid-template-columns:1fr;}}
 @media(max-width:600px){.hero-wrap,.article-body,.related-wrap,.cta-wrap{padding:0 20px;}.nav-links{display:none;}.related-grid{grid-template-columns:1fr;}.footer-inner,.footer-bottom{padding:0 20px;}}
-</style>
+    .arch-image{cursor:zoom-in;position:relative;}
+    .arch-image::after{content:"\2922";position:absolute;top:10px;right:12px;font-size:18px;color:rgba(0,212,255,0.5);pointer-events:none;opacity:0;transition:opacity 0.2s;}
+    .arch-image:hover::after{opacity:1;}
+    .lbx-overlay{display:none;position:fixed;inset:0;background:rgba(7,9,13,0.95);z-index:9999;align-items:center;justify-content:center;padding:12px;cursor:zoom-out;}
+    .lbx-overlay.open{display:flex;}
+    .lbx-inner{width:96vw;max-width:1600px;max-height:94vh;overflow:auto;border-radius:8px;border:1px solid rgba(0,212,255,0.2);background:#07090d;padding:0;cursor:default;}
+    .lbx-inner svg,.lbx-inner img{display:block;width:100%;height:auto;max-height:88vh;object-fit:contain;}
+    .lbx-caption{padding:10px 16px;font-family:var(--mono,monospace);font-size:11px;color:#55677a;border-top:1px solid #1a2235;background:#0c1018;display:flex;justify-content:space-between;align-items:center;}
+    .lbx-close{font-size:20px;color:rgba(0,212,255,0.6);cursor:pointer;line-height:1;padding:0 4px;}
+    .lbx-close:hover{color:#00d4ff;}
+    </style>
 </head>
 <body>
 <nav>
@@ -175,7 +185,61 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
   <div class="key-point"><div class="key-point-dot"></div>Secure and controlled use of AI within security operations</div>
 </div>
 <div class="pull-quote">The goal is not to automate the SOC. The goal is to build a SOC that is intelligent, governed, and human-led.</div>
-    <div class="arch-image"><img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/704/493e664a-2f71-4aa8-ba4b-ffb3fb02ce72/image-1024x683.png" alt="How AI is transforming modern Security Operations Centres" loading="lazy"><div class="arch-image-caption">// How AI is transforming modern Security Operations Centres</div></div>
+    <div class="arch-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" style="width:100%;max-width:900px;display:block;">
+  <rect width="900" height="420" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">How AI is Transforming Modern Security Operations Centres</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Traditional SOC vs AI-Augmented SOC · Analyst capacity · MTTD · MTTR · Alert fatigue reduction</text>
+  <!-- Traditional SOC -->
+  <rect x="20" y="58" width="410" height="300" rx="6" fill="#0f0a0a" stroke="#55677a" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="225" y="76" font-family="Arial" font-size="11" font-weight="bold" fill="#55677a" text-anchor="middle">TRADITIONAL SOC</text>
+  <rect x="30" y="85" width="390" height="30" rx="3" fill="#1a0808" stroke="#55677a" stroke-width="0.5"/>
+  <text x="225" y="104" font-family="Arial" font-size="9" fill="#888" text-anchor="middle">100,000+ alerts/day · Analyst reviews manually · MTTD: 4-8 hours</text>
+  <rect x="30" y="122" width="185" height="50" rx="3" fill="#0c1018" stroke="#55677a" stroke-width="0.5"/>
+  <text x="122" y="142" font-family="Arial" font-size="9" font-weight="bold" fill="#888" text-anchor="middle">Tier 1 Analyst</text>
+  <text x="122" y="156" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">Manual triage · 200 alerts/day</text>
+  <rect x="225" y="122" width="185" height="50" rx="3" fill="#0c1018" stroke="#55677a" stroke-width="0.5"/>
+  <text x="317" y="142" font-family="Arial" font-size="9" font-weight="bold" fill="#888" text-anchor="middle">Tier 2 Analyst</text>
+  <text x="317" y="156" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">Investigation · 8hr MTTR average</text>
+  <rect x="30" y="180" width="185" height="50" rx="3" fill="#0c1018" stroke="#55677a" stroke-width="0.5"/>
+  <text x="122" y="200" font-family="Arial" font-size="9" font-weight="bold" fill="#888" text-anchor="middle">Alert Fatigue</text>
+  <text x="122" y="214" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">70% false positives · Burnout</text>
+  <rect x="225" y="180" width="185" height="50" rx="3" fill="#0c1018" stroke="#55677a" stroke-width="0.5"/>
+  <text x="317" y="200" font-family="Arial" font-size="9" font-weight="bold" fill="#888" text-anchor="middle">Manual Runbooks</text>
+  <text x="317" y="214" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">Inconsistent · Human error</text>
+  <rect x="30" y="240" width="390" height="36" rx="3" fill="#150808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="225" y="255" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Challenges: Skill shortage · 24/7 coverage cost · Dwell time 200+ days</text>
+  <text x="225" y="269" font-family="Arial" font-size="8" fill="#aa4455" text-anchor="middle">Reactive not proactive · Siloed tools · No threat hunting capacity</text>
+  <text x="225" y="340" font-family="Arial" font-size="22" font-weight="bold" fill="#55677a" text-anchor="middle">MTTD: 4-8 hrs</text>
+  <text x="225" y="360" font-family="Arial" font-size="12" fill="#55677a" text-anchor="middle">MTTR: 24-72 hrs</text>
+
+  <!-- AI SOC -->
+  <rect x="470" y="58" width="410" height="300" rx="6" fill="#050d10" stroke="#00d4ff" stroke-width="2"/>
+  <text x="675" y="76" font-family="Arial" font-size="11" font-weight="bold" fill="#00d4ff" text-anchor="middle">AI-AUGMENTED SOC</text>
+  <rect x="480" y="85" width="390" height="30" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="675" y="104" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">AI pre-filters to 5,000 actionable alerts · MTTD: under 15 minutes</text>
+  <rect x="480" y="122" width="185" height="50" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="1"/>
+  <text x="572" y="142" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">AI Triage Layer</text>
+  <text x="572" y="156" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">ML classifies · Auto-enriches</text>
+  <rect x="675" y="122" width="185" height="50" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="1"/>
+  <text x="767" y="142" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">SOAR Automation</text>
+  <text x="767" y="156" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">60% auto-resolved · XSOAR</text>
+  <rect x="480" y="180" width="185" height="50" rx="3" fill="#001a10" stroke="#00e87a" stroke-width="1"/>
+  <text x="572" y="200" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a" text-anchor="middle">Threat Hunting AI</text>
+  <text x="572" y="214" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">Proactive · UEBA · Dark web</text>
+  <rect x="675" y="180" width="185" height="50" rx="3" fill="#001a10" stroke="#00e87a" stroke-width="1"/>
+  <text x="767" y="200" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a" text-anchor="middle">AI Analyst Copilot</text>
+  <text x="767" y="214" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">Natural language · Case summary</text>
+  <rect x="480" y="240" width="390" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="675" y="255" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Benefits: 80% alert reduction · Analyst focuses on complex threats only</text>
+  <text x="675" y="269" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">24/7 AI coverage · Consistent playbooks · Continuous threat hunting</text>
+  <text x="675" y="340" font-family="Arial" font-size="22" font-weight="bold" fill="#00d4ff" text-anchor="middle">MTTD: &lt;15 min</text>
+  <text x="675" y="360" font-family="Arial" font-size="12" fill="#00e87a" text-anchor="middle">MTTR: &lt;2 hrs</text>
+
+  <rect x="20" y="372" width="860" height="36" rx="4" fill="#0a1018" stroke="#1a2235" stroke-width="1"/>
+  <text x="450" y="390" font-family="Arial" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">AI tools: Microsoft Security Copilot · Splunk AI · CrowdStrike Charlotte AI · Darktrace · Google SecOps</text>
+  <text x="450" y="404" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">AI does not replace analysts — it removes tier-1 toil so analysts focus on complex hunting and response · saleemyousaf.co.uk</text>
+</svg>
+      <div class="arch-image-caption">// How AI is transforming modern Security Operations Centres</div></div>
     <div class="article-nav-bar"><a href="https://saleemyousaf.co.uk/articles/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back to all articles</a><a href="https://saleemyousaf.co.uk/articles/stride-cloud-detection/">STRIDE in Cloud Environments <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
   </article>
 </div>
@@ -217,5 +281,7 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
   </div>
 </footer>
 
+<div class="lbx-overlay" id="lbx" onclick="lbxClose(event)"><div class="lbx-inner" id="lbx-inner" onclick="event.stopPropagation()"><div id="lbx-content"></div><div class="lbx-caption"><span id="lbx-cap"></span><span class="lbx-close" onclick="lbxClose()">&#x2715;</span></div></div></div>
+<script>(function(){function openLbx(el){var c=el.querySelector('svg,img');var cap=el.querySelector('.arch-image-caption');if(!c)return;document.getElementById('lbx-content').innerHTML=c.outerHTML;document.getElementById('lbx-cap').textContent=cap?cap.textContent:'';document.getElementById('lbx').classList.add('open');document.body.style.overflow='hidden';}window.lbxClose=function(e){if(e&&e.target===document.getElementById('lbx-inner'))return;document.getElementById('lbx').classList.remove('open');document.body.style.overflow='';document.getElementById('lbx-content').innerHTML='';};document.addEventListener('keydown',function(e){if(e.key==='Escape')window.lbxClose();});document.querySelectorAll('.arch-image').forEach(function(el){el.addEventListener('click',function(){openLbx(el);});});})();</script>
 </body>
 </html>

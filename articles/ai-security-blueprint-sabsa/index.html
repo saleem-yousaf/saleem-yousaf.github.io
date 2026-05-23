@@ -112,7 +112,17 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 .footer-copy{font-size:12px;color:var(--muted2);}
 @media(max-width:960px){.related-grid{grid-template-columns:repeat(2,1fr);}.cta-wrap{grid-template-columns:1fr;}.footer-inner{grid-template-columns:1fr;}.key-points{grid-template-columns:1fr;}}
 @media(max-width:600px){.hero-wrap,.article-body,.related-wrap,.cta-wrap{padding:0 20px;}.nav-links{display:none;}.related-grid{grid-template-columns:1fr;}.footer-inner,.footer-bottom{padding:0 20px;}}
-</style>
+    .arch-image{cursor:zoom-in;position:relative;}
+    .arch-image::after{content:"\2922";position:absolute;top:10px;right:12px;font-size:18px;color:rgba(0,212,255,0.5);pointer-events:none;opacity:0;transition:opacity 0.2s;}
+    .arch-image:hover::after{opacity:1;}
+    .lbx-overlay{display:none;position:fixed;inset:0;background:rgba(7,9,13,0.95);z-index:9999;align-items:center;justify-content:center;padding:12px;cursor:zoom-out;}
+    .lbx-overlay.open{display:flex;}
+    .lbx-inner{width:96vw;max-width:1600px;max-height:94vh;overflow:auto;border-radius:8px;border:1px solid rgba(0,212,255,0.2);background:#07090d;padding:0;cursor:default;}
+    .lbx-inner svg,.lbx-inner img{display:block;width:100%;height:auto;max-height:88vh;object-fit:contain;}
+    .lbx-caption{padding:10px 16px;font-family:var(--mono,monospace);font-size:11px;color:#55677a;border-top:1px solid #1a2235;background:#0c1018;display:flex;justify-content:space-between;align-items:center;}
+    .lbx-close{font-size:20px;color:rgba(0,212,255,0.6);cursor:pointer;line-height:1;padding:0 4px;}
+    .lbx-close:hover{color:#00d4ff;}
+    </style>
 </head>
 <body>
 <nav>
@@ -173,7 +183,56 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 <h2 id="operational">Operational Layer: Run and Monitor</h2>
 <p>Continuous monitoring of AI usage patterns, threat detection for prompt anomalies and abuse indicators, and integration with SOC workflows. Key operational controls include drift detection for model and behaviour changes, logging of all inference interactions, and incident response playbooks for prompt injection attacks, data leakage incidents, and model compromise events.</p>
 <div class="pull-quote">Applying SABSA to AI security ensures that every control from prompt validation to cloud configuration is directly traceable to business risk and organisational trust.</div>
-    <div class="arch-image"><img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/923/9012f33b-53fd-4e39-84d5-2f59bcc37626/image-486x1024.png" alt="SABSA-aligned AI security architecture framework" loading="lazy"><div class="arch-image-caption">// SABSA-aligned AI security architecture framework</div></div>
+    <div class="arch-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" style="width:100%;max-width:900px;display:block;">
+  <rect width="900" height="460" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">SABSA-Aligned AI Security Architecture Framework</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Six SABSA layers applied to AI/ML systems · Contextual to component · Business risk to technical control</text>
+  <!-- SABSA layers stacked -->
+  <rect x="20" y="58" width="860" height="52" rx="5" fill="#1a0d00" stroke="#f97316" stroke-width="1.5"/>
+  <text x="140" y="78" font-family="Arial" font-size="11" font-weight="bold" fill="#f97316">CONTEXTUAL</text>
+  <text x="140" y="94" font-family="Arial" font-size="9" fill="#884400">Business risk view</text>
+  <rect x="280" y="65" width="580" height="36" rx="3" fill="#2a1500" stroke="#f97316" stroke-width="0.5"/>
+  <text x="570" y="80" font-family="Arial" font-size="8" fill="#f97316" text-anchor="middle">AI/ML systems present novel business risks: IP theft via model inversion · Regulatory exposure (EU AI Act, DORA) · Reputational harm from bias</text>
+  <text x="570" y="94" font-family="Arial" font-size="8" fill="#884400" text-anchor="middle">Decision: AI use case risk classification required before deployment · Board-level AI risk appetite statement</text>
+
+  <rect x="20" y="118" width="860" height="52" rx="5" fill="#150a00" stroke="#FFAA00" stroke-width="1.5"/>
+  <text x="140" y="138" font-family="Arial" font-size="11" font-weight="bold" fill="#FFAA00">CONCEPTUAL</text>
+  <text x="140" y="154" font-family="Arial" font-size="9" fill="#aa8800">Architecture principles</text>
+  <rect x="280" y="125" width="580" height="36" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="570" y="140" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Principles: Data minimisation · Purpose limitation · Human oversight · Explainability requirement · Fail-safe defaults</text>
+  <text x="570" y="154" font-family="Arial" font-size="8" fill="#aa8800" text-anchor="middle">AI governance policy · Model risk register · Use case approval process · Ethical AI review board</text>
+
+  <rect x="20" y="178" width="860" height="52" rx="5" fill="#0a0518" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="140" y="198" font-family="Arial" font-size="11" font-weight="bold" fill="#a78bfa">LOGICAL</text>
+  <text x="140" y="214" font-family="Arial" font-size="9" fill="#7755aa">Security services design</text>
+  <rect x="280" y="185" width="580" height="36" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="570" y="200" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Access control to training data · Model versioning and rollback · Inference API authentication · Prompt injection detection</text>
+  <text x="570" y="214" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">Output classification · PII redaction in responses · Audit logging of all queries and outputs · RBAC on model endpoints</text>
+
+  <rect x="20" y="238" width="860" height="52" rx="5" fill="#080d14" stroke="#00d4ff" stroke-width="1.5"/>
+  <text x="140" y="258" font-family="Arial" font-size="11" font-weight="bold" fill="#00d4ff">PHYSICAL</text>
+  <text x="140" y="274" font-family="Arial" font-size="9" fill="#007799">Platform and infrastructure</text>
+  <rect x="280" y="245" width="580" height="36" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="570" y="260" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Private LLM deployment (Azure OpenAI / AWS Bedrock) · VPC isolation · Private endpoints · No public model APIs</text>
+  <text x="570" y="274" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">Encryption at rest (AES-256) · TLS 1.3 in transit · Key management via KMS/Key Vault · GPU isolation for training</text>
+
+  <rect x="20" y="298" width="860" height="52" rx="5" fill="#001a0a" stroke="#00e87a" stroke-width="1.5"/>
+  <text x="140" y="318" font-family="Arial" font-size="11" font-weight="bold" fill="#00e87a">COMPONENT</text>
+  <text x="140" y="334" font-family="Arial" font-size="9" fill="#008844">Technical controls</text>
+  <rect x="280" y="305" width="580" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="570" y="320" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Guardrails API · Content safety filters · Azure AI Content Safety · AWS Bedrock Guardrails · Lakera Guard</text>
+  <text x="570" y="334" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">Prompt injection regex + ML classifiers · Output PII scanning (Presidio) · OWASP LLM Top 10 mitigations</text>
+
+  <rect x="20" y="358" width="860" height="52" rx="5" fill="#050d10" stroke="#22d3ee" stroke-width="1.5"/>
+  <text x="140" y="378" font-family="Arial" font-size="11" font-weight="bold" fill="#22d3ee">OPERATIONAL</text>
+  <text x="140" y="394" font-family="Arial" font-size="9" fill="#007799">Running and monitoring</text>
+  <rect x="280" y="365" width="580" height="36" rx="3" fill="#001a20" stroke="#22d3ee" stroke-width="0.5"/>
+  <text x="570" y="380" font-family="Arial" font-size="8" fill="#22d3ee" text-anchor="middle">Model drift monitoring · Bias detection · Performance SLAs · Incident response for AI failures · Model retraining cadence</text>
+  <text x="570" y="394" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">SIEM integration for AI API logs · SOAR playbooks for AI abuse · Red team AI models quarterly · Responsible AI reporting</text>
+
+  <text x="450" y="440" font-family="Arial" font-size="9" fill="#55677a" text-anchor="middle">SABSA ensures AI security is designed from business risk down to technical control — not retrofitted · EU AI Act compliance · saleemyousaf.co.uk</text>
+</svg>
+      <div class="arch-image-caption">// SABSA-aligned AI security architecture framework</div></div>
     <div class="article-nav-bar"><a href="https://saleemyousaf.co.uk/articles/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back to all articles</a><a href="https://saleemyousaf.co.uk/articles/secure-landing-zone-private-apis/">Secure Cloud Landing Zone: Private APIs <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
   </article>
 </div>
@@ -215,5 +274,7 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
   </div>
 </footer>
 
+<div class="lbx-overlay" id="lbx" onclick="lbxClose(event)"><div class="lbx-inner" id="lbx-inner" onclick="event.stopPropagation()"><div id="lbx-content"></div><div class="lbx-caption"><span id="lbx-cap"></span><span class="lbx-close" onclick="lbxClose()">&#x2715;</span></div></div></div>
+<script>(function(){function openLbx(el){var c=el.querySelector('svg,img');var cap=el.querySelector('.arch-image-caption');if(!c)return;document.getElementById('lbx-content').innerHTML=c.outerHTML;document.getElementById('lbx-cap').textContent=cap?cap.textContent:'';document.getElementById('lbx').classList.add('open');document.body.style.overflow='hidden';}window.lbxClose=function(e){if(e&&e.target===document.getElementById('lbx-inner'))return;document.getElementById('lbx').classList.remove('open');document.body.style.overflow='';document.getElementById('lbx-content').innerHTML='';};document.addEventListener('keydown',function(e){if(e.key==='Escape')window.lbxClose();});document.querySelectorAll('.arch-image').forEach(function(el){el.addEventListener('click',function(){openLbx(el);});});})();</script>
 </body>
 </html>
