@@ -172,7 +172,138 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 <p>To make threat modelling useful, it needs to answer: how would we detect this in real time? This is where STRIDE becomes far more powerful. Instead of just identifying threats, we map them directly to observable behaviours and detection use cases.</p>
 
 <div class="arch-image">
-  <img src="../assets/stride-cloud-detection.jpg" alt="STRIDE mapped to cloud detection use cases" loading="lazy">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" style="width:100%;max-width:900px;display:block;">
+  <rect width="900" height="500" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">STRIDE Threat Hunting in Cloud Landing Zones</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">From threat model to live detection — each STRIDE category mapped to observable cloud behaviour</text>
+
+  <!-- Column headers -->
+  <rect x="20" y="56" width="135" height="28" rx="3" fill="#1a2235"/>
+  <text x="87" y="75" font-family="Arial" font-size="9" font-weight="bold" fill="#55677a" text-anchor="middle">STRIDE</text>
+  <rect x="163" y="56" width="180" height="28" rx="3" fill="#1a0d00"/>
+  <text x="253" y="75" font-family="Arial" font-size="9" font-weight="bold" fill="#f97316" text-anchor="middle">OBSERVABLE BEHAVIOUR</text>
+  <rect x="351" y="56" width="185" height="28" rx="3" fill="#001030"/>
+  <text x="443" y="75" font-family="Arial" font-size="9" font-weight="bold" fill="#0078d4" text-anchor="middle">DETECTION SOURCE</text>
+  <rect x="544" y="56" width="185" height="28" rx="3" fill="#002a10"/>
+  <text x="636" y="75" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a" text-anchor="middle">SIEM RULE / ALERT</text>
+  <rect x="737" y="56" width="143" height="28" rx="3" fill="#150a28"/>
+  <text x="808" y="75" font-family="Arial" font-size="9" font-weight="bold" fill="#a78bfa" text-anchor="middle">HUNT QUERY</text>
+
+  <!-- Spoofing row -->
+  <rect x="20" y="90" width="135" height="60" rx="3" fill="#0a0518" stroke="#a78bfa" stroke-width="1"/>
+  <text x="87" y="116" font-family="Arial" font-size="10" font-weight="bold" fill="#a78bfa" text-anchor="middle">SPOOFING</text>
+  <text x="87" y="132" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">Identity abuse</text>
+  <rect x="163" y="90" width="180" height="60" rx="3" fill="#0c1018" stroke="#f97316" stroke-width="0.5"/>
+  <text x="253" y="110" font-family="Arial" font-size="8" fill="#f97316" text-anchor="middle">Unusual sign-in location</text>
+  <text x="253" y="124" font-family="Arial" font-size="8" fill="#884400" text-anchor="middle">Unexpected role assumption</text>
+  <text x="253" y="138" font-family="Arial" font-size="8" fill="#884400" text-anchor="middle">New credential creation</text>
+  <rect x="351" y="90" width="185" height="60" rx="3" fill="#0c1018" stroke="#0078d4" stroke-width="0.5"/>
+  <text x="443" y="110" font-family="Arial" font-size="8" fill="#0078d4" text-anchor="middle">Entra Sign-in logs</text>
+  <text x="443" y="124" font-family="Arial" font-size="8" fill="#0055aa" text-anchor="middle">CloudTrail AssumeRole</text>
+  <text x="443" y="138" font-family="Arial" font-size="8" fill="#0055aa" text-anchor="middle">UEBA risk score</text>
+  <rect x="544" y="90" width="185" height="60" rx="3" fill="#0c1018" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="636" y="110" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Impossible travel alert</text>
+  <text x="636" y="124" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">Cross-account role spike</text>
+  <text x="636" y="138" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">MFA fatigue detection</text>
+  <rect x="737" y="90" width="143" height="60" rx="3" fill="#0c1018" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="808" y="110" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Sign-ins from</text>
+  <text x="808" y="124" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">new ASN or</text>
+  <text x="808" y="138" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">country last 24h</text>
+
+  <!-- Tampering row -->
+  <rect x="20" y="156" width="135" height="60" rx="3" fill="#150808" stroke="#ff3355" stroke-width="1"/>
+  <text x="87" y="182" font-family="Arial" font-size="10" font-weight="bold" fill="#ff3355" text-anchor="middle">TAMPERING</text>
+  <text x="87" y="198" font-family="Arial" font-size="8" fill="#aa4455" text-anchor="middle">Control change</text>
+  <rect x="163" y="156" width="180" height="60" rx="3" fill="#0c1018" stroke="#f97316" stroke-width="0.5"/>
+  <text x="253" y="176" font-family="Arial" font-size="8" fill="#f97316" text-anchor="middle">SCP / policy modified</text>
+  <text x="253" y="190" font-family="Arial" font-size="8" fill="#884400" text-anchor="middle">Security group rule added</text>
+  <text x="253" y="204" font-family="Arial" font-size="8" fill="#884400" text-anchor="middle">S3 ACL or bucket policy edit</text>
+  <rect x="351" y="156" width="185" height="60" rx="3" fill="#0c1018" stroke="#0078d4" stroke-width="0.5"/>
+  <text x="443" y="176" font-family="Arial" font-size="8" fill="#0078d4" text-anchor="middle">AWS Config rules</text>
+  <text x="443" y="190" font-family="Arial" font-size="8" fill="#0055aa" text-anchor="middle">CloudTrail write events</text>
+  <text x="443" y="204" font-family="Arial" font-size="8" fill="#0055aa" text-anchor="middle">Azure Policy compliance</text>
+  <rect x="544" y="156" width="185" height="60" rx="3" fill="#0c1018" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="636" y="176" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Unauthorised config change</text>
+  <text x="636" y="190" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">0.0.0.0/0 rule created</text>
+  <text x="636" y="204" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">IaC drift alert</text>
+  <rect x="737" y="156" width="143" height="60" rx="3" fill="#0c1018" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="808" y="176" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Config changes</text>
+  <text x="808" y="190" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">outside approved</text>
+  <text x="808" y="204" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">change window</text>
+
+  <!-- Info Disclosure row -->
+  <rect x="20" y="222" width="135" height="60" rx="3" fill="#001a10" stroke="#00e87a" stroke-width="1"/>
+  <text x="87" y="242" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a" text-anchor="middle">INFORMATION</text>
+  <text x="87" y="256" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a" text-anchor="middle">DISCLOSURE</text>
+  <text x="87" y="272" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">Data exposure</text>
+  <rect x="163" y="222" width="180" height="60" rx="3" fill="#0c1018" stroke="#f97316" stroke-width="0.5"/>
+  <text x="253" y="242" font-family="Arial" font-size="8" fill="#f97316" text-anchor="middle">Large S3 data download</text>
+  <text x="253" y="256" font-family="Arial" font-size="8" fill="#884400" text-anchor="middle">Public bucket created</text>
+  <text x="253" y="270" font-family="Arial" font-size="8" fill="#884400" text-anchor="middle">API returning PII fields</text>
+  <rect x="351" y="222" width="185" height="60" rx="3" fill="#0c1018" stroke="#0078d4" stroke-width="0.5"/>
+  <text x="443" y="242" font-family="Arial" font-size="8" fill="#0078d4" text-anchor="middle">Macie · CASB · DLP</text>
+  <text x="443" y="256" font-family="Arial" font-size="8" fill="#0055aa" text-anchor="middle">S3 access logs</text>
+  <text x="443" y="270" font-family="Arial" font-size="8" fill="#0055aa" text-anchor="middle">WAF response inspection</text>
+  <rect x="544" y="222" width="185" height="60" rx="3" fill="#0c1018" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="636" y="242" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">S3 public access alert</text>
+  <text x="636" y="256" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">High-volume GET spike</text>
+  <text x="636" y="270" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">PII classification alert</text>
+  <rect x="737" y="222" width="143" height="60" rx="3" fill="#0c1018" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="808" y="242" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Bulk S3 GetObject</text>
+  <text x="808" y="256" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">by identity not</text>
+  <text x="808" y="270" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">seen before</text>
+
+  <!-- Privilege Escalation row -->
+  <rect x="20" y="288" width="135" height="60" rx="3" fill="#0f0a0a" stroke="#FFAA00" stroke-width="1"/>
+  <text x="87" y="308" font-family="Arial" font-size="9" font-weight="bold" fill="#FFAA00" text-anchor="middle">ELEVATION OF</text>
+  <text x="87" y="322" font-family="Arial" font-size="9" font-weight="bold" fill="#FFAA00" text-anchor="middle">PRIVILEGE</text>
+  <text x="87" y="338" font-family="Arial" font-size="8" fill="#aa8800" text-anchor="middle">Priv escalation</text>
+  <rect x="163" y="288" width="180" height="60" rx="3" fill="#0c1018" stroke="#f97316" stroke-width="0.5"/>
+  <text x="253" y="308" font-family="Arial" font-size="8" fill="#f97316" text-anchor="middle">Role policy attached</text>
+  <text x="253" y="322" font-family="Arial" font-size="8" fill="#884400" text-anchor="middle">Admin action by non-admin</text>
+  <text x="253" y="336" font-family="Arial" font-size="8" fill="#884400" text-anchor="middle">PIM activation outside hours</text>
+  <rect x="351" y="288" width="185" height="60" rx="3" fill="#0c1018" stroke="#0078d4" stroke-width="0.5"/>
+  <text x="443" y="308" font-family="Arial" font-size="8" fill="#0078d4" text-anchor="middle">IAM Access Analyser</text>
+  <text x="443" y="322" font-family="Arial" font-size="8" fill="#0055aa" text-anchor="middle">Defender for Identity</text>
+  <text x="443" y="336" font-family="Arial" font-size="8" fill="#0055aa" text-anchor="middle">PIM audit log</text>
+  <rect x="544" y="288" width="185" height="60" rx="3" fill="#0c1018" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="636" y="308" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Privilege escalation alert</text>
+  <text x="636" y="322" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">High-risk IAM event</text>
+  <text x="636" y="336" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">Out-of-hours PIM alert</text>
+  <rect x="737" y="288" width="143" height="60" rx="3" fill="#0c1018" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="808" y="308" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">AttachRolePolicy</text>
+  <text x="808" y="322" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">by user without</text>
+  <text x="808" y="336" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">IAM admin role</text>
+
+  <!-- Denial of Service row -->
+  <rect x="20" y="354" width="135" height="60" rx="3" fill="#001a0a" stroke="#00d4ff" stroke-width="1"/>
+  <text x="87" y="374" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">DENIAL OF</text>
+  <text x="87" y="388" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">SERVICE</text>
+  <text x="87" y="404" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">Availability attack</text>
+  <rect x="163" y="354" width="180" height="60" rx="3" fill="#0c1018" stroke="#f97316" stroke-width="0.5"/>
+  <text x="253" y="374" font-family="Arial" font-size="8" fill="#f97316" text-anchor="middle">API request flood</text>
+  <text x="253" y="388" font-family="Arial" font-size="8" fill="#884400" text-anchor="middle">Lambda concurrency hit</text>
+  <text x="253" y="402" font-family="Arial" font-size="8" fill="#884400" text-anchor="middle">Resource quota exhaustion</text>
+  <rect x="351" y="354" width="185" height="60" rx="3" fill="#0c1018" stroke="#0078d4" stroke-width="0.5"/>
+  <text x="443" y="374" font-family="Arial" font-size="8" fill="#0078d4" text-anchor="middle">WAF rate rules</text>
+  <text x="443" y="388" font-family="Arial" font-size="8" fill="#0055aa" text-anchor="middle">CloudWatch alarms</text>
+  <text x="443" y="402" font-family="Arial" font-size="8" fill="#0055aa" text-anchor="middle">AWS Shield metrics</text>
+  <rect x="544" y="354" width="185" height="60" rx="3" fill="#0c1018" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="636" y="374" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">429 rate limit spike</text>
+  <text x="636" y="388" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">Throttle threshold breach</text>
+  <text x="636" y="402" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">Shield DDoS detection</text>
+  <rect x="737" y="354" width="143" height="60" rx="3" fill="#0c1018" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="808" y="374" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Source IPs with</text>
+  <text x="808" y="388" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">&gt;1000 req/min</text>
+  <text x="808" y="402" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">to single endpoint</text>
+
+  <!-- Bottom bar -->
+  <rect x="20" y="428" width="860" height="52" rx="4" fill="#0a1018" stroke="#00d4ff" stroke-width="1"/>
+  <text x="450" y="446" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">The shift: threat modelling at design generates the detection requirement — BAS validates it fires at runtime</text>
+  <text x="450" y="461" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">Design → write rule → deploy → simulate with BAS → confirm alert fires → repeat on every architecture change</text>
+  <text x="450" y="475" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">BreachForge maps all 10 scenarios to this detection chain · saleemyousaf.co.uk/breachforge</text>
+</svg>
+  
   <div class="arch-image-caption">// STRIDE threat hunting in cloud landing zones</div>
 </div>
 
