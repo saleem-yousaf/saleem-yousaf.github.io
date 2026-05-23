@@ -169,7 +169,112 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 <div class="section-intro">Consultancies are often measured on three things at once: speed, consistency, and assurance. Clients want rapid delivery, but they also want architecture decisions robust enough for internal security review, audit scrutiny, and long-term operations. A secure AWS reference architecture bridges that gap.</div>
 
 <div class="arch-image">
-  <img src="../assets/secure-by-design-aws.png" alt="Secure by design AWS reference architecture for consultancy delivery" loading="lazy">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" style="width:100%;max-width:900px;display:block;">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#00d4ff"/></marker>
+    <marker id="arrr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#f97316"/></marker>
+  </defs>
+  <rect width="900" height="520" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Secure by Design — AWS Reference Architecture</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Five design principles layered end-to-end · Private by default · Defence in depth · Visibility from day one</text>
+
+  <!-- INTERNET -->
+  <rect x="20" y="58" width="100" height="410" rx="5" fill="#150808" stroke="#ff3355" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="70" y="78" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355" text-anchor="middle">INTERNET</text>
+  <rect x="30" y="90" width="80" height="30" rx="3" fill="#2a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="70" y="109" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Clients</text>
+  <rect x="30" y="128" width="80" height="30" rx="3" fill="#2a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="70" y="147" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">CDN / DNS</text>
+  <line x1="120" y1="200" x2="140" y2="200" stroke="#f97316" stroke-width="2" marker-end="url(#arrr)"/>
+
+  <!-- PRINCIPLE 1: Private by Default — Edge layer -->
+  <rect x="140" y="58" width="160" height="410" rx="5" fill="#080d14" stroke="#f97316" stroke-width="1.5"/>
+  <rect x="140" y="58" width="160" height="24" rx="5" fill="#f97316"/>
+  <text x="220" y="75" font-family="Arial" font-size="9" font-weight="bold" fill="#07090d" text-anchor="middle">1. PRIVATE BY DEFAULT</text>
+  <rect x="150" y="90" width="140" height="40" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="1"/>
+  <text x="220" y="108" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">CloudFront + WAF</text>
+  <text x="220" y="122" font-family="Arial" font-size="8" fill="#884400" text-anchor="middle">Public edge only</text>
+  <rect x="150" y="138" width="140" height="40" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="1"/>
+  <text x="220" y="156" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">ALB — Private</text>
+  <text x="220" y="170" font-family="Arial" font-size="8" fill="#884400" text-anchor="middle">Internal VPC only</text>
+  <rect x="150" y="186" width="140" height="40" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="1"/>
+  <text x="220" y="204" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">Private Subnets</text>
+  <text x="220" y="218" font-family="Arial" font-size="8" fill="#884400" text-anchor="middle">Multi-AZ · No public IPs</text>
+  <rect x="150" y="234" width="140" height="40" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="1"/>
+  <text x="220" y="252" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">API Gateway Private</text>
+  <text x="220" y="266" font-family="Arial" font-size="8" fill="#884400" text-anchor="middle">VPC endpoint only</text>
+  <text x="220" y="380" font-family="Arial" font-size="8" fill="#f97316" text-anchor="middle">No workload has</text>
+  <text x="220" y="393" font-family="Arial" font-size="8" fill="#884400" text-anchor="middle">a public IP address</text>
+  <line x1="300" y1="200" x2="320" y2="200" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- PRINCIPLE 2: Controlled Service Access -->
+  <rect x="320" y="58" width="160" height="410" rx="5" fill="#080d14" stroke="#00d4ff" stroke-width="1.5"/>
+  <rect x="320" y="58" width="160" height="24" rx="5" fill="#00d4ff"/>
+  <text x="400" y="75" font-family="Arial" font-size="9" font-weight="bold" fill="#07090d" text-anchor="middle">2. CONTROLLED ACCESS</text>
+  <rect x="330" y="90" width="140" height="40" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="1"/>
+  <text x="400" y="108" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">VPC Endpoints</text>
+  <text x="400" y="122" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">S3 · STS · ECR · SSM</text>
+  <rect x="330" y="138" width="140" height="40" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="1"/>
+  <text x="400" y="156" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">ECS Fargate</text>
+  <text x="400" y="170" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">Private · Task roles only</text>
+  <rect x="330" y="186" width="140" height="40" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="1"/>
+  <text x="400" y="204" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">RDS Aurora</text>
+  <text x="400" y="218" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">Private subnet · KMS enc</text>
+  <rect x="330" y="234" width="140" height="40" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="1"/>
+  <text x="400" y="252" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">S3 Private Endpoint</text>
+  <text x="400" y="266" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">Block public access SCP</text>
+  <text x="400" y="380" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">AWS backbone only</text>
+  <text x="400" y="393" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">No public routing</text>
+  <line x1="480" y1="200" x2="500" y2="200" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- PRINCIPLE 3: Least Privilege -->
+  <rect x="500" y="58" width="160" height="410" rx="5" fill="#0a0518" stroke="#a78bfa" stroke-width="1.5"/>
+  <rect x="500" y="58" width="160" height="24" rx="5" fill="#a78bfa"/>
+  <text x="580" y="75" font-family="Arial" font-size="9" font-weight="bold" fill="#07090d" text-anchor="middle">3. LEAST PRIVILEGE</text>
+  <rect x="510" y="90" width="140" height="40" rx="3" fill="#0f0820" stroke="#a78bfa" stroke-width="1"/>
+  <text x="580" y="108" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">IAM Roles Only</text>
+  <text x="580" y="122" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">No long-lived keys</text>
+  <rect x="510" y="138" width="140" height="40" rx="3" fill="#0f0820" stroke="#a78bfa" stroke-width="1"/>
+  <text x="580" y="156" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">Task Execution Roles</text>
+  <text x="580" y="170" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">Scoped per container</text>
+  <rect x="510" y="186" width="140" height="40" rx="3" fill="#0f0820" stroke="#a78bfa" stroke-width="1"/>
+  <text x="580" y="204" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">SCP Guardrails</text>
+  <text x="580" y="218" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">Deny admin · Deny root</text>
+  <rect x="510" y="234" width="140" height="40" rx="3" fill="#0f0820" stroke="#a78bfa" stroke-width="1"/>
+  <text x="580" y="252" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">Secrets Manager</text>
+  <text x="580" y="266" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">Rotation enabled</text>
+  <text x="580" y="380" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">IAM Access Analyser</text>
+  <text x="580" y="393" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">Validates all policies</text>
+
+  <!-- PRINCIPLE 4+5 combined: Defence in Depth + Visibility -->
+  <rect x="680" y="58" width="200" height="410" rx="5" fill="#050d10" stroke="#ff3355" stroke-width="1.5"/>
+  <rect x="680" y="58" width="200" height="24" rx="5" fill="#ff3355"/>
+  <text x="780" y="75" font-family="Arial" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">4+5. DEPTH + VISIBILITY</text>
+  <rect x="690" y="90" width="180" height="40" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="1"/>
+  <text x="780" y="108" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">WAF + Network Firewall</text>
+  <text x="780" y="122" font-family="Arial" font-size="8" fill="#aa4455" text-anchor="middle">Edge + VPC layers</text>
+  <rect x="690" y="138" width="180" height="40" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="1"/>
+  <text x="780" y="156" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">GuardDuty + Inspector</text>
+  <text x="780" y="170" font-family="Arial" font-size="8" fill="#aa4455" text-anchor="middle">Runtime + vuln detection</text>
+  <rect x="690" y="186" width="180" height="40" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="1"/>
+  <text x="780" y="204" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">CloudTrail + Config</text>
+  <text x="780" y="218" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">All API calls logged</text>
+  <rect x="690" y="234" width="180" height="40" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="1"/>
+  <text x="780" y="252" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">Security Hub + SIEM</text>
+  <text x="780" y="266" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">Centralised findings</text>
+  <rect x="690" y="282" width="180" height="40" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="1"/>
+  <text x="780" y="300" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">VPC Flow Logs</text>
+  <text x="780" y="314" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">East-west + egress</text>
+  <rect x="690" y="330" width="180" height="40" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="1"/>
+  <text x="780" y="348" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">BAS Validation</text>
+  <text x="780" y="362" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">Controls verified post-deploy</text>
+
+  <!-- IaC bottom banner -->
+  <rect x="20" y="480" width="860" height="30" rx="4" fill="#001a0a" stroke="#00e87a" stroke-width="1"/>
+  <text x="450" y="494" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a" text-anchor="middle">ALL LAYERS DEPLOYED VIA IaC — Terraform · GitHub Actions · tfsec · No manual console changes · Drift detection alerts</text>
+  <text x="450" y="507" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">Repeatable · Auditable · Secure by default from first deployment · saleemyousaf.co.uk</text>
+</svg>
+  
   <div class="arch-image-caption">// Secure by design AWS reference architecture</div>
 </div>
 

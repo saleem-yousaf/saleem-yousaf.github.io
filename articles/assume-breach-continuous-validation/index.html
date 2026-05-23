@@ -171,6 +171,53 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 
 <h2 id="methodology">Assume Breach as a Design Methodology</h2>
 <p>Assume Breach is not just a detection philosophy. It is an architecture mindset. Do not design security around the hope that the perimeter, the MFA prompt, the firewall, or the endpoint agent will always stop the attack at the first step. Design as though one of those layers might fail.</p>
+    <div class="arch-image" style="margin:28px 0;border:1px solid var(--border,#1a2235);border-radius:10px;overflow:hidden;background:var(--bg2,#0f1318);">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" style="width:100%;max-width:900px;display:block;">
+  <defs><marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#00d4ff"/></marker>
+  <marker id="arrr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#ff3355"/></marker></defs>
+  <rect width="900" height="420" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Assume Breach — Continuous Security Validation Model</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Pen test once vs validate continuously · Design for breach · BAS closes the gap</text>
+  <!-- Traditional left -->
+  <rect x="20" y="58" width="390" height="290" rx="6" fill="#0f0a0a" stroke="#55677a" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="215" y="76" font-family="Arial" font-size="11" font-weight="bold" fill="#55677a" text-anchor="middle">TRADITIONAL MODEL</text>
+  <rect x="35" y="86" width="360" height="32" rx="3" fill="#1a1200" stroke="#55677a" stroke-width="0.5"/>
+  <text x="215" y="107" font-family="Arial" font-size="9" fill="#888" text-anchor="middle">Annual pen test · Point in time · Manual effort</text>
+  <rect x="35" y="126" width="165" height="50" rx="3" fill="#0c1018" stroke="#55677a" stroke-width="0.5"/>
+  <text x="117" y="146" font-family="Arial" font-size="9" fill="#888" text-anchor="middle">Architecture designed</text>
+  <text x="117" y="160" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">Security added at end</text>
+  <rect x="225" y="126" width="165" height="50" rx="3" fill="#0c1018" stroke="#55677a" stroke-width="0.5"/>
+  <text x="307" y="146" font-family="Arial" font-size="9" fill="#888" text-anchor="middle">Pen test once/year</text>
+  <text x="307" y="160" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">Fix findings · Repeat</text>
+  <rect x="35" y="186" width="360" height="50" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="215" y="206" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">Gaps: 364 days unvalidated · Controls drift after change</text>
+  <text x="215" y="220" font-family="Arial" font-size="8" fill="#aa4455" text-anchor="middle">New cloud services bypass scope · No detection validation</text>
+  <text x="215" y="310" font-family="Arial" font-size="20" font-weight="bold" fill="#55677a" text-anchor="middle">MTTD: Days</text>
+  <text x="215" y="332" font-family="Arial" font-size="11" fill="#55677a" text-anchor="middle">Dwell time: 200+ days avg</text>
+  <!-- Assume Breach right -->
+  <rect x="490" y="58" width="390" height="290" rx="6" fill="#050d10" stroke="#00d4ff" stroke-width="2"/>
+  <text x="685" y="76" font-family="Arial" font-size="11" font-weight="bold" fill="#00d4ff" text-anchor="middle">ASSUME BREACH MODEL</text>
+  <rect x="505" y="86" width="360" height="32" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="685" y="107" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">Design as if breached · Validate continuously · BAS automated</text>
+  <rect x="505" y="126" width="165" height="50" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="1"/>
+  <text x="587" y="146" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">Security by design</text>
+  <text x="587" y="160" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">Segmentation · ZT · IaC</text>
+  <rect x="695" y="126" width="165" height="50" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="1"/>
+  <text x="777" y="146" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">BAS runs daily</text>
+  <text x="777" y="160" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">10 scenarios · ATT&amp;CK</text>
+  <rect x="505" y="186" width="360" height="50" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="685" y="206" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Result: Controls validated after every change</text>
+  <text x="685" y="220" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">Detection gaps found before attackers · MTTD reduced 60%</text>
+  <text x="685" y="310" font-family="Arial" font-size="20" font-weight="bold" fill="#00d4ff" text-anchor="middle">MTTD: &lt;15 min</text>
+  <text x="685" y="332" font-family="Arial" font-size="11" fill="#00e87a" text-anchor="middle">Continuous validation · No dwell time</text>
+  <!-- BAS cycle bottom -->
+  <rect x="20" y="362" width="860" height="44" rx="4" fill="#0a1018" stroke="#00d4ff" stroke-width="1"/>
+  <text x="450" y="380" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">BREACHFORGE BAS CYCLE — TI Feed → Scenario Select → Simulate → Detect → Report → Improve → Repeat</text>
+  <text x="450" y="396" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">10 scenarios · 154 ATT&amp;CK techniques · AWS + Azure + On-prem · SOC detection validated · saleemyousaf.co.uk/breachforge</text>
+</svg>
+      <div class="arch-image-caption" style="padding:10px 16px;font-family:var(--mono,monospace);font-size:11px;color:var(--muted2,#55677a);letter-spacing:0.04em;border-top:1px solid var(--border,#1a2235);background:var(--bg2,#0f1318);">// Assume Breach continuous validation model — traditional pen test vs BAS continuous security validation</div>
+    </div>
+
 <div class="key-points">
   <div class="key-point"><div class="key-point-dot"></div>If an attacker lands on a user device, what can they reach?</div>
   <div class="key-point"><div class="key-point-dot"></div>If a token is stolen, what detects its misuse?</div>

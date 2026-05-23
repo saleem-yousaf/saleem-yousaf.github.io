@@ -170,6 +170,79 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 
 <h2 id="iam">2. Overly Permissive Access (IAM)</h2>
 <p>Cloud environments frequently operate with overly broad access permissions, typically done for convenience or speed during early development stages. With increased permissions comes heightened risk. Implementing least privilege access from day one ensures users and services only have access to what they require and nothing more. If a workload is compromised, the blast radius is contained.</p>
+    <div class="arch-image" style="margin:28px 0;border:1px solid var(--border,#1a2235);border-radius:10px;overflow:hidden;background:var(--bg2,#0f1318);">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" style="width:100%;max-width:900px;display:block;">
+  <rect width="900" height="420" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Top 5 Cloud Security Mistakes — and How to Fix Them</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Patterns that repeat across every enterprise cloud migration · Each is preventable at design time</text>
+  <!-- Mistake 1 -->
+  <rect x="20" y="58" width="168" height="300" rx="5" fill="#1a0808" stroke="#ff3355" stroke-width="1.5"/>
+  <rect x="20" y="58" width="168" height="26" rx="5" fill="#ff3355"/>
+  <text x="104" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">MISTAKE 1</text>
+  <text x="104" y="102" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355" text-anchor="middle">Security Too Late</text>
+  <text x="30" y="122" font-family="Arial" font-size="8" fill="#aa4455">Architecture built first,</text>
+  <text x="30" y="135" font-family="Arial" font-size="8" fill="#aa4455">security bolted on after</text>
+  <text x="30" y="155" font-family="Arial" font-size="8" fill="#664444">Controls cost 10x more</text>
+  <text x="30" y="168" font-family="Arial" font-size="8" fill="#664444">to retrofit than design in</text>
+  <rect x="30" y="188" width="148" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="104" y="204" font-family="Arial" font-size="8" font-weight="bold" fill="#00e87a" text-anchor="middle">Fix: Threat model</text>
+  <text x="104" y="217" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">before first commit</text>
+  <!-- Mistake 2 -->
+  <rect x="198" y="58" width="168" height="300" rx="5" fill="#1a0808" stroke="#f97316" stroke-width="1.5"/>
+  <rect x="198" y="58" width="168" height="26" rx="5" fill="#f97316"/>
+  <text x="282" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#07090d" text-anchor="middle">MISTAKE 2</text>
+  <text x="282" y="102" font-family="Arial" font-size="9" font-weight="bold" fill="#f97316" text-anchor="middle">Over-Permissive IAM</text>
+  <text x="208" y="122" font-family="Arial" font-size="8" fill="#884400">AdministratorAccess</text>
+  <text x="208" y="135" font-family="Arial" font-size="8" fill="#884400">attached everywhere</text>
+  <text x="208" y="155" font-family="Arial" font-size="8" fill="#553300">Wildcard * actions</text>
+  <text x="208" y="168" font-family="Arial" font-size="8" fill="#553300">and resources common</text>
+  <rect x="208" y="188" width="148" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="282" y="204" font-family="Arial" font-size="8" font-weight="bold" fill="#00e87a" text-anchor="middle">Fix: Least privilege</text>
+  <text x="282" y="217" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">IAM Access Analyser</text>
+  <!-- Mistake 3 -->
+  <rect x="376" y="58" width="168" height="300" rx="5" fill="#0a0f18" stroke="#FFAA00" stroke-width="1.5"/>
+  <rect x="376" y="58" width="168" height="26" rx="5" fill="#FFAA00"/>
+  <text x="460" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#07090d" text-anchor="middle">MISTAKE 3</text>
+  <text x="460" y="102" font-family="Arial" font-size="9" font-weight="bold" fill="#FFAA00" text-anchor="middle">No Segmentation</text>
+  <text x="386" y="122" font-family="Arial" font-size="8" fill="#aa8800">Flat VPC — everything</text>
+  <text x="386" y="135" font-family="Arial" font-size="8" fill="#aa8800">talks to everything</text>
+  <text x="386" y="155" font-family="Arial" font-size="8" fill="#664400">0.0.0.0/0 security groups</text>
+  <text x="386" y="168" font-family="Arial" font-size="8" fill="#664400">No east-west inspection</text>
+  <rect x="386" y="188" width="148" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="460" y="204" font-family="Arial" font-size="8" font-weight="bold" fill="#00e87a" text-anchor="middle">Fix: Subnet tiers</text>
+  <text x="460" y="217" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">NACLs + Network FW</text>
+  <!-- Mistake 4 -->
+  <rect x="554" y="58" width="168" height="300" rx="5" fill="#080d14" stroke="#a78bfa" stroke-width="1.5"/>
+  <rect x="554" y="58" width="168" height="26" rx="5" fill="#a78bfa"/>
+  <text x="638" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#07090d" text-anchor="middle">MISTAKE 4</text>
+  <text x="638" y="102" font-family="Arial" font-size="9" font-weight="bold" fill="#a78bfa" text-anchor="middle">No Logging</text>
+  <text x="564" y="122" font-family="Arial" font-size="8" fill="#7755aa">CloudTrail disabled</text>
+  <text x="564" y="135" font-family="Arial" font-size="8" fill="#7755aa">GuardDuty not enabled</text>
+  <text x="564" y="155" font-family="Arial" font-size="8" fill="#554488">VPC Flow Logs off</text>
+  <text x="564" y="168" font-family="Arial" font-size="8" fill="#554488">No SIEM integration</text>
+  <rect x="564" y="188" width="148" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="638" y="204" font-family="Arial" font-size="8" font-weight="bold" fill="#00e87a" text-anchor="middle">Fix: Security Hub</text>
+  <text x="638" y="217" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">GuardDuty + CloudTrail</text>
+  <!-- Mistake 5 -->
+  <rect x="732" y="58" width="148" height="300" rx="5" fill="#080d14" stroke="#00d4ff" stroke-width="1.5"/>
+  <rect x="732" y="58" width="148" height="26" rx="5" fill="#00d4ff"/>
+  <text x="806" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#07090d" text-anchor="middle">MISTAKE 5</text>
+  <text x="806" y="102" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">No Threat Model</text>
+  <text x="742" y="122" font-family="Arial" font-size="8" fill="#007799">No STRIDE analysis</text>
+  <text x="742" y="135" font-family="Arial" font-size="8" fill="#007799">before deployment</text>
+  <text x="742" y="155" font-family="Arial" font-size="8" fill="#004455">Attack paths not</text>
+  <text x="742" y="168" font-family="Arial" font-size="8" fill="#004455">considered by design</text>
+  <rect x="742" y="188" width="128" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="806" y="204" font-family="Arial" font-size="8" font-weight="bold" fill="#00e87a" text-anchor="middle">Fix: STRIDE early</text>
+  <text x="806" y="217" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">BAS validation</text>
+  <!-- Bottom bar -->
+  <rect x="20" y="372" width="860" height="36" rx="4" fill="#0a1018" stroke="#1a2235" stroke-width="1"/>
+  <text x="450" y="388" font-family="Arial" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">All five mistakes are preventable at design time — not discoverable only after a breach</text>
+  <text x="450" y="403" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">IaC policy gates · CSPM · BAS continuous validation · Threat modelling at sprint zero · saleemyousaf.co.uk</text>
+</svg>
+      <div class="arch-image-caption" style="padding:10px 16px;font-family:var(--mono,monospace);font-size:11px;color:var(--muted2,#55677a);letter-spacing:0.04em;border-top:1px solid var(--border,#1a2235);background:var(--bg2,#0f1318);">// Top 5 cloud security mistakes and how to fix them at design time</div>
+    </div>
+
 
 <h2 id="segmentation">3. Lack of Clear Network Segmentation</h2>
 <p>Flat network design is a common problem where workloads are not properly segmented. This enables lateral movement of threats from system to system if one component is compromised. Applying patterns like segmented VPCs, controlled routing, and central inspection limits exposure and increases overall resilience.</p>
