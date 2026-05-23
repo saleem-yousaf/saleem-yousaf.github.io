@@ -112,7 +112,17 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 .footer-copy{font-size:12px;color:var(--muted2);}
 @media(max-width:960px){.related-grid{grid-template-columns:repeat(2,1fr);}.cta-wrap{grid-template-columns:1fr;}.footer-inner{grid-template-columns:1fr;}.key-points{grid-template-columns:1fr;}}
 @media(max-width:600px){.hero-wrap,.article-body,.related-wrap,.cta-wrap{padding:0 20px;}.nav-links{display:none;}.related-grid{grid-template-columns:1fr;}.footer-inner,.footer-bottom{padding:0 20px;}}
-</style>
+    .arch-image{cursor:zoom-in;position:relative;}
+    .arch-image::after{content:"\2922";position:absolute;top:10px;right:12px;font-size:18px;color:rgba(0,212,255,0.5);pointer-events:none;opacity:0;transition:opacity 0.2s;}
+    .arch-image:hover::after{opacity:1;}
+    .lbx-overlay{display:none;position:fixed;inset:0;background:rgba(7,9,13,0.95);z-index:9999;align-items:center;justify-content:center;padding:12px;cursor:zoom-out;}
+    .lbx-overlay.open{display:flex;}
+    .lbx-inner{width:96vw;max-width:1600px;max-height:94vh;overflow:auto;border-radius:8px;border:1px solid rgba(0,212,255,0.2);background:#07090d;padding:0;cursor:default;}
+    .lbx-inner svg,.lbx-inner img{display:block;width:100%;height:auto;max-height:88vh;object-fit:contain;}
+    .lbx-caption{padding:10px 16px;font-family:var(--mono,monospace);font-size:11px;color:#55677a;border-top:1px solid #1a2235;background:#0c1018;display:flex;justify-content:space-between;align-items:center;}
+    .lbx-close{font-size:20px;color:rgba(0,212,255,0.6);cursor:pointer;line-height:1;padding:0 4px;}
+    .lbx-close:hover{color:#00d4ff;}
+    </style>
 </head>
 <body>
 <nav>
@@ -176,7 +186,64 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
   <div class="key-point"><div class="key-point-dot"></div>Vendor security assessment before procurement</div>
 </div>
 <div class="pull-quote">The organisations that succeed will not be the fastest adopters. They will be the ones that adopt AI with governance at the core.</div>
-    <div class="arch-image"><img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/709/7a73f90a-821d-44d6-8b2a-b359ed9b0840/image-1024x683.png" alt="Public vs private LLM security and governance considerations" loading="lazy"><div class="arch-image-caption">// Public vs private LLM security and governance considerations</div></div>
+    <div class="arch-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" style="width:100%;max-width:900px;display:block;">
+  <rect width="900" height="420" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Public vs Private LLM — Security and Governance Considerations</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Data residency · IP protection · Compliance · Cost · Control — decision framework for enterprise AI deployment</text>
+  <!-- Headers -->
+  <rect x="20" y="58" width="415" height="30" rx="5" fill="#ff3355"/>
+  <text x="227" y="78" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">PUBLIC LLM (ChatGPT / Gemini / Claude.ai)</text>
+  <rect x="465" y="58" width="415" height="30" rx="5" fill="#00e87a"/>
+  <text x="672" y="78" font-family="Arial" font-size="12" font-weight="bold" fill="#07090d" text-anchor="middle">PRIVATE LLM (Azure OpenAI / AWS Bedrock)</text>
+
+  <!-- Comparison rows -->
+  <rect x="20" y="95" width="415" height="36" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="30" y="110" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355">Data Residency</text>
+  <text x="30" y="124" font-family="Arial" font-size="8" fill="#aa4455">Data leaves your environment · Processed on vendor infrastructure · Jurisdiction unknown</text>
+  <rect x="465" y="95" width="415" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="475" y="110" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a">Data Residency</text>
+  <text x="475" y="124" font-family="Arial" font-size="8" fill="#008844">Data stays in your tenant · EU/UK data residency enforced · Full sovereignty</text>
+
+  <rect x="20" y="138" width="415" height="36" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="30" y="153" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355">IP and Confidential Data</text>
+  <text x="30" y="167" font-family="Arial" font-size="8" fill="#aa4455">Prompts may train future models · Source code / strategy leaked · No guarantee of deletion</text>
+  <rect x="465" y="138" width="415" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="475" y="153" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a">IP and Confidential Data</text>
+  <text x="475" y="167" font-family="Arial" font-size="8" fill="#008844">Prompts not used for training · Contractual data processing agreement · Auditable</text>
+
+  <rect x="20" y="181" width="415" height="36" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="30" y="196" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355">Compliance (GDPR / DORA)</text>
+  <text x="30" y="210" font-family="Arial" font-size="8" fill="#aa4455">Article 28 processor obligations unclear · Data transfer risk · ICO exposure</text>
+  <rect x="465" y="181" width="415" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="475" y="196" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a">Compliance (GDPR / DORA)</text>
+  <text x="475" y="210" font-family="Arial" font-size="8" fill="#008844">DPA in place · SCCs · EU AI Act ready · DORA operational resilience covered</text>
+
+  <rect x="20" y="224" width="415" height="36" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="30" y="239" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355">Access Control</text>
+  <text x="30" y="253" font-family="Arial" font-size="8" fill="#aa4455">Consumer auth only · No SSO · No RBAC · No session logging to SIEM</text>
+  <rect x="465" y="224" width="415" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="475" y="239" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a">Access Control</text>
+  <text x="475" y="253" font-family="Arial" font-size="8" fill="#008844">Entra ID SSO · RBAC · Conditional access · Full session audit log to SIEM</text>
+
+  <rect x="20" y="267" width="415" height="36" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="30" y="282" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355">Cost Model</text>
+  <text x="30" y="296" font-family="Arial" font-size="8" fill="#aa4455">Low upfront · Per token · Hidden cost at scale · No budget predictability</text>
+  <rect x="465" y="267" width="415" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="475" y="282" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a">Cost Model</text>
+  <text x="475" y="296" font-family="Arial" font-size="8" fill="#008844">Reserved capacity · Predictable Azure/AWS billing · Volume discounts · FinOps governed</text>
+
+  <rect x="20" y="310" width="415" height="36" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="30" y="325" font-family="Arial" font-size="9" font-weight="bold" fill="#FFAA00">When Appropriate</text>
+  <text x="30" y="339" font-family="Arial" font-size="8" fill="#aa8800">Non-sensitive tasks · Public content · Prototyping · Individual productivity tools</text>
+  <rect x="465" y="310" width="415" height="36" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="475" y="325" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff">When Required</text>
+  <text x="475" y="339" font-family="Arial" font-size="8" fill="#007799">Any business data · Customer PII · Financial data · IP · Regulated industries</text>
+
+  <rect x="20" y="360" width="860" height="46" rx="4" fill="#0a1018" stroke="#1a2235" stroke-width="1"/>
+  <text x="450" y="378" font-family="Arial" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">Decision Rule: If the prompt contains anything you would not email to a competitor, use private LLM only</text>
+  <text x="450" y="394" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">Azure OpenAI Service · AWS Bedrock · Google Vertex AI (private) · On-premises models (Llama / Mistral) all provide enterprise data protection</text>
+</svg>
+      <div class="arch-image-caption">// Public vs private LLM security and governance considerations</div></div>
     <div class="article-nav-bar"><a href="https://saleemyousaf.co.uk/articles/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back to all articles</a><a href="https://saleemyousaf.co.uk/articles/socs-evolving/">SOCs Are Evolving <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
   </article>
 </div>
@@ -218,5 +285,7 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
   </div>
 </footer>
 
+<div class="lbx-overlay" id="lbx" onclick="lbxClose(event)"><div class="lbx-inner" id="lbx-inner" onclick="event.stopPropagation()"><div id="lbx-content"></div><div class="lbx-caption"><span id="lbx-cap"></span><span class="lbx-close" onclick="lbxClose()">&#x2715;</span></div></div></div>
+<script>(function(){function openLbx(el){var c=el.querySelector('svg,img');var cap=el.querySelector('.arch-image-caption');if(!c)return;document.getElementById('lbx-content').innerHTML=c.outerHTML;document.getElementById('lbx-cap').textContent=cap?cap.textContent:'';document.getElementById('lbx').classList.add('open');document.body.style.overflow='hidden';}window.lbxClose=function(e){if(e&&e.target===document.getElementById('lbx-inner'))return;document.getElementById('lbx').classList.remove('open');document.body.style.overflow='';document.getElementById('lbx-content').innerHTML='';};document.addEventListener('keydown',function(e){if(e.key==='Escape')window.lbxClose();});document.querySelectorAll('.arch-image').forEach(function(el){el.addEventListener('click',function(){openLbx(el);});});})();</script>
 </body>
 </html>

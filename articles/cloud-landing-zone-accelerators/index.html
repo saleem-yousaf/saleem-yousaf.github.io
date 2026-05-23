@@ -112,7 +112,17 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 .footer-copy{font-size:12px;color:var(--muted2);}
 @media(max-width:960px){.related-grid{grid-template-columns:repeat(2,1fr);}.cta-wrap{grid-template-columns:1fr;}.footer-inner{grid-template-columns:1fr;}.key-points{grid-template-columns:1fr;}}
 @media(max-width:600px){.hero-wrap,.article-body,.related-wrap,.cta-wrap{padding:0 20px;}.nav-links{display:none;}.related-grid{grid-template-columns:1fr;}.footer-inner,.footer-bottom{padding:0 20px;}}
-</style>
+    .arch-image{cursor:zoom-in;position:relative;}
+    .arch-image::after{content:"\2922";position:absolute;top:10px;right:12px;font-size:18px;color:rgba(0,212,255,0.5);pointer-events:none;opacity:0;transition:opacity 0.2s;}
+    .arch-image:hover::after{opacity:1;}
+    .lbx-overlay{display:none;position:fixed;inset:0;background:rgba(7,9,13,0.95);z-index:9999;align-items:center;justify-content:center;padding:12px;cursor:zoom-out;}
+    .lbx-overlay.open{display:flex;}
+    .lbx-inner{width:96vw;max-width:1600px;max-height:94vh;overflow:auto;border-radius:8px;border:1px solid rgba(0,212,255,0.2);background:#07090d;padding:0;cursor:default;}
+    .lbx-inner svg,.lbx-inner img{display:block;width:100%;height:auto;max-height:88vh;object-fit:contain;}
+    .lbx-caption{padding:10px 16px;font-family:var(--mono,monospace);font-size:11px;color:#55677a;border-top:1px solid #1a2235;background:#0c1018;display:flex;justify-content:space-between;align-items:center;}
+    .lbx-close{font-size:20px;color:rgba(0,212,255,0.6);cursor:pointer;line-height:1;padding:0 4px;}
+    .lbx-close:hover{color:#00d4ff;}
+    </style>
 </head>
 <body>
 <nav>
@@ -172,7 +182,42 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 <p>Help teams stand up secure, production-ready cloud foundations faster and with better visibility from day one. Security guardrails, logging, identity governance, and network segmentation are all present before any application workload is deployed. Instead of security being retrofitted after deployment, it is embedded from the first line of infrastructure code.</p>
 
 <div class="arch-image">
-  <img src="https://www.saleemyousaf.co.uk/wp-content/uploads/go-x/b/445/ce41ef33-2d1d-42f4-a2b9-bdc69550d88e/image-1024x683.png" alt="Cloud landing zone accelerators for AWS, Azure, GCP, and OCI" loading="lazy">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" style="width:100%;max-width:900px;display:block;"><rect width="900" height="440" rx="8" fill="#07090d"/>
+<text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Cloud Landing Zone Accelerators — AWS, Azure, and GCP</text>
+<text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Hub-spoke · Guardrails · Identity · Security · Connectivity · IaC · Compliance baseline</text>
+<rect x="20" y="56" width="270" height="330" rx="6" fill="#080d14" stroke="#f97316" stroke-width="1.5"/>
+<rect x="20" y="56" width="270" height="26" rx="6" fill="#f97316"/>
+<text x="155" y="74" font-family="Arial" font-size="11" font-weight="bold" fill="#07090d" text-anchor="middle">AWS LANDING ZONE</text>
+<rect x="30" y="90" width="250" height="30" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/><text x="155" y="109" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">Control Tower · Account vending · Guardrails</text>
+<rect x="30" y="126" width="250" height="30" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/><text x="155" y="145" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">Organizations + SCPs · Deny public S3</text>
+<rect x="30" y="162" width="250" height="30" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/><text x="155" y="181" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">Transit Gateway · Hub-spoke routing</text>
+<rect x="30" y="198" width="250" height="30" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/><text x="155" y="217" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">IAM Identity Center · SSO · SCIM</text>
+<rect x="30" y="234" width="250" height="30" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/><text x="155" y="253" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">GuardDuty · Security Hub · CloudTrail</text>
+<rect x="30" y="270" width="250" height="30" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/><text x="155" y="289" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">Terraform · CDK · LZA accelerator</text>
+<rect x="30" y="306" width="250" height="30" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/><text x="155" y="325" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">CIS AWS · NIST · PCI · ISO 27001</text>
+<rect x="315" y="56" width="270" height="330" rx="6" fill="#080d14" stroke="#0078d4" stroke-width="1.5"/>
+<rect x="315" y="56" width="270" height="26" rx="6" fill="#0078d4"/>
+<text x="450" y="74" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">AZURE LANDING ZONE</text>
+<rect x="325" y="90" width="250" height="30" rx="3" fill="#001030" stroke="#0078d4" stroke-width="0.5"/><text x="450" y="109" font-family="Arial" font-size="9" fill="#0078d4" text-anchor="middle">Management Groups · Policy inheritance</text>
+<rect x="325" y="126" width="250" height="30" rx="3" fill="#001030" stroke="#0078d4" stroke-width="0.5"/><text x="450" y="145" font-family="Arial" font-size="9" fill="#0078d4" text-anchor="middle">Azure Policy · Blueprints · Deny public</text>
+<rect x="325" y="162" width="250" height="30" rx="3" fill="#001030" stroke="#0078d4" stroke-width="0.5"/><text x="450" y="181" font-family="Arial" font-size="9" fill="#0078d4" text-anchor="middle">Virtual WAN / vHub · ExpressRoute</text>
+<rect x="325" y="198" width="250" height="30" rx="3" fill="#001030" stroke="#0078d4" stroke-width="0.5"/><text x="450" y="217" font-family="Arial" font-size="9" fill="#0078d4" text-anchor="middle">Entra ID + PIM · JIT access · RBAC</text>
+<rect x="325" y="234" width="250" height="30" rx="3" fill="#001030" stroke="#0078d4" stroke-width="0.5"/><text x="450" y="253" font-family="Arial" font-size="9" fill="#0078d4" text-anchor="middle">Defender for Cloud · Sentinel · Logs</text>
+<rect x="325" y="270" width="250" height="30" rx="3" fill="#001030" stroke="#0078d4" stroke-width="0.5"/><text x="450" y="289" font-family="Arial" font-size="9" fill="#0078d4" text-anchor="middle">Bicep · Terraform · CAF · ALZ</text>
+<rect x="325" y="306" width="250" height="30" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/><text x="450" y="325" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">CIS Azure · NIST · ISO 27001 · DORA</text>
+<rect x="610" y="56" width="270" height="330" rx="6" fill="#080d14" stroke="#00e87a" stroke-width="1.5"/>
+<rect x="610" y="56" width="270" height="26" rx="6" fill="#00e87a"/>
+<text x="745" y="74" font-family="Arial" font-size="11" font-weight="bold" fill="#07090d" text-anchor="middle">GCP LANDING ZONE</text>
+<rect x="620" y="90" width="250" height="30" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/><text x="745" y="109" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Resource Hierarchy · Org · Folders</text>
+<rect x="620" y="126" width="250" height="30" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/><text x="745" y="145" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Org Policies · VPC SC · No public IPs</text>
+<rect x="620" y="162" width="250" height="30" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/><text x="745" y="181" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Shared VPC · Cloud NAT · Interconnect</text>
+<rect x="620" y="198" width="250" height="30" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/><text x="745" y="217" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Cloud Identity · IAM · Workload Identity</text>
+<rect x="620" y="234" width="250" height="30" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/><text x="745" y="253" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Security Command Centre · Chronicle</text>
+<rect x="620" y="270" width="250" height="30" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/><text x="745" y="289" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Foundation Toolkit · Terraform</text>
+<rect x="620" y="306" width="250" height="30" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/><text x="745" y="325" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">CIS GCP · NIST · ISO 27001 · FedRAMP</text>
+<text x="450" y="415" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">All three: Governance · Identity · Network · Security · IaC · Compliance · lucid.app/lucidchart/edd8ef48-4b3a-497a-9b1b-740811a7c19a/edit</text>
+</svg>
+      
   <div class="arch-image-caption">// Cloud landing zone accelerators overview</div>
 </div>
 
@@ -226,5 +271,7 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
   </div>
 </footer>
 
+<div class="lbx-overlay" id="lbx" onclick="lbxClose(event)"><div class="lbx-inner" id="lbx-inner" onclick="event.stopPropagation()"><div id="lbx-content"></div><div class="lbx-caption"><span id="lbx-cap"></span><span class="lbx-close" onclick="lbxClose()">&#x2715;</span></div></div></div>
+<script>(function(){function openLbx(el){var c=el.querySelector('svg,img');var cap=el.querySelector('.arch-image-caption');if(!c)return;document.getElementById('lbx-content').innerHTML=c.outerHTML;document.getElementById('lbx-cap').textContent=cap?cap.textContent:'';document.getElementById('lbx').classList.add('open');document.body.style.overflow='hidden';}window.lbxClose=function(e){if(e&&e.target===document.getElementById('lbx-inner'))return;document.getElementById('lbx').classList.remove('open');document.body.style.overflow='';document.getElementById('lbx-content').innerHTML='';};document.addEventListener('keydown',function(e){if(e.key==='Escape')window.lbxClose();});document.querySelectorAll('.arch-image').forEach(function(el){el.addEventListener('click',function(){openLbx(el);});});})();</script>
 </body>
 </html>
