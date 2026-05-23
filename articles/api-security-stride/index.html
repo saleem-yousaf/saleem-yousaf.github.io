@@ -112,7 +112,17 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 .footer-copy{font-size:12px;color:var(--muted2);}
 @media(max-width:960px){.related-grid{grid-template-columns:repeat(2,1fr);}.cta-wrap{grid-template-columns:1fr;}.footer-inner{grid-template-columns:1fr;}.key-points{grid-template-columns:1fr;}}
 @media(max-width:600px){.hero-wrap,.article-body,.related-wrap,.cta-wrap{padding:0 20px;}.nav-links{display:none;}.related-grid{grid-template-columns:1fr;}.footer-inner,.footer-bottom{padding:0 20px;}}
-</style>
+    .arch-image{cursor:zoom-in;position:relative;}
+    .arch-image::after{content:"\2922";position:absolute;top:10px;right:12px;font-size:18px;color:rgba(0,212,255,0.5);pointer-events:none;opacity:0;transition:opacity 0.2s;}
+    .arch-image:hover::after{opacity:1;}
+    .lbx-overlay{display:none;position:fixed;inset:0;background:rgba(7,9,13,0.95);z-index:9999;align-items:center;justify-content:center;padding:12px;cursor:zoom-out;}
+    .lbx-overlay.open{display:flex;}
+    .lbx-inner{width:96vw;max-width:1600px;max-height:94vh;overflow:auto;border-radius:8px;border:1px solid rgba(0,212,255,0.2);background:#07090d;padding:0;cursor:default;}
+    .lbx-inner svg,.lbx-inner img{display:block;width:100%;height:auto;max-height:88vh;object-fit:contain;}
+    .lbx-caption{padding:10px 16px;font-family:var(--mono,monospace);font-size:11px;color:#55677a;border-top:1px solid #1a2235;background:#0c1018;display:flex;justify-content:space-between;align-items:center;}
+    .lbx-close{font-size:20px;color:rgba(0,212,255,0.6);cursor:pointer;line-height:1;padding:0 4px;}
+    .lbx-close:hover{color:#00d4ff;}
+    </style>
 </head>
 <body>
 <nav>
@@ -170,6 +180,73 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 <h2 id="controls">Effective API Security Controls</h2>
 <h3>Authentication and Authorisation</h3>
 <p>Strong authentication and authorisation using OAuth 2.0 and JWT tokens ensures that only verified identities can call APIs and that each identity can only access the resources and operations it is entitled to. Scopes should be narrow and specific.</p>
+    <div class="arch-image" style="margin:28px 0;border:1px solid var(--border,#1a2235);border-radius:10px;overflow:hidden;background:var(--bg2,#0f1318);">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" style="width:100%;max-width:900px;display:block;">
+  <rect width="900" height="440" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">STRIDE Threat Model — Applied to API Security</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Six threat categories mapped to API attack surfaces with mitigations</text>
+  <!-- S -->
+  <rect x="20" y="58" width="260" height="110" rx="5" fill="#0a0518" stroke="#a78bfa" stroke-width="1.5"/>
+  <rect x="20" y="58" width="260" height="26" rx="5" fill="#a78bfa"/>
+  <text x="150" y="76" font-family="Arial" font-size="11" font-weight="bold" fill="#07090d" text-anchor="middle">S — SPOOFING</text>
+  <text x="30" y="100" font-family="Arial" font-size="9" fill="#a78bfa">Threat: Impersonation of API callers</text>
+  <text x="30" y="114" font-family="Arial" font-size="9" fill="#a78bfa">Surface: Auth endpoints / JWT tokens</text>
+  <text x="30" y="132" font-family="Arial" font-size="8" fill="#7755aa">Mitigation: OAuth 2.0 · MFA · API key rotation</text>
+  <text x="30" y="146" font-family="Arial" font-size="8" fill="#7755aa">Detect: Failed auth spikes · Token replay</text>
+  <!-- T -->
+  <rect x="320" y="58" width="260" height="110" rx="5" fill="#150808" stroke="#ff3355" stroke-width="1.5"/>
+  <rect x="320" y="58" width="260" height="26" rx="5" fill="#ff3355"/>
+  <text x="450" y="76" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">T — TAMPERING</text>
+  <text x="330" y="100" font-family="Arial" font-size="9" fill="#ff3355">Threat: Modification of request/response</text>
+  <text x="330" y="114" font-family="Arial" font-size="9" fill="#ff3355">Surface: Request body / headers / params</text>
+  <text x="330" y="132" font-family="Arial" font-size="8" fill="#aa4455">Mitigation: Input validation · Request signing</text>
+  <text x="330" y="146" font-family="Arial" font-size="8" fill="#aa4455">Detect: Schema violations · WAF alerts</text>
+  <!-- R -->
+  <rect x="620" y="58" width="260" height="110" rx="5" fill="#0a0f18" stroke="#FFAA00" stroke-width="1.5"/>
+  <rect x="620" y="58" width="260" height="26" rx="5" fill="#FFAA00"/>
+  <text x="750" y="76" font-family="Arial" font-size="11" font-weight="bold" fill="#07090d" text-anchor="middle">R — REPUDIATION</text>
+  <text x="630" y="100" font-family="Arial" font-size="9" fill="#FFAA00">Threat: Untraceable API actions</text>
+  <text x="630" y="114" font-family="Arial" font-size="9" fill="#FFAA00">Surface: All API endpoints</text>
+  <text x="630" y="132" font-family="Arial" font-size="8" fill="#aa8800">Mitigation: Signed tokens · Audit logging</text>
+  <text x="630" y="146" font-family="Arial" font-size="8" fill="#aa8800">Detect: Missing correlation IDs · Log gaps</text>
+  <!-- I -->
+  <rect x="20" y="186" width="260" height="110" rx="5" fill="#080d14" stroke="#00d4ff" stroke-width="1.5"/>
+  <rect x="20" y="186" width="260" height="26" rx="5" fill="#00d4ff"/>
+  <text x="150" y="204" font-family="Arial" font-size="11" font-weight="bold" fill="#07090d" text-anchor="middle">I — INFO DISCLOSURE</text>
+  <text x="30" y="228" font-family="Arial" font-size="9" fill="#00d4ff">Threat: PII / IP exposed in responses</text>
+  <text x="30" y="242" font-family="Arial" font-size="9" fill="#00d4ff">Surface: Error messages / response bodies</text>
+  <text x="30" y="260" font-family="Arial" font-size="8" fill="#007799">Mitigation: Response masking · DLP · TLS 1.3</text>
+  <text x="30" y="274" font-family="Arial" font-size="8" fill="#007799">Detect: Data volume anomalies · CASB</text>
+  <!-- D -->
+  <rect x="320" y="186" width="260" height="110" rx="5" fill="#001a0a" stroke="#00e87a" stroke-width="1.5"/>
+  <rect x="320" y="186" width="260" height="26" rx="5" fill="#00e87a"/>
+  <text x="450" y="204" font-family="Arial" font-size="11" font-weight="bold" fill="#07090d" text-anchor="middle">D — DENIAL OF SERVICE</text>
+  <text x="330" y="228" font-family="Arial" font-size="9" fill="#00e87a">Threat: API abuse / volumetric attack</text>
+  <text x="330" y="242" font-family="Arial" font-size="9" fill="#00e87a">Surface: Public endpoints / auth flows</text>
+  <text x="330" y="260" font-family="Arial" font-size="8" fill="#008844">Mitigation: Rate limiting · WAF · AWS Shield</text>
+  <text x="330" y="274" font-family="Arial" font-size="8" fill="#008844">Detect: Request rate spikes · 429 errors</text>
+  <!-- E -->
+  <rect x="620" y="186" width="260" height="110" rx="5" fill="#0f0f00" stroke="#f97316" stroke-width="1.5"/>
+  <rect x="620" y="186" width="260" height="26" rx="5" fill="#f97316"/>
+  <text x="750" y="204" font-family="Arial" font-size="11" font-weight="bold" fill="#07090d" text-anchor="middle">E — ELEVATION OF PRIV</text>
+  <text x="630" y="228" font-family="Arial" font-size="9" fill="#f97316">Threat: Gain higher access than permitted</text>
+  <text x="630" y="242" font-family="Arial" font-size="9" fill="#f97316">Surface: JWT scopes / RBAC misconfig</text>
+  <text x="630" y="260" font-family="Arial" font-size="8" fill="#884400">Mitigation: Least privilege · Scope validation</text>
+  <text x="630" y="274" font-family="Arial" font-size="8" fill="#884400">Detect: UEBA · Privilege use anomalies</text>
+  <!-- API Gateway layer -->
+  <rect x="20" y="314" width="860" height="55" rx="5" fill="#050d10" stroke="#00d4ff" stroke-width="1.5"/>
+  <text x="450" y="332" font-family="Arial" font-size="10" font-weight="bold" fill="#00d4ff" text-anchor="middle">API GATEWAY — Central enforcement point for all six STRIDE mitigations</text>
+  <rect x="30" y="340" width="130" height="22" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/><text x="95" y="355" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">OAuth 2.0 / JWT</text>
+  <rect x="170" y="340" width="130" height="22" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/><text x="235" y="355" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Input validation</text>
+  <rect x="310" y="340" width="130" height="22" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/><text x="375" y="355" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Audit logging</text>
+  <rect x="450" y="340" width="130" height="22" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/><text x="515" y="355" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">TLS + DLP</text>
+  <rect x="590" y="340" width="130" height="22" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/><text x="655" y="355" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Rate limiting</text>
+  <rect x="730" y="340" width="140" height="22" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/><text x="800" y="355" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Least privilege RBAC</text>
+  <text x="450" y="420" font-family="Arial" font-size="9" fill="#55677a" text-anchor="middle">STRIDE applied at design phase prevents vulnerabilities before implementation · API Gateway enforces all six controls · saleemyousaf.co.uk</text>
+</svg>
+      <div class="arch-image-caption" style="padding:10px 16px;font-family:var(--mono,monospace);font-size:11px;color:var(--muted2,#55677a);letter-spacing:0.04em;border-top:1px solid var(--border,#1a2235);background:var(--bg2,#0f1318);">// STRIDE threat model applied to API security — six threat categories with mitigations and detection signals</div>
+    </div>
+
 <h3>Input Validation and Rate Limiting</h3>
 <p>All API inputs should be validated for type, length, format, and content before processing. Rate limiting prevents abuse patterns such as credential stuffing, brute force, and volumetric denial of service attacks. Apply limits per client identity, not just per IP address.</p>
 <h3>Encryption and Data Protection</h3>
@@ -219,5 +296,7 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
   </div>
 </footer>
 
+<div class="lbx-overlay" id="lbx" onclick="lbxClose(event)"><div class="lbx-inner" id="lbx-inner" onclick="event.stopPropagation()"><div id="lbx-content"></div><div class="lbx-caption"><span id="lbx-cap"></span><span class="lbx-close" onclick="lbxClose()">&#x2715;</span></div></div></div>
+<script>(function(){function openLbx(el){var c=el.querySelector('svg,img');var cap=el.querySelector('.arch-image-caption');if(!c)return;document.getElementById('lbx-content').innerHTML=c.outerHTML;document.getElementById('lbx-cap').textContent=cap?cap.textContent:'';document.getElementById('lbx').classList.add('open');document.body.style.overflow='hidden';}window.lbxClose=function(e){if(e&&e.target===document.getElementById('lbx-inner'))return;document.getElementById('lbx').classList.remove('open');document.body.style.overflow='';document.getElementById('lbx-content').innerHTML='';};document.addEventListener('keydown',function(e){if(e.key==='Escape')window.lbxClose();});document.querySelectorAll('.arch-image').forEach(function(el){el.addEventListener('click',function(){openLbx(el);});});})();</script>
 </body>
 </html>
