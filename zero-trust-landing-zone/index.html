@@ -1,0 +1,2155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise Zero Trust Secure Landing Zone Reference Architecture | Saleem Yousaf</title>
+<meta name="description" content="A technical deep dive into enterprise Zero Trust secure landing zone design across AWS and Azure. Covering network segmentation, Palo Alto, Fortinet, Zscaler SSE, SIEM and XSOAR integration. By Saleem Yousaf.">
+<meta name="author" content="Saleem Yousaf">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/zero-trust-landing-zone/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:         #090c10;
+  --bg2:        #0f1318;
+  --bg3:        #161b22;
+  --border:     rgba(255,255,255,0.07);
+  --border2:    rgba(255,255,255,0.12);
+  --text:       #e6eaf0;
+  --muted:      #7a8694;
+  --muted2:     #4a5568;
+  --teal:       #2dd4bf;
+  --teal-dim:   rgba(45,212,191,0.12);
+  --amber:      #f59e0b;
+  --amber-dim:  rgba(245,158,11,0.10);
+  --purple:     #a78bfa;
+  --purple-dim: rgba(167,139,250,0.10);
+  --mono:       'DM Mono', monospace;
+  --display:    'Syne', sans-serif;
+  --body:       'Inter', sans-serif;
+  --prose-max:  680px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--body); font-size: 16px; line-height: 1.7;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image: linear-gradient(rgba(45,212,191,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(45,212,191,0.015) 1px, transparent 1px);
+  background-size: 40px 40px; pointer-events: none; z-index: 0;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(9,12,16,0.88); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+}
+.nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+.nav-logo { font-family: var(--display); font-size: 15px; font-weight: 700; color: var(--text); text-decoration: none; letter-spacing: 0.02em; }
+.nav-logo span { color: var(--teal); }
+.nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+.nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; letter-spacing: 0.03em; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+.nav-links a.active { color: var(--teal); }
+.nav-dropdown { position: relative; }
+.nav-dropdown-toggle { font-size: 13px; color: var(--muted); background: none; border: none; cursor: pointer; letter-spacing: 0.03em; display: flex; align-items: center; gap: 5px; font-family: var(--body); padding: 0; transition: color 0.2s; }
+.nav-dropdown-toggle:hover { color: var(--teal); }
+.nav-dropdown-toggle svg { transition: transform 0.2s; }
+.nav-dropdown:hover .nav-dropdown-toggle svg { transform: rotate(180deg); }
+.nav-dropdown:hover .nav-dropdown-toggle { color: var(--teal); }
+.nav-dropdown-menu { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); padding-top: 12px; opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 200; }
+.nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: all; }
+.nav-dropdown-menu-inner { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 8px; min-width: 220px; }
+.nav-dropdown-menu a { display: block; padding: 9px 14px; font-size: 13px; color: var(--muted); text-decoration: none; border-radius: 5px; transition: background 0.15s, color 0.15s; white-space: nowrap; }
+.nav-dropdown-menu a:hover { background: var(--bg3); color: var(--text); }
+.nav-dropdown-menu a.active { color: var(--teal); }
+.nav-cta { font-size: 13px; font-weight: 500; color: var(--teal) !important; border: 1px solid rgba(45,212,191,0.3); padding: 6px 16px; border-radius: 4px; transition: background 0.2s, border-color 0.2s !important; }
+.nav-cta:hover { background: var(--teal-dim); border-color: var(--teal) !important; }
+
+/* ── ARTICLE HERO ── */
+.article-hero {
+  padding: 120px 0 64px; border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.article-hero-glow {
+  position: absolute; top: -120px; right: -120px;
+  width: 560px; height: 560px;
+  background: radial-gradient(circle, rgba(45,212,191,0.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero-wrap { max-width: 860px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+.article-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+.article-eyebrow-line { width: 24px; height: 1px; background: var(--teal); }
+.article-tag { font-family: var(--mono); font-size: 10px; padding: 4px 10px; border-radius: 3px; letter-spacing: 0.06em; text-transform: uppercase; }
+.article-tag.teal   { background: var(--teal-dim);   color: var(--teal); }
+.article-tag.amber  { background: var(--amber-dim);  color: var(--amber); }
+.article-tag.purple { background: var(--purple-dim); color: var(--purple); }
+.article-title {
+  font-family: var(--display); font-size: clamp(28px, 3.5vw, 46px);
+  font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; color: #fff;
+  margin-bottom: 20px;
+}
+.article-intro { font-size: 18px; line-height: 1.75; color: var(--muted); margin-bottom: 32px; }
+.article-meta-bar {
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  padding-top: 24px; border-top: 1px solid var(--border);
+}
+.meta-item { display: flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 12px; color: var(--muted2); }
+.meta-item svg { color: var(--teal); }
+.meta-divider { width: 1px; height: 14px; background: var(--border2); }
+
+/* ── ARTICLE LAYOUT ── */
+.article-layout {
+  max-width: 1100px; margin: 0 auto; padding: 64px 32px;
+  display: grid; grid-template-columns: 1fr 240px;
+  gap: 64px; align-items: start; position: relative; z-index: 1;
+}
+
+/* ── TOC SIDEBAR ── */
+.toc {
+  position: sticky; top: 80px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 24px; max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+.toc::-webkit-scrollbar { width: 4px; }
+.toc::-webkit-scrollbar-track { background: transparent; }
+.toc::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+.toc-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); margin-bottom: 16px; }
+.toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+.toc-item a {
+  font-size: 12px; color: var(--muted); text-decoration: none;
+  display: block; padding: 6px 10px; border-radius: 4px;
+  border-left: 2px solid transparent; transition: all 0.15s; line-height: 1.4;
+}
+.toc-item a:hover { color: var(--text); background: var(--bg3); border-left-color: var(--border2); }
+.toc-item a.active { color: var(--teal); border-left-color: var(--teal); background: var(--teal-dim); }
+.toc-item.sub a { padding-left: 20px; font-size: 11px; }
+
+/* ── PROSE ── */
+.prose { min-width: 0; }
+
+.prose h2 {
+  font-family: var(--display); font-size: 26px; font-weight: 700;
+  color: #fff; line-height: 1.2; letter-spacing: -0.01em;
+  margin: 56px 0 16px; padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.prose h2:first-child { margin-top: 0; border-top: none; }
+
+.prose h3 {
+  font-family: var(--display); font-size: 18px; font-weight: 700;
+  color: #fff; line-height: 1.3; margin: 32px 0 12px;
+}
+
+.prose h4 {
+  font-family: var(--mono); font-size: 12px; font-weight: 500;
+  color: var(--teal); letter-spacing: 0.1em; text-transform: uppercase;
+  margin: 24px 0 10px;
+}
+
+.prose p {
+  font-size: 15px; color: var(--muted); line-height: 1.8;
+  margin-bottom: 18px; max-width: var(--prose-max);
+}
+
+.prose ul, .prose ol {
+  margin: 0 0 20px 0; padding-left: 0; list-style: none;
+  max-width: var(--prose-max);
+}
+.prose li {
+  font-size: 14px; color: var(--muted); line-height: 1.7;
+  padding: 5px 0 5px 20px; position: relative;
+}
+.prose li::before {
+  content: ''; position: absolute; left: 0; top: 14px;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--teal); opacity: 0.6;
+}
+
+/* capability blocks */
+.capability-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 12px; margin: 24px 0 32px;
+}
+.capability-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 20px;
+}
+.capability-card-title {
+  font-family: var(--display); font-size: 14px; font-weight: 700;
+  color: #fff; margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.capability-card-title::before {
+  content: ''; display: block; width: 8px; height: 8px;
+  border-radius: 2px; background: var(--teal); flex-shrink: 0;
+}
+.capability-card ul { margin: 0; }
+.capability-card li { font-size: 13px; padding: 3px 0 3px 16px; }
+.capability-card li::before { top: 12px; width: 4px; height: 4px; }
+
+/* section intro highlight */
+.section-intro {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-left: 3px solid var(--teal); border-radius: 0 8px 8px 0;
+  padding: 18px 22px; margin: 0 0 28px;
+  font-size: 15px; color: var(--text); line-height: 1.7;
+  max-width: var(--prose-max);
+}
+
+/* pull quote */
+.pull-quote {
+  border-left: 3px solid var(--amber); border-radius: 0 8px 8px 0;
+  padding: 18px 22px; margin: 28px 0;
+  font-size: 16px; color: var(--text); font-style: italic;
+  line-height: 1.7; background: var(--amber-dim);
+  max-width: var(--prose-max);
+}
+
+/* architecture image */
+.arch-image {
+  margin: 32px 0; border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden; background: var(--bg2);
+}
+.arch-image img {
+  width: 100%; display: block;
+  transition: opacity 0.3s;
+}
+.arch-image img[src=""] { min-height: 200px; background: var(--bg3); }
+.arch-image-caption {
+  padding: 12px 16px; font-family: var(--mono); font-size: 11px;
+  color: var(--muted2); letter-spacing: 0.04em; border-top: 1px solid var(--border);
+  background: var(--bg2);
+}
+
+/* zone cards */
+.zone-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0 32px; }
+.zone-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 16px;
+}
+.zone-card-name {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 8px;
+}
+.zone-card-body { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+/* outcomes list */
+.outcomes-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 8px; margin: 20px 0;
+}
+.outcome-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 12px 14px; font-size: 13px; color: var(--muted);
+}
+.outcome-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); flex-shrink: 0; margin-top: 5px; }
+
+/* tech stack pills */
+.tech-stack { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0 24px; }
+.tech-pill {
+  font-family: var(--mono); font-size: 11px; padding: 5px 12px;
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--muted); border-radius: 4px;
+}
+
+/* github callout */
+.github-callout {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 24px 28px; margin: 32px 0;
+  display: flex; align-items: center; gap: 20px;
+}
+.github-callout-icon { color: var(--teal); flex-shrink: 0; }
+.github-callout-title { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.github-callout-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.github-callout-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 12px; color: var(--teal);
+  text-decoration: none; margin-top: 10px;
+  transition: gap 0.2s;
+}
+.github-callout-link:hover { gap: 9px; }
+
+/* disclaimer */
+.disclaimer {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 20px 24px; margin-top: 48px;
+  font-size: 13px; color: var(--muted2); line-height: 1.6;
+}
+.disclaimer strong { color: var(--muted); font-weight: 500; }
+
+/* article nav */
+.article-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 32px 0; margin-top: 48px; border-top: 1px solid var(--border);
+}
+.article-nav a {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 12px; color: var(--muted);
+  text-decoration: none; transition: color 0.2s;
+}
+.article-nav a:hover { color: var(--teal); }
+
+/* related */
+.related-section { border-top: 1px solid var(--border); padding: 64px 0; position: relative; z-index: 1; }
+.related-wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+.related-label { font-family: var(--mono); font-size: 11px; color: var(--teal); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+.related-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--teal); }
+.related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.rel-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 24px; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 10px; transition: border-color 0.2s; }
+.rel-card:hover { border-color: var(--border2); }
+.rel-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.rel-tag { font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 3px; }
+.rel-tag.teal  { background: var(--teal-dim);  color: var(--teal); }
+.rel-tag.amber { background: var(--amber-dim); color: var(--amber); }
+.rel-title { font-family: var(--display); font-size: 15px; font-weight: 700; color: #fff; line-height: 1.3; }
+.rel-meta { font-family: var(--mono); font-size: 11px; color: var(--muted2); margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border); }
+
+/* CTA strip */
+.cta-strip { background: var(--bg2); border-top: 1px solid var(--border); padding: 64px 0; position: relative; z-index: 1; }
+.cta-wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
+.cta-heading { font-family: var(--display); font-size: clamp(20px, 2.2vw, 26px); font-weight: 700; color: #fff; margin-bottom: 8px; }
+.cta-sub { font-size: 15px; color: var(--muted); }
+.cta-actions { display: flex; gap: 12px; flex-shrink: 0; }
+.btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #090c10; font-size: 14px; font-weight: 600; padding: 12px 24px; border-radius: 4px; text-decoration: none; transition: opacity 0.2s, transform 0.15s; }
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-outline { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border2); color: var(--muted); font-size: 14px; padding: 11px 24px; border-radius: 4px; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+.btn-outline:hover { border-color: var(--teal); color: var(--teal); }
+
+/* footer */
+footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: relative; z-index: 1; }
+.footer-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
+.footer-logo { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.footer-logo span { color: var(--teal); }
+.footer-desc { font-size: 13px; color: var(--muted); max-width: 380px; line-height: 1.6; }
+.footer-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--teal); }
+.footer-bottom { max-width: 1100px; margin: 32px auto 0; padding: 24px 32px 0; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.footer-copy { font-size: 12px; color: var(--muted2); }
+
+/* responsive */
+@media (max-width: 960px) {
+  .article-layout { grid-template-columns: 1fr; }
+  .toc { display: none; }
+  .capability-grid { grid-template-columns: 1fr; }
+  .zone-grid { grid-template-columns: repeat(2, 1fr); }
+  .outcomes-grid { grid-template-columns: 1fr; }
+  .related-grid { grid-template-columns: repeat(2, 1fr); }
+  .cta-wrap { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .hero-wrap, .related-wrap { padding: 0 20px; }
+  .article-layout { padding: 40px 20px; }
+  .nav-links { display: none; }
+  .zone-grid { grid-template-columns: 1fr; }
+  .related-grid { grid-template-columns: 1fr; }
+  .cta-wrap { padding: 0 20px; }
+  .footer-inner, .footer-bottom { padding: 0 20px; }
+}
+
+    /* ── Diagram lightbox ─────────────────────────────── */
+    .arch-image { cursor: zoom-in; position: relative; }
+    .arch-image::after {
+      content: '⤢';
+      position: absolute;
+      top: 10px; right: 12px;
+      font-size: 18px;
+      color: rgba(0,212,255,0.5);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .arch-image:hover::after { opacity: 1; }
+    .lbx-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(7,9,13,0.95);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      cursor: zoom-out;
+    }
+    .lbx-overlay.open { display: flex; }
+    .lbx-inner {
+      width: 96vw;
+      max-width: 1600px;
+      max-height: 94vh;
+      overflow: auto;
+      border-radius: 8px;
+      border: 1px solid rgba(0,212,255,0.2);
+      background: #07090d;
+      padding: 0;
+      cursor: default;
+    }
+    .lbx-inner svg, .lbx-inner img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 88vh;
+      object-fit: contain;
+    }
+    .lbx-inner .rmt-wrap { max-height: 85vh; overflow-y: auto; }
+    .lbx-caption {
+      padding: 10px 16px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted2);
+      border-top: 1px solid var(--border);
+      background: var(--bg2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .lbx-close {
+      font-size: 20px;
+      color: rgba(0,212,255,0.6);
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 4px;
+    }
+    .lbx-close:hover { color: #00d4ff; }
+    @media (max-width: 600px) {
+      .lbx-overlay { padding: 12px; }
+    }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="https://saleemyousaf.co.uk/" class="nav-logo">Saleem <span>Yousaf</span></a>
+    <ul class="nav-links">
+      <li><a href="https://saleemyousaf.co.uk/about/">About</a></li>
+      <li><a href="https://saleemyousaf.co.uk/experience/">Experience</a></li>
+      <li><a href="https://saleemyousaf.co.uk/projects/">Projects</a></li>
+      <li class="nav-dropdown">
+        <button class="nav-dropdown-toggle" style="color:var(--teal);">
+          Articles
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="nav-dropdown-menu">
+          <a href="https://saleemyousaf.co.uk/articles/" class="active">All Articles</a>
+          <a href="https://saleemyousaf.co.uk/assume-breach/">Assume Breach</a>
+          <a href="https://saleemyousaf.co.uk/ai-security-governance/">AI Security &amp; Governance</a>
+          <a href="https://saleemyousaf.co.uk/breachforge/" style="color:#00d4ff;border-top:1px solid rgba(255,255,255,0.07);margin-top:4px;padding-top:12px;">⬡ BreachForge BAS</a>
+        </div>
+      </li>
+      <li><a href="https://saleemyousaf.co.uk/connect/" class="nav-cta">Connect</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ARTICLE HERO -->
+<div class="article-hero">
+  <div class="article-hero-glow"></div>
+  <div class="hero-wrap">
+    <div class="article-eyebrow">
+      <div class="article-eyebrow-line"></div>
+      <span class="article-tag teal">Zero Trust</span>
+      <span class="article-tag teal">AWS</span>
+      <span class="article-tag teal">Azure</span>
+      <span class="article-tag amber">Firewall Engineering</span>
+      <span class="article-tag teal">SIEM</span>
+    </div>
+    <h1 class="article-title">Enterprise Zero Trust Secure Landing Zone Reference Architecture</h1>
+    <p class="article-intro">A technical deep dive into secure landing zone design, network segmentation, SIEM and SOAR integration, Zero Trust access control, and operational security engineering across AWS, Azure, Palo Alto, Fortinet, and Zscaler SSE environments.</p>
+    <div class="article-meta-bar">
+      <div class="meta-item">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        14 May 2026
+      </div>
+      <div class="meta-divider"></div>
+      <div class="meta-item">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        ~30 min read
+      </div>
+      <div class="meta-divider"></div>
+      <div class="meta-item">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Saleem Yousaf
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ARTICLE LAYOUT -->
+<div class="article-layout">
+
+  <!-- PROSE -->
+  <article class="prose">
+
+    <!-- 1. Overview -->
+    <h2 id="overview">Overview</h2>
+    <div class="section-intro">This reference architecture demonstrates a practical enterprise implementation approach for secure AWS and Azure landing zones using Zero Trust security principles, network segmentation, SIEM and SOAR integration, and centralised security operations.</div>
+    <p>The design showcases how organisations can modernize legacy perimeter-based security models by implementing identity-aware access controls, cloud-native security services, next-generation firewalls, and automated incident response workflows across hybrid environments.</p>
+<div class="arch-image" style="margin:28px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--bg2);">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" style="width:100%;max-width:900px;display:block;">
+  <defs>
+    <marker id="arr" markerWidth="9" markerHeight="6" refX="9" refY="3" orient="auto"><polygon points="0 0,9 3,0 6" fill="#00d4ff"/></marker>
+    <marker id="arr-r" markerWidth="9" markerHeight="6" refX="9" refY="3" orient="auto"><polygon points="0 0,9 3,0 6" fill="#ff3355"/></marker>
+  </defs>
+  <rect width="900" height="520" rx="8" fill="#07090d"/>
+  <text x="450" y="28" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Zero Trust Landing Zone — Multi-Cloud Reference Architecture</text>
+  <text x="450" y="44" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Deny by default · Identity-aware · Continuously verified · Hybrid AWS + Azure + On-Premises</text>
+
+  <!-- IDENTITY PLANE (top) -->
+  <rect x="20" y="58" width="860" height="60" rx="5" fill="#0a0a20" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="30" y="75" font-family="Arial" font-size="10" font-weight="bold" fill="#a78bfa">IDENTITY CONTROL PLANE</text>
+  <rect x="30" y="80" width="130" height="26" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="95" y="97" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">Entra ID / AWS IAM</text>
+  <rect x="170" y="80" width="130" height="26" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="235" y="97" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">Conditional Access / PIM</text>
+  <rect x="310" y="80" width="130" height="26" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="375" y="97" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">MFA / FIDO2</text>
+  <rect x="450" y="80" width="130" height="26" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="515" y="97" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">Zero Trust Policy Engine</text>
+  <rect x="590" y="80" width="130" height="26" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="655" y="97" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">UEBA / Behaviour</text>
+  <rect x="730" y="80" width="140" height="26" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="800" y="97" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">Device Compliance / MDM</text>
+
+  <!-- USER ZONE -->
+  <rect x="20" y="130" width="130" height="120" rx="5" fill="#0c1018" stroke="#FFAA00" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="85" y="148" font-family="Arial" font-size="9" font-weight="bold" fill="#FFAA00" text-anchor="middle">USERS</text>
+  <rect x="30" y="155" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="85" y="170" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Corporate Devices</text>
+  <rect x="30" y="182" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="85" y="197" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">BYOD / Remote</text>
+  <rect x="30" y="209" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="85" y="224" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Third Party / B2B</text>
+
+  <!-- SSE / SASE ZONE -->
+  <rect x="165" y="130" width="140" height="120" rx="5" fill="#0c1018" stroke="#00d4ff" stroke-width="1.5"/>
+  <text x="235" y="148" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">SSE / SASE</text>
+  <rect x="175" y="155" width="120" height="22" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="235" y="170" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Zscaler ZIA / ZPA</text>
+  <rect x="175" y="182" width="120" height="22" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="235" y="197" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">SWG / CASB / DLP</text>
+  <rect x="175" y="209" width="120" height="22" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="235" y="224" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Private Access / ZTNA</text>
+
+  <!-- AWS LANDING ZONE -->
+  <rect x="320" y="130" width="175" height="120" rx="5" fill="#080d14" stroke="#f97316" stroke-width="1.5"/>
+  <text x="407" y="148" font-family="Arial" font-size="9" font-weight="bold" fill="#f97316" text-anchor="middle">AWS LANDING ZONE</text>
+  <rect x="330" y="155" width="155" height="22" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/>
+  <text x="407" y="170" font-family="Arial" font-size="8" fill="#f97316" text-anchor="middle">Control Tower / SCPs</text>
+  <rect x="330" y="182" width="155" height="22" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/>
+  <text x="407" y="197" font-family="Arial" font-size="8" fill="#f97316" text-anchor="middle">Transit Gateway / VPC</text>
+  <rect x="330" y="209" width="155" height="22" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/>
+  <text x="407" y="224" font-family="Arial" font-size="8" fill="#f97316" text-anchor="middle">GuardDuty / Security Hub</text>
+
+  <!-- AZURE LANDING ZONE -->
+  <rect x="510" y="130" width="175" height="120" rx="5" fill="#080d14" stroke="#0078d4" stroke-width="1.5"/>
+  <text x="597" y="148" font-family="Arial" font-size="9" font-weight="bold" fill="#0078d4" text-anchor="middle">AZURE LANDING ZONE</text>
+  <rect x="520" y="155" width="155" height="22" rx="3" fill="#001030" stroke="#0078d4" stroke-width="0.5"/>
+  <text x="597" y="170" font-family="Arial" font-size="8" fill="#0078d4" text-anchor="middle">Management Groups / Policy</text>
+  <rect x="520" y="182" width="155" height="22" rx="3" fill="#001030" stroke="#0078d4" stroke-width="0.5"/>
+  <text x="597" y="197" font-family="Arial" font-size="8" fill="#0078d4" text-anchor="middle">Virtual WAN / vHub</text>
+  <rect x="520" y="209" width="155" height="22" rx="3" fill="#001030" stroke="#0078d4" stroke-width="0.5"/>
+  <text x="597" y="224" font-family="Arial" font-size="8" fill="#0078d4" text-anchor="middle">Defender for Cloud / Sentinel</text>
+
+  <!-- ON-PREM -->
+  <rect x="700" y="130" width="180" height="120" rx="5" fill="#0c1018" stroke="#00e87a" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="790" y="148" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a" text-anchor="middle">ON-PREMISES</text>
+  <rect x="710" y="155" width="160" height="22" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="790" y="170" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Data Centre / DC</text>
+  <rect x="710" y="182" width="160" height="22" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="790" y="197" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">ExpressRoute / Direct Connect</text>
+  <rect x="710" y="209" width="160" height="22" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="790" y="224" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Active Directory / LDAP</text>
+
+  <!-- POLICY ENFORCEMENT LAYER -->
+  <rect x="20" y="265" width="860" height="55" rx="5" fill="#050d10" stroke="#00d4ff" stroke-width="1.5"/>
+  <text x="450" y="283" font-family="Arial" font-size="10" font-weight="bold" fill="#00d4ff" text-anchor="middle">POLICY ENFORCEMENT LAYER — Deny by Default · All traffic inspected · Identity verified at every hop</text>
+  <rect x="30" y="290" width="160" height="20" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="110" y="304" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Palo Alto / Fortinet NGFW</text>
+  <rect x="200" y="290" width="160" height="20" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="280" y="304" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Micro-segmentation rules</text>
+  <rect x="370" y="290" width="160" height="20" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="450" y="304" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">TLS 1.3 inspection</text>
+  <rect x="540" y="290" width="160" height="20" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="620" y="304" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">East-West traffic control</text>
+  <rect x="710" y="290" width="160" height="20" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="790" y="304" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">SCPs / Azure Policy</text>
+
+  <!-- SOC / SIEM LAYER -->
+  <rect x="20" y="333" width="860" height="60" rx="5" fill="#050d10" stroke="#ff3355" stroke-width="1"/>
+  <text x="450" y="351" font-family="Arial" font-size="10" font-weight="bold" fill="#ff3355" text-anchor="middle">SOC / SIEM / SOAR — Splunk · Microsoft Sentinel · XSOAR · Automated Response</text>
+  <rect x="30" y="358" width="130" height="20" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="95" y="372" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Splunk / Sentinel</text>
+  <rect x="170" y="358" width="130" height="20" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="235" y="372" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">CloudTrail / Activity Log</text>
+  <rect x="310" y="358" width="130" height="20" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="375" y="372" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">GuardDuty / Defender</text>
+  <rect x="450" y="358" width="130" height="20" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="515" y="372" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Firewall Logs / NetFlow</text>
+  <rect x="590" y="358" width="130" height="20" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="655" y="372" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">XSOAR Automation</text>
+  <rect x="730" y="358" width="140" height="20" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="800" y="372" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">TIP / MISP / IOC feeds</text>
+
+  <!-- IaC LAYER -->
+  <rect x="20" y="406" width="860" height="50" rx="5" fill="#0a1018" stroke="#00e87a" stroke-width="1"/>
+  <text x="450" y="424" font-family="Arial" font-size="10" font-weight="bold" fill="#00e87a" text-anchor="middle">INFRASTRUCTURE AS CODE — Terraform · Bicep · GitHub Actions · Policy as Code</text>
+  <rect x="30" y="432" width="120" height="18" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="90" y="445" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Terraform modules</text>
+  <rect x="160" y="432" width="120" height="18" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="220" y="445" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Azure Bicep / ARM</text>
+  <rect x="290" y="432" width="120" height="18" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="350" y="445" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">OPA / Sentinel Policy</text>
+  <rect x="420" y="432" width="120" height="18" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="480" y="445" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">GitHub Actions CI/CD</text>
+  <rect x="550" y="432" width="120" height="18" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="610" y="445" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Config drift detection</text>
+  <rect x="680" y="432" width="190" height="18" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="775" y="445" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Compliance as Code / CIS</text>
+
+  <!-- Flow arrows -->
+  <line x1="150" y1="190" x2="165" y2="190" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="305" y1="190" x2="320" y2="190" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="495" y1="190" x2="510" y2="190" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="685" y1="190" x2="700" y2="190" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <text x="450" y="510" font-family="Arial" font-size="9" fill="#55677a" text-anchor="middle">Zero Trust: never trust, always verify · All access identity-verified · Least privilege enforced at every layer</text>
+</svg>
+<div class="arch-image-caption" style="padding:10px 16px;font-family:var(--mono);font-size:11px;color:var(--muted2);letter-spacing:0.04em;border-top:1px solid var(--border);background:var(--bg2);">// Zero Trust Landing Zone — Multi-Cloud Reference Architecture: AWS + Azure + On-Premises with identity control plane and policy enforcement</div>
+</div>
+
+
+    <div class="tech-stack">
+      <span class="tech-pill">Palo Alto NGFW &amp; Panorama</span>
+      <span class="tech-pill">Fortinet FortiGate &amp; FortiManager</span>
+      <span class="tech-pill">Zscaler SSE (ZIA/ZPA)</span>
+      <span class="tech-pill">AWS Secure Landing Zone</span>
+      <span class="tech-pill">Azure Secure Landing Zone</span>
+      <span class="tech-pill">SIEM &amp; XSOAR Integration</span>
+      <span class="tech-pill">Infrastructure as Code</span>
+      <span class="tech-pill">Zero Trust Architecture</span>
+    </div>
+
+    <!-- 2. Key Capabilities -->
+    <h2 id="capabilities">Key Capabilities Delivered</h2>
+    <div class="capability-grid">
+      <div class="capability-card">
+        <div class="capability-card-title">Cloud Security &amp; Landing Zones</div>
+        <ul>
+          <li>AWS and Azure secure landing zone architecture</li>
+          <li>Multi-cloud network segmentation</li>
+          <li>Secure ingress and egress design</li>
+          <li>Transit Gateway and Virtual WAN integration</li>
+          <li>Private endpoint architecture</li>
+          <li>Cloud-native security telemetry integration</li>
+        </ul>
+      </div>
+      <div class="capability-card">
+        <div class="capability-card-title">Zero Trust Network Architecture</div>
+        <ul>
+          <li>Identity-aware access controls</li>
+          <li>Least privilege firewall policy design</li>
+          <li>East-west traffic segmentation</li>
+          <li>Application-level access enforcement</li>
+          <li>Continuous trust validation</li>
+          <li>Device posture-aware access</li>
+        </ul>
+      </div>
+      <div class="capability-card">
+        <div class="capability-card-title">Firewall Engineering</div>
+        <ul>
+          <li>Palo Alto NGFW perimeter and VPN zoning</li>
+          <li>FortiGate internal segmentation and edge security</li>
+          <li>Panorama and FortiManager centralised governance</li>
+          <li>Threat prevention, SSL inspection, and IPS policies</li>
+          <li>NAT and VPN policy management</li>
+        </ul>
+      </div>
+      <div class="capability-card">
+        <div class="capability-card-title">SIEM &amp; SOAR Integration</div>
+        <ul>
+          <li>Centralised log aggregation</li>
+          <li>Firewall, cloud, and identity telemetry</li>
+          <li>SOC alert correlation workflows</li>
+          <li>XSOAR automation and playbooks</li>
+          <li>Incident response orchestration</li>
+          <li>Threat intelligence enrichment</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="arch-image">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" style="width:100%;max-width:900px;display:block;">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#00d4ff"/></marker>
+    <marker id="arr2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#ff3355"/></marker>
+  </defs>
+  <rect width="900" height="500" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Enterprise Secure Landing Zone — Architecture Overview</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">AWS + Azure + On-Premises · Zero Trust · SIEM/SOAR · IaC · SSE · BAS Continuous Validation</text>
+
+  <!-- IDENTITY PLANE -->
+  <rect x="20" y="55" width="860" height="48" rx="5" fill="#0a0518" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="30" y="72" font-family="Arial" font-size="10" font-weight="bold" fill="#a78bfa">IDENTITY CONTROL PLANE</text>
+  <rect x="200" y="62" width="120" height="28" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="260" y="80" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Entra ID / PIM / MFA</text>
+  <rect x="330" y="62" width="120" height="28" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="390" y="80" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Conditional Access</text>
+  <rect x="460" y="62" width="120" height="28" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="520" y="80" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">PAM / CyberArk</text>
+  <rect x="590" y="62" width="120" height="28" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="650" y="80" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Zero Trust Policy Engine</text>
+  <rect x="720" y="62" width="150" height="28" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="795" y="80" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">UEBA / Device Compliance</text>
+
+  <!-- USERS + SSE -->
+  <rect x="20" y="115" width="130" height="200" rx="5" fill="#0c1018" stroke="#FFAA00" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="85" y="132" font-family="Arial" font-size="9" font-weight="bold" fill="#FFAA00" text-anchor="middle">USERS</text>
+  <rect x="30" y="140" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="85" y="155" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Corporate / Remote</text>
+  <rect x="30" y="168" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="85" y="183" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Third Party / BYOD</text>
+  <rect x="30" y="196" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="85" y="211" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Admins / PAM only</text>
+
+  <rect x="165" y="115" width="130" height="200" rx="5" fill="#001520" stroke="#00d4ff" stroke-width="1.5"/>
+  <text x="230" y="132" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">SSE / ZTNA</text>
+  <rect x="175" y="140" width="110" height="22" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="230" y="155" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Zscaler ZIA / ZPA</text>
+  <rect x="175" y="168" width="110" height="22" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="230" y="183" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">SWG / CASB / DLP</text>
+  <rect x="175" y="196" width="110" height="22" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="230" y="211" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">No network-level VPN</text>
+
+  <!-- ON-PREM -->
+  <rect x="310" y="115" width="130" height="200" rx="5" fill="#0c1018" stroke="#00e87a" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="375" y="132" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a" text-anchor="middle">ON-PREMISES</text>
+  <rect x="320" y="140" width="110" height="22" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="375" y="155" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Data Centre / DC</text>
+  <rect x="320" y="168" width="110" height="22" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="375" y="183" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">ExpressRoute / DX</text>
+  <rect x="320" y="196" width="110" height="22" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="375" y="211" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">NGFW + NDR</text>
+
+  <!-- AWS -->
+  <rect x="455" y="115" width="130" height="200" rx="5" fill="#080d14" stroke="#f97316" stroke-width="1.5"/>
+  <text x="520" y="132" font-family="Arial" font-size="9" font-weight="bold" fill="#f97316" text-anchor="middle">AWS LZ</text>
+  <rect x="465" y="140" width="110" height="22" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/>
+  <text x="520" y="155" font-family="Arial" font-size="8" fill="#f97316" text-anchor="middle">Control Tower / SCPs</text>
+  <rect x="465" y="168" width="110" height="22" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/>
+  <text x="520" y="183" font-family="Arial" font-size="8" fill="#f97316" text-anchor="middle">Transit GW / VPC</text>
+  <rect x="465" y="196" width="110" height="22" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/>
+  <text x="520" y="211" font-family="Arial" font-size="8" fill="#f97316" text-anchor="middle">GuardDuty / Network FW</text>
+
+  <!-- AZURE -->
+  <rect x="600" y="115" width="130" height="200" rx="5" fill="#080d14" stroke="#0078d4" stroke-width="1.5"/>
+  <text x="665" y="132" font-family="Arial" font-size="9" font-weight="bold" fill="#0078d4" text-anchor="middle">AZURE LZ</text>
+  <rect x="610" y="140" width="110" height="22" rx="3" fill="#001030" stroke="#0078d4" stroke-width="0.5"/>
+  <text x="665" y="155" font-family="Arial" font-size="8" fill="#0078d4" text-anchor="middle">Mgmt Groups / Policy</text>
+  <rect x="610" y="168" width="110" height="22" rx="3" fill="#001030" stroke="#0078d4" stroke-width="0.5"/>
+  <text x="665" y="183" font-family="Arial" font-size="8" fill="#0078d4" text-anchor="middle">Virtual WAN / vHub</text>
+  <rect x="610" y="196" width="110" height="22" rx="3" fill="#001030" stroke="#0078d4" stroke-width="0.5"/>
+  <text x="665" y="211" font-family="Arial" font-size="8" fill="#0078d4" text-anchor="middle">Defender / Sentinel</text>
+
+  <!-- BAS -->
+  <rect x="745" y="115" width="135" height="200" rx="5" fill="#050d10" stroke="#00d4ff" stroke-width="2"/>
+  <text x="812" y="132" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">BREACHFORGE</text>
+  <rect x="755" y="140" width="115" height="22" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="812" y="155" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">BAS Simulation</text>
+  <rect x="755" y="168" width="115" height="22" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="812" y="183" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Live TI Portal</text>
+  <rect x="755" y="196" width="115" height="22" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="812" y="211" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">ATT&amp;CK Validation</text>
+
+  <!-- POLICY LAYER -->
+  <rect x="20" y="328" width="860" height="40" rx="5" fill="#050d10" stroke="#00d4ff" stroke-width="1.5"/>
+  <text x="450" y="346" font-family="Arial" font-size="10" font-weight="bold" fill="#00d4ff" text-anchor="middle">POLICY ENFORCEMENT — Deny by Default · Palo Alto / Fortinet / Azure FW / AWS Network FW · All boundaries inspected</text>
+  <text x="450" y="362" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">IaC managed (Terraform + Bicep) · Panorama + FortiManager + Azure Policy + SCPs · No manual changes</text>
+
+  <!-- SOC LAYER -->
+  <rect x="20" y="380" width="860" height="40" rx="5" fill="#050d10" stroke="#ff3355" stroke-width="1"/>
+  <text x="450" y="398" font-family="Arial" font-size="10" font-weight="bold" fill="#ff3355" text-anchor="middle">SOC / SIEM / SOAR — Splunk · Sentinel · Cortex XSOAR · Automated playbooks · TIP integration</text>
+  <text x="450" y="414" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">MTTD &lt;90min · MTTR &lt;2hrs · Tier-1 auto-resolved · All telemetry centralised · BAS validates every control</text>
+
+  <!-- IaC LAYER -->
+  <rect x="20" y="432" width="860" height="40" rx="5" fill="#0a1018" stroke="#00e87a" stroke-width="1"/>
+  <text x="450" y="450" font-family="Arial" font-size="10" font-weight="bold" fill="#00e87a" text-anchor="middle">INFRASTRUCTURE AS CODE — Terraform · Bicep · GitHub Actions · OPA · Config drift detection · Compliance reports</text>
+  <text x="450" y="466" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">NIST CSF · ISO 27001 · CIS Benchmarks · SOC 2 · Evidence generated automatically</text>
+
+  <!-- Arrows between layers -->
+  <line x1="150" y1="215" x2="165" y2="215" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="295" y1="215" x2="310" y2="215" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="440" y1="215" x2="455" y2="215" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="585" y1="215" x2="600" y2="215" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="730" y1="215" x2="745" y2="215" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#arr)"/>
+</svg>
+      
+      <div class="arch-image-caption">// Enterprise secure landing zone architecture overview</div>
+    </div>
+
+    <!-- 3. Technical Design Objectives -->
+    <h2 id="design-objectives">Technical Design Objectives</h2>
+    <p>The secure landing zone architecture was designed to support enterprise-scale cloud transformation, Zero Trust security enforcement, and operational SOC modernization across hybrid AWS, Azure, and on-premise environments. The primary objective was to establish a repeatable, security-governed architecture capable of supporting secure workload migration, centralised visibility, and automated incident response while reducing attack surface and operational risk.</p>
+
+    <h3>Core Objectives</h3>
+    <div class="outcomes-grid">
+      <div class="outcome-item"><div class="outcome-dot"></div>Remove implicit trust between all network zones</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Eliminate broad flat-network VPN access</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Standardize firewall governance across hybrid environments</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Improve SOC visibility across hybrid infrastructure</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Enable centralised SIEM and XSOAR operations</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Reduce lateral movement risk through micro-segmentation</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Enforce least privilege access across all identities</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Implement repeatable IaC-driven cloud security patterns</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Automate security operations and incident response</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Support scalable enterprise cloud migration programmes</div>
+    </div>
+
+    <div class="arch-image">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" style="width:100%;max-width:900px;display:block;">
+  <rect width="900" height="460" rx="8" fill="#07090d"/>
+  <text x="450" y="28" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Zero Trust Design Principles — Applied Across Security Domains</text>
+  <text x="450" y="44" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Never trust, always verify · Least privilege · Assume breach · Explicit verification · Continuous monitoring</text>
+
+  <!-- Principle 1 -->
+  <rect x="20" y="60" width="260" height="160" rx="6" fill="#0a0518" stroke="#a78bfa" stroke-width="1.5"/>
+  <rect x="20" y="60" width="260" height="30" rx="6" fill="#a78bfa"/>
+  <text x="150" y="81" font-family="Arial" font-size="11" font-weight="bold" fill="#07090d" text-anchor="middle">Never Trust, Always Verify</text>
+  <text x="35" y="112" font-family="Arial" font-size="9" fill="#a78bfa">Every access request verified regardless</text>
+  <text x="35" y="127" font-family="Arial" font-size="9" fill="#a78bfa">of network location or prior session</text>
+  <text x="35" y="150" font-family="Arial" font-size="8" fill="#7755aa">Applied to: Identity · Device · Network</text>
+  <text x="35" y="164" font-family="Arial" font-size="8" fill="#7755aa">Tools: Entra CA · ZPA · PAM · MFA</text>
+  <text x="35" y="178" font-family="Arial" font-size="8" fill="#7755aa">Validated by: BAS S3 S8 identity attacks</text>
+
+  <!-- Principle 2 -->
+  <rect x="320" y="60" width="260" height="160" rx="6" fill="#080d14" stroke="#00d4ff" stroke-width="1.5"/>
+  <rect x="320" y="60" width="260" height="30" rx="6" fill="#00d4ff"/>
+  <text x="450" y="81" font-family="Arial" font-size="11" font-weight="bold" fill="#07090d" text-anchor="middle">Least Privilege Access</text>
+  <text x="335" y="112" font-family="Arial" font-size="9" fill="#00d4ff">Minimum access required to perform</text>
+  <text x="335" y="127" font-family="Arial" font-size="9" fill="#00d4ff">the task — no standing privileges</text>
+  <text x="335" y="150" font-family="Arial" font-size="8" fill="#007799">Applied to: IAM · RBAC · PIM · PAM</text>
+  <text x="335" y="164" font-family="Arial" font-size="8" fill="#007799">Tools: Entra PIM · CyberArk · AWS IAM</text>
+  <text x="335" y="178" font-family="Arial" font-size="8" fill="#007799">Validated by: BAS S2 S6 privilege abuse</text>
+
+  <!-- Principle 3 -->
+  <rect x="620" y="60" width="260" height="160" rx="6" fill="#150808" stroke="#ff3355" stroke-width="1.5"/>
+  <rect x="620" y="60" width="260" height="30" rx="6" fill="#ff3355"/>
+  <text x="750" y="81" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">Assume Breach</text>
+  <text x="635" y="112" font-family="Arial" font-size="9" fill="#ff3355">Design as if attackers are already</text>
+  <text x="635" y="127" font-family="Arial" font-size="9" fill="#ff3355">inside — minimise blast radius</text>
+  <text x="635" y="150" font-family="Arial" font-size="8" fill="#aa4455">Applied to: Segmentation · Encryption</text>
+  <text x="635" y="164" font-family="Arial" font-size="8" fill="#aa4455">Tools: NGFW · NDR · SIEM · SOAR</text>
+  <text x="635" y="178" font-family="Arial" font-size="8" fill="#aa4455">Validated by: BAS all 10 scenarios</text>
+
+  <!-- Principle 4 -->
+  <rect x="20" y="240" width="260" height="160" rx="6" fill="#0a0f18" stroke="#FFAA00" stroke-width="1.5"/>
+  <rect x="20" y="240" width="260" height="30" rx="6" fill="#FFAA00"/>
+  <text x="150" y="261" font-family="Arial" font-size="11" font-weight="bold" fill="#07090d" text-anchor="middle">Explicit Verification</text>
+  <text x="35" y="292" font-family="Arial" font-size="9" fill="#FFAA00">Authenticate and authorise based on</text>
+  <text x="35" y="307" font-family="Arial" font-size="9" fill="#FFAA00">all available signals — not just identity</text>
+  <text x="35" y="330" font-family="Arial" font-size="8" fill="#aa8800">Applied to: Device · Location · Risk</text>
+  <text x="35" y="344" font-family="Arial" font-size="8" fill="#aa8800">Tools: Entra CA · ZIA · UEBA · MDM</text>
+  <text x="35" y="358" font-family="Arial" font-size="8" fill="#aa8800">Validated by: BAS S4 S10 bypass</text>
+
+  <!-- Principle 5 -->
+  <rect x="320" y="240" width="260" height="160" rx="6" fill="#001a0a" stroke="#00e87a" stroke-width="1.5"/>
+  <rect x="320" y="240" width="260" height="30" rx="6" fill="#00e87a"/>
+  <text x="450" y="261" font-family="Arial" font-size="11" font-weight="bold" fill="#07090d" text-anchor="middle">Continuous Monitoring</text>
+  <text x="335" y="292" font-family="Arial" font-size="9" fill="#00e87a">Real-time visibility across all layers —</text>
+  <text x="335" y="307" font-family="Arial" font-size="9" fill="#00e87a">detect and respond without delay</text>
+  <text x="335" y="330" font-family="Arial" font-size="8" fill="#008844">Applied to: SIEM · NDR · CSPM · EDR</text>
+  <text x="335" y="344" font-family="Arial" font-size="8" fill="#008844">Tools: Splunk · Sentinel · GuardDuty</text>
+  <text x="335" y="358" font-family="Arial" font-size="8" fill="#008844">Validated by: BAS detection gap analysis</text>
+
+  <!-- Principle 6 -->
+  <rect x="620" y="240" width="260" height="160" rx="6" fill="#0a0f10" stroke="#f97316" stroke-width="1.5"/>
+  <rect x="620" y="240" width="260" height="30" rx="6" fill="#f97316"/>
+  <text x="750" y="261" font-family="Arial" font-size="11" font-weight="bold" fill="#07090d" text-anchor="middle">Secure by Design</text>
+  <text x="635" y="292" font-family="Arial" font-size="9" fill="#f97316">Security embedded at every layer —</text>
+  <text x="635" y="307" font-family="Arial" font-size="9" fill="#f97316">not bolted on after deployment</text>
+  <text x="635" y="330" font-family="Arial" font-size="8" fill="#884400">Applied to: IaC · Policy · Architecture</text>
+  <text x="635" y="344" font-family="Arial" font-size="8" fill="#884400">Tools: Terraform · OPA · SCPs · Bicep</text>
+  <text x="635" y="358" font-family="Arial" font-size="8" fill="#884400">Validated by: Config drift detection</text>
+
+  <!-- Bottom bar -->
+  <rect x="20" y="415" width="860" height="32" rx="4" fill="#0a1018" stroke="#1a2235" stroke-width="1"/>
+  <text x="450" y="433" font-family="Arial" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">All six principles applied simultaneously — no single principle is sufficient in isolation</text>
+  <text x="450" y="447" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">BAS continuous validation confirms each principle is enforced at runtime, not just at design time · saleemyousaf.co.uk</text>
+</svg>
+      
+      <div class="arch-image-caption">// Zero Trust design principles applied across the security domains</div>
+    </div>
+
+    <!-- 4. Zero Trust Segmentation -->
+    <h2 id="segmentation">Zero Trust Network Segmentation</h2>
+    <div class="section-intro">The architecture applies Zero Trust segmentation to remove implicit trust between users, workloads, cloud services, and network zones across AWS, Azure, and on-premise environments. Traffic between zones is denied by default unless explicitly authorized through policy-based controls.</div>
+
+    <div class="zone-grid">
+      <div class="zone-card">
+        <div class="zone-card-name">Edge Security</div>
+        <div class="zone-card-body">Internet ingress and egress inspection, DDoS protection, SSL/TLS inspection, threat prevention, DNS security, and geo-blocking via Palo Alto, FortiGate, and Zscaler ZIA.</div>
+      </div>
+      <div class="zone-card">
+        <div class="zone-card-name">Perimeter Zones</div>
+        <div class="zone-card-body">Isolated publicly accessible services from internal tiers. Reverse proxies, WAFs, public APIs, DMZ workloads. Restricted inbound services with TLS termination and API inspection.</div>
+      </div>
+      <div class="zone-card">
+        <div class="zone-card-name">Application Tiers</div>
+        <div class="zone-card-body">Segmented by business criticality and environment. Micro-segmentation, security groups, App-ID-based firewall rules, Layer 7 policy enforcement.</div>
+      </div>
+      <div class="zone-card">
+        <div class="zone-card-name">Data Tiers</div>
+        <div class="zone-card-body">Highly restricted zones with strict least-privilege firewall rules. No direct internet or user access. Private endpoint access only. Database access monitoring and DLP integration.</div>
+      </div>
+      <div class="zone-card">
+        <div class="zone-card-name">Management Zones</div>
+        <div class="zone-card-body">Isolated administrative services, bastion hosts, PAM platforms, SIEM and XSOAR infrastructure. MFA, certificate auth, PAM, device posture, and time-bound admin access.</div>
+      </div>
+      <div class="zone-card">
+        <div class="zone-card-name">VPN Zones</div>
+        <div class="zone-card-body">Segmented by user type: corporate, privileged admin, third-party, partners, SOC analysts. Identity-aware, application-level access only. No broad network trust.</div>
+      </div>
+    </div>
+
+    <div class="arch-image">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" style="width:100%;max-width:900px;display:block;">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#00d4ff"/></marker>
+    <marker id="deny" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#ff3355"/></marker>
+  </defs>
+  <rect width="900" height="480" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Zero Trust Network Segmentation — Trust Zone Architecture</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">VPN zones by user type · Application-level access only · No implicit trust · Identity-aware at every boundary</text>
+  <!-- Zone columns -->
+  <!-- Corporate Users -->
+  <rect x="20" y="58" width="130" height="360" rx="5" fill="#0a0f18" stroke="#FFAA00" stroke-width="1.5"/>
+  <rect x="20" y="58" width="130" height="26" rx="5" fill="#FFAA00"/>
+  <text x="85" y="75" font-family="Arial" font-size="9" font-weight="bold" fill="#07090d" text-anchor="middle">CORPORATE</text>
+  <rect x="30" y="92" width="110" height="28" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="85" y="110" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Managed Device</text>
+  <rect x="30" y="126" width="110" height="28" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="85" y="144" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Compliant / MDM</text>
+  <rect x="30" y="160" width="110" height="28" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="85" y="178" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Full app access</text>
+  <rect x="30" y="194" width="110" height="28" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="85" y="212" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Internal DNS</text>
+  <text x="85" y="295" font-family="Arial" font-size="8" font-weight="bold" fill="#FFAA00" text-anchor="middle">Trust: Medium</text>
+  <text x="85" y="310" font-family="Arial" font-size="7" fill="#aa8800" text-anchor="middle">Verified continuously</text>
+  <!-- Privileged Admin -->
+  <rect x="162" y="58" width="130" height="360" rx="5" fill="#0a0518" stroke="#ff3355" stroke-width="2"/>
+  <rect x="162" y="58" width="130" height="26" rx="5" fill="#ff3355"/>
+  <text x="227" y="75" font-family="Arial" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">PRIVILEGED ADMIN</text>
+  <rect x="172" y="92" width="110" height="28" rx="3" fill="#2a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="227" y="110" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">PAM Session Only</text>
+  <rect x="172" y="126" width="110" height="28" rx="3" fill="#2a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="227" y="144" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Time-Bound Access</text>
+  <rect x="172" y="160" width="110" height="28" rx="3" fill="#2a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="227" y="178" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">MFA + Hardware Key</text>
+  <rect x="172" y="194" width="110" height="28" rx="3" fill="#2a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="227" y="212" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Session Recording</text>
+  <rect x="172" y="228" width="110" height="28" rx="3" fill="#2a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="227" y="246" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Bastion / Jump Host</text>
+  <text x="227" y="295" font-family="Arial" font-size="8" font-weight="bold" fill="#ff3355" text-anchor="middle">Trust: Explicit Only</text>
+  <text x="227" y="310" font-family="Arial" font-size="7" fill="#aa4455" text-anchor="middle">Every session approved</text>
+  <!-- Third Party -->
+  <rect x="304" y="58" width="130" height="360" rx="5" fill="#0a0a18" stroke="#a78bfa" stroke-width="1.5"/>
+  <rect x="304" y="58" width="130" height="26" rx="5" fill="#a78bfa"/>
+  <text x="369" y="75" font-family="Arial" font-size="9" font-weight="bold" fill="#07090d" text-anchor="middle">THIRD PARTY</text>
+  <rect x="314" y="92" width="110" height="28" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="369" y="110" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Unmanaged Device</text>
+  <rect x="314" y="126" width="110" height="28" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="369" y="144" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Vendor / Contractor</text>
+  <rect x="314" y="160" width="110" height="28" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="369" y="178" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">ZTNA App Specific</text>
+  <rect x="314" y="194" width="110" height="28" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="369" y="212" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">No internal access</text>
+  <text x="369" y="295" font-family="Arial" font-size="8" font-weight="bold" fill="#a78bfa" text-anchor="middle">Trust: App-Level Only</text>
+  <text x="369" y="310" font-family="Arial" font-size="7" fill="#7755aa" text-anchor="middle">Isolated from network</text>
+  <!-- Partners -->
+  <rect x="446" y="58" width="130" height="360" rx="5" fill="#080d14" stroke="#22d3ee" stroke-width="1.5"/>
+  <rect x="446" y="58" width="130" height="26" rx="5" fill="#22d3ee"/>
+  <text x="511" y="75" font-family="Arial" font-size="9" font-weight="bold" fill="#07090d" text-anchor="middle">PARTNERS / B2B</text>
+  <rect x="456" y="92" width="110" height="28" rx="3" fill="#001a20" stroke="#22d3ee" stroke-width="0.5"/>
+  <text x="511" y="110" font-family="Arial" font-size="8" fill="#22d3ee" text-anchor="middle">Entra B2B / B2C</text>
+  <rect x="456" y="126" width="110" height="28" rx="3" fill="#001a20" stroke="#22d3ee" stroke-width="0.5"/>
+  <text x="511" y="144" font-family="Arial" font-size="8" fill="#22d3ee" text-anchor="middle">API Gateway Only</text>
+  <rect x="456" y="160" width="110" height="28" rx="3" fill="#001a20" stroke="#22d3ee" stroke-width="0.5"/>
+  <text x="511" y="178" font-family="Arial" font-size="8" fill="#22d3ee" text-anchor="middle">Scoped Permissions</text>
+  <rect x="456" y="194" width="110" height="28" rx="3" fill="#001a20" stroke="#22d3ee" stroke-width="0.5"/>
+  <text x="511" y="212" font-family="Arial" font-size="8" fill="#22d3ee" text-anchor="middle">No direct DB access</text>
+  <text x="511" y="295" font-family="Arial" font-size="8" font-weight="bold" fill="#22d3ee" text-anchor="middle">Trust: Scoped</text>
+  <text x="511" y="310" font-family="Arial" font-size="7" fill="#007799" text-anchor="middle">Federation only</text>
+  <!-- SOC Analysts -->
+  <rect x="588" y="58" width="130" height="360" rx="5" fill="#050d10" stroke="#00d4ff" stroke-width="1.5"/>
+  <rect x="588" y="58" width="130" height="26" rx="5" fill="#00d4ff"/>
+  <text x="653" y="75" font-family="Arial" font-size="9" font-weight="bold" fill="#07090d" text-anchor="middle">SOC ANALYSTS</text>
+  <rect x="598" y="92" width="110" height="28" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="653" y="110" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Read-Only by Default</text>
+  <rect x="598" y="126" width="110" height="28" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="653" y="144" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">SIEM / SOAR Access</text>
+  <rect x="598" y="160" width="110" height="28" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="653" y="178" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Endpoint Isolate Only</text>
+  <rect x="598" y="194" width="110" height="28" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="653" y="212" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">No prod write access</text>
+  <text x="653" y="295" font-family="Arial" font-size="8" font-weight="bold" fill="#00d4ff" text-anchor="middle">Trust: Functional</text>
+  <text x="653" y="310" font-family="Arial" font-size="7" fill="#007799" text-anchor="middle">Role-scoped only</text>
+  <!-- Trust Scale -->
+  <rect x="730" y="58" width="155" height="360" rx="5" fill="#0a1018" stroke="#1a2235" stroke-width="1"/>
+  <text x="807" y="78" font-family="Arial" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">Trust Levels</text>
+  <rect x="740" y="88" width="135" height="36" rx="3" fill="#2a0808" stroke="#ff3355" stroke-width="1"/>
+  <text x="807" y="108" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">Zero — Default Deny</text>
+  <text x="807" y="120" font-family="Arial" font-size="8" fill="#aa4455" text-anchor="middle">No access without policy</text>
+  <rect x="740" y="132" width="135" height="36" rx="3" fill="#1a0d00" stroke="#FFAA00" stroke-width="1"/>
+  <text x="807" y="152" font-family="Arial" font-size="9" fill="#FFAA00" text-anchor="middle">Conditional — Low</text>
+  <text x="807" y="164" font-family="Arial" font-size="8" fill="#aa8800" text-anchor="middle">Policy + MFA required</text>
+  <rect x="740" y="176" width="135" height="36" rx="3" fill="#0a1520" stroke="#00d4ff" stroke-width="1"/>
+  <text x="807" y="196" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">Verified — Medium</text>
+  <text x="807" y="208" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">Device + identity check</text>
+  <rect x="740" y="220" width="135" height="36" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="1"/>
+  <text x="807" y="240" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Explicit — App Only</text>
+  <text x="807" y="252" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">Scoped per application</text>
+  <rect x="740" y="264" width="135" height="36" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="1"/>
+  <text x="807" y="284" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">Privileged — Explicit</text>
+  <text x="807" y="296" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">PAM + session record</text>
+  <!-- Policy Engine bar -->
+  <rect x="20" y="428" width="860" height="40" rx="4" fill="#0a0f18" stroke="#00d4ff" stroke-width="1"/>
+  <text x="450" y="446" font-family="Arial" font-size="10" font-weight="bold" fill="#00d4ff" text-anchor="middle">ZERO TRUST POLICY ENGINE — Entra Conditional Access · PIM · Zscaler ZPA · PAM</text>
+  <text x="450" y="462" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">Every access request evaluated against: user identity + device state + location + risk score + app sensitivity</text>
+</svg>
+      
+      <div class="arch-image-caption">// Zero Trust network segmentation and trust zone architecture</div>
+    </div>
+
+    <!-- 5. Firewall Engineering -->
+    <h2 id="firewall">Firewall Engineering &amp; Connectivity</h2>
+    <div class="section-intro">The connectivity model enforces a deny-by-default posture across all network zones and routes all trusted and untrusted traffic through designated inspection and policy enforcement points. All traffic crossing security boundaries is logged and forwarded into SIEM and XSOAR workflows.</div>
+
+    <h3>Palo Alto Networks</h3>
+    <p>Deployed as the primary perimeter inspection and VPN segmentation layer. Application-aware controls enforced using App-ID, User-ID, Device-ID, URL Filtering, DNS Security, Threat Prevention, and WildFire. Panorama provides centralised firewall governance, policy lifecycle management, and log forwarding configuration.</p>
+<div class="arch-image" style="margin:28px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--bg2);">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" style="width:100%;max-width:900px;display:block;">
+  <defs>
+    <marker id="arr" markerWidth="9" markerHeight="6" refX="9" refY="3" orient="auto"><polygon points="0 0,9 3,0 6" fill="#00d4ff"/></marker>
+    <marker id="arrd" markerWidth="9" markerHeight="6" refX="9" refY="3" orient="auto"><polygon points="0 0,9 3,0 6" fill="#ff3355"/></marker>
+  </defs>
+  <rect width="900" height="460" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Zero Trust Network Segmentation Model</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Deny by default between all zones · Explicit policy required · East-west and north-south inspection</text>
+
+  <!-- Internet -->
+  <rect x="20" y="60" width="120" height="340" rx="5" fill="#150808" stroke="#ff3355" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="80" y="78" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355" text-anchor="middle">INTERNET</text>
+  <rect x="30" y="88" width="100" height="28" rx="3" fill="#2a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="80" y="106" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Untrusted Users</text>
+  <rect x="30" y="122" width="100" height="28" rx="3" fill="#2a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="80" y="140" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Threat Actors</text>
+  <rect x="30" y="156" width="100" height="28" rx="3" fill="#2a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="80" y="174" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Partners / B2B</text>
+  <rect x="30" y="200" width="100" height="50" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="80" y="218" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">ALL DENIED</text>
+  <text x="80" y="232" font-family="Arial" font-size="7" fill="#aa4455" text-anchor="middle">by default</text>
+  <text x="80" y="244" font-family="Arial" font-size="7" fill="#aa4455" text-anchor="middle">without policy</text>
+
+  <!-- Zone 1 DMZ -->
+  <rect x="155" y="60" width="140" height="340" rx="5" fill="#0f0f00" stroke="#FFAA00" stroke-width="1.5"/>
+  <text x="225" y="78" font-family="Arial" font-size="9" font-weight="bold" fill="#FFAA00" text-anchor="middle">ZONE 1: DMZ</text>
+  <rect x="165" y="88" width="120" height="28" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="225" y="106" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">NGFW / WAF</text>
+  <rect x="165" y="122" width="120" height="28" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="225" y="140" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Reverse Proxy</text>
+  <rect x="165" y="156" width="120" height="28" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="225" y="174" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">IDS / IPS Inline</text>
+  <rect x="165" y="190" width="120" height="28" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="225" y="208" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">DDoS Protection</text>
+  <rect x="165" y="228" width="120" height="45" rx="3" fill="#1a1000" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="225" y="246" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Explicit allow:</text>
+  <text x="225" y="258" font-family="Arial" font-size="7" fill="#aa8800" text-anchor="middle">HTTPS 443 only</text>
+  <text x="225" y="270" font-family="Arial" font-size="7" fill="#aa8800" text-anchor="middle">Authenticated only</text>
+
+  <!-- Zone 2 App -->
+  <rect x="310" y="60" width="140" height="340" rx="5" fill="#080d14" stroke="#00d4ff" stroke-width="1.5"/>
+  <text x="380" y="78" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">ZONE 2: APP</text>
+  <rect x="320" y="88" width="120" height="28" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="380" y="106" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Web / App Servers</text>
+  <rect x="320" y="122" width="120" height="28" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="380" y="140" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">API Services</text>
+  <rect x="320" y="156" width="120" height="28" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="380" y="174" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Containers / ECS</text>
+  <rect x="320" y="190" width="120" height="28" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="380" y="208" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Service Mesh</text>
+  <rect x="320" y="228" width="120" height="45" rx="3" fill="#001a20" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="380" y="246" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Explicit allow:</text>
+  <text x="380" y="258" font-family="Arial" font-size="7" fill="#007799" text-anchor="middle">App → Data only</text>
+  <text x="380" y="270" font-family="Arial" font-size="7" fill="#007799" text-anchor="middle">mTLS enforced</text>
+
+  <!-- Zone 3 Identity -->
+  <rect x="465" y="60" width="140" height="340" rx="5" fill="#0a0518" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="535" y="78" font-family="Arial" font-size="9" font-weight="bold" fill="#a78bfa" text-anchor="middle">ZONE 3: IDENTITY</text>
+  <rect x="475" y="88" width="120" height="28" rx="3" fill="#0f0820" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="535" y="106" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Domain Controllers</text>
+  <rect x="475" y="122" width="120" height="28" rx="3" fill="#0f0820" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="535" y="140" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">PKI / ADCS</text>
+  <rect x="475" y="156" width="120" height="28" rx="3" fill="#0f0820" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="535" y="174" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">PAM / CyberArk</text>
+  <rect x="475" y="190" width="120" height="28" rx="3" fill="#0f0820" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="535" y="208" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">RADIUS / MFA</text>
+  <rect x="475" y="228" width="120" height="45" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="535" y="246" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Explicit allow:</text>
+  <text x="535" y="258" font-family="Arial" font-size="7" fill="#7755aa" text-anchor="middle">Auth requests only</text>
+  <text x="535" y="270" font-family="Arial" font-size="7" fill="#7755aa" text-anchor="middle">No direct internet</text>
+
+  <!-- Zone 4 Data -->
+  <rect x="620" y="60" width="140" height="340" rx="5" fill="#0a0818" stroke="#00e87a" stroke-width="1.5"/>
+  <text x="690" y="78" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a" text-anchor="middle">ZONE 4: DATA</text>
+  <rect x="630" y="88" width="120" height="28" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="690" y="106" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Databases / RDS</text>
+  <rect x="630" y="122" width="120" height="28" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="690" y="140" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">S3 / Blob Storage</text>
+  <rect x="630" y="156" width="120" height="28" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="690" y="174" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">KMS / Key Vault</text>
+  <rect x="630" y="190" width="120" height="28" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="690" y="208" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Data Classification</text>
+  <rect x="630" y="228" width="120" height="45" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="690" y="246" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Explicit allow:</text>
+  <text x="690" y="258" font-family="Arial" font-size="7" fill="#008844" text-anchor="middle">App layer only</text>
+  <text x="690" y="270" font-family="Arial" font-size="7" fill="#008844" text-anchor="middle">Encrypted in transit</text>
+
+  <!-- Zone 5 Mgmt -->
+  <rect x="775" y="60" width="110" height="340" rx="5" fill="#050d10" stroke="#22d3ee" stroke-width="1.5"/>
+  <text x="830" y="78" font-family="Arial" font-size="9" font-weight="bold" fill="#22d3ee" text-anchor="middle">MGMT</text>
+  <rect x="783" y="88" width="94" height="28" rx="3" fill="#001520" stroke="#22d3ee" stroke-width="0.5"/>
+  <text x="830" y="106" font-family="Arial" font-size="8" fill="#22d3ee" text-anchor="middle">Bastion Hosts</text>
+  <rect x="783" y="122" width="94" height="28" rx="3" fill="#001520" stroke="#22d3ee" stroke-width="0.5"/>
+  <text x="830" y="140" font-family="Arial" font-size="8" fill="#22d3ee" text-anchor="middle">Jump Servers</text>
+  <rect x="783" y="156" width="94" height="28" rx="3" fill="#001520" stroke="#22d3ee" stroke-width="0.5"/>
+  <text x="830" y="174" font-family="Arial" font-size="8" fill="#22d3ee" text-anchor="middle">SIEM / SOAR</text>
+  <rect x="783" y="190" width="94" height="28" rx="3" fill="#001520" stroke="#22d3ee" stroke-width="0.5"/>
+  <text x="830" y="208" font-family="Arial" font-size="8" fill="#22d3ee" text-anchor="middle">NDR / Logging</text>
+  <rect x="783" y="228" width="94" height="45" rx="3" fill="#001520" stroke="#22d3ee" stroke-width="0.5"/>
+  <text x="830" y="246" font-family="Arial" font-size="8" fill="#22d3ee" text-anchor="middle">Read from</text>
+  <text x="830" y="258" font-family="Arial" font-size="7" fill="#007799" text-anchor="middle">all zones</text>
+  <text x="830" y="270" font-family="Arial" font-size="7" fill="#007799" text-anchor="middle">write-only logs</text>
+
+  <!-- Deny lines between zones -->
+  <line x1="140" y1="190" x2="155" y2="190" stroke="#ff3355" stroke-width="2" marker-end="url(#arrd)"/>
+  <text x="146" y="185" font-family="Arial" font-size="7" fill="#ff3355">DENY</text>
+  <line x1="295" y1="190" x2="310" y2="190" stroke="#00d4ff" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#arr)"/>
+  <text x="296" y="185" font-family="Arial" font-size="7" fill="#00d4ff">policy</text>
+  <line x1="450" y1="190" x2="465" y2="190" stroke="#00d4ff" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#arr)"/>
+  <text x="451" y="185" font-family="Arial" font-size="7" fill="#00d4ff">policy</text>
+  <line x1="605" y1="190" x2="620" y2="190" stroke="#00d4ff" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#arr)"/>
+  <text x="606" y="185" font-family="Arial" font-size="7" fill="#00d4ff">policy</text>
+  <line x1="760" y1="190" x2="775" y2="190" stroke="#00d4ff" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#arr)"/>
+
+  <!-- Bottom labels -->
+  <rect x="20" y="415" width="860" height="36" rx="4" fill="#0a1018" stroke="#1a2235" stroke-width="1"/>
+  <text x="450" y="430" font-family="Arial" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">Zero Trust Principle: No implicit trust between any zones. Every connection requires explicit policy, identity verification, and continuous monitoring.</text>
+  <text x="450" y="445" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">East-west traffic denied by default · Lateral movement detection via NDR · All sessions logged to SIEM</text>
+</svg>
+<div class="arch-image-caption" style="padding:10px 16px;font-family:var(--mono);font-size:11px;color:var(--muted2);letter-spacing:0.04em;border-top:1px solid var(--border);background:var(--bg2);">// Zero Trust Network Segmentation — Five security zones with deny-by-default policy between all zones and explicit allow rules</div>
+</div>
+
+
+    <h3>FortiGate</h3>
+    <p>Deployed for enterprise edge security, internal segmentation, datacentre connectivity, SD-WAN routing, and IPSec site-to-site VPNs. FortiManager standardises policy governance and change control. FortiAnalyzer provides traffic analytics and SIEM forwarding. FortiAuthenticator handles MFA and certificate-based authentication.</p>
+
+    <h3>AWS Connectivity</h3>
+    <p>Segmented VPC architectures connected through AWS Transit Gateway for centralised routing and inspection. Public-facing workloads routed through AWS ALB, WAF inspection layers, and Palo Alto perimeter inspection. PrivateLink and VPC Endpoints remove unnecessary internet exposure. Cloud security telemetry from VPC Flow Logs, CloudTrail, GuardDuty, Security Hub, and WAF logs forwarded into centralised SIEM.</p>
+
+    <h3>Azure Connectivity</h3>
+    <p>Hub-and-spoke VNet connectivity with Azure Virtual WAN. Azure Application Gateway provides Layer 7 load balancing and WAF protection. Azure API Management secures API ingress. Private Endpoints implemented for all PaaS services, removing the need for internet-exposed management or data services.</p>
+
+    <div class="arch-image">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" style="width:100%;max-width:900px;display:block;">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#00d4ff"/></marker>
+    <marker id="arr2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#FFAA00"/></marker>
+  </defs>
+  <rect width="900" height="480" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Firewall Engineering and Hybrid Cloud Connectivity Model</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Deny by default · All boundaries inspected · Palo Alto + Fortinet + Azure Firewall + AWS Network Firewall</text>
+  <!-- Internet -->
+  <rect x="20" y="58" width="100" height="360" rx="5" fill="#150808" stroke="#ff3355" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="70" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355" text-anchor="middle">INTERNET</text>
+  <rect x="30" y="88" width="80" height="28" rx="3" fill="#2a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="70" y="106" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Untrusted</text>
+  <rect x="30" y="124" width="80" height="28" rx="3" fill="#2a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="70" y="142" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Threat Actors</text>
+  <!-- Edge NGFW -->
+  <rect x="135" y="58" width="130" height="360" rx="5" fill="#0f0820" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="200" y="75" font-family="Arial" font-size="9" font-weight="bold" fill="#a78bfa" text-anchor="middle">EDGE NGFW</text>
+  <rect x="145" y="85" width="110" height="28" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="200" y="103" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Palo Alto PA-5200</text>
+  <rect x="145" y="119" width="110" height="28" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="200" y="137" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">FortiGate 3000F</text>
+  <rect x="145" y="153" width="110" height="28" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="200" y="171" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">HA Active/Passive</text>
+  <rect x="145" y="187" width="110" height="28" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="200" y="205" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">IDS/IPS Inline</text>
+  <rect x="145" y="221" width="110" height="28" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="200" y="239" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">SSL Inspection</text>
+  <rect x="145" y="255" width="110" height="28" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="200" y="273" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">App-ID / URL Filter</text>
+  <text x="200" y="370" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Panorama managed</text>
+  <text x="200" y="384" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">FortiManager HA</text>
+  <!-- Transit / Hub -->
+  <rect x="280" y="58" width="130" height="360" rx="5" fill="#050d10" stroke="#00d4ff" stroke-width="2"/>
+  <text x="345" y="75" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">TRANSIT HUB</text>
+  <rect x="290" y="85" width="110" height="28" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="345" y="103" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">AWS Transit GW</text>
+  <rect x="290" y="119" width="110" height="28" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="345" y="137" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Azure Virtual WAN</text>
+  <rect x="290" y="153" width="110" height="28" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="345" y="171" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">ExpressRoute / DX</text>
+  <rect x="290" y="187" width="110" height="28" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="345" y="205" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">BGP Routing</text>
+  <rect x="290" y="221" width="110" height="28" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="345" y="239" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Route Tables / UDR</text>
+  <text x="345" y="370" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Hub-spoke routing</text>
+  <text x="345" y="384" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">All to inspection FW</text>
+  <!-- AWS Zone -->
+  <rect x="425" y="58" width="130" height="175" rx="5" fill="#080d14" stroke="#f97316" stroke-width="1.5"/>
+  <text x="490" y="75" font-family="Arial" font-size="9" font-weight="bold" fill="#f97316" text-anchor="middle">AWS</text>
+  <rect x="435" y="85" width="110" height="28" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/>
+  <text x="490" y="103" font-family="Arial" font-size="8" fill="#f97316" text-anchor="middle">Network Firewall</text>
+  <rect x="435" y="119" width="110" height="28" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/>
+  <text x="490" y="137" font-family="Arial" font-size="8" fill="#f97316" text-anchor="middle">Security Groups</text>
+  <rect x="435" y="153" width="110" height="28" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/>
+  <text x="490" y="171" font-family="Arial" font-size="8" fill="#f97316" text-anchor="middle">WAF / Shield</text>
+  <rect x="435" y="187" width="110" height="28" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/>
+  <text x="490" y="205" font-family="Arial" font-size="8" fill="#f97316" text-anchor="middle">GuardDuty</text>
+  <!-- Azure Zone -->
+  <rect x="425" y="243" width="130" height="175" rx="5" fill="#080d14" stroke="#0078d4" stroke-width="1.5"/>
+  <text x="490" y="260" font-family="Arial" font-size="9" font-weight="bold" fill="#0078d4" text-anchor="middle">AZURE</text>
+  <rect x="435" y="270" width="110" height="28" rx="3" fill="#001030" stroke="#0078d4" stroke-width="0.5"/>
+  <text x="490" y="288" font-family="Arial" font-size="8" fill="#0078d4" text-anchor="middle">Azure Firewall Prem</text>
+  <rect x="435" y="304" width="110" height="28" rx="3" fill="#001030" stroke="#0078d4" stroke-width="0.5"/>
+  <text x="490" y="322" font-family="Arial" font-size="8" fill="#0078d4" text-anchor="middle">NSG / ASG</text>
+  <rect x="435" y="338" width="110" height="28" rx="3" fill="#001030" stroke="#0078d4" stroke-width="0.5"/>
+  <text x="490" y="356" font-family="Arial" font-size="8" fill="#0078d4" text-anchor="middle">Front Door / WAF</text>
+  <rect x="435" y="372" width="110" height="28" rx="3" fill="#001030" stroke="#0078d4" stroke-width="0.5"/>
+  <text x="490" y="390" font-family="Arial" font-size="8" fill="#0078d4" text-anchor="middle">DDoS Protection</text>
+  <!-- On-Prem -->
+  <rect x="570" y="58" width="130" height="360" rx="5" fill="#0c1018" stroke="#00e87a" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="635" y="75" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a" text-anchor="middle">ON-PREMISES</text>
+  <rect x="580" y="85" width="110" height="28" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="635" y="103" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Data Centre FW</text>
+  <rect x="580" y="119" width="110" height="28" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="635" y="137" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Core / Distribution</text>
+  <rect x="580" y="153" width="110" height="28" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="635" y="171" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Server VLAN</text>
+  <rect x="580" y="187" width="110" height="28" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="635" y="205" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">User VLAN</text>
+  <rect x="580" y="221" width="110" height="28" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="635" y="239" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">NAC / 802.1x</text>
+  <!-- Centralised Mgmt -->
+  <rect x="715" y="58" width="170" height="360" rx="5" fill="#050d10" stroke="#ff3355" stroke-width="1.5"/>
+  <text x="800" y="75" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355" text-anchor="middle">CENTRAL MGMT</text>
+  <rect x="725" y="85" width="150" height="28" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="800" y="103" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Panorama (PA)</text>
+  <rect x="725" y="119" width="150" height="28" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="800" y="137" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">FortiManager</text>
+  <rect x="725" y="153" width="150" height="28" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="800" y="171" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Azure Firewall Policy</text>
+  <rect x="725" y="187" width="150" height="28" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="800" y="205" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">AWS FW Policy Mgr</text>
+  <rect x="725" y="221" width="150" height="28" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="800" y="239" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">SIEM Log Feed</text>
+  <rect x="725" y="255" width="150" height="28" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="800" y="273" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Terraform IaC</text>
+  <text x="800" y="360" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">All changes via IaC</text>
+  <text x="800" y="374" font-family="Arial" font-size="8" fill="#aa4455" text-anchor="middle">No manual firewall edits</text>
+  <!-- Arrows -->
+  <line x1="120" y1="190" x2="135" y2="190" stroke="#ff3355" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="265" y1="190" x2="280" y2="190" stroke="#00d4ff" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="410" y1="145" x2="425" y2="145" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="410" y1="330" x2="425" y2="330" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="555" y1="190" x2="570" y2="190" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- Bottom bar -->
+  <rect x="20" y="428" width="860" height="40" rx="4" fill="#0a1018" stroke="#1a2235" stroke-width="1"/>
+  <text x="450" y="445" font-family="Arial" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">All traffic traversing security zone boundaries is: explicitly authorised · application-aware · TLS inspected · logged to SIEM</text>
+  <text x="450" y="462" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">No firewall rule changes outside IaC pipeline · Panorama and FortiManager enforce policy consistency across all platforms</text>
+</svg>
+      
+      <div class="arch-image-caption">// Firewall engineering and hybrid cloud connectivity model</div>
+    </div>
+
+    <!-- 6. Secure Remote Access -->
+    <h2 id="remote-access">Secure Remote Access &amp; SSE</h2>
+    <div class="section-intro">Traditional perimeter-based remote access was replaced with identity-aware, application-specific access controls. The architecture eliminates broad network-level trust and enforces continuous verification of users, devices, applications, and access context before access is granted.</div>
+
+    <h3>Zscaler Internet Access (ZIA)</h3>
+    <p>All outbound internet traffic routed through ZIA inspection nodes. Controls include secure web gateway filtering, URL categorisation, threat intelligence validation, SSL/TLS inspection, DNS security, malware sandboxing, CASB inspection, and DLP enforcement. Threat telemetry forwarded into SIEM alongside firewall, endpoint, identity, and cloud telemetry.</p>
+
+    <h3>Zscaler Private Access (ZPA)</h3>
+    <p>Zero Trust application access for internal applications across AWS, Azure, and on-premise. Applications remain non-internet routable. ZPA App Connectors deployed within AWS VPCs, Azure VNets, and datacentres broker secure outbound-only application connectivity. Third-party suppliers isolated into dedicated access groups with no lateral network access.</p>
+
+    <h3>Device Posture and MFA</h3>
+    <p>Endpoint health checks, OS validation, EDR verification, certificate validation, patch compliance, and disk encryption validation are enforced before access is granted. Non-compliant devices are blocked or redirected to remediation. Conditional access policies evaluate user identity, device trust state, geolocation, authentication risk, and threat intelligence indicators dynamically.</p>
+
+    <div class="arch-image">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" style="width:100%;max-width:900px;display:block;">
+  <defs><marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#00d4ff"/></marker></defs>
+  <rect width="900" height="440" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Secure Remote Access and Secure Service Edge (SSE) Architecture</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Zscaler ZIA + ZPA · ZTNA replaces VPN · Identity-aware · Device posture · No implicit network trust</text>
+  <!-- User types left -->
+  <rect x="20" y="58" width="130" height="320" rx="5" fill="#0c1018" stroke="#FFAA00" stroke-width="1.5"/>
+  <text x="85" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#FFAA00" text-anchor="middle">USERS</text>
+  <rect x="30" y="86" width="110" height="32" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="85" y="106" font-family="Arial" font-size="9" fill="#FFAA00" text-anchor="middle">Corporate Laptop</text>
+  <rect x="30" y="124" width="110" height="32" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="85" y="144" font-family="Arial" font-size="9" fill="#FFAA00" text-anchor="middle">Mobile / BYOD</text>
+  <rect x="30" y="162" width="110" height="32" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="85" y="182" font-family="Arial" font-size="9" fill="#FFAA00" text-anchor="middle">Home Worker</text>
+  <rect x="30" y="200" width="110" height="32" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="85" y="220" font-family="Arial" font-size="9" fill="#FFAA00" text-anchor="middle">Third Party</text>
+  <rect x="30" y="238" width="110" height="32" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="85" y="258" font-family="Arial" font-size="9" fill="#FFAA00" text-anchor="middle">Unmanaged Device</text>
+  <!-- SSE Cloud -->
+  <rect x="165" y="58" width="200" height="320" rx="5" fill="#001520" stroke="#00d4ff" stroke-width="2"/>
+  <text x="265" y="76" font-family="Arial" font-size="10" font-weight="bold" fill="#00d4ff" text-anchor="middle">SSE CLOUD — ZSCALER</text>
+  <rect x="175" y="86" width="180" height="55" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="1"/>
+  <text x="265" y="104" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">ZIA — Internet Access</text>
+  <text x="265" y="118" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">SWG · CASB · DLP · Sandbox</text>
+  <text x="265" y="130" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">DNS Security · Cloud FW</text>
+  <rect x="175" y="149" width="180" height="55" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="1"/>
+  <text x="265" y="167" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">ZPA — Private Access</text>
+  <text x="265" y="181" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">ZTNA · App-level access</text>
+  <text x="265" y="193" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">No network-level trust</text>
+  <rect x="175" y="212" width="180" height="40" rx="3" fill="#001a20" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="265" y="230" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">ZDX — Digital Experience</text>
+  <text x="265" y="242" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">Performance monitoring</text>
+  <rect x="175" y="260" width="180" height="40" rx="3" fill="#001a20" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="265" y="278" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">ZPA Connector</text>
+  <text x="265" y="290" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">On-prem / cloud app broker</text>
+  <!-- Identity -->
+  <rect x="380" y="58" width="150" height="320" rx="5" fill="#0a0518" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="455" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#a78bfa" text-anchor="middle">IDENTITY</text>
+  <rect x="390" y="86" width="130" height="32" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="455" y="106" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">Entra ID / MFA</text>
+  <rect x="390" y="124" width="130" height="32" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="455" y="144" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">Conditional Access</text>
+  <rect x="390" y="162" width="130" height="32" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="455" y="182" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">Device Compliance</text>
+  <rect x="390" y="200" width="130" height="32" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="455" y="220" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">Risk Score / UEBA</text>
+  <rect x="390" y="238" width="130" height="32" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="455" y="258" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">Location / Geo-block</text>
+  <!-- Apps -->
+  <rect x="545" y="58" width="150" height="320" rx="5" fill="#080d14" stroke="#00e87a" stroke-width="1.5"/>
+  <text x="620" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a" text-anchor="middle">APPLICATIONS</text>
+  <rect x="555" y="86" width="130" height="32" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="620" y="106" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">M365 / SaaS</text>
+  <rect x="555" y="124" width="130" height="32" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="620" y="144" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">AWS Workloads</text>
+  <rect x="555" y="162" width="130" height="32" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="620" y="182" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Azure Apps</text>
+  <rect x="555" y="200" width="130" height="32" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="620" y="220" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">On-Prem Apps</text>
+  <rect x="555" y="238" width="130" height="32" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="620" y="258" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Private APIs</text>
+  <!-- SOC -->
+  <rect x="710" y="58" width="175" height="320" rx="5" fill="#050d10" stroke="#ff3355" stroke-width="1.5"/>
+  <text x="797" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355" text-anchor="middle">SOC VISIBILITY</text>
+  <rect x="720" y="86" width="155" height="32" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="797" y="106" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">ZIA / ZPA Log Feed</text>
+  <rect x="720" y="124" width="155" height="32" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="797" y="144" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">Splunk / Sentinel</text>
+  <rect x="720" y="162" width="155" height="32" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="797" y="182" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">UEBA Anomaly Detect</text>
+  <rect x="720" y="200" width="155" height="32" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="797" y="220" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">Block + Remediate</text>
+  <rect x="720" y="238" width="155" height="32" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="797" y="258" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">SOAR Playbook</text>
+  <!-- Arrows -->
+  <line x1="150" y1="180" x2="165" y2="180" stroke="#00d4ff" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="365" y1="180" x2="380" y2="180" stroke="#00d4ff" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="530" y1="180" x2="545" y2="180" stroke="#00d4ff" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="695" y1="180" x2="710" y2="180" stroke="#00d4ff" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="20" y="392" width="860" height="36" rx="4" fill="#0a1018" stroke="#1a2235" stroke-width="1"/>
+  <text x="450" y="408" font-family="Arial" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">No network-level VPN trust · Every request evaluated: identity + device posture + location + app risk</text>
+  <text x="450" y="422" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">Zscaler ZPA replaces traditional VPN · Application-specific access only · Device remediation before access granted</text>
+</svg>
+      
+      <div class="arch-image-caption">// Secure remote access and Secure Service Edge (SSE) architecture</div>
+    </div>
+
+    <!-- 7. SIEM & SOAR -->
+    <h2 id="siem-soar">SIEM &amp; SOAR Integration</h2>
+    <div class="section-intro">The SIEM and SOAR architecture consolidates telemetry from firewalls, VPN platforms, cloud-native security services, identity providers, endpoints, SaaS platforms, and DNS services into a centralised operational security platform supporting real-time threat detection, automated incident response, and SOC operations.</div>
+
+    <h3>Log Aggregation</h3>
+    <p>Centralised log aggregation covers network and firewall telemetry (Palo Alto, FortiGate, WildFire, VPN), cloud security telemetry (AWS CloudTrail, VPC Flow Logs, GuardDuty, Azure Defender, NSG Flow Logs), identity and access telemetry (MFA events, PAM sessions, conditional access decisions), and remote access telemetry (Zscaler ZIA and ZPA logs, DNS security events).</p>
+<div class="arch-image" style="margin:28px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--bg2);">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" style="width:100%;max-width:900px;display:block;">
+  <defs>
+    <marker id="arr" markerWidth="9" markerHeight="6" refX="9" refY="3" orient="auto"><polygon points="0 0,9 3,0 6" fill="#00d4ff"/></marker>
+    <marker id="arr2" markerWidth="9" markerHeight="6" refX="9" refY="3" orient="auto"><polygon points="0 0,9 3,0 6" fill="#ff3355"/></marker>
+  </defs>
+  <rect width="900" height="440" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">SIEM and SOAR Integration Architecture</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Centralised telemetry · Automated detection · Playbook-driven response · Threat intelligence enrichment</text>
+
+  <!-- Data Sources row -->
+  <text x="450" y="65" font-family="Arial" font-size="10" font-weight="bold" fill="#55677a" text-anchor="middle">// TELEMETRY SOURCES</text>
+  <rect x="20" y="72" width="118" height="50" rx="4" fill="#1a0d00" stroke="#f97316" stroke-width="1"/>
+  <text x="79" y="91" font-family="Arial" font-size="9" font-weight="bold" fill="#f97316" text-anchor="middle">Cloud Logs</text>
+  <text x="79" y="104" font-family="Arial" font-size="8" fill="#884400" text-anchor="middle">CloudTrail</text>
+  <text x="79" y="116" font-family="Arial" font-size="8" fill="#884400" text-anchor="middle">Activity Logs</text>
+  <rect x="148" y="72" width="118" height="50" rx="4" fill="#0f0820" stroke="#a78bfa" stroke-width="1"/>
+  <text x="207" y="91" font-family="Arial" font-size="9" font-weight="bold" fill="#a78bfa" text-anchor="middle">Identity</text>
+  <text x="207" y="104" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">Entra Sign-in</text>
+  <text x="207" y="116" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">AD Events</text>
+  <rect x="276" y="72" width="118" height="50" rx="4" fill="#001a0a" stroke="#00e87a" stroke-width="1"/>
+  <text x="335" y="91" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a" text-anchor="middle">Endpoint</text>
+  <text x="335" y="104" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">EDR / XDR</text>
+  <text x="335" y="116" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">CrowdStrike / MDE</text>
+  <rect x="404" y="72" width="118" height="50" rx="4" fill="#1a1200" stroke="#FFAA00" stroke-width="1"/>
+  <text x="463" y="91" font-family="Arial" font-size="9" font-weight="bold" fill="#FFAA00" text-anchor="middle">Network</text>
+  <text x="463" y="104" font-family="Arial" font-size="8" fill="#aa8800" text-anchor="middle">Firewall / IDS</text>
+  <text x="463" y="116" font-family="Arial" font-size="8" fill="#aa8800" text-anchor="middle">NetFlow / DNS</text>
+  <rect x="532" y="72" width="118" height="50" rx="4" fill="#001030" stroke="#0078d4" stroke-width="1"/>
+  <text x="591" y="91" font-family="Arial" font-size="9" font-weight="bold" fill="#0078d4" text-anchor="middle">Cloud Security</text>
+  <text x="591" y="104" font-family="Arial" font-size="8" fill="#0055aa" text-anchor="middle">GuardDuty</text>
+  <text x="591" y="116" font-family="Arial" font-size="8" fill="#0055aa" text-anchor="middle">Defender for Cloud</text>
+  <rect x="660" y="72" width="118" height="50" rx="4" fill="#1a0a14" stroke="#f472b6" stroke-width="1"/>
+  <text x="719" y="91" font-family="Arial" font-size="9" font-weight="bold" fill="#f472b6" text-anchor="middle">SaaS / Apps</text>
+  <text x="719" y="104" font-family="Arial" font-size="8" fill="#884466" text-anchor="middle">M365 / Okta</text>
+  <text x="719" y="116" font-family="Arial" font-size="8" fill="#884466" text-anchor="middle">Zscaler / SSE</text>
+  <rect x="788" y="72" width="96" height="50" rx="4" fill="#001520" stroke="#00d4ff" stroke-width="1"/>
+  <text x="836" y="91" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">Vuln / Patch</text>
+  <text x="836" y="104" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">Tenable</text>
+  <text x="836" y="116" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">Qualys / CSPM</text>
+
+  <!-- Arrow down to SIEM -->
+  <line x1="450" y1="122" x2="450" y2="140" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- SIEM Core -->
+  <rect x="20" y="143" width="860" height="70" rx="5" fill="#050d10" stroke="#ff3355" stroke-width="2"/>
+  <text x="180" y="163" font-family="Arial" font-size="11" font-weight="bold" fill="#ff3355">SIEM PLATFORM</text>
+  <rect x="30" y="170" width="160" height="30" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="110" y="189" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">Splunk Enterprise Security</text>
+  <rect x="200" y="170" width="160" height="30" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="280" y="189" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">Microsoft Sentinel</text>
+  <rect x="370" y="170" width="160" height="30" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="450" y="189" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">Correlation Rules / ML</text>
+  <rect x="540" y="170" width="160" height="30" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="620" y="189" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">Alert Triage / Priority</text>
+  <rect x="710" y="170" width="160" height="30" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="790" y="189" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">Dashboards / Reporting</text>
+
+  <!-- Arrow to TIP and SOAR -->
+  <line x1="280" y1="213" x2="280" y2="235" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="620" y1="213" x2="620" y2="235" stroke="#ff3355" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+  <!-- TIP -->
+  <rect x="20" y="238" width="500" height="65" rx="5" fill="#001520" stroke="#00d4ff" stroke-width="1.5"/>
+  <text x="30" y="255" font-family="Arial" font-size="10" font-weight="bold" fill="#00d4ff">THREAT INTELLIGENCE PLATFORM</text>
+  <rect x="30" y="260" width="145" height="28" rx="3" fill="#0a1018" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="102" y="278" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">MISP / OpenCTI</text>
+  <rect x="185" y="260" width="145" height="28" rx="3" fill="#0a1018" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="257" y="278" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">CISA KEV / OTX feeds</text>
+  <rect x="340" y="260" width="170" height="28" rx="3" fill="#001a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="425" y="278" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">BreachForge TI Portal</text>
+
+  <!-- SOAR -->
+  <rect x="530" y="238" width="350" height="65" rx="5" fill="#1a0808" stroke="#ff3355" stroke-width="1.5"/>
+  <text x="540" y="255" font-family="Arial" font-size="10" font-weight="bold" fill="#ff3355">SOAR — AUTOMATED RESPONSE</text>
+  <rect x="540" y="260" width="155" height="28" rx="3" fill="#2a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="617" y="278" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Cortex XSOAR</text>
+  <rect x="705" y="260" width="165" height="28" rx="3" fill="#2a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="787" y="278" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Sentinel Logic Apps</text>
+
+  <!-- Playbooks -->
+  <rect x="20" y="318" width="860" height="60" rx="5" fill="#0a1018" stroke="#00e87a" stroke-width="1"/>
+  <text x="30" y="335" font-family="Arial" font-size="10" font-weight="bold" fill="#00e87a">RESPONSE PLAYBOOKS</text>
+  <rect x="30" y="342" width="155" height="26" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="107" y="359" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Account lockout auto</text>
+  <rect x="195" y="342" width="155" height="26" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="272" y="359" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">IP block via firewall API</text>
+  <rect x="360" y="342" width="155" height="26" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="437" y="359" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Endpoint isolate via EDR</text>
+  <rect x="525" y="342" width="155" height="26" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="602" y="359" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">IOC enrichment auto</text>
+  <rect x="690" y="342" width="180" height="26" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="780" y="359" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Ticket create / escalate</text>
+
+  <text x="450" y="430" font-family="Arial" font-size="9" fill="#55677a" text-anchor="middle">SIEM ingests all telemetry · SOAR automates tier-1 response · TIP enriches with current threat actor TTPs · Mean time to respond reduced</text>
+</svg>
+<div class="arch-image-caption" style="padding:10px 16px;font-family:var(--mono);font-size:11px;color:var(--muted2);letter-spacing:0.04em;border-top:1px solid var(--border);background:var(--bg2);">// SIEM and SOAR Integration Architecture — Centralised telemetry ingestion, automated playbooks, and threat intelligence enrichment</div>
+</div>
+
+
+    <h3>XSOAR Playbooks</h3>
+    <p>Automated playbooks handle phishing response (URL extraction, threat intelligence lookups, domain blocking), malware callback detection (endpoint isolation, firewall blocking), VPN abuse detection (account suspension, MFA verification), and cloud compromise investigation (CloudTrail and Azure telemetry correlation, workload isolation). Automation reduces MTTD and MTTR while improving response consistency and SOC scalability.</p>
+
+    <div class="pull-quote">The value is not "we ran a simulation." The value is "we proved this control failed, fixed it, and can now show it works."</div>
+
+    <div class="arch-image">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" style="width:100%;max-width:900px;display:block;">
+  <defs><marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#00d4ff"/></marker>
+  <marker id="arr2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#00e87a"/></marker></defs>
+  <rect width="900" height="420" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">SIEM and SOAR — XSOAR Orchestration Model</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Cortex XSOAR · Automated tier-1 response · Playbook-driven · MTTD and MTTR reduction</text>
+  <!-- Alert sources -->
+  <text x="100" y="65" font-family="Arial" font-size="9" font-weight="bold" fill="#55677a" text-anchor="middle">ALERT SOURCES</text>
+  <rect x="20" y="72" width="160" height="26" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="100" y="89" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">GuardDuty / Defender for Cloud</text>
+  <rect x="20" y="104" width="160" height="26" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="100" y="121" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">EDR — CrowdStrike / MDE</text>
+  <rect x="20" y="136" width="160" height="26" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="100" y="153" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Firewall / IDS Alerts</text>
+  <rect x="20" y="168" width="160" height="26" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="100" y="185" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Identity / Entra Alerts</text>
+  <rect x="20" y="200" width="160" height="26" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="100" y="217" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Zscaler ZIA / ZPA Events</text>
+  <rect x="20" y="232" width="160" height="26" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="100" y="249" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Vulnerability Findings</text>
+  <!-- SIEM -->
+  <rect x="200" y="72" width="180" height="210" rx="5" fill="#050d10" stroke="#ff3355" stroke-width="2"/>
+  <text x="290" y="90" font-family="Arial" font-size="10" font-weight="bold" fill="#ff3355" text-anchor="middle">SPLUNK / SENTINEL</text>
+  <rect x="210" y="98" width="160" height="26" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="290" y="115" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Log aggregation</text>
+  <rect x="210" y="130" width="160" height="26" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="290" y="147" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Correlation rules / ML</text>
+  <rect x="210" y="162" width="160" height="26" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="290" y="179" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Case creation</text>
+  <rect x="210" y="194" width="160" height="26" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="290" y="211" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Dashboard / MTTD track</text>
+  <rect x="210" y="226" width="160" height="26" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="290" y="243" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">XSOAR API trigger</text>
+  <!-- XSOAR -->
+  <rect x="400" y="58" width="200" height="320" rx="5" fill="#001520" stroke="#00d4ff" stroke-width="2"/>
+  <text x="500" y="78" font-family="Arial" font-size="11" font-weight="bold" fill="#00d4ff" text-anchor="middle">CORTEX XSOAR</text>
+  <text x="500" y="92" font-family="Arial" font-size="9" fill="#55677a" text-anchor="middle">Orchestration engine</text>
+  <rect x="410" y="100" width="180" height="32" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="1"/>
+  <text x="500" y="120" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">Incident Classification</text>
+  <rect x="410" y="138" width="180" height="32" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="1"/>
+  <text x="500" y="158" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">IOC Enrichment</text>
+  <rect x="410" y="176" width="180" height="32" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="1"/>
+  <text x="500" y="196" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">Playbook Execution</text>
+  <rect x="410" y="214" width="180" height="32" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="1"/>
+  <text x="500" y="234" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">Analyst Notification</text>
+  <rect x="410" y="252" width="180" height="32" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="1"/>
+  <text x="500" y="272" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">Action Audit Log</text>
+  <rect x="410" y="290" width="180" height="32" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="1"/>
+  <text x="500" y="310" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">MTTR Tracking</text>
+  <!-- Automated Actions -->
+  <rect x="620" y="58" width="260" height="320" rx="5" fill="#001a0a" stroke="#00e87a" stroke-width="2"/>
+  <text x="750" y="78" font-family="Arial" font-size="10" font-weight="bold" fill="#00e87a" text-anchor="middle">AUTOMATED ACTIONS</text>
+  <rect x="630" y="88" width="240" height="32" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="750" y="108" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Account disable — Entra API</text>
+  <rect x="630" y="126" width="240" height="32" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="750" y="146" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Endpoint isolate — EDR API</text>
+  <rect x="630" y="164" width="240" height="32" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="750" y="184" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">IP block — Firewall API</text>
+  <rect x="630" y="202" width="240" height="32" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="750" y="222" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">URL block — ZIA API</text>
+  <rect x="630" y="240" width="240" height="32" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="750" y="260" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">ServiceNow ticket create</text>
+  <rect x="630" y="278" width="240" height="32" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="750" y="298" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Slack / Teams analyst alert</text>
+  <rect x="630" y="316" width="240" height="32" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="750" y="336" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Evidence pack / forensic log</text>
+  <!-- Arrows -->
+  <line x1="180" y1="177" x2="200" y2="177" stroke="#ff3355" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="380" y1="177" x2="400" y2="196" stroke="#00d4ff" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="600" y1="196" x2="620" y2="196" stroke="#00e87a" stroke-width="2" marker-end="url(#arr2)"/>
+  <!-- Metrics bar -->
+  <rect x="20" y="390" width="860" height="22" rx="3" fill="#0a1018" stroke="#1a2235" stroke-width="1"/>
+  <text x="450" y="405" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Target: MTTD &lt; 15 minutes · MTTR &lt; 2 hours for P1 · Tier-1 auto-resolved 60% · All actions audited</text>
+</svg>
+      
+      <div class="arch-image-caption">// Centralised SIEM and SOAR integration model with XSOAR orchestration</div>
+    </div>
+
+    <!-- 8. IaC -->
+    <h2 id="iac">Infrastructure as Code &amp; Policy Enforcement</h2>
+    <div class="section-intro">The IaC strategy ensures repeatable, version-controlled deployments with embedded security controls. All infrastructure provisioning is automated through approved templates and governed through centralised policy enforcement, creating a secure-by-default deployment model.</div>
+
+    <h3>Terraform</h3>
+    <p>Primary multi-cloud IaC platform covering AWS VPC architectures, Azure VNets, segmented subnets, route controls, NAT gateways, load balancers, VPN infrastructure, security groups, NSGs, logging integrations, and cloud-native security services. Reusable modules created for network segmentation, firewall integration, and SIEM onboarding. Terraform state stored in encrypted remote storage with RBAC-controlled access.</p>
+
+    <h3>Azure Policy and AWS SCPs</h3>
+    <p>Azure Policy enforces governance guardrails including denying public IP creation, restricting internet-exposed storage, enforcing diagnostic logging, and requiring resource tagging. AWS Service Control Policies prevent unrestricted security group rules, restrict public S3 exposure, enforce CloudTrail usage, and prevent IAM privilege escalation across AWS Organizations and landing zone accounts.</p>
+
+    <div class="arch-image">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" style="width:100%;max-width:900px;display:block;">
+  <defs><marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#00e87a"/></marker></defs>
+  <rect width="900" height="400" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Infrastructure as Code and Policy Enforcement Model</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Terraform · Bicep · GitHub Actions · OPA · SCPs — No manual changes · Drift detection · Secure by default</text>
+  <!-- Source Control -->
+  <rect x="20" y="58" width="150" height="280" rx="5" fill="#0a0f18" stroke="#00e87a" stroke-width="1.5"/>
+  <text x="95" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a" text-anchor="middle">SOURCE CONTROL</text>
+  <rect x="30" y="86" width="130" height="30" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="95" y="105" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">GitHub / Azure DevOps</text>
+  <rect x="30" y="122" width="130" height="30" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="95" y="141" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Terraform modules</text>
+  <rect x="30" y="158" width="130" height="30" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="95" y="177" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Azure Bicep / ARM</text>
+  <rect x="30" y="194" width="130" height="30" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="95" y="213" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Pull request reviews</text>
+  <rect x="30" y="230" width="130" height="30" rx="3" fill="#001a0a" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="95" y="249" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Branch protection</text>
+  <!-- CI/CD Pipeline -->
+  <rect x="185" y="58" width="180" height="280" rx="5" fill="#0a0f18" stroke="#f97316" stroke-width="1.5"/>
+  <text x="275" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#f97316" text-anchor="middle">CI/CD PIPELINE</text>
+  <rect x="195" y="86" width="160" height="30" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/>
+  <text x="275" y="105" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">GitHub Actions</text>
+  <rect x="195" y="122" width="160" height="30" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/>
+  <text x="275" y="141" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">tfsec / checkov scan</text>
+  <rect x="195" y="158" width="160" height="30" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/>
+  <text x="275" y="177" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">OPA policy gate</text>
+  <rect x="195" y="194" width="160" height="30" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/>
+  <text x="275" y="213" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">Terraform plan review</text>
+  <rect x="195" y="230" width="160" height="30" rx="3" fill="#1a0d00" stroke="#f97316" stroke-width="0.5"/>
+  <text x="275" y="249" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">Approval gate + apply</text>
+  <!-- Policy Layer -->
+  <rect x="380" y="58" width="180" height="280" rx="5" fill="#0a0518" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="470" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#a78bfa" text-anchor="middle">POLICY ENFORCEMENT</text>
+  <rect x="390" y="86" width="160" height="30" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="470" y="105" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">AWS SCPs</text>
+  <rect x="390" y="122" width="160" height="30" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="470" y="141" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">Azure Policy</text>
+  <rect x="390" y="158" width="160" height="30" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="470" y="177" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">OPA / Rego rules</text>
+  <rect x="390" y="194" width="160" height="30" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="470" y="213" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">Deny public S3 / Blob</text>
+  <rect x="390" y="230" width="160" height="30" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="470" y="249" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">Enforce encryption</text>
+  <!-- Drift Detection -->
+  <rect x="575" y="58" width="165" height="280" rx="5" fill="#050d10" stroke="#00d4ff" stroke-width="1.5"/>
+  <text x="657" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">DRIFT DETECTION</text>
+  <rect x="585" y="86" width="145" height="30" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="657" y="105" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">AWS Config</text>
+  <rect x="585" y="122" width="145" height="30" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="657" y="141" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">Azure Policy Compliance</text>
+  <rect x="585" y="158" width="145" height="30" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="657" y="177" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">Terraform state check</text>
+  <rect x="585" y="194" width="145" height="30" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="657" y="213" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">Alert on deviation</text>
+  <rect x="585" y="230" width="145" height="30" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="657" y="249" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">Auto-remediate / SOAR</text>
+  <!-- Compliance -->
+  <rect x="755" y="58" width="130" height="280" rx="5" fill="#0a1018" stroke="#FFAA00" stroke-width="1.5"/>
+  <text x="820" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#FFAA00" text-anchor="middle">COMPLIANCE</text>
+  <rect x="765" y="86" width="110" height="30" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="820" y="105" font-family="Arial" font-size="9" fill="#FFAA00" text-anchor="middle">NIST CSF</text>
+  <rect x="765" y="122" width="110" height="30" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="820" y="141" font-family="Arial" font-size="9" fill="#FFAA00" text-anchor="middle">CIS Benchmarks</text>
+  <rect x="765" y="158" width="110" height="30" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="820" y="177" font-family="Arial" font-size="9" fill="#FFAA00" text-anchor="middle">ISO 27001</text>
+  <rect x="765" y="194" width="110" height="30" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="820" y="213" font-family="Arial" font-size="9" fill="#FFAA00" text-anchor="middle">SOC 2 Type II</text>
+  <rect x="765" y="230" width="110" height="30" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="820" y="249" font-family="Arial" font-size="9" fill="#FFAA00" text-anchor="middle">Evidence reports</text>
+  <!-- Arrows -->
+  <line x1="170" y1="196" x2="185" y2="196" stroke="#00e87a" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="365" y1="196" x2="380" y2="196" stroke="#00e87a" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="560" y1="196" x2="575" y2="196" stroke="#00e87a" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="740" y1="196" x2="755" y2="196" stroke="#00e87a" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="20" y="350" width="860" height="36" rx="4" fill="#0a1018" stroke="#1a2235" stroke-width="1"/>
+  <text x="450" y="366" font-family="Arial" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">No manual infrastructure changes permitted · All deployments via approved IaC pipeline · Drift triggers SOAR alert</text>
+  <text x="450" y="382" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">Secure by default templates · CIS hardening embedded in modules · Evidence generated automatically for audit</text>
+</svg>
+      
+      <div class="arch-image-caption">// Infrastructure as Code and policy enforcement model</div>
+    </div>
+
+    <div class="github-callout">
+      <div class="github-callout-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      </div>
+      <div>
+        <div class="github-callout-title">GitHub Reference Implementation</div>
+        <div class="github-callout-body">Terraform deployment examples, Azure Bicep templates, Palo Alto configuration standards, FortiGate policy examples, Zscaler SSE configuration patterns, VPN zoning examples, and SIEM/XSOAR integration examples are available in the accompanying repository.</div>
+        <a href="https://github.com/saleem-yousaf/saleem-yousaf-zero-trust-architecture" target="_blank" rel="noopener" class="github-callout-link">
+          github.com/saleem-yousaf/saleem-yousaf-zero-trust-architecture
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- 9. Firewall Rule Standards -->
+    <h2 id="firewall-rules">Firewall Rule Standards</h2>
+    <p>All firewall policies follow a deny-by-default security model with centralised governance enforced through Panorama, FortiManager, cloud-native policy controls, and Infrastructure as Code. All traffic traversing trust boundaries is explicitly authorized, application-aware, logged, inspected, and subject to threat prevention policies.</p>
+
+    <h4>Core Firewall Rule Requirements</h4>
+    <div class="arch-image">
+      <style>
+.rmt{width:100%;border-collapse:collapse;font-family:"DM Mono",monospace;font-size:11px;background:#07090d;}
+.rmt th{background:#0f1520;color:#00d4ff;padding:8px 10px;text-align:left;border:1px solid #1a2235;letter-spacing:0.06em;font-size:10px;}
+.rmt td{padding:7px 10px;border:1px solid #1a2235;color:#dde4ef;vertical-align:top;}
+.rmt tr:nth-child(even) td{background:#0c1018;}
+.rmt tr:nth-child(odd) td{background:#07090d;}
+.rmt .c-r{color:#ff3355;}.rmt .c-g{color:#00e87a;}.rmt .c-a{color:#ffaa00;}.rmt .c-b{color:#00d4ff;}.rmt .c-p{color:#a78bfa;}
+.rmt-wrap{overflow-x:auto;border:1px solid #1a2235;border-radius:6px;}
+</style><div class="rmt-wrap"><table class="rmt">
+<thead><tr><th>Rule Category</th><th>Direction</th><th>Protocol</th><th>Action</th><th>Logging</th><th>Threat Prevention</th><th>Requirement</th></tr></thead>
+<tbody>
+<tr><td class="c-r">Default Deny All</td><td>Inbound + Outbound</td><td>Any</td><td class="c-r">DENY</td><td class="c-g">Required</td><td>N/A</td><td>All rules must be explicit allow — implicit deny at bottom of all rulesets</td></tr>
+<tr><td class="c-a">Internet Ingress</td><td>Inbound</td><td>HTTPS 443</td><td class="c-g">ALLOW</td><td class="c-g">Required</td><td class="c-g">Required</td><td>WAF + IPS + SSL inspection required on all public-facing ingress</td></tr>
+<tr><td class="c-a">Management Access</td><td>Inbound</td><td>SSH/RDP 22/3389</td><td class="c-a">ALLOW — PAM only</td><td class="c-g">Required</td><td class="c-g">Required</td><td>Via bastion/PAM only — no direct admin access from internet</td></tr>
+<tr><td class="c-b">Internal East-West</td><td>Lateral</td><td>App-specific</td><td class="c-a">ALLOW — explicit</td><td class="c-g">Required</td><td class="c-g">Required</td><td>Application-aware rules only — no broad subnet-to-subnet allow</td></tr>
+<tr><td class="c-b">DNS Resolution</td><td>Outbound</td><td>UDP/TCP 53</td><td class="c-g">ALLOW — controlled</td><td class="c-g">Required</td><td class="c-g">Required</td><td>DNS to authorised resolvers only — DNS security filtering enabled</td></tr>
+<tr><td class="c-p">VPN / Remote Access</td><td>Inbound</td><td>IPSec / SSL-VPN</td><td class="c-a">ALLOW — identity</td><td class="c-g">Required</td><td class="c-g">Required</td><td>Identity-verified, MFA enforced, split tunnelling disabled</td></tr>
+<tr><td class="c-r">Egress Internet</td><td>Outbound</td><td>HTTP/HTTPS</td><td class="c-a">ALLOW — proxied</td><td class="c-g">Required</td><td class="c-g">Required</td><td>All outbound via SWG/proxy — direct internet egress denied</td></tr>
+<tr><td>Time Restrictions</td><td>Any</td><td>Any</td><td>Schedule-based</td><td class="c-g">Required</td><td>Optional</td><td>Business-hours restrictions on non-critical admin access paths</td></tr>
+<tr><td class="c-r">Log Forwarding</td><td>N/A</td><td>Syslog/HTTPS</td><td class="c-g">ALLOW — SIEM</td><td class="c-g">Required</td><td>N/A</td><td>All firewall logs forwarded to SIEM within 60 seconds of generation</td></tr>
+</tbody></table></div>
+      
+      <div class="arch-image-caption">// Core firewall rule requirements matrix</div>
+    </div>
+
+    <h4>Palo Alto NGFW Rule Matrix</h4>
+    <div class="arch-image">
+      <style>
+.rmt{width:100%;border-collapse:collapse;font-family:"DM Mono",monospace;font-size:11px;background:#07090d;}
+.rmt th{background:#0f1520;color:#00d4ff;padding:8px 10px;text-align:left;border:1px solid #1a2235;letter-spacing:0.06em;font-size:10px;}
+.rmt td{padding:7px 10px;border:1px solid #1a2235;color:#dde4ef;vertical-align:top;}
+.rmt tr:nth-child(even) td{background:#0c1018;}
+.rmt tr:nth-child(odd) td{background:#07090d;}
+.rmt .c-r{color:#ff3355;}.rmt .c-g{color:#00e87a;}.rmt .c-a{color:#ffaa00;}.rmt .c-b{color:#00d4ff;}.rmt .c-p{color:#a78bfa;}
+.rmt-wrap{overflow-x:auto;border:1px solid #1a2235;border-radius:6px;}
+</style><div class="rmt-wrap"><table class="rmt">
+<thead><tr><th>Rule Name</th><th>Source Zone</th><th>Destination Zone</th><th>Application</th><th>Service</th><th>Action</th><th>Security Profile</th></tr></thead>
+<tbody>
+<tr><td class="c-b">Allow-Web-Ingress</td><td>untrust</td><td>dmz</td><td>ssl, web-browsing</td><td>application-default</td><td class="c-g">allow</td><td>IPS + AV + URL</td></tr>
+<tr><td class="c-b">Allow-API-Gateway</td><td>untrust</td><td>dmz</td><td>ssl</td><td>tcp/443</td><td class="c-g">allow</td><td>IPS + AV + DNS</td></tr>
+<tr><td class="c-a">Allow-App-to-DB</td><td>app-zone</td><td>data-zone</td><td>mssql, mysql, oracle</td><td>application-default</td><td class="c-g">allow</td><td>IPS + Data Filter</td></tr>
+<tr><td class="c-a">Allow-App-to-Identity</td><td>app-zone</td><td>identity-zone</td><td>kerberos, ldap, msrpc</td><td>application-default</td><td class="c-g">allow</td><td>IPS</td></tr>
+<tr><td class="c-p">Allow-PAM-Admin</td><td>mgmt-zone</td><td>any</td><td>ssh, rdp</td><td>application-default</td><td class="c-g">allow</td><td>IPS + Wildfire</td></tr>
+<tr><td class="c-b">Allow-SOC-Readonly</td><td>mgmt-zone</td><td>any</td><td>syslog, snmp</td><td>application-default</td><td class="c-g">allow</td><td>IPS</td></tr>
+<tr><td>Allow-Internal-DNS</td><td>any</td><td>dns-zone</td><td>dns</td><td>application-default</td><td class="c-g">allow</td><td>DNS Security</td></tr>
+<tr><td>Allow-NTP</td><td>any</td><td>ntp-zone</td><td>ntp</td><td>udp/123</td><td class="c-g">allow</td><td>None</td></tr>
+<tr><td class="c-r">Deny-East-West-Default</td><td>any internal</td><td>any internal</td><td>any</td><td>any</td><td class="c-r">deny</td><td>N/A — log all</td></tr>
+<tr><td class="c-r">Deny-All-Default</td><td>any</td><td>any</td><td>any</td><td>any</td><td class="c-r">deny</td><td>N/A — log all</td></tr>
+</tbody></table></div>
+      
+      <div class="arch-image-caption">// Palo Alto NGFW example rule matrix</div>
+    </div>
+
+    <h4>FortiGate NGFW Rule Matrix</h4>
+    <div class="arch-image">
+      <style>
+.rmt{width:100%;border-collapse:collapse;font-family:"DM Mono",monospace;font-size:11px;background:#07090d;}
+.rmt th{background:#0f1520;color:#00d4ff;padding:8px 10px;text-align:left;border:1px solid #1a2235;letter-spacing:0.06em;font-size:10px;}
+.rmt td{padding:7px 10px;border:1px solid #1a2235;color:#dde4ef;vertical-align:top;}
+.rmt tr:nth-child(even) td{background:#0c1018;}
+.rmt tr:nth-child(odd) td{background:#07090d;}
+.rmt .c-r{color:#ff3355;}.rmt .c-g{color:#00e87a;}.rmt .c-a{color:#ffaa00;}.rmt .c-b{color:#00d4ff;}.rmt .c-p{color:#a78bfa;}
+.rmt-wrap{overflow-x:auto;border:1px solid #1a2235;border-radius:6px;}
+</style><div class="rmt-wrap"><table class="rmt">
+<thead><tr><th>Policy Name</th><th>Incoming IF</th><th>Outgoing IF</th><th>Source</th><th>Destination</th><th>Service</th><th>Action</th><th>UTM Profile</th></tr></thead>
+<tbody>
+<tr><td class="c-b">WAN-to-DMZ-HTTPS</td><td>wan1</td><td>dmz</td><td>all</td><td>dmz-servers</td><td>HTTPS</td><td class="c-g">ACCEPT</td><td>IPS + AV + WAF</td></tr>
+<tr><td class="c-b">WAN-to-DMZ-HTTP-Redirect</td><td>wan1</td><td>dmz</td><td>all</td><td>dmz-servers</td><td>HTTP</td><td class="c-a">REDIRECT</td><td>WAF</td></tr>
+<tr><td class="c-a">DMZ-to-AppZone</td><td>dmz</td><td>internal</td><td>dmz-servers</td><td>app-servers</td><td>CUSTOM-APP</td><td class="c-g">ACCEPT</td><td>IPS + AppCtrl</td></tr>
+<tr><td class="c-a">AppZone-to-DataZone</td><td>internal-app</td><td>internal-data</td><td>app-servers</td><td>db-servers</td><td>DB-PORTS</td><td class="c-g">ACCEPT</td><td>IPS + DLP</td></tr>
+<tr><td class="c-p">MGMT-Admin-Access</td><td>mgmt</td><td>any</td><td>admin-hosts</td><td>any</td><td>SSH, HTTPS</td><td class="c-g">ACCEPT</td><td>IPS + Logging</td></tr>
+<tr><td>Internal-to-DNS</td><td>internal</td><td>dns-if</td><td>all</td><td>dns-servers</td><td>DNS</td><td class="c-g">ACCEPT</td><td>DNS Filter</td></tr>
+<tr><td>Internal-to-Internet-Proxied</td><td>internal</td><td>wan1</td><td>all</td><td>all</td><td>HTTPS</td><td class="c-a">ACCEPT (proxied)</td><td>AV + Web Filter</td></tr>
+<tr><td class="c-r">Implicit-Deny</td><td>any</td><td>any</td><td>all</td><td>all</td><td>ANY</td><td class="c-r">DENY</td><td>Log all denied</td></tr>
+</tbody></table></div>
+      
+      <div class="arch-image-caption">// FortiGate NGFW example rule matrix</div>
+    </div>
+
+    <h4>NAT Rule Matrix</h4>
+    <div class="arch-image">
+      <style>
+.rmt{width:100%;border-collapse:collapse;font-family:"DM Mono",monospace;font-size:11px;background:#07090d;}
+.rmt th{background:#0f1520;color:#00d4ff;padding:8px 10px;text-align:left;border:1px solid #1a2235;letter-spacing:0.06em;font-size:10px;}
+.rmt td{padding:7px 10px;border:1px solid #1a2235;color:#dde4ef;vertical-align:top;}
+.rmt tr:nth-child(even) td{background:#0c1018;}
+.rmt tr:nth-child(odd) td{background:#07090d;}
+.rmt .c-r{color:#ff3355;}.rmt .c-g{color:#00e87a;}.rmt .c-a{color:#ffaa00;}.rmt .c-b{color:#00d4ff;}.rmt .c-p{color:#a78bfa;}
+.rmt-wrap{overflow-x:auto;border:1px solid #1a2235;border-radius:6px;}
+</style><div class="rmt-wrap"><table class="rmt">
+<thead><tr><th>NAT Rule Name</th><th>Original Src</th><th>Original Dst</th><th>Original Svc</th><th>Translated Src</th><th>Translated Dst</th><th>Type</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td class="c-b">DNAT-Web-443</td><td>any</td><td>203.0.113.10</td><td>tcp/443</td><td>—</td><td>10.10.1.10:443</td><td>DNAT</td><td>WAF IP to internal web tier — SSL pass-through to app</td></tr>
+<tr><td class="c-b">DNAT-API-443</td><td>any</td><td>203.0.113.11</td><td>tcp/443</td><td>—</td><td>10.10.1.20:443</td><td>DNAT</td><td>API Gateway public IP to internal API cluster</td></tr>
+<tr><td class="c-a">SNAT-App-Egress</td><td>10.10.2.0/24</td><td>any</td><td>any</td><td>203.0.113.50</td><td>—</td><td>SNAT</td><td>App zone outbound — shared egress IP for audit trail</td></tr>
+<tr><td class="c-a">SNAT-Mgmt-Egress</td><td>10.10.5.0/24</td><td>any</td><td>any</td><td>203.0.113.51</td><td>—</td><td>SNAT</td><td>Management zone — separate egress for admin traffic tracking</td></tr>
+<tr><td class="c-p">DNAT-VPN-Gateway</td><td>any</td><td>203.0.113.100</td><td>udp/500, udp/4500</td><td>—</td><td>10.10.5.50</td><td>DNAT</td><td>IPSec VPN termination — identity-verified users only</td></tr>
+<tr><td>No-NAT-Internal</td><td>10.0.0.0/8</td><td>10.0.0.0/8</td><td>any</td><td>—</td><td>—</td><td>No NAT</td><td>Internal routing — NAT bypass for trusted zones</td></tr>
+<tr><td class="c-r">Block-Hairpin</td><td>any</td><td>internal RFC1918</td><td>any</td><td>—</td><td>—</td><td>DENY</td><td>No hairpin NAT permitted — prevents loopback attacks</td></tr>
+</tbody></table></div>
+      
+      <div class="arch-image-caption">// NAT rule standards matrix</div>
+    </div>
+
+    <h4>VPN Rule Matrix</h4>
+    <div class="arch-image">
+      <style>
+.rmt{width:100%;border-collapse:collapse;font-family:"DM Mono",monospace;font-size:11px;background:#07090d;}
+.rmt th{background:#0f1520;color:#00d4ff;padding:8px 10px;text-align:left;border:1px solid #1a2235;letter-spacing:0.06em;font-size:10px;}
+.rmt td{padding:7px 10px;border:1px solid #1a2235;color:#dde4ef;vertical-align:top;}
+.rmt tr:nth-child(even) td{background:#0c1018;}
+.rmt tr:nth-child(odd) td{background:#07090d;}
+.rmt .c-r{color:#ff3355;}.rmt .c-g{color:#00e87a;}.rmt .c-a{color:#ffaa00;}.rmt .c-b{color:#00d4ff;}.rmt .c-p{color:#a78bfa;}
+.rmt-wrap{overflow-x:auto;border:1px solid #1a2235;border-radius:6px;}
+</style><div class="rmt-wrap"><table class="rmt">
+<thead><tr><th>VPN Profile</th><th>User Group</th><th>Auth Method</th><th>Split Tunnel</th><th>Permitted Resources</th><th>Session Limit</th><th>Logging</th></tr></thead>
+<tbody>
+<tr><td class="c-b">Corporate-Full</td><td>Corp-Staff</td><td>Entra SSO + FIDO2</td><td class="c-r">Disabled</td><td>All internal + internet via proxy</td><td>8 hours</td><td class="c-g">Full session log</td></tr>
+<tr><td class="c-r">Admin-Privileged</td><td>IT-Admins</td><td>PAM + Hardware MFA</td><td class="c-r">Disabled</td><td>Management zone only — PAM brokered</td><td>4 hours</td><td class="c-g">Full + recording</td></tr>
+<tr><td class="c-a">Third-Party-Scoped</td><td>Vendors</td><td>Entra B2B + MFA</td><td class="c-r">Disabled</td><td>Specific app/server only — ZTNA</td><td>4 hours</td><td class="c-g">Full session log</td></tr>
+<tr><td class="c-p">SOC-Analyst</td><td>SOC-Team</td><td>Entra SSO + MFA</td><td class="c-r">Disabled</td><td>SIEM + SOC tools only — read-only prod</td><td>12 hours</td><td class="c-g">Full session log</td></tr>
+<tr><td>Partner-API</td><td>Partners</td><td>OAuth 2.0 / API Key</td><td>N/A</td><td>API endpoints only — no network access</td><td>Token TTL</td><td class="c-g">API gateway log</td></tr>
+<tr><td class="c-r">Emergency-Break-Glass</td><td>CISO approved</td><td>PAM + Dual approval</td><td class="c-r">Disabled</td><td>Specific system — time-bound only</td><td>2 hours</td><td class="c-g">Full + alert SOC</td></tr>
+</tbody></table></div>
+      
+      <div class="arch-image-caption">// VPN access rule matrix</div>
+    </div>
+
+    <h4>Zscaler SSE Policy Matrix</h4>
+    <div class="arch-image">
+      <style>
+.rmt{width:100%;border-collapse:collapse;font-family:"DM Mono",monospace;font-size:11px;background:#07090d;}
+.rmt th{background:#0f1520;color:#00d4ff;padding:8px 10px;text-align:left;border:1px solid #1a2235;letter-spacing:0.06em;font-size:10px;}
+.rmt td{padding:7px 10px;border:1px solid #1a2235;color:#dde4ef;vertical-align:top;}
+.rmt tr:nth-child(even) td{background:#0c1018;}
+.rmt tr:nth-child(odd) td{background:#07090d;}
+.rmt .c-r{color:#ff3355;}.rmt .c-g{color:#00e87a;}.rmt .c-a{color:#ffaa00;}.rmt .c-b{color:#00d4ff;}.rmt .c-p{color:#a78bfa;}
+.rmt-wrap{overflow-x:auto;border:1px solid #1a2235;border-radius:6px;}
+</style><div class="rmt-wrap"><table class="rmt">
+<thead><tr><th>Policy Name</th><th>Component</th><th>User Group</th><th>Condition</th><th>Action</th><th>Logging</th></tr></thead>
+<tbody>
+<tr><td class="c-b">Allow-SaaS-Apps</td><td>ZIA</td><td>All Corp Users</td><td>Compliant device + MFA</td><td class="c-g">Allow + CASB inspect</td><td class="c-g">Full</td></tr>
+<tr><td class="c-r">Block-Shadow-IT</td><td>ZIA</td><td>All Users</td><td>Unapproved cloud app</td><td class="c-r">Block + notify user</td><td class="c-g">Full</td></tr>
+<tr><td class="c-r">Block-Malware-Categories</td><td>ZIA</td><td>All Users</td><td>Malware / phishing category</td><td class="c-r">Block + alert SOC</td><td class="c-g">Full</td></tr>
+<tr><td class="c-a">DLP-Data-Exfil</td><td>ZIA</td><td>All Users</td><td>PII / sensitive data upload</td><td class="c-a">Block + quarantine</td><td class="c-g">Full + DLP log</td></tr>
+<tr><td class="c-b">ZPA-Internal-Apps</td><td>ZPA</td><td>Corp Users</td><td>Compliant device + identity</td><td class="c-g">Allow app-specific</td><td class="c-g">Full</td></tr>
+<tr><td class="c-p">ZPA-Admin-Apps</td><td>ZPA</td><td>IT Admins</td><td>PAM session + hardware key</td><td class="c-g">Allow scoped only</td><td class="c-g">Full + recording</td></tr>
+<tr><td class="c-a">ZPA-Vendor-Scoped</td><td>ZPA</td><td>Vendors</td><td>B2B identity + MFA</td><td class="c-g">Allow app only</td><td class="c-g">Full</td></tr>
+<tr><td class="c-r">Block-Non-Compliant</td><td>ZPA + ZIA</td><td>All Users</td><td>Non-compliant device</td><td class="c-r">Block + remediate page</td><td class="c-g">Full + alert</td></tr>
+<tr><td>DNS-Security</td><td>ZIA</td><td>All Users</td><td>Malicious / C2 domain</td><td class="c-r">Block + SIEM alert</td><td class="c-g">Full</td></tr>
+</tbody></table></div>
+      
+      <div class="arch-image-caption">// Zscaler SSE (ZIA/ZPA) policy standards matrix</div>
+    </div>
+
+    <!-- 10. Outcomes -->
+    <h2 id="outcomes">Operational Outcomes &amp; Security Benefits</h2>
+    <p>The secure landing zone architecture and Zero Trust operating model delivered measurable improvements across security operations, cloud governance, incident response, network segmentation, and hybrid cloud visibility.</p>
+
+    <h4>Measurable Security Outcomes</h4>
+    <div class="arch-image">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" style="width:100%;max-width:900px;display:block;">
+  <rect width="900" height="380" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Measurable Security Outcomes</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Quantified improvements delivered by the Zero Trust landing zone architecture and operating model</text>
+  <!-- Outcome cards: 3 per row, 2 rows -->
+  <!-- Row 1 -->
+  <rect x="20" y="58" width="270" height="130" rx="6" fill="#0c1018" stroke="#00d4ff" stroke-width="1.5"/>
+  <rect x="20" y="58" width="270" height="4" rx="2" fill="#00d4ff"/>
+  <text x="35" y="80" font-family="Arial" font-size="28" font-weight="bold" fill="#00d4ff">60%</text>
+  <text x="35" y="100" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff">MTTD Reduction</text>
+  <text x="35" y="116" font-family="Arial" font-size="10" fill="#55677a">Mean time to detect threats reduced</text>
+  <text x="35" y="130" font-family="Arial" font-size="10" fill="#55677a">from 4 hours to under 90 minutes</text>
+  <text x="35" y="148" font-family="Arial" font-size="9" fill="#007799">SIEM correlation + GuardDuty</text>
+  <rect x="315" y="58" width="270" height="130" rx="6" fill="#0c1018" stroke="#00e87a" stroke-width="1.5"/>
+  <rect x="315" y="58" width="270" height="4" rx="2" fill="#00e87a"/>
+  <text x="330" y="80" font-family="Arial" font-size="28" font-weight="bold" fill="#00e87a">75%</text>
+  <text x="330" y="100" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff">MTTR Improvement</text>
+  <text x="330" y="116" font-family="Arial" font-size="10" fill="#55677a">Mean time to respond reduced via</text>
+  <text x="330" y="130" font-family="Arial" font-size="10" fill="#55677a">SOAR automation and playbooks</text>
+  <text x="330" y="148" font-family="Arial" font-size="9" fill="#008844">XSOAR automated tier-1 response</text>
+  <rect x="610" y="58" width="270" height="130" rx="6" fill="#0c1018" stroke="#a78bfa" stroke-width="1.5"/>
+  <rect x="610" y="58" width="270" height="4" rx="2" fill="#a78bfa"/>
+  <text x="625" y="80" font-family="Arial" font-size="28" font-weight="bold" fill="#a78bfa">Zero</text>
+  <text x="625" y="100" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff">Public Exposed Services</text>
+  <text x="625" y="116" font-family="Arial" font-size="10" fill="#55677a">All management interfaces removed</text>
+  <text x="625" y="130" font-family="Arial" font-size="10" fill="#55677a">from public internet — ZTNA only</text>
+  <text x="625" y="148" font-family="Arial" font-size="9" fill="#7755aa">Private endpoints + ZPA enforced</text>
+  <!-- Row 2 -->
+  <rect x="20" y="205" width="270" height="130" rx="6" fill="#0c1018" stroke="#FFAA00" stroke-width="1.5"/>
+  <rect x="20" y="205" width="270" height="4" rx="2" fill="#FFAA00"/>
+  <text x="35" y="227" font-family="Arial" font-size="28" font-weight="bold" fill="#FFAA00">100%</text>
+  <text x="35" y="247" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff">Traffic Inspected</text>
+  <text x="35" y="263" font-family="Arial" font-size="10" fill="#55677a">All north-south and east-west</text>
+  <text x="35" y="277" font-family="Arial" font-size="10" fill="#55677a">traffic inspected and logged</text>
+  <text x="35" y="295" font-family="Arial" font-size="9" fill="#aa8800">NGFW + NDR + SSL inspection</text>
+  <rect x="315" y="205" width="270" height="130" rx="6" fill="#0c1018" stroke="#ff3355" stroke-width="1.5"/>
+  <rect x="315" y="205" width="270" height="4" rx="2" fill="#ff3355"/>
+  <text x="330" y="227" font-family="Arial" font-size="28" font-weight="bold" fill="#ff3355">95%</text>
+  <text x="330" y="247" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff">Attack Surface Reduction</text>
+  <text x="330" y="263" font-family="Arial" font-size="10" fill="#55677a">Measured reduction in externally</text>
+  <text x="330" y="277" font-family="Arial" font-size="10" fill="#55677a">reachable attack surface</text>
+  <text x="330" y="295" font-family="Arial" font-size="9" fill="#aa4455">Network segmentation + micro-seg</text>
+  <rect x="610" y="205" width="270" height="130" rx="6" fill="#0c1018" stroke="#22d3ee" stroke-width="1.5"/>
+  <rect x="610" y="205" width="270" height="4" rx="2" fill="#22d3ee"/>
+  <text x="625" y="227" font-family="Arial" font-size="28" font-weight="bold" fill="#22d3ee">ISO 27001</text>
+  <text x="625" y="247" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff">Compliance Achieved</text>
+  <text x="625" y="263" font-family="Arial" font-size="10" fill="#55677a">Policy-as-code controls mapped</text>
+  <text x="625" y="277" font-family="Arial" font-size="10" fill="#55677a">to NIST CSF, CIS, SOC 2, DORA</text>
+  <text x="625" y="295" font-family="Arial" font-size="9" fill="#007799">IaC compliance reports automated</text>
+  <text x="450" y="358" font-family="Arial" font-size="9" fill="#55677a" text-anchor="middle">Outcomes measured post-implementation across security operations, governance, incident response, and compliance domains</text>
+</svg>
+      
+      <div class="arch-image-caption">// Measurable security outcomes summary</div>
+    </div>
+
+    <div class="outcomes-grid">
+      <div class="outcome-item"><div class="outcome-dot"></div>Improved SOC operational visibility and faster threat detection</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Reduced phishing and malware exposure</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Scalable Zero Trust segmentation across hybrid environments</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Standardised firewall governance via Panorama and FortiManager</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Stronger cloud security posture across AWS and Azure</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Improved incident response times through XSOAR automation</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Reduced excessive VPN and lateral access</div>
+      <div class="outcome-item"><div class="outcome-dot"></div>Automated SOC workflows reducing analyst workload</div>
+    </div>
+
+    <!-- 11. Conclusion -->
+    <h2 id="conclusion">Conclusion</h2>
+    <p>This reference architecture demonstrates a scalable and repeatable enterprise security model designed to support modern hybrid cloud transformation across AWS, Azure, remote access, and on-premise environments.</p>
+    <p>By combining Zero Trust network segmentation, centralised SIEM and XSOAR operations, Palo Alto and Fortinet security platforms, Zscaler SSE secure access controls, and Infrastructure as Code governance, the architecture establishes a cloud-ready and operationally mature security framework capable of supporting enterprise-scale modernization programmes.</p>
+
+    <div class="arch-image">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" style="width:100%;max-width:900px;display:block;">
+  <rect width="900" height="360" rx="8" fill="#07090d"/>
+  <text x="450" y="28" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Final Architecture — Strategic Security Outcomes</text>
+  <text x="450" y="44" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Zero Trust principles applied end-to-end across identity, network, cloud, and operations</text>
+  <!-- Five pillars -->
+  <rect x="20" y="60" width="160" height="240" rx="6" fill="#0a0518" stroke="#a78bfa" stroke-width="1.5"/>
+  <rect x="20" y="60" width="160" height="28" rx="6" fill="#a78bfa"/>
+  <text x="100" y="79" font-family="Arial" font-size="10" font-weight="bold" fill="#07090d" text-anchor="middle">IDENTITY</text>
+  <text x="100" y="113" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">Zero standing privilege</text>
+  <text x="100" y="130" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">Entra PIM enforced</text>
+  <text x="100" y="147" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">MFA on all access</text>
+  <text x="100" y="164" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">Device compliance</text>
+  <text x="100" y="181" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">UEBA monitoring</text>
+  <text x="100" y="198" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">PAM all admin</text>
+  <rect x="195" y="60" width="160" height="240" rx="6" fill="#080d14" stroke="#00d4ff" stroke-width="1.5"/>
+  <rect x="195" y="60" width="160" height="28" rx="6" fill="#00d4ff"/>
+  <text x="275" y="79" font-family="Arial" font-size="10" font-weight="bold" fill="#07090d" text-anchor="middle">NETWORK</text>
+  <text x="275" y="113" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">Deny by default</text>
+  <text x="275" y="130" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">5 security zones</text>
+  <text x="275" y="147" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">100% TLS inspect</text>
+  <text x="275" y="164" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">East-west control</text>
+  <text x="275" y="181" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">NDR all segments</text>
+  <text x="275" y="198" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">IaC firewall rules</text>
+  <rect x="370" y="60" width="160" height="240" rx="6" fill="#080d14" stroke="#f97316" stroke-width="1.5"/>
+  <rect x="370" y="60" width="160" height="28" rx="6" fill="#f97316"/>
+  <text x="450" y="79" font-family="Arial" font-size="10" font-weight="bold" fill="#07090d" text-anchor="middle">CLOUD</text>
+  <text x="450" y="113" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">AWS + Azure LZ</text>
+  <text x="450" y="130" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">Private endpoints only</text>
+  <text x="450" y="147" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">SCPs + Azure Policy</text>
+  <text x="450" y="164" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">GuardDuty + Defender</text>
+  <text x="450" y="181" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">Container isolation</text>
+  <text x="450" y="198" font-family="Arial" font-size="9" fill="#f97316" text-anchor="middle">IaC all deployments</text>
+  <rect x="545" y="60" width="160" height="240" rx="6" fill="#050d10" stroke="#ff3355" stroke-width="1.5"/>
+  <rect x="545" y="60" width="160" height="28" rx="6" fill="#ff3355"/>
+  <text x="625" y="79" font-family="Arial" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">OPERATIONS</text>
+  <text x="625" y="113" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">SIEM + SOAR live</text>
+  <text x="625" y="130" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">XSOAR automation</text>
+  <text x="625" y="147" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">MTTD under 90min</text>
+  <text x="625" y="164" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">Playbook coverage</text>
+  <text x="625" y="181" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">TIP integration</text>
+  <text x="625" y="198" font-family="Arial" font-size="9" fill="#ff3355" text-anchor="middle">BAS validation</text>
+  <rect x="720" y="60" width="160" height="240" rx="6" fill="#0a1018" stroke="#00e87a" stroke-width="1.5"/>
+  <rect x="720" y="60" width="160" height="28" rx="6" fill="#00e87a"/>
+  <text x="800" y="79" font-family="Arial" font-size="10" font-weight="bold" fill="#07090d" text-anchor="middle">COMPLIANCE</text>
+  <text x="800" y="113" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">NIST CSF aligned</text>
+  <text x="800" y="130" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">ISO 27001 mapped</text>
+  <text x="800" y="147" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">CIS benchmarks</text>
+  <text x="800" y="164" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">SOC 2 evidence</text>
+  <text x="800" y="181" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Auto audit reports</text>
+  <text x="800" y="198" font-family="Arial" font-size="9" fill="#00e87a" text-anchor="middle">Policy as code</text>
+  <!-- Bottom bar -->
+  <rect x="20" y="312" width="860" height="36" rx="4" fill="#0a1018" stroke="#00d4ff" stroke-width="1"/>
+  <text x="450" y="330" font-family="Arial" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">A scalable, repeatable enterprise security model supporting hybrid cloud transformation at enterprise scale</text>
+  <text x="450" y="346" font-family="Arial" font-size="9" fill="#55677a" text-anchor="middle">Zero Trust · SIEM + SOAR · IaC governance · BAS continuous validation · saleemyousaf.co.uk</text>
+</svg>
+      
+      <div class="arch-image-caption">// Final architecture and strategic security outcomes</div>
+    </div>
+
+    <div class="disclaimer">
+      <strong>Reference Design Disclaimer.</strong> This reference architecture is provided for technical demonstration and capability showcase purposes only. All examples, network ranges, configurations, policies, and design patterns are illustrative and sanitised to avoid disclosure of any client-sensitive or production-specific information.
+    </div>
+
+    <div class="article-nav">
+      <a href="https://saleemyousaf.co.uk/articles/">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back to all articles
+      </a>
+      <a href="https://saleemyousaf.co.uk/assume-breach/">
+        Assume Breach framework
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+  </article>
+
+  <!-- TOC SIDEBAR -->
+  <aside>
+    <nav class="toc">
+      <div class="toc-label">// Contents</div>
+      <ul class="toc-list">
+        <li class="toc-item"><a href="#overview">Overview</a></li>
+        <li class="toc-item"><a href="#capabilities">Key Capabilities</a></li>
+        <li class="toc-item"><a href="#design-objectives">Design Objectives</a></li>
+        <li class="toc-item"><a href="#segmentation">Zero Trust Segmentation</a></li>
+        <li class="toc-item sub"><a href="#segmentation">Edge Security</a></li>
+        <li class="toc-item sub"><a href="#segmentation">Trust Zones</a></li>
+        <li class="toc-item"><a href="#firewall">Firewall &amp; Connectivity</a></li>
+        <li class="toc-item sub"><a href="#firewall">Palo Alto</a></li>
+        <li class="toc-item sub"><a href="#firewall">FortiGate</a></li>
+        <li class="toc-item sub"><a href="#firewall">AWS &amp; Azure</a></li>
+        <li class="toc-item"><a href="#remote-access">Secure Remote Access</a></li>
+        <li class="toc-item sub"><a href="#remote-access">Zscaler ZIA</a></li>
+        <li class="toc-item sub"><a href="#remote-access">Zscaler ZPA</a></li>
+        <li class="toc-item"><a href="#siem-soar">SIEM &amp; SOAR</a></li>
+        <li class="toc-item sub"><a href="#siem-soar">XSOAR Playbooks</a></li>
+        <li class="toc-item"><a href="#iac">Infrastructure as Code</a></li>
+        <li class="toc-item sub"><a href="#iac">Terraform</a></li>
+        <li class="toc-item sub"><a href="#iac">Azure Policy &amp; SCPs</a></li>
+        <li class="toc-item"><a href="#firewall-rules">Firewall Rule Standards</a></li>
+        <li class="toc-item sub"><a href="#firewall-rules">Palo Alto Matrix</a></li>
+        <li class="toc-item sub"><a href="#firewall-rules">FortiGate Matrix</a></li>
+        <li class="toc-item sub"><a href="#firewall-rules">Zscaler Matrix</a></li>
+        <li class="toc-item"><a href="#outcomes">Outcomes &amp; Benefits</a></li>
+        <li class="toc-item"><a href="#conclusion">Conclusion</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+</div>
+
+<!-- RELATED ARTICLES -->
+<div class="related-section">
+  <div class="related-wrap">
+    <div class="related-label">Related articles</div>
+    <div class="related-grid">
+      <a href="https://saleemyousaf.co.uk/articles/secure-landing-zone-private-apis/" class="rel-card">
+        <div class="rel-tags"><span class="rel-tag teal">AWS</span><span class="rel-tag teal">Landing Zone</span></div>
+        <div class="rel-title">Secure Cloud Landing Zone Architecture: Private APIs, ECS, and Compliance Controls</div>
+        <div class="rel-meta">4 May 2026 · ~10 min read</div>
+      </a>
+      <a href="https://saleemyousaf.co.uk/articles/zero-trust-zscaler/" class="rel-card">
+        <div class="rel-tags"><span class="rel-tag teal">Zero Trust</span><span class="rel-tag teal">Zscaler</span></div>
+        <div class="rel-title">Zero Trust in Practice: Where Does Zscaler Fit Within a Modern Security Architecture?</div>
+        <div class="rel-meta">29 Apr 2026 · ~9 min read</div>
+      </a>
+      <a href="https://saleemyousaf.co.uk/articles/stride-cloud-detection/" class="rel-card">
+        <div class="rel-tags"><span class="rel-tag amber">STRIDE</span><span class="rel-tag teal">Cloud</span></div>
+        <div class="rel-title">From Threat Modelling to Threat Detection: Making STRIDE Work in Cloud Environments</div>
+        <div class="rel-meta">22 Apr 2026 · ~10 min read</div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-strip">
+  <div class="cta-wrap">
+    <div>
+      <div class="cta-heading">Working on a Zero Trust or cloud security programme?</div>
+      <div class="cta-sub">Connect to discuss architecture, security design, or implementation strategy.</div>
+    </div>
+    <div class="cta-actions">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener" class="btn-primary">Connect on LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf/saleem-yousaf-zero-trust-architecture" target="_blank" rel="noopener" class="btn-outline">GitHub repo</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Saleem <span>Yousaf</span></div>
+      <div class="footer-desc">Cloud &amp; Cyber Security Architect · AWS · Azure · Zero Trust · AI Governance · OT Security · Enterprise Architecture</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
+      <a href="https://saleem-yousaf.blogspot.com/" target="_blank" rel="noopener">Blogger</a>
+      <a href="https://codepen.io/Saleem-Yousaf" target="_blank" rel="noopener">CodePen</a>
+      <a href="https://www.cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
+    <a href="https://www.saleemyousaf.co.uk/privacy-policy/" style="font-size:12px;color:var(--muted2);text-decoration:none;">Privacy Policy</a>
+  </div>
+</footer>
+
+<script>
+// Active TOC highlighting on scroll
+const sections = document.querySelectorAll('h2[id]');
+const tocLinks = document.querySelectorAll('.toc-item a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      tocLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + entry.target.id) {
+          link.classList.add('active');
+        }
+      });
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(section => observer.observe(section));
+</script>
+
+
+
+<div class="lbx-overlay" id="lbx" onclick="lbxClose(event)">
+  <div class="lbx-inner" id="lbx-inner" onclick="event.stopPropagation()">
+    <div id="lbx-content"></div>
+    <div class="lbx-caption">
+      <span id="lbx-cap"></span>
+      <span class="lbx-close" onclick="lbxClose()">&#x2715;</span>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  function openLbx(el){
+    var content=el.querySelector('svg,img,.rmt-wrap');
+    var cap=el.querySelector('.arch-image-caption');
+    if(!content)return;
+    document.getElementById('lbx-content').innerHTML=content.outerHTML;
+    document.getElementById('lbx-cap').textContent=cap?cap.textContent:'';
+    document.getElementById('lbx').classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+  window.lbxClose=function(e){
+    if(e&&e.target===document.getElementById('lbx-inner'))return;
+    document.getElementById('lbx').classList.remove('open');
+    document.body.style.overflow='';
+    document.getElementById('lbx-content').innerHTML='';
+  };
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')window.lbxClose();});
+  document.querySelectorAll('.arch-image').forEach(function(el){
+    el.addEventListener('click',function(){openLbx(el);});
+  });
+})();
+</script>
+</body>
+</html>
