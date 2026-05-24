@@ -311,6 +311,18 @@ footer{border-top:1px solid var(--border);padding:28px;margin-top:0;}
         </div>
       </div>
 
+      <!-- EMERGING THREATS CARD -->
+      <div class="rec-card" style="border-top:2px solid var(--amber)">
+        <div class="section-header">
+          <div class="section-title" style="color:var(--amber)">⚡ Emerging — Outside BAS Coverage</div>
+          <a href="../simulation/desktop/" style="font-size:10px;color:var(--teal);text-decoration:none;opacity:0.7;">→ View in BAS</a>
+        </div>
+        <div class="rec-list" id="emerging-list">
+          <div class="skeleton" style="height:50px"></div>
+          <div class="skeleton" style="height:50px"></div>
+        </div>
+      </div>
+
       <!-- FEED HEALTH -->
       <div class="feed-card">
         <div class="section-header">
@@ -579,12 +591,42 @@ function renderActors(threats) {
 }
 
 // ── Bootstrap ────────────────────────────────────────────────────────────────
+function renderEmerging(data) {
+  const el = document.getElementById('emerging-list');
+  if(!el || !data || !data.emerging) return;
+
+  if(data.emerging.length === 0) {
+    el.innerHTML = '<div style="font-size:10px;color:var(--muted2);padding:8px 0">No emerging threats outside current coverage.</div>';
+    return;
+  }
+
+  const sevCol = {Critical:'var(--red)',High:'var(--amber)',Medium:'var(--teal)'};
+
+  el.innerHTML = data.emerging.slice(0,3).map(t => `
+    <div class="rec-item rec-${t.severity.toLowerCase()}" style="margin-bottom:8px">
+      <span class="rec-urgency urg-${t.severity.toLowerCase()}">${t.severity}</span>
+      <div class="rec-name" style="font-size:10px;margin:4px 0">${t.title.slice(0,80)}...</div>
+      <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:4px">
+        ${t.uncovered_techniques.slice(0,3).map(tp =>
+          `<span style="font-size:7px;background:rgba(255,51,85,0.15);color:var(--red);padding:1px 5px;border-radius:2px;font-family:monospace">${tp}</span>`
+        ).join('')}
+        ${t.new_actors.slice(0,2).map(a =>
+          `<span style="font-size:7px;background:rgba(255,170,0,0.15);color:var(--amber);padding:1px 5px;border-radius:2px">${a}</span>`
+        ).join('')}
+      </div>
+      <a href="../simulation/desktop/" class="rec-cta" style="background:rgba(255,170,0,0.1);color:var(--amber);border-color:rgba(255,170,0,0.4)">⚡ Review in Emerging Threats</a>
+    </div>
+  `).join('');
+}
+
+
 async function init() {
-  const [threats, techniques, recs, feeds] = await Promise.all([
+  const [threats, techniques, recs, feeds, emerging] = await Promise.all([
     load('threats.json'),
     load('techniques.json'),
     load('recommendations.json'),
-    load('feeds.json')
+    load('feeds.json'),
+    load('emerging_threats.json')
   ]);
 
   if(threats) {
@@ -596,6 +638,7 @@ async function init() {
 
   if(techniques) renderTechniques(techniques);
   if(recs) renderRecs(recs);
+  if(emerging) renderEmerging(emerging);
   if(feeds) renderFeeds(feeds);
 }
 
