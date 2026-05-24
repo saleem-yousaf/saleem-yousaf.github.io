@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-24T10:40:27.421690+00:00",
+  "generated": "2026-05-23T19:15:55.624488+00:00",
   "source": "BreachForge TI Feed Collector v1.0",
   "threats": [
     {
@@ -12,7 +12,7 @@
       "techniques": [],
       "actors": [],
       "sectors": [
-        "Manufacturing"
+        "Technology"
       ],
       "summary": "Microsoft has been recognized as a Leader in The Forrester Wave™: Workforce Identity Security Platforms, Q2 2026, receiving the highest scores in both the current offering and strategy categories. The post Microsoft recognized as a Leader in The Forrester Wave™ for Workforce Identity Security Platforms appeared first on Microsoft Security Blog ."
     },
@@ -26,7 +26,7 @@
       "techniques": [],
       "actors": [],
       "sectors": [
-        "Manufacturing"
+        "Technology"
       ],
       "summary": "A multi-stage attack on Linux devices began with an exposed F5 BIG-IP edge appliance and pivoted to an internal Confluence server for credential theft and identity compromise. Learn how the threat actor attempted Kerberos relay and lateral movement, and how Microsoft Defender detected, blocked, and unraveled the attack. The post From edge appliance to enterprise compromise: Multi-stage Linux intru"
     },
@@ -40,7 +40,6 @@
       "techniques": [],
       "actors": [],
       "sectors": [
-        "Manufacturing",
         "Technology"
       ],
       "summary": "How Frontier firms secure AI at scale: read how Microsoft customers embed governance, identity, and cloud security to make protection an enabler of AI growth. The post Microsoft Security success stories: How St. Luke&#8217;s and ManpowerGroup are securing AI foundations appeared first on Microsoft Security Blog ."
@@ -74,8 +73,8 @@
       "summary": "Open-source framework ROADtools is being misused by threat actors for cloud intrusions. Learn how to identify its malicious use. The post Paved With Intent: ROADtools and Nation-State Tactics in the Cloud appeared first on Unit 42 ."
     },
     {
-      "id": "TI-9975BDE1",
-      "title": "CISA KEV: Drupal Core — Drupal Core SQL Injection Vulnerability",
+      "id": "TI-B87A10B7",
+      "title": "CISA KEV: Drupal Core - Drupal Core SQL Injection Vulnerability",
       "source": "CISA KEV",
       "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
       "published": "2026-05-22T00:00:00Z",
@@ -83,7 +82,6 @@
       "techniques": [],
       "actors": [],
       "sectors": [
-        "Manufacturing",
         "Technology"
       ],
       "summary": "Drupal Core contains a SQL injection vulnerability that could allow for privilege escalation and remote code execution via specially crafted requests sent with the database abstraction API. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
@@ -112,7 +110,7 @@
       "techniques": [],
       "actors": [],
       "sectors": [
-        "Manufacturing"
+        "Technology"
       ],
       "summary": "Microsoft Security’s latest updates extend visibility, control, and protection across expanding ecosystems as organizations accelerate AI adoption. The post What’s new in Microsoft Security: May 2026 appeared first on Microsoft Security Blog ."
     },
@@ -131,8 +129,8 @@
       "summary": "Unit 42 analyzes npm supply chain evolution post-Shai Hulud. Discover wormable malware, CI/CD persistence, multi-stage attacks and more. The post The npm Threat Landscape: Attack Surface and Mitigations (Updated May 21) appeared first on Unit 42 ."
     },
     {
-      "id": "TI-417C8FF6",
-      "title": "CISA KEV: Langflow Langflow — Langflow Origin Validation Error Vulnerability",
+      "id": "TI-2322E65E",
+      "title": "CISA KEV: Langflow Langflow - Langflow Origin Validation Error Vulnerability",
       "source": "CISA KEV",
       "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
       "published": "2026-05-21T00:00:00Z",
@@ -145,8 +143,8 @@
       "summary": "Langflow contains an origin validation error vulnerability in which an overly permissive CORS configuration combined with a refresh token cookie configured as SameSite=None allows a malicious webpage to perform cross-origin requests that include credentials and successfully call the refresh endpoint. This could allow the attacker to execute arbitrary code and achieve full system compromise via obt"
     },
     {
-      "id": "TI-1179A41F",
-      "title": "CISA KEV: Trend Micro Apex One — Trend Micro Apex One (On-Premise) Directory Traversal Vulnerability",
+      "id": "TI-C6B122C1",
+      "title": "CISA KEV: Trend Micro Apex One - Trend Micro Apex One (On-Premise) Directory Traversal Vulnerability",
       "source": "CISA KEV",
       "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
       "published": "2026-05-21T00:00:00Z",
@@ -173,8 +171,8 @@
       "summary": "Unit 42 analyzes TamperedChef malware clusters that use trojanized productivity apps and malvertising to deliver stealthy payloads to targets. The post Tracking TamperedChef Clusters via Certificate and Code Reuse appeared first on Unit 42 ."
     },
     {
-      "id": "TI-202ABF4D",
-      "title": "CISA KEV: Microsoft Windows — Microsoft Windows Buffer Overflow Vulnerability",
+      "id": "TI-3884F494",
+      "title": "CISA KEV: Microsoft Windows - Microsoft Windows Buffer Overflow Vulnerability",
       "source": "CISA KEV",
       "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
       "published": "2026-05-20T00:00:00Z",
@@ -182,14 +180,13 @@
       "techniques": [],
       "actors": [],
       "sectors": [
-        "Manufacturing",
         "Technology"
       ],
       "summary": "Microsoft Windows contains a buffer overflow vulnerability in the Windows Server Service that allows remote attackers to execute arbitrary code via a crafted RPC request that triggers an overflow during path canonicalization. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
     },
     {
-      "id": "TI-2F08CAAA",
-      "title": "CISA KEV: Microsoft DirectX — Microsoft DirectX NULL Byte Overwrite Vulnerability",
+      "id": "TI-B9F9F949",
+      "title": "CISA KEV: Microsoft DirectX - Microsoft DirectX NULL Byte Overwrite Vulnerability",
       "source": "CISA KEV",
       "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
       "published": "2026-05-20T00:00:00Z",
@@ -197,7 +194,6 @@
       "techniques": [],
       "actors": [],
       "sectors": [
-        "Manufacturing",
         "Technology"
       ],
       "summary": "Microsoft DirectX contains a NULL byte overwrite vulnerability in the QuickTime Movie Parser Filter in quartz.dll in DirectShow which could allow remote attackers to execute arbitrary code via a crafted QuickTime media file. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
@@ -212,7 +208,7 @@
       "techniques": [],
       "actors": [],
       "sectors": [
-        "Manufacturing"
+        "Technology"
       ],
       "summary": "Cisco Talos&#x2019; Vulnerability Discovery &amp; Research team recently disclosed eight vulnerabilities in TP-Link, and one each in Adobe Photoshop, OpenVPN, and Gen Digital&apos;s Norton VPN. The vulnerabilities mentioned in this blog post have been patched by their respective vendors, in adherence to Cisco&#x2019;s third-party vulnerability"
     },
@@ -268,7 +264,7 @@
       "techniques": [],
       "actors": [],
       "sectors": [
-        "Manufacturing"
+        "Technology"
       ],
       "summary": "Key Takeaways We identified an exposed server that provided unusual visibility into a large-scale, multi-victim exploitation and collection operation. Artifacts on the host showed that Claude Code and OpenClaw were embedded in the operator’s day-to-day workflow, supporting troubleshooting, orchestration, and refinement of the collection pipeline. This AI-assisted workflow resulted in the modular p"
     },
@@ -284,7 +280,7 @@
         "LockBit"
       ],
       "sectors": [
-        "Manufacturing"
+        "Technology"
       ],
       "summary": "Key Takeaways An audio version of this report can be found on&#160;Spotify,&#160;Apple,&#160;YouTube,&#160;Audible, &#38;&#160;Amazon.&#160; This intrusion began in mid-February 2024 after a threat actor exploited a vulnerability (CVE-2023-46604) on an exposed Apache ActiveMQ server. The threat actor was able to perform remote code execution (RCE) by using a Java Spring class and a custom Java Spr"
     }

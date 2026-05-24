@@ -504,14 +504,11 @@ function AttackPath({sc,progress=0}){
   </div>;
 }
 
-function SimRunner({tiPick,clearTiPick}={}){
-  const {recs:tiRecs}=useTIData();
-  const tiMap=React.useMemo(()=>{const m={};(tiRecs||[]).forEach(r=>{m[r.scenario_id]={urgency:r.urgency,priority:r.priority};});return m;},[tiRecs]);
+function SimRunner(){
   const [sel,setSel]=useState(null);
   const [run,setRun]=useState(false);
   const [step,setStep]=useState(0);
   const [done,setDone]=useState(false);
-  useEffect(()=>{if(tiPick){setSel(tiPick);setRun(false);setStep(0);setDone(false);if(clearTiPick)clearTiPick();}},[tiPick]);
   const [tab,setTab]=useState("path");
   const ref=useRef();
   function pick(s){setSel(s);setRun(false);setStep(0);setDone(false);}
@@ -521,12 +518,9 @@ function SimRunner({tiPick,clearTiPick}={}){
   const chainLit=sel?Math.floor((step/sel.steps.length)*(sel.chain.length-1)):0;
   return <div style={{display:"flex",flexDirection:"column",gap:16}}>
     <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12}}>
-      {SCENARIOS.map(sc=><div key={sc.id} onClick={()=>pick(sc)} style={{...card(),cursor:"pointer",border:`1px solid ${sel?.id===sc.id?(CAT_COL[sc.cat]||C.accent)+"80":C.border}`,background:sel?.id===sc.id?`${CAT_COL[sc.cat]||C.accent}08`:C.card,transition:"border-color .15s,background .15s",position:"relative"}}>
+      {SCENARIOS.map(sc=><div key={sc.id} onClick={()=>pick(sc)} style={{...card(),cursor:"pointer",border:`1px solid ${sel?.id===sc.id?(CAT_COL[sc.cat]||C.accent)+"80":C.border}`,background:sel?.id===sc.id?`${CAT_COL[sc.cat]||C.accent}08`:C.card,transition:"border-color .15s,background .15s"}}>
         <div style={{display:"flex",justifyContent:"space-between",marginBottom:8}}><Bdg v={sc.cat} c={CAT_COL[sc.cat]||C.dim}/><Sev v={sc.sev}/></div>
-        <div style={{fontSize:12,fontWeight:700,marginBottom:6,display:"flex",alignItems:"center",gap:6}}>
-              {sc.name}
-              {tiMap[sc.id]&&<span style={{fontSize:7,fontWeight:700,color:tiMap[sc.id].urgency.toLowerCase()==="critical"?C.red:tiMap[sc.id].urgency.toLowerCase()==="high"?C.amber:C.accent,background:tiMap[sc.id].urgency.toLowerCase()==="critical"?C.red+"22":C.amber+"22",padding:"1px 6px",borderRadius:3,whiteSpace:"nowrap"}}>{"▲ "+tiMap[sc.id].urgency}</span>}
-            </div>
+        <div style={{fontSize:12,fontWeight:700,marginBottom:6}}>{sc.name}</div>
         <div style={{fontSize:9,color:C.dim,lineHeight:1.6,marginBottom:10}}>{sc.desc}</div>
         <div style={{fontSize:9,color:C.muted}}>{sc.ttps.length} TTPs · {sc.dur}</div>
       </div>)}
@@ -659,64 +653,12 @@ function CompliancePage(){
 
 const LIVE_EVENTS=[{sev:"INFO",msg:"Synthetic phishing lure delivered to HR-003@lab.internal — XLSX macro attachment"},{sev:"WARN",msg:"PowerShell cradle fired — HTTPS beacon to C2 lab node 192.168.200.10:443"},{sev:"CRIT",msg:"LSASS memory access — mimikatz_sim.exe — EDR rule CRED-0041 FIRED"},{sev:"WARN",msg:"RDP lateral move: 192.168.10.14 → FS01 using harvested domain credentials"},{sev:"INFO",msg:"VSS deletion attempt — blocked by PAM policy on WIN-LAB-07"},{sev:"CRIT",msg:"DCSync pattern: replication rights abused by SVC-BACKUP on DC01 — SIEM FIRED"},{sev:"WARN",msg:"IAM enumeration: 14 ListRoles calls in 90s from dev-ops-svc@lab.cloud"},{sev:"CRIT",msg:"Golden Ticket: forged TGT 10-year TTL — Kerberos anomaly rule triggered"},{sev:"WARN",msg:"Password spray: 12 failed SSO attempts in 60s — lockout enforced"},{sev:"INFO",msg:"S3 exfil: 2.3 GB archive upload to external bucket — GuardDuty raised"}];
 
-
-// ── Live TI integration ──────────────────────────────────────────────────────
-function useTIData(){
-  const [recs,setRecs]=useState(null);
-  const [updated,setUpdated]=useState(null);
-  useEffect(()=>{
-    fetch('../../intel/data/recommendations.json?v='+Date.now())
-      .then(r=>r.json())
-      .then(d=>{setRecs(d.recommendations||[]);setUpdated(d.generated);})
-      .catch(()=>{});
-  },[]);
-  return {recs,updated};
-}
-
-function TIBanner({recs,updated,onRun}){
-  if(!recs||recs.length===0)return null;
-  const top=recs.slice(0,3);
-  const urgCol={critical:C.red,high:C.amber,medium:C.accent,low:C.green};
-  const age=updated?Math.round((Date.now()-new Date(updated))/3600000):null;
-  return <div style={{background:"#0a0d14",border:`1px solid ${C.red}40`,borderRadius:8,padding:16,marginBottom:0}}>
-    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
-      <div style={{display:"flex",alignItems:"center",gap:10}}>
-        <span style={{width:8,height:8,borderRadius:"50%",background:C.red,display:"inline-block",boxShadow:`0 0 6px ${C.red}`}}/>
-        <span style={{fontSize:9,letterSpacing:".14em",color:C.red,fontWeight:700,textTransform:"uppercase"}}>Live TI — Priority Simulations</span>
-      </div>
-      <div style={{display:"flex",alignItems:"center",gap:12}}>
-        {age!==null&&<span style={{fontSize:8,color:C.dim}}>TI updated {age<1?"<1h":`${age}h`} ago</span>}
-        <a href="../../intel/" style={{fontSize:8,color:C.accent,textDecoration:"none",border:`1px solid ${C.accent}40`,padding:"2px 8px",borderRadius:3}}>→ TI Portal</a>
-      </div>
-    </div>
-    <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10}}>
-      {top.map(r=>{
-        const uc=urgCol[r.urgency.toLowerCase()]||C.accent;
-        return <div key={r.scenario_id} style={{background:C.card,borderRadius:6,padding:12,border:`1px solid ${uc}30`,position:"relative"}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:6}}>
-            <span style={{fontSize:8,fontWeight:700,color:uc,letterSpacing:".1em",textTransform:"uppercase"}}>{r.urgency}</span>
-            <span style={{fontSize:8,color:C.dim}}>Priority {r.priority}</span>
-          </div>
-          <div style={{fontSize:11,fontWeight:700,color:"#dde4ef",marginBottom:5,lineHeight:1.3}}>{r.scenario_name}</div>
-          <div style={{fontSize:9,color:C.dim,marginBottom:8,lineHeight:1.4}}>{r.reason}</div>
-          <div style={{display:"flex",flexWrap:"wrap",gap:3,marginBottom:8}}>
-            {r.techniques_matched.slice(0,4).map(t=><span key={t} style={{fontSize:7,background:"#1a2235",color:C.accent,padding:"1px 5px",borderRadius:2,fontFamily:"monospace"}}>{t}</span>)}
-          </div>
-          <button onClick={()=>onRun&&onRun(r.scenario_id)} style={{background:uc+"22",color:uc,border:`1px solid ${uc}60`,borderRadius:4,padding:"4px 10px",fontSize:8,cursor:"pointer",fontWeight:700,width:"100%"}}>▶ Run {r.scenario_id}</button>
-        </div>;
-      })}
-    </div>
-  </div>;
-}
-
 function Overview(){
-  const {recs,updated}=useTIData();
   const [evts,setEvts]=useState(LIVE_EVENTS.slice(0,4));
   const [idx,setIdx]=useState(4);
   useEffect(()=>{const t=setInterval(()=>{setEvts(p=>[...p,LIVE_EVENTS[idx%LIVE_EVENTS.length]].slice(-7));setIdx(i=>i+1);},2800);return()=>clearInterval(t);},[idx]);
   const ec={INFO:C.accent,WARN:C.amber,CRIT:C.red};
   return <div style={{display:"flex",flexDirection:"column",gap:16}}>
-    <TIBanner recs={recs} updated={updated} onRun={(id)=>{}}/>
     <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12}}>
       {[["Exposure Score","57",C.amber,"↑8 pts from last run"],["Detection Coverage","68%",C.green,"Δ +5% this month"],["Mean Time to Detect","34m",C.accent,"Target: <20m"],["Critical Gaps","7",C.red,"Immediate action"]].map(([l,v,c,s])=><div key={l} style={card()}><div style={{fontSize:8,letterSpacing:".12em",color:C.dim,marginBottom:8,textTransform:"uppercase"}}>{l}</div><div style={{fontSize:32,fontWeight:700,color:c,lineHeight:1}}>{v}</div><div style={{fontSize:9,color:C.dim,marginTop:5}}>{s}</div></div>)}
     </div>
@@ -853,11 +795,9 @@ function App(){
   const [page,setPage]=useState("overview");
   const [role,setRole]=useState("CISO / CIO");
   const [time,setTime]=useState(new Date());
-  const [tiPick,setTiPick]=useState(null);
-  useEffect(()=>{_nav.setPage=setPage;_nav.setPick=setTiPick;},[]);
   useEffect(()=>{const t=setInterval(()=>setTime(new Date()),1000);return()=>clearInterval(t);},[]);
   if(!onboarded)return <Onboarding onDone={()=>setOnboarded(true)}/>;
-  const PAGES={overview:<Overview/>,simulations:<SimRunner tiPick={tiPick} clearTiPick={()=>setTiPick(null)}/>,killchain:<KillChainPage/>,mitre:<MitrePage/>,actors:<ActorLibrary/>,compliance:<CompliancePage/>,agents:<AgentsPage/>,reports:<ReportsPage/>,settings:<SettingsPage/>};
+  const PAGES={overview:<Overview/>,simulations:<SimRunner/>,killchain:<KillChainPage/>,mitre:<MitrePage/>,actors:<ActorLibrary/>,compliance:<CompliancePage/>,agents:<AgentsPage/>,reports:<ReportsPage/>,settings:<SettingsPage/>};
   return <div style={{display:"flex",minHeight:"100vh",background:C.bg}}>
     <div style={{width:200,background:C.surface,borderRight:`1px solid ${C.border}`,display:"flex",flexDirection:"column",flexShrink:0,position:"sticky",top:0,height:"100vh",overflowY:"auto"}}>
       <div style={{padding:"20px 16px 16px",borderBottom:`1px solid ${C.border}`}}>
