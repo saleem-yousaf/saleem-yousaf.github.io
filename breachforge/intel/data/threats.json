@@ -1,102 +1,292 @@
 {
-  "generated": "2026-05-22T08:00:00Z",
+  "generated": "2026-05-24T15:35:13.899489+00:00",
   "source": "BreachForge TI Feed Collector v1.0",
   "threats": [
     {
-      "id": "TI-001",
-      "title": "CISA KEV: Actively Exploited Ivanti Connect Secure Vulnerability",
+      "id": "TI-1590801C",
+      "title": "Microsoft recognized as a Leader in The Forrester Wave™ for Workforce Identity Security Platforms",
+      "source": "Microsoft Threat Intel RSS",
+      "source_url": "https://www.microsoft.com/security/blog",
+      "published": "2026-05-22T17:00:00+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Manufacturing"
+      ],
+      "summary": "Microsoft has been recognized as a Leader in The Forrester Wave™: Workforce Identity Security Platforms, Q2 2026, receiving the highest scores in both the current offering and strategy categories. The post Microsoft recognized as a Leader in The Forrester Wave™ for Workforce Identity Security Platforms appeared first on Microsoft Security Blog ."
+    },
+    {
+      "id": "TI-EF3B2B4D",
+      "title": "From edge appliance to enterprise compromise: Multi-stage Linux intrusion via F5 and Confluence",
+      "source": "Microsoft Threat Intel RSS",
+      "source_url": "https://www.microsoft.com/security/blog",
+      "published": "2026-05-22T16:53:39+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Manufacturing"
+      ],
+      "summary": "A multi-stage attack on Linux devices began with an exposed F5 BIG-IP edge appliance and pivoted to an internal Confluence server for credential theft and identity compromise. Learn how the threat actor attempted Kerberos relay and lateral movement, and how Microsoft Defender detected, blocked, and unraveled the attack. The post From edge appliance to enterprise compromise: Multi-stage Linux intru"
+    },
+    {
+      "id": "TI-882321EF",
+      "title": "Microsoft Security success stories: How St. Luke’s and ManpowerGroup are securing AI foundations",
+      "source": "Microsoft Threat Intel RSS",
+      "source_url": "https://www.microsoft.com/security/blog",
+      "published": "2026-05-22T16:00:00+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Manufacturing",
+        "Technology"
+      ],
+      "summary": "How Frontier firms secure AI at scale: read how Microsoft customers embed governance, identity, and cloud security to make protection an enabler of AI growth. The post Microsoft Security success stories: How St. Luke&#8217;s and ManpowerGroup are securing AI foundations appeared first on Microsoft Security Blog ."
+    },
+    {
+      "id": "TI-D9654958",
+      "title": "Tracking Iranian APT Screening Serpens’ 2026 Espionage Campaigns",
+      "source": "Palo Alto Unit42 RSS",
+      "source_url": "https://unit42.paloaltonetworks.com",
+      "published": "2026-05-22T13:00:42+00:00",
+      "severity": "High",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Defence"
+      ],
+      "summary": "Unit 42 details Screening Serpens' use of AppDomainManager hijacking and new RAT variants to target tech and defense sectors in recent campaigns. The post Tracking Iranian APT Screening Serpens’ 2026 Espionage Campaigns appeared first on Unit 42 ."
+    },
+    {
+      "id": "TI-23E5A5A8",
+      "title": "Paved With Intent: ROADtools and Nation-State Tactics in the Cloud",
+      "source": "Palo Alto Unit42 RSS",
+      "source_url": "https://unit42.paloaltonetworks.com",
+      "published": "2026-05-22T10:00:24+00:00",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Open-source framework ROADtools is being misused by threat actors for cloud intrusions. Learn how to identify its malicious use. The post Paved With Intent: ROADtools and Nation-State Tactics in the Cloud appeared first on Unit 42 ."
+    },
+    {
+      "id": "TI-9975BDE1",
+      "title": "CISA KEV: Drupal Core — Drupal Core SQL Injection Vulnerability",
+      "source": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "published": "2026-05-22T00:00:00Z",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Manufacturing",
+        "Technology"
+      ],
+      "summary": "Drupal Core contains a SQL injection vulnerability that could allow for privilege escalation and remote code execution via specially crafted requests sent with the database abstraction API. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
+    },
+    {
+      "id": "TI-4101AF0D",
+      "title": "The art of being ungovernable",
+      "source": "Cisco Talos RSS",
+      "source_url": "https://blog.talosintelligence.com",
+      "published": "2026-05-21T18:00:14+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "In this edition of the Threat Source newsletter, William explores the value of being \"ungovernable\" in a professional setting, sharing how challenging the status quo and seeking out the smartest people in the room can lead to a more fulfilling and successful career."
+    },
+    {
+      "id": "TI-E8A80614",
+      "title": "What’s new in Microsoft Security: May 2026",
+      "source": "Microsoft Threat Intel RSS",
+      "source_url": "https://www.microsoft.com/security/blog",
+      "published": "2026-05-21T16:00:00+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Manufacturing"
+      ],
+      "summary": "Microsoft Security’s latest updates extend visibility, control, and protection across expanding ecosystems as organizations accelerate AI adoption. The post What’s new in Microsoft Security: May 2026 appeared first on Microsoft Security Blog ."
+    },
+    {
+      "id": "TI-11812FEE",
+      "title": "The npm Threat Landscape: Attack Surface and Mitigations (Updated May 21)",
+      "source": "Palo Alto Unit42 RSS",
+      "source_url": "https://unit42.paloaltonetworks.com",
+      "published": "2026-05-21T15:30:33+00:00",
+      "severity": "High",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Unit 42 analyzes npm supply chain evolution post-Shai Hulud. Discover wormable malware, CI/CD persistence, multi-stage attacks and more. The post The npm Threat Landscape: Attack Surface and Mitigations (Updated May 21) appeared first on Unit 42 ."
+    },
+    {
+      "id": "TI-417C8FF6",
+      "title": "CISA KEV: Langflow Langflow — Langflow Origin Validation Error Vulnerability",
       "source": "CISA KEV",
       "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
       "published": "2026-05-21T00:00:00Z",
       "severity": "Critical",
-      "techniques": ["T1190", "T1059.001", "T1003.001"],
-      "actors": ["UNC5221"],
-      "sectors": ["Government", "Defence", "Technology"],
-      "summary": "CISA added CVE-2025-22457 to the Known Exploited Vulnerabilities catalog. Ivanti Connect Secure SSL-VPN being actively exploited for initial access by suspected nation-state actors."
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Langflow contains an origin validation error vulnerability in which an overly permissive CORS configuration combined with a refresh token cookie configured as SameSite=None allows a malicious webpage to perform cross-origin requests that include credentials and successfully call the refresh endpoint. This could allow the attacker to execute arbitrary code and achieve full system compromise via obt"
     },
     {
-      "id": "TI-002",
-      "title": "Scattered Spider Targeting UK Financial Sector via MFA Fatigue",
-      "source": "AlienVault OTX",
-      "source_url": "https://otx.alienvault.com",
-      "published": "2026-05-20T00:00:00Z",
-      "severity": "High",
-      "techniques": ["T1621", "T1078", "T1528", "T1530"],
-      "actors": ["Scattered Spider"],
-      "sectors": ["Financial Services", "Insurance", "Retail"],
-      "summary": "Scattered Spider conducting MFA fatigue attacks against UK financial sector organisations. Post-compromise activity includes OAuth token theft and cloud storage exfiltration."
-    },
-    {
-      "id": "TI-003",
-      "title": "Volt Typhoon Pre-Positioning in Critical Infrastructure",
-      "source": "Cisco Talos",
-      "source_url": "https://blog.talosintelligence.com",
-      "published": "2026-05-19T00:00:00Z",
-      "severity": "Critical",
-      "techniques": ["T1078.001", "T1133", "T1562.001", "T1070.001", "T1041"],
-      "actors": ["Volt Typhoon"],
-      "sectors": ["Energy", "Water", "Communications", "Transport"],
-      "summary": "Volt Typhoon continuing living-off-the-land pre-positioning campaigns in Western critical infrastructure. No malware deployed — uses native tools only to avoid detection."
-    },
-    {
-      "id": "TI-004",
-      "title": "TeamTNT Cryptojacking Campaign Targeting Exposed Kubernetes APIs",
-      "source": "Abuse.ch",
-      "source_url": "https://abuse.ch",
-      "published": "2026-05-18T00:00:00Z",
-      "severity": "High",
-      "techniques": ["T1610", "T1611", "T1552.007", "T1496"],
-      "actors": ["TeamTNT"],
-      "sectors": ["Cloud Providers", "Technology", "Financial Services"],
-      "summary": "TeamTNT scanning for exposed Docker and Kubernetes APIs. Deploying cryptomining containers at scale. Credential harvesting from cloud metadata endpoints observed."
-    },
-    {
-      "id": "TI-005",
-      "title": "APT29 Targeting European Diplomatic Email via OAuth Abuse",
-      "source": "Microsoft Threat Intelligence",
-      "source_url": "https://www.microsoft.com/security/blog",
-      "published": "2026-05-17T00:00:00Z",
-      "severity": "Critical",
-      "techniques": ["T1528", "T1550.001", "T1114.002", "T1537"],
-      "actors": ["APT29"],
-      "sectors": ["Government", "Diplomacy", "Defence"],
-      "summary": "APT29 leveraging OAuth device code phishing to steal access tokens for Microsoft 365. Post-compromise email collection and exfiltration to attacker-controlled cloud storage observed."
-    },
-    {
-      "id": "TI-006",
-      "title": "Ransomware Group Targeting Healthcare via Unpatched VPN Appliances",
-      "source": "DFIR Report",
-      "source_url": "https://thedfirreport.com",
-      "published": "2026-05-16T00:00:00Z",
-      "severity": "Critical",
-      "techniques": ["T1190", "T1133", "T1486", "T1490", "T1003.001"],
-      "actors": ["FIN7"],
-      "sectors": ["Healthcare", "Pharmaceuticals"],
-      "summary": "FIN7-affiliated ransomware operators exploiting unpatched Fortinet VPN vulnerabilities for initial access. Full ransomware deployment within 4 hours of compromise. Backup destruction observed."
-    },
-    {
-      "id": "TI-007",
-      "title": "Supply Chain Attack via Compromised NPM Package",
-      "source": "Palo Alto Unit42",
-      "source_url": "https://unit42.paloaltonetworks.com",
-      "published": "2026-05-15T00:00:00Z",
-      "severity": "High",
-      "techniques": ["T1195.001", "T1059.001", "T1041"],
-      "actors": ["Unknown"],
-      "sectors": ["Technology", "Software Development", "Financial Services"],
-      "summary": "Malicious code injected into popular NPM package with 2.3M weekly downloads. Stealer payload exfiltrates environment variables and cloud credentials on installation."
-    },
-    {
-      "id": "TI-008",
-      "title": "CISA KEV: Actively Exploited Cisco IOS XE Web UI Vulnerability",
+      "id": "TI-1179A41F",
+      "title": "CISA KEV: Trend Micro Apex One — Trend Micro Apex One (On-Premise) Directory Traversal Vulnerability",
       "source": "CISA KEV",
       "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
-      "published": "2026-05-14T00:00:00Z",
+      "published": "2026-05-21T00:00:00Z",
       "severity": "Critical",
-      "techniques": ["T1190", "T1505.003", "T1059.004"],
-      "actors": ["Unknown"],
-      "sectors": ["Technology", "Telecommunications", "Government"],
-      "summary": "CISA added CVE-2025-20188 to KEV. Unauthenticated RCE in Cisco IOS XE web UI actively exploited for web shell deployment and persistent access."
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Trend Micro Apex One (on-premise) contains a directory traversal vulnerability that could allow a pre-authenticated local attacker to modify a key table on the server to inject malicious code to deploy to agents on affected installations. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavaila"
+    },
+    {
+      "id": "TI-8ED111BE",
+      "title": "Tracking TamperedChef Clusters via Certificate and Code Reuse",
+      "source": "Palo Alto Unit42 RSS",
+      "source_url": "https://unit42.paloaltonetworks.com",
+      "published": "2026-05-20T10:00:46+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Unit 42 analyzes TamperedChef malware clusters that use trojanized productivity apps and malvertising to deliver stealthy payloads to targets. The post Tracking TamperedChef Clusters via Certificate and Code Reuse appeared first on Unit 42 ."
+    },
+    {
+      "id": "TI-202ABF4D",
+      "title": "CISA KEV: Microsoft Windows — Microsoft Windows Buffer Overflow Vulnerability",
+      "source": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "published": "2026-05-20T00:00:00Z",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Manufacturing",
+        "Technology"
+      ],
+      "summary": "Microsoft Windows contains a buffer overflow vulnerability in the Windows Server Service that allows remote attackers to execute arbitrary code via a crafted RPC request that triggers an overflow during path canonicalization. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
+    },
+    {
+      "id": "TI-2F08CAAA",
+      "title": "CISA KEV: Microsoft DirectX — Microsoft DirectX NULL Byte Overwrite Vulnerability",
+      "source": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "published": "2026-05-20T00:00:00Z",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Manufacturing",
+        "Technology"
+      ],
+      "summary": "Microsoft DirectX contains a NULL byte overwrite vulnerability in the QuickTime Movie Parser Filter in quartz.dll in DirectShow which could allow remote attackers to execute arbitrary code via a crafted QuickTime media file. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
+    },
+    {
+      "id": "TI-B033C486",
+      "title": "TP-Link, Photoshop, OpenVPN, Norton VPN vulnerabilities",
+      "source": "Cisco Talos RSS",
+      "source_url": "https://blog.talosintelligence.com",
+      "published": "2026-05-19T15:39:37+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Manufacturing"
+      ],
+      "summary": "Cisco Talos&#x2019; Vulnerability Discovery &amp; Research team recently disclosed eight vulnerabilities in TP-Link, and one each in Adobe Photoshop, OpenVPN, and Gen Digital&apos;s Norton VPN. The vulnerabilities mentioned in this blog post have been patched by their respective vendors, in adherence to Cisco&#x2019;s third-party vulnerability"
+    },
+    {
+      "id": "TI-465F411E",
+      "title": "From PDB strings to MaaS: Tracking a commodity BadIIS ecosystem used by Chinese-speaking threat",
+      "source": "Cisco Talos RSS",
+      "source_url": "https://blog.talosintelligence.com",
+      "published": "2026-05-19T10:00:20+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Cisco Talos has uncovered a BadIIS variant — identifiable by its embedded \"demo.pdb\" strings — that functions as commodity malware, likely sold or shared among multiple Chinese-speaking cyber crime groups operating under a malware-as-a-service (MaaS) model for continuous monetization."
+    },
+    {
+      "id": "TI-AAD0237E",
+      "title": "The time of much patching is coming",
+      "source": "Cisco Talos RSS",
+      "source_url": "https://blog.talosintelligence.com",
+      "published": "2026-05-14T18:00:24+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "In this week’s newsletter, Martin reflects on what the next iteration of AI tools means for vulnerability discovery and our ability to manage large-scale patch releases."
+    },
+    {
+      "id": "TI-784E2A1D",
+      "title": "Flash Alert: EtherRat and TukTuk C2 End in The Gentleman Ransomware",
+      "source": "DFIR Report RSS",
+      "source_url": "https://thedfirreport.com",
+      "published": "2026-05-11T14:05:04+00:00",
+      "severity": "High",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "The EtherRAT malware family was first reported by Sysdig back in December 2025. At that time, the initial access vector was exploitation of CVE-2025-55182 (React2Shell) targeting Linux servers. In March 2026, a Windows variant campaign was reported by Atos, with their investigation showing evidence of activity going back to the previous December. In April, we [&#8230;] The post Flash Alert: EtherR"
+    },
+    {
+      "id": "TI-3434ED0F",
+      "title": "Bissa Scanner Exposed: AI-Assisted Mass Exploitation and Credential Harvesting",
+      "source": "DFIR Report RSS",
+      "source_url": "https://thedfirreport.com",
+      "published": "2026-04-22T14:51:21+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Manufacturing"
+      ],
+      "summary": "Key Takeaways We identified an exposed server that provided unusual visibility into a large-scale, multi-victim exploitation and collection operation. Artifacts on the host showed that Claude Code and OpenClaw were embedded in the operator’s day-to-day workflow, supporting troubleshooting, orchestration, and refinement of the collection pipeline. This AI-assisted workflow resulted in the modular p"
+    },
+    {
+      "id": "TI-8A3BF2D8",
+      "title": "Apache ActiveMQ Exploit Leads to LockBit Ransomware",
+      "source": "DFIR Report RSS",
+      "source_url": "https://thedfirreport.com",
+      "published": "2026-02-23T14:09:43+00:00",
+      "severity": "High",
+      "techniques": [],
+      "actors": [
+        "LockBit"
+      ],
+      "sectors": [
+        "Manufacturing"
+      ],
+      "summary": "Key Takeaways An audio version of this report can be found on&#160;Spotify,&#160;Apple,&#160;YouTube,&#160;Audible, &#38;&#160;Amazon.&#160; This intrusion began in mid-February 2024 after a threat actor exploited a vulnerability (CVE-2023-46604) on an exposed Apache ActiveMQ server. The threat actor was able to perform remote code execution (RCE) by using a Java Spring class and a custom Java Spr"
     }
   ]
 }
