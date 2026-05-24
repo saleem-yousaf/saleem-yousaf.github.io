@@ -303,6 +303,7 @@ footer{border-top:1px solid var(--border);padding:28px;margin-top:0;}
       <div class="rec-card">
         <div class="section-header">
           <div class="section-title">BAS Recommendations</div>
+        <a href="../simulation/" style="font-size:10px;color:var(--teal);text-decoration:none;opacity:0.7;">→ Open BAS Platform</a>
         </div>
         <div class="rec-list" id="rec-list">
           <div class="skeleton" style="height:60px"></div>
@@ -496,7 +497,7 @@ function renderRecs(data) {
       <div class="rec-name">${r.scenario_name}</div>
       <div class="rec-reason">${r.reason}</div>
       <div class="rec-ttps">${r.techniques_matched.map(t => `<span class="ttp-chip">${t}</span>`).join('')}</div>
-      <a href="${r.simulation_url}" class="rec-cta">▶ Run Simulation</a>
+      <a href="${r.simulation_url}" class="rec-cta" title="Run ${r.scenario_name} simulation">▶ Run ${r.scenario_id} — ${r.scenario_name}</a>
     </div>
   `).join('');
 }
