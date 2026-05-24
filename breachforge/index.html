@@ -236,7 +236,7 @@
   <h1>What BAS looks like<br /><em>when it is done properly.</em></h1>
   <p class="page-lead">Breach Attack Simulation is one of the most valuable and most misunderstood capabilities in enterprise security. This page covers what a mature BAS programme should deliver, how to evaluate and select the right platform for your environment, and includes a working interactive demonstration of the methodology in practice.</p>
   <div class="cta-row">
-    <a class="btn btn-primary" href="https://saleemyousaf.co.uk/breachforge/simulation/" target="_blank" rel="noopener">▶ Open Live Demonstration</a>
+    <a class="btn btn-primary" href="https://saleemyousaf.co.uk/breachforge/simulation/desktop/" target="_blank" rel="noopener">▶ Open Live Demonstration</a>
     <a class="btn btn-secondary" href="#the-4am-call">See a simulation scenario ↓</a>
     <a class="btn btn-secondary" href="#vendor-selection">Vendor selection guide ↓</a>
   </div>
@@ -327,7 +327,7 @@
           <div class="beat-time" style="color: #bc8cff;">Day −30 · Reconnaissance</div>
           <div class="beat-title">The attacker was watching before you knew they existed.</div>
           <div class="beat-text">A threat actor modelled on FIN7 spends three weeks doing passive reconnaissance. LinkedIn profiles of your IT helpdesk staff. MX record enumeration. Job postings that reveal your EDR vendor. None of this triggers a single alert in your environment.</div>
-          <div><span class="chip chip-purple">T1589 — Identity Info Gathering</span><span class="chip chip-purple">T1596 — Open Technical Databases</span></div>
+          <div><span class="chip chip-purple">T1589   Identity Info Gathering</span><span class="chip chip-purple">T1596   Open Technical Databases</span></div>
           <div class="beat-callout" style="background: rgba(188,140,255,.06); border-left-color: rgba(188,140,255,.4); color: var(--dim);">
             <strong style="color: #bc8cff;">BAS approach:</strong> No simulation action at this phase. A mature BAS platform documents the OSINT surface your organisation exposes and uses it to build the scenario brief.
           </div>
@@ -339,7 +339,7 @@
           <div class="beat-time" style="color: #e3b341;">T+00:00 · Initial Access</div>
           <div class="beat-title">A phishing email lands. One person opens it.</div>
           <div class="beat-text">A macro-enabled XLSX labelled "Q3 Salary Review: Action Required" is delivered to three seed accounts: HR, Finance, and IT Helpdesk. The simulation records whether your email gateway quarantines it, whether the sandbox detonates the attachment, and whether user simulation triggers the macro.</div>
-          <div><span class="chip chip-amber">T1566.001 — Spearphishing Attachment</span><span class="chip chip-amber">T1204.002 — Malicious File</span></div>
+          <div><span class="chip chip-amber">T1566.001   Spearphishing Attachment</span><span class="chip chip-amber">T1204.002   Malicious File</span></div>
           <div class="beat-callout" style="background: rgba(227,179,65,.06); border-left-color: rgba(227,179,65,.4); color: var(--dim);">
             <strong style="color: #e3b341;">Gap found in 68% of simulations:</strong> Email sandbox fires on the attachment, but the alert is auto-closed as low priority by a SOAR playbook misconfigured six months earlier. The macro executes.
           </div>
@@ -351,7 +351,7 @@
           <div class="beat-time" style="color: #4a9eff;">T+04:13 · Execution</div>
           <div class="beat-title">PowerShell fires. A beacon phones home.</div>
           <div class="beat-text">The VBA macro drops an encoded PowerShell cradle. In 8 seconds it decodes, executes in-memory, and establishes an HTTPS beacon to the C2 lab node over port 443. The traffic is indistinguishable from normal web browsing to a proxy without TLS inspection and behavioural baselining.</div>
-          <div><span class="chip chip-accent">T1059.001 — PowerShell</span><span class="chip chip-accent">T1055.001 — Process Injection</span></div>
+          <div><span class="chip chip-accent">T1059.001   PowerShell</span><span class="chip chip-accent">T1055.001   Process Injection</span></div>
           <div class="beat-callout" style="background: rgba(74,158,255,.06); border-left-color: rgba(74,158,255,.4); color: var(--dim);">
             <strong style="color: #4a9eff;">EDR fires at T+09m:</strong> Script-block logging catches the encoded payload. Alert raised, but the on-call analyst is triaging a separate P2 incident. The alert ages 22 minutes before acknowledgement.
           </div>
@@ -363,7 +363,7 @@
           <div class="beat-time" style="color: #f85149;">T+14:27 · Credential Access</div>
           <div class="beat-title">LSASS. The single most common technique in enterprise ransomware chains.</div>
           <div class="beat-text">With a foothold established, the simulation attempts LSASS memory access. On hosts without Credential Guard, this yields NTLM hashes and Kerberos tickets in under 90 seconds. This is the pivotal moment in the kill chain: catch it here and the attack ends. Miss it and everything downstream follows.</div>
-          <div><span class="chip chip-red">T1003.001 — LSASS Memory Dump</span><span class="chip chip-red">T1558.003 — Kerberoasting</span></div>
+          <div><span class="chip chip-red">T1003.001   LSASS Memory Dump</span><span class="chip chip-red">T1558.003   Kerberoasting</span></div>
           <div class="beat-callout" style="background: rgba(248,81,73,.07); border-left-color: rgba(248,81,73,.5); color: var(--dim);">
             <strong style="color: #f85149;">Critical gap:</strong> Credential Guard is not deployed on domain controllers. LSASS access succeeds. Estimated engineering effort to remediate: 4 hours. In a real attack, this is where the clock resets.
           </div>
@@ -375,7 +375,7 @@
           <div class="beat-time" style="color: #39c5cf;">T+31:00 · Lateral Movement</div>
           <div class="beat-title">The attacker moves. Quietly. East-west through the estate.</div>
           <div class="beat-text">Using harvested credentials, the simulation pivots to the file server via RDP, then enumerates the domain controller. Three additional workstations in the same subnet are reached via WMI. The NDR fires, but the detection threshold was raised six months ago to reduce alert volume.</div>
-          <div><span class="chip chip-cyan">T1021.001 — Remote Desktop Protocol</span><span class="chip chip-cyan">T1047 — WMI Execution</span></div>
+          <div><span class="chip chip-cyan">T1021.001   Remote Desktop Protocol</span><span class="chip chip-cyan">T1047   WMI Execution</span></div>
           <div class="beat-callout" style="background: rgba(57,197,207,.06); border-left-color: rgba(57,197,207,.4); color: var(--dim);">
             <strong style="color: #39c5cf;">Detection gap: 18 minutes</strong> between first lateral move and NDR alert. In a real ransomware event, that is four additional hosts compromised and backup infrastructure reached.
           </div>
@@ -387,7 +387,7 @@
           <div class="beat-time" style="color: #f85149;">T+41:00 · Impact</div>
           <div class="beat-title">4:17am. The call comes in.</div>
           <div class="beat-text">Volume shadow copies deleted. 847 files encrypted with AES-256. Ransom note dropped to three shared directories. In the simulation, this is entirely synthetic. No real files are touched. In the real incident this scenario is modelled on, recovery took 19 days and cost £2.3M in downtime, forensics, and recovery. The controls that would have stopped it at T+14 minutes cost less than a day of engineering work to fix.</div>
-          <div><span class="chip chip-red">T1490 — Inhibit System Recovery</span><span class="chip chip-red">T1486 — Data Encrypted for Impact</span></div>
+          <div><span class="chip chip-red">T1490   Inhibit System Recovery</span><span class="chip chip-red">T1486   Data Encrypted for Impact</span></div>
           <div class="beat-callout" style="background: rgba(61,214,140,.06); border-left-color: rgba(61,214,140,.4); color: var(--dim);">
             <strong style="color: #3dd68c;">Simulation result:</strong> 3 critical gaps identified. Detection coverage 68%. Mean time to detect: 22 minutes. Remediation roadmap generated. P1 fixes estimated at 6 hours of engineering work. Re-run in 30 days to validate.
           </div>
@@ -519,19 +519,19 @@
         <tbody>
           <tr>
             <td class="td-label">MITRE ATT&CK coverage depth</td>
-            <td class="yes">Strong — 1500+ techniques, frequent updates</td>
-            <td class="yes">Strong — Picus Threat Library, weekly updates</td>
-            <td class="yes">Strong — MITRE-aligned, community content</td>
-            <td class="yes">Strong — Hacker's Playbook library</td>
+            <td class="yes">Strong   1500+ techniques, frequent updates</td>
+            <td class="yes">Strong   Picus Threat Library, weekly updates</td>
+            <td class="yes">Strong   MITRE-aligned, community content</td>
+            <td class="yes">Strong   Hacker's Playbook library</td>
             <td class="part">Different approach: attack path focus</td>
           </tr>
           <tr>
             <td class="td-label">Integration ecosystem</td>
-            <td class="yes">Broad — 100+ integrations, bidirectional SIEM</td>
-            <td class="yes">Strong — Picus Complete Security Validation</td>
-            <td class="yes">Strong — open platform, API-first</td>
-            <td class="part">Good — major SIEM/EDR vendors covered</td>
-            <td class="yes">Strong — graph-based platform integrations</td>
+            <td class="yes">Broad   100+ integrations, bidirectional SIEM</td>
+            <td class="yes">Strong   Picus Complete Security Validation</td>
+            <td class="yes">Strong   open platform, API-first</td>
+            <td class="part">Good   major SIEM/EDR vendors covered</td>
+            <td class="yes">Strong   graph-based platform integrations</td>
           </tr>
           <tr>
             <td class="td-label">Cloud and hybrid coverage</td>
@@ -710,7 +710,7 @@
       </div>
       <div class="sc-card" style="border-top-color: #f472b6;">
         <div class="sc-cat" style="color: #f472b6;">Insider</div>
-        <div class="sc-name">Insider Threat — Data Theft</div>
+        <div class="sc-name">Insider Threat   Data Theft</div>
         <div class="sc-desc">Trusted user abusing legitimate access to exfiltrate sensitive data. DLP bypass via encrypted archives. UEBA detection validation across baseline deviation scoring.</div>
         <div><span class="chip" style="background:rgba(244,114,182,.1);border-color:rgba(244,114,182,.3);color:#f472b6;">T1562.001</span><span class="chip" style="background:rgba(244,114,182,.1);border-color:rgba(244,114,182,.3);color:#f472b6;">T1048</span><span class="chip" style="background:rgba(244,114,182,.1);border-color:rgba(244,114,182,.3);color:#f472b6;">T1078</span></div>
       </div>
@@ -745,7 +745,7 @@
         </div>
       </div>
       <div class="cta-row">
-        <a class="btn btn-primary" href="https://saleemyousaf.co.uk/breachforge/simulation/" target="_blank" rel="noopener">▶ Open Demonstration Platform</a>
+        <a class="btn btn-primary" href="https://saleemyousaf.co.uk/breachforge/simulation/desktop/" target="_blank" rel="noopener">▶ Open Demonstration Platform</a>
         <a class="btn btn-secondary" href="https://saleemyousaf.co.uk/assume-breach/">Read the Assume Breach methodology</a>
       </div>
     </div>
