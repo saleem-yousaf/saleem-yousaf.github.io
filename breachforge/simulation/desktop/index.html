@@ -845,7 +845,7 @@ function Onboarding({onDone}){
   </div>;
 }
 
-const NAV=[{id:"overview",label:"Overview",icon:"⬡"},{id:"simulations",label:"Simulations",icon:"▶"},{id:"emerging",label:"Emerging",icon:"⚡"},{id:"killchain",label:"Kill Chain",icon:"⛓"},{id:"mitre",label:"MITRE ATT&CK",icon:"◈"},{id:"actors",label:"Threat Actors",icon:"◆"},{id:"compliance",label:"Compliance",icon:"✓"},{id:"agents",label:"Agents",icon:"⊞"},{id:"reports",label:"Reports",icon:"▨"},{id:"settings",label:"Settings",icon:"⚙"}];
+const NAV=[{id:"overview",label:"Overview",icon:"⬡"},{id:"simulations",label:"Simulations",icon:"▶"},{id:"emerging",label:"Emerging",icon:"⚡"},{id:"rules",label:"Detection Rules",icon:"⛨"},{id:"killchain",label:"Kill Chain",icon:"⛓"},{id:"mitre",label:"MITRE ATT&CK",icon:"◈"},{id:"actors",label:"Threat Actors",icon:"◆"},{id:"compliance",label:"Compliance",icon:"✓"},{id:"agents",label:"Agents",icon:"⊞"},{id:"reports",label:"Reports",icon:"▨"},{id:"settings",label:"Settings",icon:"⚙"}];
 const ROLES=["CISO / CIO","SOC Analyst","Architect","PM","Developer"];
 
 // ── Emerging Threats Module ──────────────────────────────────────────────────
@@ -1176,6 +1176,1191 @@ function ScenarioDraftPanel(){
   </div>;
 }
 
+
+// ── Detection Rule Library ───────────────────────────────────────────────────
+
+const DETECTION_RULES = {
+  "T1003.001": {
+    name:"LSASS Memory Dump",tactic:"Credential Access",
+    splunk:`index=windows EventCode=10 TargetImage="*lsass.exe"
+| stats count by SourceImage, GrantedAccess, host
+| where GrantedAccess IN ("0x1010","0x1038","0x1fffff")
+| table host, SourceImage, GrantedAccess, count`,
+    sentinel:`SecurityEvent
+| where EventID == 4656 or EventID == 10
+| where ObjectName contains "lsass"
+| where AccessMask in ("0x1010","0x1038","0x1fffff")
+| summarize count() by Computer, SubjectUserName, ObjectName, AccessMask`
+  },
+  "T1003.006": {
+    name:"DCSync",tactic:"Credential Access",
+    splunk:`index=windows EventCode=4662 
+| where ObjectType="*domainDNS*" AND (Properties="*1131f6aa*" OR Properties="*1131f6ad*" OR Properties="*89e95b76*")
+| where SubjectUserName!="*$"
+| stats count by SubjectUserName, SubjectDomainName, host`,
+    sentinel:`SecurityEvent
+| where EventID == 4662
+| where ObjectType contains "domainDNS"
+| where Properties contains "1131f6aa" or Properties contains "1131f6ad"
+| where AccountType != "Machine"
+| summarize count() by Account, Computer, ObjectName`
+  },
+  "T1016": {
+    name:"System Network Configuration Discovery",tactic:"Discovery",
+    splunk:`index=windows EventCode=4688 
+| where CommandLine IN ("*ipconfig*","*ifconfig*","*netstat*","*arp -a*","*route print*")
+| stats count by host, ParentProcessName, CommandLine
+| where count > 3`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where CommandLine contains "ipconfig" or CommandLine contains "netstat" or CommandLine contains "route print"
+| summarize count() by Computer, ParentProcessName, CommandLine
+| where count_ > 3`
+  },
+  "T1018": {
+    name:"Remote System Discovery",tactic:"Discovery",
+    splunk:`index=windows EventCode=4688
+| where CommandLine IN ("*net view*","*netscan*","*arp -a*","*ping /L*")
+| stats count by host, User, CommandLine
+| where count > 5`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where CommandLine contains "net view" or CommandLine contains "netscan" or CommandLine contains "arp -a"
+| summarize count() by Computer, Account, CommandLine
+| where count_ > 5`
+  },
+  "T1021.001": {
+    name:"Remote Desktop Protocol",tactic:"Lateral Movement",
+    splunk:`index=windows EventCode=4624 LogonType=10
+| stats count by src_ip, dest, user, host
+| where count > 3
+| eval alert="RDP lateral movement — "+user+" from "+src_ip`,
+    sentinel:`SecurityEvent
+| where EventID == 4624 and LogonType == 10
+| summarize count() by IpAddress, Computer, TargetUserName
+| where count_ > 3
+| extend Alert = strcat("RDP from ", IpAddress, " as ", TargetUserName)`
+  },
+  "T1021.002": {
+    name:"SMB/Windows Admin Shares",tactic:"Lateral Movement",
+    splunk:`index=windows EventCode=5140 ShareName IN ("\\*\ADMIN$","\\*\C$","\\*\IPC$")
+| stats count by SubjectUserName, IpAddress, ShareName, host
+| where count > 5`,
+    sentinel:`SecurityEvent
+| where EventID == 5140
+| where ShareName contains "ADMIN$" or ShareName contains "C$"
+| summarize count() by Account, IpAddress, ShareName, Computer
+| where count_ > 5`
+  },
+  "T1021.004": {
+    name:"SSH Lateral Movement",tactic:"Lateral Movement",
+    splunk:`index=linux sourcetype=syslog "Accepted publickey"
+| stats count by src_ip, user, host
+| where count > 3
+| eval alert="SSH key auth from "+src_ip`,
+    sentinel:`Syslog
+| where SyslogMessage contains "Accepted publickey"
+| parse SyslogMessage with * "from " src_ip " port" *
+| summarize count() by src_ip, Computer, HostName
+| where count_ > 3`
+  },
+  "T1021.006": {
+    name:"WinRM Lateral Movement",tactic:"Lateral Movement",
+    splunk:`index=windows EventCode=4624 LogonType=3
+| where AuthenticationPackageName="Kerberos" AND WorkstationName!=""
+| stats count by TargetUserName, IpAddress, host
+| where count > 2`,
+    sentinel:`SecurityEvent
+| where EventID == 4624 and LogonType == 3
+| where AuthenticationPackageName == "Kerberos"
+| summarize count() by TargetUserName, IpAddress, Computer
+| where count_ > 2`
+  },
+  "T1027.002": {
+    name:"Packed Executable",tactic:"Defense Evasion",
+    splunk:`index=windows EventCode=4688
+| where CommandLine LIKE "%.exe%" 
+| eval entropy=len(CommandLine)
+| where entropy > 200
+| stats count by Image, CommandLine, host`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where strlen(CommandLine) > 200
+| where CommandLine contains ".exe"
+| summarize count() by NewProcessName, CommandLine, Computer`
+  },
+  "T1036.003": {
+    name:"Rename System Utilities",tactic:"Defense Evasion",
+    splunk:`index=windows EventCode=4688
+| where OriginalFileName IN ("cmd.exe","powershell.exe","wscript.exe","cscript.exe") AND NewProcessName!=OriginalFileName
+| stats count by host, OriginalFileName, NewProcessName, User`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where OriginalFileName in ("cmd.exe","powershell.exe","wscript.exe")
+| where NewProcessName !endswith OriginalFileName
+| summarize count() by Computer, OriginalFileName, NewProcessName, Account`
+  },
+  "T1036.005": {
+    name:"Match Legitimate Name or Location",tactic:"Defense Evasion",
+    splunk:`index=windows EventCode=4688
+| where Image LIKE "%svchost.exe%" AND NOT ParentImage IN ("services.exe","MsMpEng.exe")
+| stats count by host, Image, ParentImage, CommandLine`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where NewProcessName contains "svchost.exe"
+| where ParentProcessName !contains "services.exe"
+| summarize count() by Computer, NewProcessName, ParentProcessName, CommandLine`
+  },
+  "T1041": {
+    name:"Exfiltration Over C2 Channel",tactic:"Exfiltration",
+    splunk:`index=network dest_port IN (443,80,8080,8443) bytes_out > 10000000
+| stats sum(bytes_out) as total_out by src_ip, dest_ip, dest_port
+| where total_out > 100000000
+| eval GB=round(total_out/1073741824,2)`,
+    sentinel:`CommonSecurityLog
+| where DestinationPort in (443, 80, 8080)
+| where SentBytes > 10000000
+| summarize TotalBytes=sum(SentBytes) by SourceIP, DestinationIP, DestinationPort
+| where TotalBytes > 100000000
+| extend GB = round(TotalBytes/1073741824, 2)`
+  },
+  "T1047": {
+    name:"WMI Execution",tactic:"Execution",
+    splunk:`index=windows EventCode=4688
+| where ParentImage LIKE "%WmiPrvSE.exe%" AND Image NOT IN ("conhost.exe","WmiPrvSE.exe")
+| stats count by host, Image, CommandLine, User`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where ParentProcessName contains "WmiPrvSE.exe"
+| where NewProcessName !contains "conhost.exe"
+| summarize count() by Computer, NewProcessName, CommandLine, Account`
+  },
+  "T1048": {
+    name:"Exfiltration Over Alternative Protocol",tactic:"Exfiltration",
+    splunk:`index=network dest_port IN (21,22,53,69) bytes_out > 1000000
+| stats sum(bytes_out) as total by src_ip, dest_ip, dest_port, protocol
+| where total > 10000000`,
+    sentinel:`CommonSecurityLog
+| where DestinationPort in (21, 22, 53, 69)
+| where SentBytes > 1000000
+| summarize TotalBytes=sum(SentBytes) by SourceIP, DestinationIP, DestinationPort, Protocol
+| where TotalBytes > 10000000`
+  },
+  "T1048.002": {
+    name:"Exfil over Asymmetric Encrypted Non-C2",tactic:"Exfiltration",
+    splunk:`index=network dest_port=443 bytes_out > 5000000
+| where dest_ip NOT IN (known_saas_ips)
+| stats sum(bytes_out) as total by src_ip, dest_ip
+| where total > 50000000`,
+    sentinel:`CommonSecurityLog
+| where DestinationPort == 443
+| where SentBytes > 5000000
+| summarize Total=sum(SentBytes) by SourceIP, DestinationIP
+| where Total > 50000000`
+  },
+  "T1048.003": {
+    name:"Exfiltration Over Unencrypted Protocol",tactic:"Exfiltration",
+    splunk:`index=network dest_port=53 bytes_out > 512
+| stats count, sum(bytes_out) as dns_bytes by src_ip, dest_ip
+| where dns_bytes > 100000
+| eval alert="Potential DNS tunnelling from "+src_ip`,
+    sentinel:`DnsEvents
+| where QueryType == "TXT" or strlen(Name) > 50
+| summarize count() by ClientIP, Name
+| where count_ > 100
+| extend Alert = strcat("DNS tunnel candidate: ", ClientIP)`
+  },
+  "T1049": {
+    name:"System Network Connections Discovery",tactic:"Discovery",
+    splunk:`index=windows EventCode=4688
+| where CommandLine IN ("*netstat*","*net use*","*net session*")
+| stats count by host, User, CommandLine`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where CommandLine contains "netstat" or CommandLine contains "net use" or CommandLine contains "net session"
+| summarize count() by Computer, Account, CommandLine`
+  },
+  "T1053.005": {
+    name:"Scheduled Task",tactic:"Persistence",
+    splunk:`index=windows EventCode=4698
+| stats count by TaskName, TaskContent, SubjectUserName, host
+| where SubjectUserName!="SYSTEM"`,
+    sentinel:`SecurityEvent
+| where EventID == 4698
+| where SubjectUserName != "SYSTEM"
+| summarize count() by TaskName, SubjectUserName, Computer
+| extend Alert = strcat("New scheduled task: ", TaskName)`
+  },
+  "T1055.001": {
+    name:"DLL Injection",tactic:"Defense Evasion",
+    splunk:`index=windows EventCode=8
+| where TargetImage NOT IN ("svchost.exe","explorer.exe","lsass.exe")
+| stats count by SourceImage, TargetImage, host
+| eval alert="DLL injection: "+SourceImage+" -> "+TargetImage`,
+    sentinel:`SecurityEvent
+| where EventID == 8
+| where TargetImage !contains "svchost.exe"
+| summarize count() by SourceImage, TargetImage, Computer
+| extend Alert = strcat(SourceImage, " injecting into ", TargetImage)`
+  },
+  "T1059.001": {
+    name:"PowerShell Execution",tactic:"Execution",
+    splunk:`index=windows EventCode=4104
+| where ScriptBlockText LIKE "%IEX%" OR ScriptBlockText LIKE "%Invoke-Expression%" OR ScriptBlockText LIKE "%-enc%"
+| stats count by host, UserID, ScriptBlockText
+| where count > 1`,
+    sentinel:`Event
+| where Source == "Microsoft-Windows-PowerShell"
+| where EventID == 4104
+| where EventData contains "IEX" or EventData contains "Invoke-Expression" or EventData contains "-enc"
+| summarize count() by Computer, UserName, EventData`
+  },
+  "T1059.003": {
+    name:"Windows Command Shell",tactic:"Execution",
+    splunk:`index=windows EventCode=4688
+| where Image LIKE "%cmd.exe%" AND ParentImage LIKE "%Office*"
+| stats count by host, User, ParentImage, CommandLine`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where NewProcessName contains "cmd.exe"
+| where ParentProcessName contains "OFFICE" or ParentProcessName contains "Word" or ParentProcessName contains "Excel"
+| summarize count() by Computer, Account, ParentProcessName, CommandLine`
+  },
+  "T1059.004": {
+    name:"Unix Shell Execution",tactic:"Execution",
+    splunk:`index=linux sourcetype=syslog
+| where message LIKE "%/bin/sh%" OR message LIKE "%/bin/bash%" AND process IN ("python","php","ruby")
+| stats count by host, user, message`,
+    sentinel:`Syslog
+| where SyslogMessage contains "/bin/sh" or SyslogMessage contains "/bin/bash"
+| where ProcessName in ("python","php","ruby","perl")
+| summarize count() by Computer, ProcessName, SyslogMessage`
+  },
+  "T1059.007": {
+    name:"JavaScript Execution",tactic:"Execution",
+    splunk:`index=windows EventCode=4688
+| where Image LIKE "%wscript.exe%" OR Image LIKE "%cscript.exe%"
+| where CommandLine LIKE "%.js%" OR CommandLine LIKE "%.vbs%"
+| stats count by host, User, CommandLine`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where NewProcessName contains "wscript.exe" or NewProcessName contains "cscript.exe"
+| where CommandLine contains ".js" or CommandLine contains ".vbs"
+| summarize count() by Computer, Account, CommandLine`
+  },
+  "T1069.002": {
+    name:"Domain Group Enumeration",tactic:"Discovery",
+    splunk:`index=windows EventCode=4799
+| where CallerProcessName NOT IN ("services.exe","svchost.exe")
+| stats count by SubjectUserName, GroupName, host
+| where count > 10`,
+    sentinel:`SecurityEvent
+| where EventID == 4799
+| where SubjectUserName != "SYSTEM"
+| summarize count() by Account, TargetUserName, Computer
+| where count_ > 10`
+  },
+  "T1069.003": {
+    name:"Cloud Group Enumeration",tactic:"Discovery",
+    splunk:`index=azure operationName="List group members" OR operationName="Get group"
+| stats count by userPrincipalName, ipAddress, operationName
+| where count > 20`,
+    sentinel:`AuditLogs
+| where OperationName contains "List group" or OperationName contains "Get group"
+| summarize count() by InitiatedByUpn, IPAddress, OperationName
+| where count_ > 20`
+  },
+  "T1070.001": {
+    name:"Clear Windows Event Logs",tactic:"Defense Evasion",
+    splunk:`index=windows EventCode=1102
+| stats count by SubjectUserName, host
+| eval alert="EVENT LOG CLEARED by "+SubjectUserName+" on "+host`,
+    sentinel:`SecurityEvent
+| where EventID == 1102 or EventID == 104
+| summarize count() by Account, Computer
+| extend Alert = strcat("Event log cleared by ", Account, " on ", Computer)`
+  },
+  "T1070.003": {
+    name:"Clear Command History",tactic:"Defense Evasion",
+    splunk:`index=linux sourcetype=syslog
+| where message LIKE "%history -c%" OR message LIKE "%unset HISTFILE%"
+| stats count by host, user, message`,
+    sentinel:`Syslog
+| where SyslogMessage contains "history -c" or SyslogMessage contains "unset HISTFILE" or SyslogMessage contains "HISTFILESIZE=0"
+| summarize count() by Computer, HostName, SyslogMessage`
+  },
+  "T1070.004": {
+    name:"File Deletion",tactic:"Defense Evasion",
+    splunk:`index=windows EventCode=4663 AccessMask="0x10000"
+| where ObjectName LIKE "*.log" OR ObjectName LIKE "*.evtx"
+| stats count by SubjectUserName, ObjectName, host`,
+    sentinel:`SecurityEvent
+| where EventID == 4663
+| where AccessMask == "0x10000"
+| where ObjectName endswith ".log" or ObjectName endswith ".evtx"
+| summarize count() by Account, ObjectName, Computer`
+  },
+  "T1078": {
+    name:"Valid Accounts",tactic:"Defense Evasion",
+    splunk:`index=windows EventCode=4624 LogonType IN (2,10)
+| stats count by TargetUserName, IpAddress, host
+| eventstats avg(count) as avg_count by TargetUserName
+| where count > avg_count * 3`,
+    sentinel:`SecurityEvent
+| where EventID == 4624 and LogonType in (2, 10)
+| summarize count() by TargetUserName, IpAddress, Computer
+| join kind=inner (SecurityEvent | where EventID == 4624 | summarize avg_count=avg(1) by TargetUserName) on TargetUserName
+| where count_ > avg_count * 3`
+  },
+  "T1078.002": {
+    name:"Domain Accounts Abuse",tactic:"Defense Evasion",
+    splunk:`index=windows EventCode=4625 LogonType=3
+| stats count by TargetUserName, IpAddress, host
+| where count > 10
+| eval alert="Potential credential abuse: "+TargetUserName`,
+    sentinel:`SecurityEvent
+| where EventID == 4625 and LogonType == 3
+| summarize count() by TargetUserName, IpAddress, Computer
+| where count_ > 10`
+  },
+  "T1078.004": {
+    name:"Cloud Accounts Abuse",tactic:"Defense Evasion",
+    splunk:`index=azure operationName="Sign-in activity" resultDescription="Success"
+| stats count by userPrincipalName, ipAddress, location
+| where count > 5 AND location IN (known_risky_countries)`,
+    sentinel:`SigninLogs
+| where ResultType == 0
+| where Location !in ("GB","US","DE","FR","NL")
+| summarize count() by UserPrincipalName, IPAddress, Location
+| where count_ > 3`
+  },
+  "T1082": {
+    name:"System Information Discovery",tactic:"Discovery",
+    splunk:`index=windows EventCode=4688
+| where CommandLine IN ("*systeminfo*","*whoami /all*","*ver*","*hostname*")
+| stats count by host, User, CommandLine
+| where count > 5`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where CommandLine contains "systeminfo" or CommandLine contains "whoami" or CommandLine contains "hostname"
+| summarize count() by Computer, Account, CommandLine
+| where count_ > 5`
+  },
+  "T1083": {
+    name:"File and Directory Discovery",tactic:"Discovery",
+    splunk:`index=windows EventCode=4688
+| where CommandLine IN ("*dir /s*","*ls -la*","*find / -name*","*tree /f*")
+| stats count by host, User, CommandLine`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where CommandLine contains "dir /s" or CommandLine contains "find / -name" or CommandLine contains "tree /f"
+| summarize count() by Computer, Account, CommandLine`
+  },
+  "T1087.001": {
+    name:"Local Account Discovery",tactic:"Discovery",
+    splunk:`index=windows EventCode=4688
+| where CommandLine IN ("*net user*","*Get-LocalUser*","*wmic useraccount*")
+| stats count by host, User, CommandLine`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where CommandLine contains "net user" or CommandLine contains "Get-LocalUser" or CommandLine contains "wmic useraccount"
+| summarize count() by Computer, Account, CommandLine`
+  },
+  "T1087.002": {
+    name:"Domain Account Discovery",tactic:"Discovery",
+    splunk:`index=windows EventCode=4688
+| where CommandLine IN ("*net user /domain*","*Get-ADUser*","*dsquery user*")
+| stats count by host, User, CommandLine`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where CommandLine contains "net user /domain" or CommandLine contains "Get-ADUser" or CommandLine contains "dsquery user"
+| summarize count() by Computer, Account, CommandLine`
+  },
+  "T1087.004": {
+    name:"Cloud Account Discovery",tactic:"Discovery",
+    splunk:`index=azure operationName IN ("List users","Get user")
+| stats count by userPrincipalName, ipAddress
+| where count > 30`,
+    sentinel:`AuditLogs
+| where OperationName contains "List users" or OperationName contains "Get user"
+| summarize count() by InitiatedByUpn, IPAddress
+| where count_ > 30`
+  },
+  "T1098": {
+    name:"Account Manipulation",tactic:"Persistence",
+    splunk:`index=windows EventCode IN (4720,4722,4728,4732,4756)
+| where SubjectUserName!="*$" AND SubjectUserName!="SYSTEM"
+| stats count by SubjectUserName, TargetUserName, EventCode, host`,
+    sentinel:`SecurityEvent
+| where EventID in (4720, 4722, 4728, 4732, 4756)
+| where SubjectUserName != "SYSTEM"
+| summarize count() by Account, TargetUserName, EventID, Computer`
+  },
+  "T1098.001": {
+    name:"Additional Cloud Credentials",tactic:"Persistence",
+    splunk:`index=azure operationName="Add service principal credentials"
+| stats count by userPrincipalName, ipAddress, targetResources
+| eval alert="New cloud credentials added by "+userPrincipalName`,
+    sentinel:`AuditLogs
+| where OperationName == "Add service principal credentials"
+| extend Actor = tostring(InitiatedBy.user.userPrincipalName)
+| summarize count() by Actor, IPAddress, TargetResources`
+  },
+  "T1098.003": {
+    name:"Additional Cloud Roles",tactic:"Persistence",
+    splunk:`index=azure operationName="Add member to role"
+| where targetResources LIKE "*Global Administrator*" OR targetResources LIKE "*Privileged Role Administrator*"
+| stats count by userPrincipalName, targetResources, ipAddress`,
+    sentinel:`AuditLogs
+| where OperationName == "Add member to role"
+| where TargetResources contains "Global Administrator" or TargetResources contains "Privileged Role"
+| extend Actor = tostring(InitiatedBy.user.userPrincipalName)
+| summarize count() by Actor, TargetResources, IPAddress`
+  },
+  "T1098.004": {
+    name:"SSH Authorized Keys",tactic:"Persistence",
+    splunk:`index=linux sourcetype=syslog
+| where message LIKE "%authorized_keys%" AND message LIKE "%MODIFIED%"
+| stats count by host, user, message`,
+    sentinel:`Syslog
+| where SyslogMessage contains "authorized_keys"
+| where SyslogMessage contains "MODIFIED" or SyslogMessage contains "added"
+| summarize count() by Computer, HostName, SyslogMessage`
+  },
+  "T1106": {
+    name:"Native API Abuse",tactic:"Execution",
+    splunk:`index=windows EventCode=4688
+| where Image LIKE "%rundll32.exe%" AND CommandLine LIKE "%shell32.dll%"
+| stats count by host, User, CommandLine`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where NewProcessName contains "rundll32.exe"
+| where CommandLine contains "shell32.dll" or CommandLine contains "comsvcs.dll"
+| summarize count() by Computer, Account, CommandLine`
+  },
+  "T1110.001": {
+    name:"Password Guessing",tactic:"Credential Access",
+    splunk:`index=windows EventCode=4625
+| stats count by TargetUserName, IpAddress, host
+| where count > 10
+| eval alert="Brute force: "+count+" failures for "+TargetUserName`,
+    sentinel:`SecurityEvent
+| where EventID == 4625
+| summarize FailCount=count() by TargetUserName, IpAddress, Computer
+| where FailCount > 10
+| extend Alert = strcat("Brute force: ", FailCount, " failures for ", TargetUserName)`
+  },
+  "T1110.002": {
+    name:"Password Cracking",tactic:"Credential Access",
+    splunk:`index=windows EventCode=4776 Status="0xC000006A"
+| stats count by TargetUserName, Workstation
+| where count > 20`,
+    sentinel:`SecurityEvent
+| where EventID == 4776
+| where Status == "0xC000006A"
+| summarize count() by TargetUserName, WorkstationName
+| where count_ > 20`
+  },
+  "T1110.003": {
+    name:"Password Spraying",tactic:"Credential Access",
+    splunk:`index=windows EventCode=4625 LogonType=3
+| bucket _time span=5m
+| stats dc(TargetUserName) as unique_users, count by IpAddress, _time
+| where unique_users > 10 AND count > 20`,
+    sentinel:`SecurityEvent
+| where EventID == 4625 and LogonType == 3
+| summarize UniqueUsers=dcount(TargetUserName), Attempts=count() by IpAddress, bin(TimeGenerated, 5m)
+| where UniqueUsers > 10 and Attempts > 20`
+  },
+  "T1113": {
+    name:"Screen Capture",tactic:"Collection",
+    splunk:`index=windows EventCode=4688
+| where CommandLine LIKE "%screenshot%" OR Image LIKE "%snippingtool%"
+| stats count by host, User, Image, CommandLine`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where CommandLine contains "screenshot" or NewProcessName contains "SnippingTool"
+| summarize count() by Computer, Account, NewProcessName, CommandLine`
+  },
+  "T1114.001": {
+    name:"Local Email Collection",tactic:"Collection",
+    splunk:`index=windows EventCode=4663
+| where ObjectName LIKE "*.pst" OR ObjectName LIKE "*.ost"
+| where AccessMask="0x1"
+| stats count by SubjectUserName, ObjectName, host`,
+    sentinel:`SecurityEvent
+| where EventID == 4663
+| where ObjectName endswith ".pst" or ObjectName endswith ".ost"
+| where AccessMask == "0x1"
+| summarize count() by Account, ObjectName, Computer`
+  },
+  "T1133": {
+    name:"External Remote Services",tactic:"Initial Access",
+    splunk:`index=network dest_port IN (3389,22,443,8443,10000) src_ip NOT IN (known_vpn_ips)
+| stats count by src_ip, dest_ip, dest_port
+| where count > 5`,
+    sentinel:`CommonSecurityLog
+| where DestinationPort in (3389, 22, 443)
+| where SourceIP !in (known_vpn_ips)
+| summarize count() by SourceIP, DestinationIP, DestinationPort
+| where count_ > 5`
+  },
+  "T1134.001": {
+    name:"Token Impersonation",tactic:"Privilege Escalation",
+    splunk:`index=windows EventCode=4624 LogonType=9
+| where ImpersonationLevel="%%1833"
+| stats count by SubjectUserName, TargetUserName, host`,
+    sentinel:`SecurityEvent
+| where EventID == 4624 and LogonType == 9
+| where ImpersonationLevel == "%%1833"
+| summarize count() by Account, TargetUserName, Computer`
+  },
+  "T1134.002": {
+    name:"Create Process with Token",tactic:"Privilege Escalation",
+    splunk:`index=windows EventCode=4688
+| where CommandLine LIKE "%CreateProcessWithTokenW%" OR CommandLine LIKE "%runas /savecred%"
+| stats count by host, User, CommandLine`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where CommandLine contains "CreateProcessWithTokenW" or CommandLine contains "runas /savecred"
+| summarize count() by Computer, Account, CommandLine`
+  },
+  "T1135": {
+    name:"Network Share Discovery",tactic:"Discovery",
+    splunk:`index=windows EventCode=5140
+| stats dc(ShareName) as shares_accessed, count by SubjectUserName, IpAddress, host
+| where shares_accessed > 5`,
+    sentinel:`SecurityEvent
+| where EventID == 5140
+| summarize SharesAccessed=dcount(ShareName), count() by Account, IpAddress, Computer
+| where SharesAccessed > 5`
+  },
+  "T1136.002": {
+    name:"Create Domain Account",tactic:"Persistence",
+    splunk:`index=windows EventCode=4720
+| where SubjectUserName!="SYSTEM"
+| stats count by SubjectUserName, TargetUserName, host
+| eval alert="New domain account: "+TargetUserName+" by "+SubjectUserName`,
+    sentinel:`SecurityEvent
+| where EventID == 4720
+| where SubjectUserName != "SYSTEM"
+| summarize count() by Account, TargetUserName, Computer
+| extend Alert = strcat("New account created: ", TargetUserName)`
+  },
+  "T1190": {
+    name:"Exploit Public-Facing Application",tactic:"Initial Access",
+    splunk:`index=web sourcetype=access_combined status IN (500,501,502,503) 
+| stats count by src_ip, uri_path, status
+| where count > 20
+| eval alert="App exploit attempt from "+src_ip`,
+    sentinel:`W3CIISLog
+| where scStatus startswith "5"
+| summarize count() by cIP, csUriStem, scStatus
+| where count_ > 20`
+  },
+  "T1195.002": {
+    name:"Compromised Software Supply Chain",tactic:"Initial Access",
+    splunk:`index=windows EventCode=4688
+| where Image LIKE "%update%" AND CommandLine LIKE "%-nop -w hidden%"
+| stats count by host, Image, CommandLine`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where NewProcessName contains "update"
+| where CommandLine contains "-nop" or CommandLine contains "-w hidden"
+| summarize count() by Computer, NewProcessName, CommandLine`
+  },
+  "T1204.002": {
+    name:"Malicious File Execution",tactic:"Execution",
+    splunk:`index=windows EventCode=4688
+| where ParentImage LIKE "%OUTLOOK.EXE%" OR ParentImage LIKE "%WINWORD.EXE%"
+| where Image NOT IN ("splwow64.exe","explorer.exe","winword.exe")
+| stats count by host, ParentImage, Image, CommandLine`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where ParentProcessName contains "OUTLOOK" or ParentProcessName contains "WINWORD"
+| where NewProcessName !contains "splwow64.exe"
+| summarize count() by Computer, ParentProcessName, NewProcessName, CommandLine`
+  },
+  "T1213.002": {
+    name:"SharePoint Data Collection",tactic:"Collection",
+    splunk:`index=o365 Workload=SharePoint Operation IN ("FileDownloaded","FileAccessed")
+| stats count by UserId, ClientIP, SiteUrl
+| where count > 50`,
+    sentinel:`OfficeActivity
+| where OfficeWorkload == "SharePoint"
+| where Operation in ("FileDownloaded","FileAccessed")
+| summarize count() by UserId, ClientIP, SiteUrl
+| where count_ > 50`
+  },
+  "T1486": {
+    name:"Data Encrypted for Impact",tactic:"Impact",
+    splunk:`index=windows EventCode=4663
+| where ObjectName LIKE "%.locked" OR ObjectName LIKE "%.encrypted" OR ObjectName LIKE "%.enc"
+| stats count by SubjectUserName, host
+| where count > 10
+| eval alert="RANSOMWARE: "+count+" files encrypted by "+SubjectUserName`,
+    sentinel:`SecurityEvent
+| where EventID == 4663
+| where ObjectName endswith ".locked" or ObjectName endswith ".encrypted"
+| summarize count() by Account, Computer
+| where count_ > 10
+| extend Alert = strcat("RANSOMWARE: ", count_, " files encrypted by ", Account)`
+  },
+  "T1489": {
+    name:"Service Stop",tactic:"Impact",
+    splunk:`index=windows EventCode=7036
+| where ServiceName IN ("MSSQLSERVER","MSExchangeIS","VSS","wbengine","Backup")
+| where Message LIKE "%stopped%"
+| stats count by ServiceName, host`,
+    sentinel:`Event
+| where Source == "Service Control Manager"
+| where EventID == 7036
+| where EventData contains "MSSQLSERVER" or EventData contains "VSS" or EventData contains "wbengine"
+| where EventData contains "stopped"
+| summarize count() by Computer, EventData`
+  },
+  "T1490": {
+    name:"Inhibit System Recovery",tactic:"Impact",
+    splunk:`index=windows EventCode=4688
+| where CommandLine LIKE "%vssadmin delete shadows%" OR CommandLine LIKE "%wmic shadowcopy delete%"
+| stats count by host, User, CommandLine
+| eval alert="VSS DELETION: "+CommandLine`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where CommandLine contains "vssadmin delete shadows" or CommandLine contains "wmic shadowcopy delete" or CommandLine contains "wbadmin delete"
+| extend Alert = strcat("VSS deletion attempt by ", Account)
+| summarize count() by Computer, Account, CommandLine, Alert`
+  },
+  "T1496": {
+    name:"Resource Hijacking",tactic:"Impact",
+    splunk:`index=linux sourcetype=syslog
+| where message LIKE "%xmrig%" OR message LIKE "%cryptominer%" OR message LIKE "%minerd%"
+| stats count by host, user, message`,
+    sentinel:`Syslog
+| where SyslogMessage contains "xmrig" or SyslogMessage contains "minerd" or SyslogMessage contains "cryptominer"
+| summarize count() by Computer, HostName, SyslogMessage`
+  },
+  "T1505.003": {
+    name:"Web Shell",tactic:"Persistence",
+    splunk:`index=web sourcetype=access_combined
+| where uri_path LIKE "%.php" AND method="POST" AND bytes_in > 0
+| where uri_path LIKE "%cmd%" OR uri_path LIKE "%shell%" OR uri_path LIKE "%upload%"
+| stats count by src_ip, uri_path, status`,
+    sentinel:`W3CIISLog
+| where csMethod == "POST"
+| where csUriStem contains ".php" or csUriStem contains ".asp"
+| where csUriStem contains "cmd" or csUriStem contains "shell"
+| summarize count() by cIP, csUriStem, scStatus`
+  },
+  "T1525": {
+    name:"Implant Internal Image",tactic:"Persistence",
+    splunk:`index=container action=push image_name LIKE "*:latest*"
+| where src_ip NOT IN (known_ci_ips)
+| stats count by src_ip, image_name, user`,
+    sentinel:`ContainerRegistryEvents
+| where OperationName == "Push"
+| where Repository contains ":latest"
+| where CallerIpAddress !in (known_ci_ips)
+| summarize count() by CallerIpAddress, Repository, Identity`
+  },
+  "T1526": {
+    name:"Cloud Service Discovery",tactic:"Discovery",
+    splunk:`index=aws sourcetype=aws:cloudtrail eventName IN ("ListBuckets","DescribeInstances","ListFunctions")
+| stats count by userIdentity.principalId, sourceIPAddress, eventName
+| where count > 20`,
+    sentinel:`AWSCloudTrail
+| where EventName in ("ListBuckets","DescribeInstances","ListFunctions","ListRoles")
+| summarize count() by UserIdentityPrincipalid, SourceIpAddress, EventName
+| where count_ > 20`
+  },
+  "T1528": {
+    name:"Steal Application Access Token",tactic:"Credential Access",
+    splunk:`index=azure operationName="Consent to application"
+| where targetResources LIKE "*offline_access*" OR targetResources LIKE "*mail.read*"
+| stats count by userPrincipalName, ipAddress, targetResources`,
+    sentinel:`AuditLogs
+| where OperationName == "Consent to application"
+| where TargetResources contains "offline_access" or TargetResources contains "mail.read"
+| extend Actor = tostring(InitiatedBy.user.userPrincipalName)
+| summarize count() by Actor, IPAddress, TargetResources`
+  },
+  "T1530": {
+    name:"Data from Cloud Storage",tactic:"Collection",
+    splunk:`index=aws sourcetype=aws:cloudtrail eventName IN ("GetObject","ListObjects")
+| stats count, sum(responseElements.contentLength) as bytes by userIdentity.principalId, requestParameters.bucketName
+| where bytes > 1073741824`,
+    sentinel:`AWSCloudTrail
+| where EventName in ("GetObject","ListObjects")
+| extend BucketName = tostring(RequestParameters.bucketName)
+| summarize TotalBytes=sum(todouble(ResponseElements.contentLength)) by UserIdentityPrincipalid, BucketName
+| where TotalBytes > 1073741824`
+  },
+  "T1537": {
+    name:"Transfer Data to Cloud Account",tactic:"Exfiltration",
+    splunk:`index=aws sourcetype=aws:cloudtrail eventName="CopySnapshot"
+| where requestParameters.destinationRegion!=awsRegion
+| stats count by userIdentity.principalId, requestParameters.destinationRegion, sourceIPAddress`,
+    sentinel:`AWSCloudTrail
+| where EventName == "CopySnapshot" or EventName == "ShareSnapshot"
+| where RequestParameters contains "destinationRegion"
+| extend Actor = tostring(UserIdentityPrincipalid)
+| summarize count() by Actor, SourceIpAddress, RequestParameters`
+  },
+  "T1543.002": {
+    name:"Systemd Service Persistence",tactic:"Persistence",
+    splunk:`index=linux sourcetype=syslog
+| where message LIKE "%systemctl enable%" OR message LIKE "%Created symlink%/etc/systemd%"
+| stats count by host, user, message`,
+    sentinel:`Syslog
+| where SyslogMessage contains "systemctl enable" or SyslogMessage contains "Created symlink" and SyslogMessage contains "/etc/systemd"
+| summarize count() by Computer, HostName, SyslogMessage`
+  },
+  "T1546.012": {
+    name:"Image File Execution Options Injection",tactic:"Persistence",
+    splunk:`index=windows EventCode=13
+| where TargetObject LIKE "*Image File Execution Options*" AND Details NOT IN ("WerFault.exe","vsjitdebugger.exe")
+| stats count by Computer, TargetObject, Details`,
+    sentinel:`SecurityEvent
+| where EventID == 13
+| where TargetObject contains "Image File Execution Options"
+| where Details !contains "WerFault"
+| summarize count() by Computer, TargetObject, Details`
+  },
+  "T1547.001": {
+    name:"Registry Run Keys Persistence",tactic:"Persistence",
+    splunk:`index=windows EventCode=13
+| where TargetObject LIKE "*\CurrentVersion\Run*"
+| where NOT (Details LIKE "%Microsoft%" OR Details LIKE "%Windows%")
+| stats count by Computer, TargetObject, Details`,
+    sentinel:`SecurityEvent
+| where EventID == 13
+| where TargetObject contains "\CurrentVersion\Run"
+| where Details !contains "Microsoft" and Details !contains "Windows"
+| summarize count() by Computer, TargetObject, Details`
+  },
+  "T1548.002": {
+    name:"UAC Bypass",tactic:"Privilege Escalation",
+    splunk:`index=windows EventCode=4688
+| where CommandLine LIKE "%fodhelper%" OR CommandLine LIKE "%eventvwr%" OR CommandLine LIKE "%sdclt%"
+| stats count by host, User, CommandLine`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where CommandLine contains "fodhelper" or CommandLine contains "eventvwr" or CommandLine contains "sdclt"
+| summarize count() by Computer, Account, CommandLine`
+  },
+  "T1548.005": {
+    name:"Temporary Elevated Cloud Access",tactic:"Privilege Escalation",
+    splunk:`index=azure operationName IN ("Add member to role","Update role assignment")
+| where targetResources LIKE "*AdministratorAccess*" OR targetResources LIKE "*Owner*"
+| stats count by userPrincipalName, ipAddress, targetResources`,
+    sentinel:`AuditLogs
+| where OperationName in ("Add member to role","Update role assignment")
+| where TargetResources contains "AdministratorAccess" or TargetResources contains "Owner"
+| extend Actor = tostring(InitiatedBy.user.userPrincipalName)
+| summarize count() by Actor, IPAddress, TargetResources`
+  },
+  "T1550.001": {
+    name:"Application Access Token Reuse",tactic:"Lateral Movement",
+    splunk:`index=azure operationName="UserLoggedIn" 
+| where ResultType=0 AND AuthenticationRequirement="singleFactorAuthentication"
+| where ipAddress NOT IN (known_corp_ips)
+| stats count by userPrincipalName, ipAddress, location`,
+    sentinel:`SigninLogs
+| where ResultType == 0
+| where AuthenticationRequirement == "singleFactorAuthentication"
+| where IPAddress !in (known_corp_ips)
+| summarize count() by UserPrincipalName, IPAddress, Location`
+  },
+  "T1550.002": {
+    name:"Pass the Hash",tactic:"Lateral Movement",
+    splunk:`index=windows EventCode=4624 LogonType=3
+| where AuthenticationPackageName="NTLM" AND WorkstationName!=""
+| stats count by TargetUserName, IpAddress, WorkstationName, host
+| where count > 3`,
+    sentinel:`SecurityEvent
+| where EventID == 4624 and LogonType == 3
+| where AuthenticationPackageName == "NTLM"
+| summarize count() by TargetUserName, IpAddress, WorkstationName, Computer
+| where count_ > 3`
+  },
+  "T1550.003": {
+    name:"Pass the Ticket",tactic:"Lateral Movement",
+    splunk:`index=windows EventCode=4769 TicketOptions="0x40810000"
+| where ServiceName!="krbtgt" AND ServiceName!="$"
+| stats count by ServiceName, ClientAddress, host
+| where count > 5`,
+    sentinel:`SecurityEvent
+| where EventID == 4769
+| where TicketOptions == "0x40810000"
+| where ServiceName !endswith "$" and ServiceName != "krbtgt"
+| summarize count() by ServiceName, IpAddress, Computer
+| where count_ > 5`
+  },
+  "T1552.007": {
+    name:"Container API Credential Access",tactic:"Credential Access",
+    splunk:`index=kubernetes sourcetype=kube:apiserver verb IN ("get","list") resource="secrets"
+| where user.username NOT IN (known_service_accounts)
+| stats count by user.username, sourceIPs{}, resource`,
+    sentinel:`KubeAuditAdminLogs
+| where Verb in ("get","list")
+| where ObjectRef_Resource == "secrets"
+| where User_Username !in (known_service_accounts)
+| summarize count() by User_Username, SourceIps, ObjectRef_Namespace`
+  },
+  "T1553.002": {
+    name:"Code Signing Bypass",tactic:"Defense Evasion",
+    splunk:`index=windows EventCode=4688
+| where Signature="Microsoft Corporation" AND Image NOT LIKE "C:\Windows\%"
+| stats count by host, Image, Signature, CommandLine`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where Signature == "Microsoft Corporation"
+| where NewProcessName !startswith "C:\Windows\"
+| summarize count() by Computer, NewProcessName, CommandLine`
+  },
+  "T1558.003": {
+    name:"Kerberoasting",tactic:"Credential Access",
+    splunk:`index=windows EventCode=4769 TicketEncryptionType="0x17"
+| where ServiceName!="krbtgt" AND ServiceName NOT LIKE "%$"
+| stats count by ServiceName, ClientAddress, host
+| where count > 3`,
+    sentinel:`SecurityEvent
+| where EventID == 4769
+| where TicketEncryptionType == "0x17"
+| where ServiceName != "krbtgt" and ServiceName !endswith "$"
+| summarize count() by ServiceName, IpAddress, Computer
+| where count_ > 3`
+  },
+  "T1560.001": {
+    name:"Archive Collected Data",tactic:"Collection",
+    splunk:`index=windows EventCode=4688
+| where CommandLine LIKE "%7z%" OR CommandLine LIKE "%WinRAR%" OR CommandLine LIKE "%-p %"
+| where CommandLine LIKE "%-mhe%" OR CommandLine LIKE "%-hp%"
+| stats count by host, User, CommandLine`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where CommandLine contains "7z" or CommandLine contains "WinRAR"
+| where CommandLine contains "-p " or CommandLine contains "-hp" or CommandLine contains "-mhe"
+| summarize count() by Computer, Account, CommandLine`
+  },
+  "T1562.001": {
+    name:"Disable or Modify Security Tools",tactic:"Defense Evasion",
+    splunk:`index=windows EventCode IN (7045,4688)
+| where CommandLine LIKE "%Set-MpPreference%DisableRealtimeMonitoring%" OR CommandLine LIKE "%Stop-Service%windefend%"
+| stats count by host, User, CommandLine`,
+    sentinel:`SecurityEvent
+| where EventID in (7045, 4688)
+| where CommandLine contains "DisableRealtimeMonitoring" or CommandLine contains "Stop-Service" and CommandLine contains "windefend"
+| summarize count() by Computer, Account, CommandLine`
+  },
+  "T1562.004": {
+    name:"Disable or Modify System Firewall",tactic:"Defense Evasion",
+    splunk:`index=windows EventCode=4688
+| where CommandLine LIKE "%netsh advfirewall set allprofiles state off%" OR CommandLine LIKE "%Set-NetFirewallProfile%Disabled%"
+| stats count by host, User, CommandLine`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where CommandLine contains "advfirewall set allprofiles state off" or CommandLine contains "Set-NetFirewallProfile" and CommandLine contains "Disabled"
+| summarize count() by Computer, Account, CommandLine`
+  },
+  "T1562.008": {
+    name:"Disable Cloud Logs",tactic:"Defense Evasion",
+    splunk:`index=azure operationName IN ("Delete diagnostic setting","Delete activity log profile")
+| stats count by userPrincipalName, ipAddress, operationName`,
+    sentinel:`AuditLogs
+| where OperationName in ("Delete diagnostic setting","Delete activity log profile")
+| extend Actor = tostring(InitiatedBy.user.userPrincipalName)
+| summarize count() by Actor, IPAddress, OperationName`
+  },
+  "T1566.001": {
+    name:"Spearphishing Attachment",tactic:"Initial Access",
+    splunk:`index=email (attachment_type IN ("application/vnd.ms-excel","application/msword","application/pdf"))
+| where subject LIKE "%invoice%" OR subject LIKE "%payment%" OR subject LIKE "%urgent%"
+| stats count by sender, recipient, attachment_name`,
+    sentinel:`EmailEvents
+| where AttachmentCount > 0
+| where FileType in ("xls","xlsx","doc","docx","pdf")
+| where Subject contains "invoice" or Subject contains "payment" or Subject contains "urgent"
+| summarize count() by SenderFromAddress, RecipientEmailAddress, FileName`
+  },
+  "T1566.002": {
+    name:"Spearphishing Link",tactic:"Initial Access",
+    splunk:`index=email url LIKE "http://*" AND url NOT IN (known_safe_domains)
+| stats count by sender, recipient, url
+| where count > 3`,
+    sentinel:`EmailEvents
+| where Urls contains "http://"
+| where not(Urls has_any (known_safe_domains))
+| summarize count() by SenderFromAddress, RecipientEmailAddress, Urls`
+  },
+  "T1567.001": {
+    name:"Exfiltration to Code Repository",tactic:"Exfiltration",
+    splunk:`index=proxy dest IN ("github.com","gitlab.com","bitbucket.org") method=POST bytes_out > 1000000
+| stats sum(bytes_out) as total by src_ip, dest, uri_path
+| where total > 10000000`,
+    sentinel:`CommonSecurityLog
+| where DestinationHostName in ("github.com","gitlab.com","bitbucket.org")
+| where RequestMethod == "POST"
+| where SentBytes > 1000000
+| summarize Total=sum(SentBytes) by SourceIP, DestinationHostName, RequestURL
+| where Total > 10000000`
+  },
+  "T1567.002": {
+    name:"Exfiltration to Cloud Storage",tactic:"Exfiltration",
+    splunk:`index=proxy dest IN ("drive.google.com","onedrive.live.com","dropbox.com") method=POST bytes_out > 5000000
+| stats sum(bytes_out) as total by src_ip, dest
+| where total > 50000000`,
+    sentinel:`CommonSecurityLog
+| where DestinationHostName in ("drive.google.com","onedrive.live.com","dropbox.com")
+| where RequestMethod == "POST"
+| where SentBytes > 5000000
+| summarize Total=sum(SentBytes) by SourceIP, DestinationHostName
+| where Total > 50000000`
+  },
+  "T1570": {
+    name:"Lateral Tool Transfer",tactic:"Lateral Movement",
+    splunk:`index=windows EventCode=5145 ShareName="\\*\ADMIN$"
+| where RelativeTargetName LIKE "%.exe" OR RelativeTargetName LIKE "%.ps1" OR RelativeTargetName LIKE "%.dll"
+| stats count by SubjectUserName, IpAddress, RelativeTargetName, host`,
+    sentinel:`SecurityEvent
+| where EventID == 5145
+| where ShareName contains "ADMIN$"
+| where RelativeTargetName endswith ".exe" or RelativeTargetName endswith ".ps1" or RelativeTargetName endswith ".dll"
+| summarize count() by Account, IpAddress, RelativeTargetName, Computer`
+  },
+  "T1574.001": {
+    name:"DLL Search Order Hijacking",tactic:"Persistence",
+    splunk:`index=windows EventCode=4688
+| where Image LIKE "%.dll" AND NOT Image LIKE "C:\Windows\System32\%"
+| where ParentImage IN ("explorer.exe","services.exe")
+| stats count by host, Image, ParentImage`,
+    sentinel:`SecurityEvent
+| where EventID == 4688
+| where NewProcessName endswith ".dll"
+| where NewProcessName !startswith "C:\Windows\System32\"
+| summarize count() by Computer, NewProcessName, ParentProcessName`
+  },
+  "T1592.002": {
+    name:"Gather Host Software Information",tactic:"Reconnaissance",
+    splunk:`index=web uri_path IN ("/robots.txt","/.git/config","/.env","//phpinfo.php")
+| stats count by src_ip, uri_path, status`,
+    sentinel:`W3CIISLog
+| where csUriStem in ("/robots.txt","/.git/config","/.env","/phpinfo.php")
+| summarize count() by cIP, csUriStem, scStatus`
+  },
+  "T1595.002": {
+    name:"Vulnerability Scanning",tactic:"Reconnaissance",
+    splunk:`index=network dest_port IN (80,443,8080,8443)
+| stats dc(dest_port) as ports_scanned, count by src_ip
+| where ports_scanned > 10 AND count > 100`,
+    sentinel:`CommonSecurityLog
+| where DestinationPort in (80, 443, 8080, 8443)
+| summarize PortsScanned=dcount(DestinationPort), Requests=count() by SourceIP
+| where PortsScanned > 10 and Requests > 100`
+  },
+  "T1610": {
+    name:"Deploy Container",tactic:"Execution",
+    splunk:`index=container action=create
+| where src_ip NOT IN (known_orchestrator_ips)
+| stats count by src_ip, image_name, container_id`,
+    sentinel:`ContainerInstanceLog
+| where OperationName == "Create/Update Container Group"
+| where CallerIpAddress !in (known_orchestrator_ips)
+| summarize count() by CallerIpAddress, ContainerGroupName, Image`
+  },
+  "T1611": {
+    name:"Escape to Host",tactic:"Privilege Escalation",
+    splunk:`index=container
+| where message LIKE "%privileged%" OR message LIKE "%nsenter%" OR message LIKE "%--pid=host%"
+| stats count by host, container_id, message`,
+    sentinel:`ContainerInstanceLog
+| where OperationName contains "privileged" or Properties contains "nsenter" or Properties contains "--pid=host"
+| summarize count() by Computer, ContainerGroupName, Properties`
+  },
+  "T1613": {
+    name:"Container and Resource Discovery",tactic:"Discovery",
+    splunk:`index=kubernetes sourcetype=kube:apiserver verb IN ("list","get") resource IN ("pods","services","secrets","configmaps")
+| stats count by user.username, resource, namespace
+| where count > 50`,
+    sentinel:`KubeAuditAdminLogs
+| where Verb in ("list","get")
+| where ObjectRef_Resource in ("pods","services","secrets","configmaps")
+| summarize count() by User_Username, ObjectRef_Resource, ObjectRef_Namespace
+| where count_ > 50`
+  }
+};
+
+const RULE_SCENARIOS = {};
+SCENARIOS.forEach(sc => {
+  sc.ttps.forEach(t => {
+    if (!RULE_SCENARIOS[t]) RULE_SCENARIOS[t] = [];
+    if (!RULE_SCENARIOS[t].includes(sc.id)) RULE_SCENARIOS[t].push(sc.id);
+  });
+});
+
+
+function DetectionRulesPage(){
+  const [activeScenario,setActiveScenario]=useState("all");
+  const [activeTactic,setActiveTactic]=useState("all");
+  const [search,setSearch]=useState("");
+  const [sel,setSel]=useState(null);
+  const [copied,setCopied]=useState(null);
+
+  const TACTICS=["all","Initial Access","Execution","Persistence","Privilege Escalation","Defense Evasion","Credential Access","Discovery","Lateral Movement","Collection","Exfiltration","Impact","Reconnaissance"];
+
+  const filtered=Object.entries(DETECTION_RULES).filter(([tid,rule])=>{
+    if(activeScenario!=="all" && !( RULE_SCENARIOS[tid]||[]).includes(activeScenario)) return false;
+    if(activeTactic!=="all" && rule.tactic!==activeTactic) return false;
+    if(search && !tid.toLowerCase().includes(search.toLowerCase()) && !rule.name.toLowerCase().includes(search.toLowerCase())) return false;
+    return true;
+  });
+
+  function copy(text,id){
+    navigator.clipboard.writeText(text).then(()=>{setCopied(id);setTimeout(()=>setCopied(null),2000);});
+  }
+
+  const tacticCol={
+    "Initial Access":C.amber,"Execution":C.orange,"Persistence":C.pink,
+    "Privilege Escalation":C.red,"Defense Evasion":C.purple,"Credential Access":C.red,
+    "Discovery":C.cyan,"Lateral Movement":C.accent,"Collection":C.green,
+    "Exfiltration":C.red,"Impact":C.red,"Reconnaissance":C.dim
+  };
+
+  return <div style={{display:"flex",flexDirection:"column",gap:16}}>
+
+    {/* Header stats */}
+    <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12}}>
+      {[
+        ["Total Rules",Object.keys(DETECTION_RULES).length,C.accent],
+        ["Splunk SPL",Object.keys(DETECTION_RULES).length,C.orange],
+        ["Sentinel KQL",Object.keys(DETECTION_RULES).length,C.purple],
+        ["Scenarios Covered","S1-S10",C.green],
+      ].map(([l,v,c])=><div key={l} style={card()}>
+        <div style={{fontSize:8,letterSpacing:".12em",color:C.dim,marginBottom:6,textTransform:"uppercase"}}>{l}</div>
+        <div style={{fontSize:28,fontWeight:700,color:c}}>{v}</div>
+      </div>)}
+    </div>
+
+    {/* Filters */}
+    <div style={{...card(),display:"flex",gap:12,flexWrap:"wrap",alignItems:"center"}}>
+      <input value={search} onChange={e=>setSearch(e.target.value)}
+        placeholder="Search technique ID or name..."
+        style={{background:C.surface,border:`1px solid ${C.border}`,color:C.text,
+          padding:"6px 12px",borderRadius:4,fontSize:11,fontFamily:"inherit",
+          width:220,outline:"none"}}/>
+      <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+        {["all","S1","S2","S3","S4","S5","S6","S7","S8","S9","S10"].map(s=>(
+          <button key={s} onClick={()=>setActiveScenario(s)}
+            style={{...BTN(activeScenario===s?C.accent:C.dim,activeScenario!==s),
+              padding:"4px 10px",fontSize:9}}>
+            {s==="all"?"All Scenarios":s}
+          </button>
+        ))}
+      </div>
+      <select value={activeTactic} onChange={e=>setActiveTactic(e.target.value)}
+        style={{background:C.surface,border:`1px solid ${C.border}`,color:C.text,
+          padding:"5px 10px",borderRadius:4,fontSize:11,fontFamily:"inherit",outline:"none"}}>
+        {TACTICS.map(t=><option key={t} value={t}>{t==="all"?"All Tactics":t}</option>)}
+      </select>
+      <span style={{fontSize:9,color:C.dim,marginLeft:"auto"}}>{filtered.length} rules</span>
+    </div>
+
+    {/* Rules grid + detail panel */}
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,minHeight:400}}>
+
+      {/* Left: rule list */}
+      <div style={{display:"flex",flexDirection:"column",gap:6,maxHeight:700,overflowY:"auto"}}>
+        {filtered.map(([tid,rule])=>{
+          const tc=tacticCol[rule.tactic]||C.dim;
+          const scenarios=RULE_SCENARIOS[tid]||[];
+          return <div key={tid} onClick={()=>setSel(sel===tid?null:tid)}
+            style={{...card({padding:12,cursor:"pointer"}),
+              border:`1px solid ${sel===tid?C.accent:C.border}`,
+              background:sel===tid?`${C.accent}08`:C.card}}>
+            <div style={{display:"flex",justifyContent:"space-between",marginBottom:5}}>
+              <span style={{fontSize:10,fontWeight:700,color:C.accent,fontFamily:"monospace"}}>{tid}</span>
+              <span style={{fontSize:8,color:tc,background:`${tc}18`,padding:"1px 6px",borderRadius:3}}>{rule.tactic}</span>
+            </div>
+            <div style={{fontSize:11,fontWeight:600,color:C.text,marginBottom:5}}>{rule.name}</div>
+            <div style={{display:"flex",gap:3,flexWrap:"wrap"}}>
+              {scenarios.map(s=><span key={s} style={{fontSize:7,background:`${C.accent}18`,
+                color:C.accent,padding:"1px 5px",borderRadius:2}}>{s}</span>)}
+              <span style={{fontSize:7,color:C.muted,marginLeft:"auto"}}>SPL + KQL</span>
+            </div>
+          </div>;
+        })}
+        {filtered.length===0&&<div style={{padding:24,color:C.dim,fontSize:11,textAlign:"center"}}>
+          No rules match current filters
+        </div>}
+      </div>
+
+      {/* Right: rule detail */}
+      <div style={{...card(),padding:0,overflow:"hidden",height:"fit-content",position:"sticky",top:0}}>
+        {!sel?<div style={{padding:24,color:C.dim,fontSize:10,textAlign:"center",marginTop:40}}>
+          Select a technique to see detection rules
+        </div>:<div>
+          {(()=>{
+            const rule=DETECTION_RULES[sel];
+            if(!rule)return null;
+            const tc=tacticCol[rule.tactic]||C.dim;
+            const scenarios=RULE_SCENARIOS[sel]||[];
+            return <>
+              <div style={{padding:"14px 16px",borderBottom:`1px solid ${C.border}`,
+                background:`${C.accent}06`}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:4}}>
+                  <span style={{fontSize:14,fontWeight:700,color:C.accent,fontFamily:"monospace"}}>{sel}</span>
+                  <span style={{fontSize:8,color:tc,background:`${tc}18`,padding:"2px 8px",borderRadius:3}}>{rule.tactic}</span>
+                </div>
+                <div style={{fontSize:13,fontWeight:700,color:C.text,marginBottom:6}}>{rule.name}</div>
+                <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+                  {scenarios.map(s=><span key={s} style={{fontSize:8,background:`${C.accent}18`,
+                    color:C.accent,padding:"2px 7px",borderRadius:3}}>Used in {s}</span>)}
+                </div>
+              </div>
+
+              {/* Splunk SPL */}
+              <div style={{padding:"12px 16px",borderBottom:`1px solid ${C.border}`}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+                  <div style={{display:"flex",alignItems:"center",gap:6}}>
+                    <span style={{fontSize:9,fontWeight:700,color:C.orange,letterSpacing:".1em"}}>SPLUNK SPL</span>
+                  </div>
+                  <button onClick={()=>copy(rule.splunk,"splunk-"+sel)}
+                    style={{...BTN(copied==="splunk-"+sel?C.green:C.orange,true),padding:"3px 10px",fontSize:8}}>
+                    {copied==="splunk-"+sel?"✓ Copied":"Copy SPL"}
+                  </button>
+                </div>
+                <pre style={{background:"#040710",border:`1px solid ${C.border}`,borderRadius:4,
+                  padding:"10px 12px",fontSize:9,color:C.green,lineHeight:1.7,
+                  overflowX:"auto",margin:0,whiteSpace:"pre-wrap",wordBreak:"break-word"}}>
+                  {rule.splunk}
+                </pre>
+              </div>
+
+              {/* Sentinel KQL */}
+              <div style={{padding:"12px 16px"}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+                  <div style={{display:"flex",alignItems:"center",gap:6}}>
+                    <span style={{fontSize:9,fontWeight:700,color:C.purple,letterSpacing:".1em"}}>MICROSOFT SENTINEL KQL</span>
+                  </div>
+                  <button onClick={()=>copy(rule.sentinel,"sentinel-"+sel)}
+                    style={{...BTN(copied==="sentinel-"+sel?C.green:C.purple,true),padding:"3px 10px",fontSize:8}}>
+                    {copied==="sentinel-"+sel?"✓ Copied":"Copy KQL"}
+                  </button>
+                </div>
+                <pre style={{background:"#040710",border:`1px solid ${C.border}`,borderRadius:4,
+                  padding:"10px 12px",fontSize:9,color:C.purple,lineHeight:1.7,
+                  overflowX:"auto",margin:0,whiteSpace:"pre-wrap",wordBreak:"break-word"}}>
+                  {rule.sentinel}
+                </pre>
+              </div>
+            </>;
+          })()}
+        </div>}
+      </div>
+    </div>
+  </div>;
+}
+
 // ── TI Navigation bridge ─────────────────────────────────────────────────────
 const _nav={setPage:null,setPick:null};
 function tiRunScenario(id){
@@ -1193,7 +2378,7 @@ function App(){
   useEffect(()=>{_nav.setPage=setPage;_nav.setPick=setTiPick;},[]);
   useEffect(()=>{const t=setInterval(()=>setTime(new Date()),1000);return()=>clearInterval(t);},[]);
   if(!onboarded)return <Onboarding onDone={()=>setOnboarded(true)}/>;
-  const PAGES={overview:<Overview/>,emerging:<EmergingThreats/>,simulations:<SimRunner tiPick={tiPick} clearTiPick={()=>setTiPick(null)}/>,killchain:<KillChainPage/>,mitre:<MitrePage/>,actors:<ActorLibrary/>,compliance:<CompliancePage/>,agents:<AgentsPage/>,reports:<ReportsPage/>,settings:<SettingsPage/>};
+  const PAGES={overview:<Overview/>,emerging:<EmergingThreats/>,rules:<DetectionRulesPage/>,simulations:<SimRunner tiPick={tiPick} clearTiPick={()=>setTiPick(null)}/>,killchain:<KillChainPage/>,mitre:<MitrePage/>,actors:<ActorLibrary/>,compliance:<CompliancePage/>,agents:<AgentsPage/>,reports:<ReportsPage/>,settings:<SettingsPage/>};
   return <div style={{display:"flex",minHeight:"100vh",background:C.bg}}>
     <div style={{width:200,background:C.surface,borderRight:`1px solid ${C.border}`,display:"flex",flexDirection:"column",flexShrink:0,position:"sticky",top:0,height:"100vh",overflowY:"auto"}}>
       <div style={{padding:"20px 16px 16px",borderBottom:`1px solid ${C.border}`}}>
