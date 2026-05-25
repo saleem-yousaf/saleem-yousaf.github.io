@@ -545,8 +545,201 @@ def main():
         path.write_text(json.dumps(data, indent=2, ensure_ascii=False))
         print(f"Written: {path} ({path.stat().st_size} bytes)")
 
+    # Phase 3: AI scenario generation from high-priority emerging threats
+    run_phase3_generation(emerging_list)
+
     print(f"[{datetime.now().isoformat()}] Feed collection complete.")
 
 
 if __name__ == "__main__":
     main()
+
+
+# ── Phase 3: AI Scenario Generation ──────────────────────────────────────────
+
+SCENARIO_SCHEMA = """
+You are a cybersecurity red team expert building Breach Attack Simulation scenarios.
+Given a threat intelligence report, generate a BAS scenario in the exact JSON format below.
+Respond ONLY with valid JSON. No preamble, no markdown, no explanation.
+
+Required JSON format:
+{
+  "id": "S11",
+  "name": "Short scenario name (max 6 words)",
+  "cat": "One of: Endpoint, Cloud, Identity, WAF / Web, Network, Insider, Supply Chain, Azure / Entra, Container, API / Web",
+  "sev": "One of: Critical, High, Medium",
+  "actor": "Primary threat actor name",
+  "desc": "2-3 sentence description of the scenario for practitioners",
+  "tactics": ["Tactic1", "Tactic2", "Tactic3"],
+  "dur": "Estimated duration e.g. 30-60 min",
+  "ttps": ["T1234", "T5678"],
+  "chain": [
+    {"ph": "Phase name", "tac": "TAXXXX", "col": "#hexcolor", "nodes": ["node1", "node2", "node3"]}
+  ],
+  "steps": [
+    {"t": "T+00m", "sev": "INFO|WARN|CRIT", "ev": "[TXXXX] Description of what happened"}
+  ],
+  "confidence": 0.85,
+  "source_url": "URL of source intelligence report",
+  "generated_by": "level3"
+}
+
+Generate 6-8 kill chain phases and 12-16 event log steps.
+Use real ATT&CK technique IDs (T followed by 4 digits).
+"""
+
+MAX_API_CALLS_PER_RUN = 2
+PRIORITY_THRESHOLD    = 6
+CACHE_FILE            = Path(__file__).parent.parent.parent / "breachforge/intel/data/scenario_cache.json"
+DRAFTS_FILE           = Path(__file__).parent.parent.parent / "breachforge/intel/data/emerging_scenarios.json"
+
+
+def load_cache():
+    if CACHE_FILE.exists():
+        try:
+            return json.loads(CACHE_FILE.read_text())
+        except Exception:
+            pass
+    return {}
+
+
+def save_cache(cache):
+    CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    CACHE_FILE.write_text(json.dumps(cache, indent=2))
+
+
+def load_drafts():
+    if DRAFTS_FILE.exists():
+        try:
+            return json.loads(DRAFTS_FILE.read_text())
+        except Exception:
+            pass
+    return {"generated": None, "drafts": []}
+
+
+def save_drafts(data):
+    DRAFTS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    DRAFTS_FILE.write_text(json.dumps(data, indent=2))
+
+
+def generate_scenario_draft(threat, next_scenario_id):
+    """Call Claude API to generate a draft BAS scenario from an emerging threat."""
+    import os
+    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    if not api_key:
+        print("  ANTHROPIC_API_KEY not set — skipping AI generation")
+        return None
+
+    try:
+        import anthropic
+        client = anthropic.Anthropic(api_key=api_key)
+
+        prompt = f"""Here is a threat intelligence report about an emerging cyber threat:
+
+Title: {threat.get('title', '')}
+Summary: {threat.get('summary', '')}
+Threat Actors: {', '.join(threat.get('actors', []))}
+Techniques Involved: {', '.join(threat.get('techniques', []))}
+Uncovered Techniques (not in existing S1-S10): {', '.join(threat.get('uncovered_techniques', []))}
+Sectors Targeted: {', '.join(threat.get('sectors', []))}
+Source: {threat.get('source_url', '')}
+Severity: {threat.get('severity', 'High')}
+
+Generate a new BAS scenario (ID: {next_scenario_id}) that covers this threat, focusing especially
+on the uncovered techniques listed above. The scenario should follow the same format and depth
+as existing scenarios S1-S10 in the BreachForge platform."""
+
+        message = client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=2000,
+            messages=[
+                {"role": "user", "content": SCENARIO_SCHEMA + "\n\n" + prompt}
+            ]
+        )
+
+        raw = message.content[0].text.strip()
+        # Strip markdown fences if present
+        if raw.startswith("```"):
+            raw = raw.split("```")[1]
+            if raw.startswith("json"):
+                raw = raw[4:]
+        raw = raw.strip()
+
+        scenario = json.loads(raw)
+        scenario["id"]           = next_scenario_id
+        scenario["status"]       = "draft"
+        scenario["threat_ref"]   = threat.get("id")
+        scenario["generated_at"] = datetime.now(timezone.utc).isoformat()
+        scenario["generated_by"] = "level3"
+        print(f"  Draft scenario generated: {next_scenario_id} — {scenario.get('name','')}")
+        return scenario
+
+    except json.JSONDecodeError as e:
+        print(f"  JSON parse error in API response: {e}")
+        return None
+    except Exception as e:
+        print(f"  API call failed: {e}")
+        return None
+
+
+def run_phase3_generation(emerging_list):
+    """Check emerging threats and generate draft scenarios for high priority items."""
+    import os
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        print("Phase 3: ANTHROPIC_API_KEY not set — skipping")
+        return
+
+    cache      = load_cache()
+    drafts_obj = load_drafts()
+    existing   = {d["id"]: d for d in drafts_obj.get("drafts", [])}
+    api_calls  = 0
+
+    # Work out next scenario ID
+    all_ids = [d.get("id","S10") for d in drafts_obj.get("drafts",[])]
+    approved = [d.get("id","S10") for d in drafts_obj.get("drafts",[]) if d.get("status")=="approved"]
+    base_num = 10 + len(approved) + 1
+    next_num = base_num
+
+    candidates = [
+        t for t in emerging_list
+        if t.get("priority_score", 0) >= PRIORITY_THRESHOLD
+        and t.get("id") not in cache
+        and t.get("id") not in existing
+    ]
+    candidates.sort(key=lambda x: x.get("priority_score", 0), reverse=True)
+
+    print(f"Phase 3: {len(candidates)} candidate(s) eligible for AI generation")
+
+    for threat in candidates:
+        if api_calls >= MAX_API_CALLS_PER_RUN:
+            print(f"Phase 3: API call limit ({MAX_API_CALLS_PER_RUN}) reached for this run")
+            break
+
+        scenario_id = f"S{next_num}"
+        print(f"  Generating draft for {threat.get('id')} as {scenario_id}...")
+        draft = generate_scenario_draft(threat, scenario_id)
+        api_calls += 1
+
+        if draft:
+            existing[threat["id"]] = draft
+            cache[threat["id"]]    = {
+                "generated_at": draft["generated_at"],
+                "scenario_id":  scenario_id,
+                "status":       "draft"
+            }
+            next_num += 1
+        else:
+            # Cache the failure so we do not retry immediately
+            cache[threat["id"]] = {
+                "generated_at": datetime.now(timezone.utc).isoformat(),
+                "scenario_id":  None,
+                "status":       "failed"
+            }
+
+    drafts_obj["generated"] = datetime.now(timezone.utc).isoformat()
+    drafts_obj["drafts"]    = list(existing.values())
+    drafts_obj["total"]     = len(drafts_obj["drafts"])
+
+    save_cache(cache)
+    save_drafts(drafts_obj)
+    print(f"Phase 3: complete. {api_calls} API call(s) made. {len(existing)} draft(s) total.")
