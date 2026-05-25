@@ -24,13 +24,14 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install requests feedparser python-dateutil
+          pip install requests feedparser python-dateutil anthropic
 
       - name: Run feed collector
         run: |
           python .github/scripts/collect_feeds.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
 
       - name: Commit updated JSON files
         run: |
