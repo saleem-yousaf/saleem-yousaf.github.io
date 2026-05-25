@@ -1006,6 +1006,176 @@ function EmergingThreats(){
 }
 
 
+
+function useScenarioDrafts(){
+  const [drafts,setDrafts]=useState([]);
+  const [loading,setLoading]=useState(true);
+  useEffect(()=>{
+    fetch('/breachforge/intel/data/emerging_scenarios.json?v='+Date.now())
+      .then(r=>r.json())
+      .then(d=>{setDrafts(d.drafts||[]);setLoading(false);})
+      .catch(()=>{setDrafts([]);setLoading(false);});
+  },[]);
+  return {drafts,loading};
+}
+
+
+function ScenarioDraftPanel(){
+  const {drafts,loading}=useScenarioDrafts();
+  const [sel,setSel]=useState(null);
+  const [copied,setCopied]=useState(false);
+  const [approved,setApproved]=useState([]);
+
+  if(loading)return <div style={{padding:16,color:C.dim,fontSize:11}}>Loading draft scenarios...</div>;
+  if(!drafts||drafts.length===0)return null;
+
+  const pending=drafts.filter(d=>d.status==="draft"&&!approved.includes(d.id));
+  if(pending.length===0)return null;
+
+  const sevCol={Critical:C.red,High:C.amber,Medium:C.accent};
+
+  function copyJSON(d){
+    const out=JSON.stringify(d,null,2);
+    navigator.clipboard.writeText(out).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),2000);});
+  }
+
+  return <div style={{marginTop:16,border:`1px solid ${C.amber}44`,borderRadius:8,overflow:"hidden"}}>
+    <div style={{background:"#0a0d14",borderBottom:`1px solid ${C.amber}30`,padding:"10px 16px",
+      display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+      <div style={{display:"flex",alignItems:"center",gap:10}}>
+        <span style={{width:8,height:8,borderRadius:"50%",background:C.amber,display:"inline-block",
+          boxShadow:`0 0 6px ${C.amber}`}}/>
+        <span style={{fontSize:9,letterSpacing:".14em",color:C.amber,fontWeight:700,
+          textTransform:"uppercase"}}>Level 3 — AI Draft Scenarios Pending Review</span>
+      </div>
+      <span style={{fontSize:8,color:C.dim,background:"#1a2235",padding:"2px 8px",borderRadius:3}}>
+        {pending.length} draft{pending.length!==1?"s":""} awaiting approval
+      </span>
+    </div>
+
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:0}}>
+      {/* Left: draft list */}
+      <div style={{borderRight:`1px solid ${C.border}`,padding:12,display:"flex",flexDirection:"column",gap:8}}>
+        {pending.map(d=>{
+          const sc=sevCol[d.sev]||C.accent;
+          return <div key={d.id} onClick={()=>setSel(sel?.id===d.id?null:d)}
+            style={{...card(),cursor:"pointer",padding:12,
+              border:`1px solid ${sel?.id===d.id?sc:C.border}`,
+              background:sel?.id===d.id?`${sc}08`:C.card}}>
+            <div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}>
+              <span style={{fontSize:8,color:sc,fontWeight:700,background:`${sc}22`,
+                padding:"1px 6px",borderRadius:3}}>{d.sev}</span>
+              <span style={{fontSize:8,color:C.dim}}>{d.id}</span>
+            </div>
+            <div style={{fontSize:11,fontWeight:700,color:LIGHT,marginBottom:4}}>{d.name}</div>
+            <div style={{fontSize:9,color:C.dim,marginBottom:6,lineHeight:1.4}}>{d.desc?.slice(0,100)}...</div>
+            <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+              {(d.ttps||[]).slice(0,4).map(t=><span key={t} style={{fontSize:7,background:"#1a2235",
+                color:C.accent,padding:"1px 5px",borderRadius:2,fontFamily:"monospace"}}>{t}</span>)}
+            </div>
+            <div style={{marginTop:6,fontSize:8,color:C.muted}}>
+              Actor: {d.actor}  |  Confidence: {d.confidence?Math.round(d.confidence*100)+"%":"—"}
+            </div>
+          </div>;
+        })}
+      </div>
+
+      {/* Right: detail + actions */}
+      <div style={{padding:16}}>
+        {!sel?<div style={{color:C.dim,fontSize:10,textAlign:"center",marginTop:40,padding:20}}>
+          Select a draft scenario to review and approve
+        </div>:<div style={{display:"flex",flexDirection:"column",gap:12}}>
+
+          <div>
+            <div style={{fontSize:13,fontWeight:700,color:LIGHT,marginBottom:4}}>{sel.name}</div>
+            <div style={{fontSize:9,color:C.dim,lineHeight:1.6,marginBottom:8}}>{sel.desc}</div>
+            <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:8}}>
+              <span style={{fontSize:8,background:`${C.accent}18`,color:C.accent,
+                padding:"2px 8px",borderRadius:3}}>{sel.cat}</span>
+              <span style={{fontSize:8,background:`${C.amber}18`,color:C.amber,
+                padding:"2px 8px",borderRadius:3}}>Actor: {sel.actor}</span>
+              <span style={{fontSize:8,background:`${C.purple}18`,color:C.purple,
+                padding:"2px 8px",borderRadius:3}}>{sel.dur}</span>
+            </div>
+          </div>
+
+          {/* Kill chain phases */}
+          <div>
+            <div style={{fontSize:8,color:C.dim,letterSpacing:".1em",marginBottom:6,textTransform:"uppercase"}}>
+              Kill Chain
+            </div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
+              {(sel.chain||[]).map((ph,i)=><span key={i} style={{fontSize:8,
+                background:(ph.col||C.accent)+"18",color:ph.col||C.accent,
+                padding:"2px 8px",borderRadius:3,border:`1px solid ${ph.col||C.accent}30`}}>{ph.ph}</span>)}
+            </div>
+          </div>
+
+          {/* TTPs */}
+          <div>
+            <div style={{fontSize:8,color:C.dim,letterSpacing:".1em",marginBottom:6,textTransform:"uppercase"}}>
+              ATT&CK Techniques ({(sel.ttps||[]).length})
+            </div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:3}}>
+              {(sel.ttps||[]).map(t=><span key={t} style={{fontSize:7,background:"#1a2235",
+                color:C.accent,padding:"1px 5px",borderRadius:2,fontFamily:"monospace"}}>{t}</span>)}
+            </div>
+          </div>
+
+          {/* Confidence */}
+          {sel.confidence&&<div>
+            <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}>
+              <span style={{fontSize:8,color:C.dim,letterSpacing:".1em",textTransform:"uppercase"}}>
+                ATT&CK Mapping Confidence
+              </span>
+              <span style={{fontSize:10,fontWeight:700,
+                color:sel.confidence>=0.8?C.green:sel.confidence>=0.6?C.amber:C.red}}>
+                {Math.round(sel.confidence*100)}%
+              </span>
+            </div>
+            <div style={{height:4,background:C.muted+"55",borderRadius:2}}>
+              <div style={{height:"100%",width:`${sel.confidence*100}%`,borderRadius:2,
+                background:sel.confidence>=0.8?C.green:sel.confidence>=0.6?C.amber:C.red,
+                transition:"width .5s ease"}}/>
+            </div>
+          </div>}
+
+          {/* Source */}
+          {sel.source_url&&<div>
+            <a href={sel.source_url} target="_blank" rel="noopener"
+              style={{fontSize:9,color:C.accent,textDecoration:"none"}}>
+              → View source intelligence report
+            </a>
+          </div>}
+
+          {/* Action buttons */}
+          <div style={{display:"flex",gap:8,marginTop:4}}>
+            <button
+              onClick={()=>{setApproved(p=>[...p,sel.id]);setSel(null);}}
+              style={{flex:1,background:C.green+"22",color:C.green,
+                border:`1px solid ${C.green}60`,borderRadius:4,padding:"8px 12px",
+                fontSize:10,cursor:"pointer",fontWeight:700}}>
+              ✓ Approve Scenario
+            </button>
+            <button
+              onClick={()=>copyJSON(sel)}
+              style={{background:C.purple+"22",color:C.purple,
+                border:`1px solid ${C.purple}60`,borderRadius:4,padding:"8px 12px",
+                fontSize:10,cursor:"pointer",fontWeight:700,whiteSpace:"nowrap"}}>
+              {copied?"✓ Copied":"{} Copy JSON"}
+            </button>
+          </div>
+          <div style={{fontSize:8,color:C.dim,lineHeight:1.5}}>
+            Approving adds this scenario to the active simulation library for this session.
+            Copy JSON to permanently add it to the SCENARIOS array in the simulation file.
+          </div>
+        </div>}
+      </div>
+    </div>
+    <ScenarioDraftPanel/>
+  </div>;
+}
+
 // ── TI Navigation bridge ─────────────────────────────────────────────────────
 const _nav={setPage:null,setPick:null};
 function tiRunScenario(id){
