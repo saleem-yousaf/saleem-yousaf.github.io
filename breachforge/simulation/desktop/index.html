@@ -2199,6 +2199,24 @@ SCENARIOS.forEach(sc => {
 });
 
 
+
+function useDetectionRules(){
+  const [liveRules,setLiveRules]=useState({});
+  useEffect(()=>{
+    fetch('/breachforge/intel/data/detection_rules.json?v='+Date.now())
+      .then(r=>r.json())
+      .then(d=>{
+        if(d.rules&&Object.keys(d.rules).length>0){
+          setLiveRules(d.rules);
+          console.log('Detection rules: '+Object.keys(d.rules).length+' live rules loaded from TI pipeline');
+        }
+      })
+      .catch(()=>{});
+  },[]);
+  // Merge live rules (from Phase 3 API) with embedded rules — live rules take priority
+  return {...DETECTION_RULES,...liveRules};
+}
+
 function DetectionRulesPage(){
   const [activeScenario,setActiveScenario]=useState("all");
   const [activeTactic,setActiveTactic]=useState("all");
@@ -2208,7 +2226,8 @@ function DetectionRulesPage(){
 
   const TACTICS=["all","Initial Access","Execution","Persistence","Privilege Escalation","Defense Evasion","Credential Access","Discovery","Lateral Movement","Collection","Exfiltration","Impact","Reconnaissance"];
 
-  const filtered=Object.entries(DETECTION_RULES).filter(([tid,rule])=>{
+  const allRules=useDetectionRules();
+  const filtered=Object.entries(allRules).filter(([tid,rule])=>{
     if(activeScenario!=="all" && !( RULE_SCENARIOS[tid]||[]).includes(activeScenario)) return false;
     if(activeTactic!=="all" && rule.tactic!==activeTactic) return false;
     if(search && !tid.toLowerCase().includes(search.toLowerCase()) && !rule.name.toLowerCase().includes(search.toLowerCase())) return false;
@@ -2231,7 +2250,7 @@ function DetectionRulesPage(){
     {/* Header stats */}
     <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12}}>
       {[
-        ["Total Rules",Object.keys(DETECTION_RULES).length,C.accent],
+        ["Total Rules",Object.keys(allRules).length,C.accent],
         ["Splunk SPL",Object.keys(DETECTION_RULES).length,C.orange],
         ["Sentinel KQL",Object.keys(DETECTION_RULES).length,C.purple],
         ["Scenarios Covered","S1-S10",C.green],
@@ -2300,7 +2319,7 @@ function DetectionRulesPage(){
           Select a technique to see detection rules
         </div>:<div>
           {(()=>{
-            const rule=DETECTION_RULES[sel];
+            const rule=allRules[sel];
             if(!rule)return null;
             const tc=tacticCol[rule.tactic]||C.dim;
             const scenarios=RULE_SCENARIOS[sel]||[];
