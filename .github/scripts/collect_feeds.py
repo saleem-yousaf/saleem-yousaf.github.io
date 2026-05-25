@@ -711,7 +711,121 @@ def run_phase3_generation(emerging_list):
     save_cache(cache)
     save_drafts(drafts_obj)
     print(f"Phase 3: complete. {api_calls} API call(s) made. {len(existing)} draft(s) total.")
+    # Generate detection rules for new techniques in draft scenarios
+    generate_detection_rules(list(existing.values()))
 
+
+
+RULES_FILE = Path(__file__).parent.parent.parent / "breachforge/intel/data/detection_rules.json"
+
+COVERED_TECHNIQUES = ["T1003.001", "T1003.006", "T1016", "T1018", "T1021.001", "T1021.002", "T1021.004", "T1021.006", "T1027.002", "T1036.003", "T1036.005", "T1041", "T1047", "T1048", "T1048.002", "T1048.003", "T1049", "T1053.005", "T1055.001", "T1059.001", "T1059.003", "T1059.004", "T1059.007", "T1069.002", "T1069.003", "T1070.001", "T1070.003", "T1070.004", "T1078", "T1078.002", "T1078.004", "T1082", "T1083", "T1087.001", "T1087.002", "T1087.004", "T1098", "T1098.001", "T1098.003", "T1098.004", "T1106", "T1110.001", "T1110.002", "T1110.003", "T1113", "T1114.001", "T1133", "T1134.001", "T1134.002", "T1135", "T1136.002", "T1190", "T1195.002", "T1204.002", "T1213.002", "T1486", "T1489", "T1490", "T1496", "T1505.003", "T1525", "T1526", "T1528", "T1530", "T1537", "T1543.002", "T1546.012", "T1547.001", "T1548.002", "T1548.005", "T1550.001", "T1550.002", "T1550.003", "T1552.007", "T1553.002", "T1558.003", "T1560.001", "T1562.001", "T1562.004", "T1562.008", "T1566.001", "T1566.002", "T1567.001", "T1567.002", "T1570", "T1574.001", "T1592.002", "T1595.002", "T1610", "T1611", "T1613"]
+
+RULE_GENERATION_SCHEMA = """
+You are a cybersecurity detection engineer writing SIEM detection rules.
+Given an ATT&CK technique ID and name, generate detection rules in JSON format.
+Respond ONLY with valid JSON. No preamble, no markdown, no explanation.
+
+Required JSON format:
+{
+  "technique_id": "T1234.001",
+  "name": "Technique Name",
+  "tactic": "Tactic Name",
+  "splunk": "index=windows EventCode=... | stats ...",
+  "sentinel": "SecurityEvent\n| where EventID == ...\n| summarize ..."
+}
+
+Rules must be specific, use correct field names, include thresholds, and reference correct event IDs.
+"""
+
+
+def load_rules():
+    if RULES_FILE.exists():
+        try:
+            return json.loads(RULES_FILE.read_text())
+        except Exception:
+            pass
+    return {"generated": None, "rules": {}}
+
+
+def save_rules(data):
+    RULES_FILE.parent.mkdir(parents=True, exist_ok=True)
+    RULES_FILE.write_text(json.dumps(data, indent=2))
+
+
+def generate_detection_rule(technique_id, technique_name, tactic, client):
+    try:
+        prompt = (
+            "Generate detection rules for this ATT&CK technique:\n\n"
+            f"Technique ID: {technique_id}\n"
+            f"Technique Name: {technique_name}\n"
+            f"Tactic: {tactic}\n\n"
+            "Provide a Splunk SPL query and a Microsoft Sentinel KQL query "
+            "that would detect this technique in a typical enterprise environment."
+        )
+        message = client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=800,
+            messages=[{"role": "user", "content": RULE_GENERATION_SCHEMA + "\n\n" + prompt}]
+        )
+        raw = message.content[0].text.strip()
+        if raw.startswith("```"):
+            raw = raw.split("```")[1]
+            if raw.startswith("json"):
+                raw = raw[4:]
+        rule = json.loads(raw.strip())
+        print(f"    Rule generated for {technique_id}")
+        return rule
+    except Exception as e:
+        print(f"    Rule generation failed for {technique_id}: {e}")
+        return None
+
+
+def generate_detection_rules(draft_scenarios, max_api_calls=4):
+    import os
+    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    if not api_key:
+        print("Phase 3 Rules: ANTHROPIC_API_KEY not set -- skipping")
+        return
+    if not draft_scenarios:
+        print("Phase 3 Rules: no draft scenarios -- skipping")
+        return
+    try:
+        import anthropic
+        client = anthropic.Anthropic(api_key=api_key)
+    except Exception as e:
+        print(f"Phase 3 Rules: client error -- {e}")
+        return
+
+    rules_obj = load_rules()
+    existing  = rules_obj.get("rules", {})
+    api_calls = 0
+
+    new_techniques = {}
+    for scenario in draft_scenarios:
+        if scenario.get("status") != "draft":
+            continue
+        for ttp in scenario.get("ttps", []):
+            if ttp not in COVERED_TECHNIQUES and ttp not in existing and ttp not in new_techniques:
+                tactic = scenario.get("tactics", ["Unknown"])[0] if scenario.get("tactics") else "Unknown"
+                new_techniques[ttp] = {"name": ttp, "tactic": tactic, "scenario": scenario.get("id","?")}
+
+    print(f"Phase 3 Rules: {len(new_techniques)} new technique(s) need rules")
+
+    for ttp, info in new_techniques.items():
+        if api_calls >= max_api_calls:
+            print(f"Phase 3 Rules: API call limit ({max_api_calls}) reached")
+            break
+        print(f"  Generating rule for {ttp} (from {info['scenario']})...")
+        rule = generate_detection_rule(ttp, info["name"], info["tactic"], client)
+        api_calls += 1
+        if rule:
+            existing[ttp] = rule
+
+    rules_obj["generated"] = datetime.now(timezone.utc).isoformat()
+    rules_obj["rules"]     = existing
+    rules_obj["total"]     = len(existing)
+    save_rules(rules_obj)
+    print(f"Phase 3 Rules: complete. {api_calls} API call(s). {len(existing)} rule(s) total.")
 
 if __name__ == "__main__":
     main()
