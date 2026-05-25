@@ -458,6 +458,8 @@ def detect_emerging_threats(threats, techniques_data):
 
 
 
+
+
 def main():
     print(f"[{datetime.now().isoformat()}] BreachForge TI Feed Collector starting...")
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -551,9 +553,6 @@ def main():
     print(f"[{datetime.now().isoformat()}] Feed collection complete.")
 
 
-if __name__ == "__main__":
-    main()
-
 
 # ── Phase 3: AI Scenario Generation ──────────────────────────────────────────
 
@@ -590,8 +589,8 @@ Use real ATT&CK technique IDs (T followed by 4 digits).
 
 MAX_API_CALLS_PER_RUN = 2
 PRIORITY_THRESHOLD    = 6
-CACHE_FILE            = Path(__file__).parent.parent.parent / "breachforge/intel/data/scenario_cache.json"
-DRAFTS_FILE           = Path(__file__).parent.parent.parent / "breachforge/intel/data/emerging_scenarios.json"
+CACHE_FILE  = Path(__file__).parent.parent.parent / "breachforge/intel/data/scenario_cache.json"
+DRAFTS_FILE = Path(__file__).parent.parent.parent / "breachforge/intel/data/emerging_scenarios.json"
 
 
 def load_cache():
@@ -623,57 +622,46 @@ def save_drafts(data):
 
 
 def generate_scenario_draft(threat, next_scenario_id):
-    """Call Claude API to generate a draft BAS scenario from an emerging threat."""
     import os
     api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
-        print("  ANTHROPIC_API_KEY not set — skipping AI generation")
+        print("  ANTHROPIC_API_KEY not set -- skipping AI generation")
         return None
-
     try:
         import anthropic
         client = anthropic.Anthropic(api_key=api_key)
-
-        prompt = f"""Here is a threat intelligence report about an emerging cyber threat:
-
-Title: {threat.get('title', '')}
-Summary: {threat.get('summary', '')}
-Threat Actors: {', '.join(threat.get('actors', []))}
-Techniques Involved: {', '.join(threat.get('techniques', []))}
-Uncovered Techniques (not in existing S1-S10): {', '.join(threat.get('uncovered_techniques', []))}
-Sectors Targeted: {', '.join(threat.get('sectors', []))}
-Source: {threat.get('source_url', '')}
-Severity: {threat.get('severity', 'High')}
-
-Generate a new BAS scenario (ID: {next_scenario_id}) that covers this threat, focusing especially
-on the uncovered techniques listed above. The scenario should follow the same format and depth
-as existing scenarios S1-S10 in the BreachForge platform."""
-
+        prompt = (
+            "Here is a threat intelligence report about an emerging cyber threat:\n\n"
+            f"Title: {threat.get('title','')}\n"
+            f"Summary: {threat.get('summary','')}\n"
+            f"Threat Actors: {', '.join(threat.get('actors',[]))}\n"
+            f"Techniques Involved: {', '.join(threat.get('techniques',[]))}\n"
+            f"Uncovered Techniques: {', '.join(threat.get('uncovered_techniques',[]))}\n"
+            f"Sectors Targeted: {', '.join(threat.get('sectors',[]))}\n"
+            f"Source: {threat.get('source_url','')}\n"
+            f"Severity: {threat.get('severity','High')}\n\n"
+            f"Generate a new BAS scenario (ID: {next_scenario_id}) covering this threat, "
+            "focusing on the uncovered techniques listed above."
+        )
         message = client.messages.create(
             model="claude-sonnet-4-20250514",
             max_tokens=2000,
-            messages=[
-                {"role": "user", "content": SCENARIO_SCHEMA + "\n\n" + prompt}
-            ]
+            messages=[{"role":"user","content": SCENARIO_SCHEMA + "\n\n" + prompt}]
         )
-
         raw = message.content[0].text.strip()
-        # Strip markdown fences if present
         if raw.startswith("```"):
             raw = raw.split("```")[1]
             if raw.startswith("json"):
                 raw = raw[4:]
         raw = raw.strip()
-
         scenario = json.loads(raw)
         scenario["id"]           = next_scenario_id
         scenario["status"]       = "draft"
         scenario["threat_ref"]   = threat.get("id")
         scenario["generated_at"] = datetime.now(timezone.utc).isoformat()
         scenario["generated_by"] = "level3"
-        print(f"  Draft scenario generated: {next_scenario_id} — {scenario.get('name','')}")
+        print(f"  Draft scenario generated: {next_scenario_id} -- {scenario.get('name','')}")
         return scenario
-
     except json.JSONDecodeError as e:
         print(f"  JSON parse error in API response: {e}")
         return None
@@ -683,23 +671,16 @@ as existing scenarios S1-S10 in the BreachForge platform."""
 
 
 def run_phase3_generation(emerging_list):
-    """Check emerging threats and generate draft scenarios for high priority items."""
     import os
     if not os.environ.get("ANTHROPIC_API_KEY"):
-        print("Phase 3: ANTHROPIC_API_KEY not set — skipping")
+        print("Phase 3: ANTHROPIC_API_KEY not set -- skipping")
         return
-
     cache      = load_cache()
     drafts_obj = load_drafts()
-    existing   = {d["id"]: d for d in drafts_obj.get("drafts", [])}
+    existing   = {d["threat_ref"]: d for d in drafts_obj.get("drafts", []) if d.get("threat_ref")}
     api_calls  = 0
-
-    # Work out next scenario ID
-    all_ids = [d.get("id","S10") for d in drafts_obj.get("drafts",[])]
-    approved = [d.get("id","S10") for d in drafts_obj.get("drafts",[]) if d.get("status")=="approved"]
-    base_num = 10 + len(approved) + 1
-    next_num = base_num
-
+    approved   = [d for d in drafts_obj.get("drafts",[]) if d.get("status") == "approved"]
+    next_num   = 11 + len(approved)
     candidates = [
         t for t in emerging_list
         if t.get("priority_score", 0) >= PRIORITY_THRESHOLD
@@ -707,39 +688,30 @@ def run_phase3_generation(emerging_list):
         and t.get("id") not in existing
     ]
     candidates.sort(key=lambda x: x.get("priority_score", 0), reverse=True)
-
     print(f"Phase 3: {len(candidates)} candidate(s) eligible for AI generation")
-
     for threat in candidates:
         if api_calls >= MAX_API_CALLS_PER_RUN:
-            print(f"Phase 3: API call limit ({MAX_API_CALLS_PER_RUN}) reached for this run")
+            print(f"Phase 3: API call limit ({MAX_API_CALLS_PER_RUN}) reached")
             break
-
         scenario_id = f"S{next_num}"
         print(f"  Generating draft for {threat.get('id')} as {scenario_id}...")
         draft = generate_scenario_draft(threat, scenario_id)
         api_calls += 1
-
         if draft:
             existing[threat["id"]] = draft
-            cache[threat["id"]]    = {
-                "generated_at": draft["generated_at"],
-                "scenario_id":  scenario_id,
-                "status":       "draft"
-            }
+            cache[threat["id"]]    = {"generated_at": draft["generated_at"],
+                                      "scenario_id": scenario_id, "status": "draft"}
             next_num += 1
         else:
-            # Cache the failure so we do not retry immediately
-            cache[threat["id"]] = {
-                "generated_at": datetime.now(timezone.utc).isoformat(),
-                "scenario_id":  None,
-                "status":       "failed"
-            }
-
+            cache[threat["id"]] = {"generated_at": datetime.now(timezone.utc).isoformat(),
+                                   "scenario_id": None, "status": "failed"}
     drafts_obj["generated"] = datetime.now(timezone.utc).isoformat()
     drafts_obj["drafts"]    = list(existing.values())
     drafts_obj["total"]     = len(drafts_obj["drafts"])
-
     save_cache(cache)
     save_drafts(drafts_obj)
     print(f"Phase 3: complete. {api_calls} API call(s) made. {len(existing)} draft(s) total.")
+
+
+if __name__ == "__main__":
+    main()
