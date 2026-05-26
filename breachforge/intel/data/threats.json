@@ -1,7 +1,22 @@
 {
-  "generated": "2026-05-26T15:42:31.454614+00:00",
+  "generated": "2026-05-26T20:13:11.174690+00:00",
   "source": "BreachForge TI Feed Collector v1.0",
   "threats": [
+    {
+      "id": "TI-950BCC80",
+      "title": "CISA KEV: LiteSpeed cPanel Plugin — LiteSpeed cPanel Plugin Privilege Escalation Vulnerability",
+      "source": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "published": "2026-05-26T00:00:00Z",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Manufacturing",
+        "Technology"
+      ],
+      "summary": "LiteSpeed cPanel Plugin contains privilege escalation vulnerability that is exposed via the user-end cPanel plugin, which can be abused by any cPanel user account to execute arbitrary scripts with root privileges. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
+    },
     {
       "id": "TI-1590801C",
       "title": "Microsoft recognized as a Leader in The Forrester Wave™ for Workforce Identity Security Platforms",
@@ -186,21 +201,6 @@
         "Technology"
       ],
       "summary": "Microsoft Windows contains a buffer overflow vulnerability in the Windows Server Service that allows remote attackers to execute arbitrary code via a crafted RPC request that triggers an overflow during path canonicalization. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
-    },
-    {
-      "id": "TI-2F08CAAA",
-      "title": "CISA KEV: Microsoft DirectX — Microsoft DirectX NULL Byte Overwrite Vulnerability",
-      "source": "CISA KEV",
-      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
-      "published": "2026-05-20T00:00:00Z",
-      "severity": "Critical",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Manufacturing",
-        "Technology"
-      ],
-      "summary": "Microsoft DirectX contains a NULL byte overwrite vulnerability in the QuickTime Movie Parser Filter in quartz.dll in DirectShow which could allow remote attackers to execute arbitrary code via a crafted QuickTime media file. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
     },
     {
       "id": "TI-B033C486",
