@@ -2397,7 +2397,7 @@ function App(){
   const [tiPick,setTiPick]=useState(null);
   useEffect(()=>{_nav.setPage=setPage;_nav.setPick=setTiPick;},[]);
   useEffect(()=>{const t=setInterval(()=>setTime(new Date()),1000);return()=>clearInterval(t);},[]);
-  if(!onboarded)return <Onboarding onDone={()=>setOnboarded(true)}/>;
+  if(!onboarded)return <Onboarding onDone={(selectedRole)=>{setRole(selectedRole||"CISO / CIO");setOnboarded(true);}}/>;
   const PAGES={overview:<Overview/>,emerging:<EmergingThreats/>,rules:<DetectionRulesPage/>,simulations:<SimRunner tiPick={tiPick} clearTiPick={()=>setTiPick(null)}/>,killchain:<KillChainPage/>,mitre:<MitrePage/>,actors:<ActorLibrary/>,compliance:<CompliancePage/>,agents:<AgentsPage/>,reports:<ReportsPage role={role}/>,settings:<SettingsPage/>};
   return <div style={{display:"flex",minHeight:"100vh",background:C.bg}}>
     <div style={{width:200,background:C.surface,borderRight:`1px solid ${C.border}`,display:"flex",flexDirection:"column",flexShrink:0,position:"sticky",top:0,height:"100vh",overflowY:"auto"}}>
