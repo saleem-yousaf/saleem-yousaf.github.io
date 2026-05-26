@@ -759,9 +759,9 @@ function ReportsPage({role}){
   const ROLE_REPORT={
     "CISO / CIO":"exec",
     "SOC Analyst":"mitre",
-    "Architect":"full",
+    "Architect":"mitre",
     "PM":"roadmap",
-    "Developer":"full"
+    "Developer":"mitre"
   };
   const roleReport=role?ROLE_REPORT[role]:null;
   const [open,setOpen]=useState(null);
@@ -855,7 +855,7 @@ function Onboarding({onDone}){
   </div>;
 }
 
-const NAV=[{id:"overview",label:"Overview",icon:"⬡"},{id:"simulations",label:"Simulations",icon:"▶"},{id:"emerging",label:"Emerging",icon:"⚡"},{id:"rules",label:"Detection Rules",icon:"⛨"},{id:"killchain",label:"Kill Chain",icon:"⛓"},{id:"mitre",label:"MITRE ATT&CK",icon:"◈"},{id:"actors",label:"Threat Actors",icon:"◆"},{id:"compliance",label:"Compliance",icon:"✓"},{id:"agents",label:"Agents",icon:"⊞"},{id:"reports",label:"Reports",icon:"▨"},{id:"settings",label:"Settings",icon:"⚙"}];
+const NAV=[{id:"overview",label:"Overview",icon:"⬡"},{id:"simulations",label:"Simulations",icon:"▶"},{id:"emerging",label:"Emerging",icon:"⚡"},{id:"rules",label:"Detection Rules",icon:"⛨"},{id:"killchain",label:"Kill Chain",icon:"⛓"},{id:"mitre",label:"MITRE ATT&CK",icon:"◈"},{id:"actors",label:"Threat Actors",icon:"◆"},{id:"compliance",label:"Compliance",icon:"✓"},{id:"agents",label:"Agents",icon:"⊞"},{id:"assessment",label:"Assessment",icon:"◎"},{id:"reports",label:"Reports",icon:"▨"},{id:"settings",label:"Settings",icon:"⚙"}];
 const ROLES=["CISO / CIO","SOC Analyst","Architect","PM","Developer"];
 
 // ── Emerging Threats Module ──────────────────────────────────────────────────
@@ -2398,7 +2398,161 @@ function tiRunScenario(id){
   if(_nav.setPage)_nav.setPage("simulations");
 }
 
-function App(){
+
+  function AssessmentPage({role}) {
+    const [step, setStep] = React.useState(0);
+    const [answers, setAnswers] = React.useState({});
+    const [report, setReport] = React.useState(null);
+    const [selectedSector, setSelectedSector] = React.useState('Healthcare');
+    
+    const SECTOR_BENCHMARKS = {"Public Sector": {"detection": 3.2, "response": 3.4, "coverage": 2.9, "process": 3.1, "tooling": 2.8}, "Healthcare": {"detection": 3.4, "response": 3.5, "coverage": 3.0, "process": 3.3, "tooling": 2.9}, "Manufacturing": {"detection": 2.7, "response": 2.8, "coverage": 2.6, "process": 2.7, "tooling": 2.4}, "Retail": {"detection": 2.1, "response": 2.3, "coverage": 2.0, "process": 2.2, "tooling": 2.0}, "Airlines": {"detection": 3.5, "response": 3.6, "coverage": 3.2, "process": 3.4, "tooling": 3.0}, "Hospitality": {"detection": 2.0, "response": 2.2, "coverage": 1.9, "process": 2.1, "tooling": 1.9}, "Local Authority": {"detection": 2.9, "response": 2.8, "coverage": 2.7, "process": 2.9, "tooling": 2.6}, "CNI": {"detection": 4.0, "response": 4.1, "coverage": 3.8, "process": 4.0, "tooling": 3.7}, "Government": {"detection": 3.6, "response": 3.7, "coverage": 3.3, "process": 3.5, "tooling": 3.1}, "Financial Services": {"detection": 3.8, "response": 3.9, "coverage": 3.4, "process": 3.7, "tooling": 3.3}};
+    
+    const ASSESSMENT_QUESTIONS = [
+      { id: 1, dim: 'detection', q: 'How mature is your threat detection capability?', opts: ['Manual log review', 'Basic SIEM with rules', 'Tuned SIEM rules', 'Advanced ML/AI detection', 'Real-time automated detection'] },
+      { id: 2, dim: 'detection', q: 'Do you have EDR deployed?', opts: ['No EDR', 'EDR on critical only', 'EDR on 50-80%', 'EDR on 80%+ with telemetry', 'Full EDR with behavioral'] },
+      { id: 3, dim: 'detection', q: 'What is your mean time to detect?', opts: ['> 7 days', '3-7 days', '1-3 days', '< 1 day', '< 1 hour'] },
+      { id: 4, dim: 'response', q: 'How mature is your IR process?', opts: ['Ad-hoc', 'Basic runbook', 'Documented procedures', 'Automated playbooks', 'AI-driven response'] },
+      { id: 5, dim: 'response', q: 'What is your mean time to respond?', opts: ['> 7 days', '3-7 days', '1-3 days', '< 1 day', '< 1 hour'] },
+      { id: 6, dim: 'response', q: 'Do you have dedicated IR team?', opts: ['No team', 'Part-time rotation', 'Dedicated on-call', 'Full 24/7 SOC', 'SOC with AI triage'] },
+      { id: 7, dim: 'coverage', q: 'What % of attack surface do you validate?', opts: ['None', '< 25%', '25-50%', '50-75%', '> 75% continuous'] },
+      { id: 8, dim: 'coverage', q: 'How many ATT&CK techniques monitored?', opts: ['None', '< 25', '25-50', '50-100', '> 100 with mapping'] },
+      { id: 9, dim: 'coverage', q: 'How often run attack simulations?', opts: ['Never', 'Annually', 'Quarterly', 'Monthly', 'Weekly/continuous'] },
+      { id: 10, dim: 'process', q: 'TI integration maturity?', opts: ['No TI process', 'Manual review', 'Feeds integrated', 'Automated TI-driven', 'Predictive TI'] },
+      { id: 11, dim: 'process', q: 'Do you track security metrics?', opts: ['None', 'Ad-hoc dashboards', 'Formal but irregular', 'Regular review', 'Automated with ML'] },
+      { id: 12, dim: 'process', q: 'Vulnerability management maturity?', opts: ['None', 'Occasional scan', 'Regular scan+triage', 'Automated workflow', 'Risk-driven automation'] },
+      { id: 13, dim: 'tooling', q: 'Primary security tooling stack?', opts: ['Point solutions', 'SIEM + firewall', 'SIEM + EDR + integration', 'Unified platform', 'Cloud-native + AI'] },
+      { id: 14, dim: 'tooling', q: 'Do tools support SOAR/automation?', opts: ['None', 'Basic scripting', 'SOAR for common tasks', 'Advanced SOAR', 'Full AI orchestration'] },
+      { id: 15, dim: 'tooling', q: 'Tooling integration level?', opts: ['Standalone tools', 'Some API integrations', 'Integrated dashboards', 'Fully orchestrated', 'Mesh + AI orchestration'] }
+    ];
+
+    const DIMS = [
+      { id: 'detection', name: 'Detection', color: '#00D4FF' },
+      { id: 'response', name: 'Response', color: '#00E87A' },
+      { id: 'coverage', name: 'Coverage', color: '#FFAA00' },
+      { id: 'process', name: 'Process', color: '#A78BFA' },
+      { id: 'tooling', name: 'Tooling', color: '#F97316' }
+    ];
+
+    function handleAnswer(qId, val) {
+      setAnswers({...answers, [qId]: val});
+    }
+
+    function submitAssessment() {
+      let scores = {};
+      DIMS.forEach(dim => {
+        const qs = ASSESSMENT_QUESTIONS.filter(q => q.dim === dim.id);
+        const as = qs.map(q => answers[q.id] || 0);
+        const avg = as.reduce((a, b) => a + b, 0) / as.length;
+        scores[dim.id] = Math.round(avg * 10) / 10;
+      });
+      const overall = (Object.values(scores).reduce((a, b) => a + b) / 5).toFixed(1);
+      const weakest = Object.entries(scores).sort((a, b) => a[1] - b[1])[0];
+      const benchmark = SECTOR_BENCHMARKS[selectedSector];
+      const benchmarkOverall = (Object.values(benchmark).reduce((a, b) => a + b) / 5).toFixed(1);
+      
+      setReport({
+        overall, 
+        scores, 
+        sector: selectedSector,
+        benchmark,
+        benchmarkOverall,
+        weakest: {name: DIMS.find(d => d.id === weakest[0]).name, score: weakest[1]}
+      });
+    }
+
+    if (report) {
+      return <div style={{padding: 20}}>
+        <h2>Assessment Results</h2>
+        <div style={{marginBottom: 30, padding: 15, background: '#f0f0f0', borderRadius: 8}}>
+          <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20}}>
+            <div>
+              <div style={{fontSize: 12, color: '#666', marginBottom: 5}}>Your Maturity</div>
+              <div style={{fontSize: 28, fontWeight: 'bold', color: '#00D4FF'}}>{report.overall}/5.0</div>
+            </div>
+            <div>
+              <div style={{fontSize: 12, color: '#666', marginBottom: 5}}>{report.sector} Baseline</div>
+              <div style={{fontSize: 28, fontWeight: 'bold', color: '#00E87A'}}>{report.benchmarkOverall}/5.0</div>
+            </div>
+          </div>
+          <div style={{marginTop: 15, fontSize: 13, color: '#333'}}>
+            Gap vs {report.sector}: <strong>{(report.overall - report.benchmarkOverall).toFixed(1)}</strong> points
+          </div>
+        </div>
+
+        <div style={{marginBottom: 20}}>
+          <h3>Dimension Scores</h3>
+          {Object.entries(report.scores).map(([d, s]) => {
+            const bench = report.benchmark[d];
+            const gap = (s - bench).toFixed(1);
+            return <div key={d} style={{marginBottom: 12, padding: 10, border: '1px solid #ddd', borderRadius: 4}}>
+              <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: 5}}>
+                <strong style={{textTransform: 'capitalize'}}>{d}</strong>
+                <span>{s}/5.0 vs {bench}/5.0 baseline</span>
+              </div>
+              <div style={{fontSize: 12, color: gap > 0 ? '#00E87A' : '#FFAA00'}}>
+                {gap > 0 ? '+' : ''}{gap} vs sector
+              </div>
+            </div>;
+          })}
+        </div>
+
+        <div style={{marginBottom: 20}}>
+          <strong>Weakest Area:</strong> {report.weakest.name} ({report.weakest.score}/5.0)
+        </div>
+
+        <button onClick={() => {setReport(null); setAnswers({});}} style={{padding: '8px 16px', background: '#555', color: 'white', border: 'none', borderRadius: 4, cursor: 'pointer'}}>Retake Assessment</button>
+      </div>;
+    }
+
+    if (step === 0) {
+      return <div style={{padding: 20}}>
+        <h2>Select Your Sector</h2>
+        <p style={{marginBottom: 20, color: '#666'}}>This helps us compare your maturity against industry baselines.</p>
+        <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20}}>
+          {Object.keys(SECTOR_BENCHMARKS).map(sector => (
+            <button key={sector} onClick={() => setSelectedSector(sector)} style={{
+              padding: 12,
+              border: selectedSector === sector ? '2px solid #00D4FF' : '1px solid #ddd',
+              background: selectedSector === sector ? '#f0f8ff' : 'white',
+              borderRadius: 4,
+              cursor: 'pointer',
+              fontWeight: selectedSector === sector ? 'bold' : 'normal'
+            }}>
+              {sector}
+            </button>
+          ))}
+        </div>
+        <button onClick={() => setStep(1)} style={{padding: '10px 20px', background: '#00D4FF', color: '#07090D', border: 'none', borderRadius: 4, cursor: 'pointer'}}>Start Assessment</button>
+      </div>;
+    }
+
+    if (step > ASSESSMENT_QUESTIONS.length) {
+      return <div style={{padding: 20}}>
+        <button onClick={submitAssessment} style={{padding: '10px 20px', background: '#00E87A', color: '#07090D', border: 'none', borderRadius: 4, cursor: 'pointer'}}>Generate Report</button>
+      </div>;
+    }
+
+    const q = ASSESSMENT_QUESTIONS[step - 1];
+    const dim = DIMS.find(d => d.id === q.dim);
+    
+    return <div style={{padding: 20}}>
+      <h3>Q{step}/15 - {dim.name}</h3>
+      <p>{q.q}</p>
+      <div style={{marginBottom: 20}}>
+        {q.opts.map((opt, i) => (
+          <label key={i} style={{display: 'block', marginBottom: 8, cursor: 'pointer'}}>
+            <input type="radio" name="ans" value={i+1} onChange={e => handleAnswer(q.id, parseInt(e.target.value))} checked={answers[q.id] === i+1} />
+            {' ' + opt}
+          </label>
+        ))}
+      </div>
+      <button onClick={() => setStep(s => s - 1)} disabled={step === 1} style={{padding: '8px 16px', marginRight: 10, background: step === 1 ? '#ccc' : '#555', color: 'white', border: 'none', borderRadius: 4, cursor: 'pointer'}}>Back</button>
+      <button onClick={() => setStep(s => s + 1)} disabled={!answers[q.id]} style={{padding: '8px 16px', background: !answers[q.id] ? '#ccc' : '#00D4FF', color: !answers[q.id] ? 'gray' : '#07090D', border: 'none', borderRadius: 4, cursor: 'pointer'}}>Next</button>
+    </div>;
+  }
+
+
+  function App(){
   const [onboarded,setOnboarded]=useState(false);
   const [page,setPage]=useState("overview");
   const [role,setRole]=useState("CISO / CIO");
@@ -2407,7 +2561,7 @@ function App(){
   useEffect(()=>{_nav.setPage=setPage;_nav.setPick=setTiPick;},[]);
   useEffect(()=>{const t=setInterval(()=>setTime(new Date()),1000);return()=>clearInterval(t);},[]);
   if(!onboarded)return <Onboarding onDone={(selectedRole)=>{console.log("ROLE SELECTED:",selectedRole);setRole(selectedRole||"CISO / CIO");setOnboarded(true);}}/>;
-  const PAGES={overview:<Overview/>,emerging:<EmergingThreats/>,rules:<DetectionRulesPage/>,simulations:<SimRunner tiPick={tiPick} clearTiPick={()=>setTiPick(null)}/>,killchain:<KillChainPage/>,mitre:<MitrePage/>,actors:<ActorLibrary/>,compliance:<CompliancePage/>,agents:<AgentsPage/>,reports:<ReportsPage role={role}/>,settings:<SettingsPage/>};
+  const PAGES={overview:<Overview/>,emerging:<EmergingThreats/>,rules:<DetectionRulesPage/>,simulations:<SimRunner tiPick={tiPick} clearTiPick={()=>setTiPick(null)}/>,killchain:<KillChainPage/>,mitre:<MitrePage/>,actors:<ActorLibrary/>,compliance:<CompliancePage/>,agents:<AgentsPage/>,assessment:<AssessmentPage role={role}/>,reports:<ReportsPage role={role}/>,settings:<SettingsPage/>};
   return <div style={{display:"flex",minHeight:"100vh",background:C.bg}}>
     <div style={{width:200,background:C.surface,borderRight:`1px solid ${C.border}`,display:"flex",flexDirection:"column",flexShrink:0,position:"sticky",top:0,height:"100vh",overflowY:"auto"}}>
       <div style={{padding:"20px 16px 16px",borderBottom:`1px solid ${C.border}`}}>
