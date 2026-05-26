@@ -755,6 +755,15 @@ function AgentsPage(){
 }
 
 function ReportsPage({role}){
+  // Role-based report pre-selection
+  const ROLE_REPORT={
+    "CISO / CIO":"exec",
+    "SOC Analyst":"mitre",
+    "Architect":"mitre",
+    "PM":"roadmap",
+    "Developer":"mitre"
+  };
+  const roleReport=role?ROLE_REPORT[role]:null;
   const [open,setOpen]=useState(null);
   const [gen,setGen]=useState([]);
   const [loading,setLoading]=useState(null);
@@ -814,7 +823,7 @@ function Onboarding({onDone}){
       <div style={{marginTop:24,display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>{[["No live exploits","Synthetic telemetry only"],["MITRE-mapped","Every TTP catalogued"],["Multi-persona","SOC, CISO, Architect views"],["10 Scenarios","Endpoint to cloud"]].map(([h,s])=><div key={h} style={{padding:"12px 16px",background:`${C.accent}09`,border:`1px solid ${C.accent}28`,borderRadius:5,textAlign:"center",minWidth:130}}><div style={{fontSize:11,fontWeight:700,color:C.accent}}>{h}</div><div style={{fontSize:9,color:C.dim,marginTop:3}}>{s}</div></div>)}</div>
     </div>},
     {title:"Select your role",sub:"Personalise your dashboard",body:<div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10}}>
-      {[["CISO / CIO","🎯","Executive risk, compliance, board reporting"],["SOC Analyst","🔍","Alerts, detection rules, incident triage"],["Security Architect","🏗","Attack surface, control gaps, integrations"],["Project Manager","📋","Remediation roadmaps, sprint planning"],["Developer","💻","API access, agent deployment, docs"],["Security Engineer","⚙️","Rule tuning, playbook updates, TTPs"]].map(([r,ic,d])=>(
+      {[["CISO / CIO","🎯","Executive risk, compliance, board reporting"],["SOC Analyst","🔍","Alerts, detection rules, incident triage"],["Architect","🏗","Attack surface, control gaps, integrations"],["PM","📋","Remediation roadmaps, sprint planning"],["Developer","💻","API access, agent deployment, docs"]].map(([r,ic,d])=>(
         <div key={r} onClick={()=>setRole(r)} style={{...card({cursor:"pointer",textAlign:"center",padding:14}),border:`1px solid ${role===r?C.accent+"70":C.border}`}}><div style={{fontSize:26,marginBottom:6}}>{ic}</div><div style={{fontSize:10,fontWeight:700,marginBottom:4}}>{r}</div><div style={{fontSize:9,color:C.dim,lineHeight:1.5}}>{d}</div></div>
       ))}
     </div>},
@@ -2397,7 +2406,7 @@ function App(){
   const [tiPick,setTiPick]=useState(null);
   useEffect(()=>{_nav.setPage=setPage;_nav.setPick=setTiPick;},[]);
   useEffect(()=>{const t=setInterval(()=>setTime(new Date()),1000);return()=>clearInterval(t);},[]);
-  if(!onboarded)return <Onboarding onDone={(selectedRole)=>{setRole(selectedRole||"CISO / CIO");setOnboarded(true);}}/>;
+  if(!onboarded)return <Onboarding onDone={(selectedRole)=>{console.log("ROLE SELECTED:",selectedRole);setRole(selectedRole||"CISO / CIO");setOnboarded(true);}}/>;
   const PAGES={overview:<Overview/>,emerging:<EmergingThreats/>,rules:<DetectionRulesPage/>,simulations:<SimRunner tiPick={tiPick} clearTiPick={()=>setTiPick(null)}/>,killchain:<KillChainPage/>,mitre:<MitrePage/>,actors:<ActorLibrary/>,compliance:<CompliancePage/>,agents:<AgentsPage/>,reports:<ReportsPage role={role}/>,settings:<SettingsPage/>};
   return <div style={{display:"flex",minHeight:"100vh",background:C.bg}}>
     <div style={{width:200,background:C.surface,borderRight:`1px solid ${C.border}`,display:"flex",flexDirection:"column",flexShrink:0,position:"sticky",top:0,height:"100vh",overflowY:"auto"}}>
