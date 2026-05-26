@@ -759,9 +759,9 @@ function ReportsPage({role}){
   const ROLE_REPORT={
     "CISO / CIO":"exec",
     "SOC Analyst":"mitre",
-    "Architect":"mitre",
+    "Architect":"full",
     "PM":"roadmap",
-    "Developer":"mitre"
+    "Developer":"full"
   };
   const roleReport=role?ROLE_REPORT[role]:null;
   const [open,setOpen]=useState(null);
