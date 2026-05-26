@@ -511,6 +511,7 @@ function SimRunner({tiPick,clearTiPick}={}){
   const [run,setRun]=useState(false);
   const [step,setStep]=useState(0);
   const [done,setDone]=useState(false);
+  const [role,setRole]=useState(null);
   useEffect(()=>{if(tiPick){setSel(tiPick);setRun(false);setStep(0);setDone(false);if(clearTiPick)clearTiPick();}},[tiPick]);
   const [tab,setTab]=useState("path");
   const ref=useRef();
@@ -839,7 +840,7 @@ function Onboarding({onDone}){
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:18}}>
         <button style={BTN(C.dim,true)} onClick={()=>step>0&&setStep(s=>s-1)} disabled={step===0}>← Back</button>
         <span style={{fontSize:9,color:C.muted}}>{step+1} / {STEPS.length}</span>
-        {step<STEPS.length-1?<button style={BTN(C.accent)} onClick={()=>setStep(s=>s+1)}>Continue →</button>:<button style={BTN(C.green)} onClick={onDone}>Enter Platform →</button>}
+        {step<STEPS.length-1?<button style={BTN(C.accent)} onClick={()=>setStep(s=>s+1)}>Continue →</button>:<button style={BTN(C.green)} onClick={()=>onDone(role)}>Enter Platform →</button>}
       </div>
     </div>
   </div>;
