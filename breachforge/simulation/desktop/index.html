@@ -1,35 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>BreachForge | Breach Attack Simulation Platform</title>
-<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.3/babel.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{background:#07090d;color:#dde4ef;font-family:'JetBrains Mono',monospace;font-size:13px;height:100%;}
-#root{height:100%;}
-::-webkit-scrollbar{width:5px;height:5px;}
-::-webkit-scrollbar-track{background:#07090d;}
-::-webkit-scrollbar-thumb{background:#2a3545;border-radius:3px;}
-button{cursor:pointer;font-family:'JetBrains Mono',monospace;transition:all 0.15s;}
-button:hover{filter:brightness(1.18);}
-button:disabled{opacity:0.5;cursor:default;}
-input{outline:none;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.fadein{animation:fadein .22s ease both;}
-tr:hover>td{background:rgba(255,255,255,.018);}
-</style>
-</head>
-<body>
-<div id="root"></div>
-<script type="text/babel" data-presets="react">/* BF-TIBAN-v3 */
+<html lang="en"> 
+<head>  
+<meta charset="UTF-8"/> 
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/> 
+<title>BreachForge | Breach Attack Simulation Platform</title> 
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script> 
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script> 
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.3/babel.min.js"></script> 
+<link rel="preconnect" href="https://fonts.googleapis.com"/> 
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/> 
+<style> 
+*{box-sizing:border-box;margin:0;padding:0;} 
+html,body{background:#07090d;color:#dde4ef;font-family:'JetBrains Mono',monospace;font-size:13px;height:100%;} 
+#root{height:100%;} 
+::-webkit-scrollbar{width:5px;height:5px;} 
+::-webkit-scrollbar-track{background:#07090d;} 
+::-webkit-scrollbar-thumb{background:#2a3545;border-radius:3px;} 
+button{cursor:pointer;font-family:'JetBrains Mono',monospace;transition:all 0.15s;} 
+button:hover{filter:brightness(1.18);} 
+button:disabled{opacity:0.5;cursor:default;} 
+input{outline:none;} 
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}} 
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}} 
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}} 
+.fadein{animation:fadein .22s ease both;} 
+tr:hover>td{background:rgba(255,255,255,.018);} 
+</style> 
+</head> 
+<body> 
+<div id="root"></div> 
+<script type="text/babel" data-presets="react">/* BF-TIBAN-v3 */ 
 const {useState,useEffect,useRef} = React;
 
 const C={bg:"#07090d",surface:"#0c1018",card:"#101520",border:"#1c2535",accent:"#00d4ff",green:"#00e87a",red:"#ff3355",amber:"#ffaa00",purple:"#a78bfa",pink:"#f472b6",cyan:"#22d3ee",orange:"#ff7c3a",text:"#dde4ef",dim:"#55677a",muted:"#2a3545"};
