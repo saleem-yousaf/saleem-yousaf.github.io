@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-27T15:53:38.562296+00:00",
+  "generated": "2026-05-27T20:23:10.723339+00:00",
   "source": "BreachForge TI Feed Collector v1.0",
   "threats": [
     {
@@ -29,6 +29,48 @@
         "Technology"
       ],
       "summary": "EvidenceForge generates high-quality, realistic, and consistent datasets across multiple log formats, enabling teams to effectively train personnel and validate detection models without the need for complex manual simulations."
+    },
+    {
+      "id": "TI-E360D4F4",
+      "title": "CISA KEV: Nx Nx Console — Nx Console Embedded Malicious Code Vulnerability",
+      "source": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "published": "2026-05-27T00:00:00Z",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Nx Console contains an embedded malicious code vulnerability that allowed a malicious version of Nx Console to be published. The compromised extension fetched an obfuscated payload that could harvested credentials from multiple sources on disk and in memory. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if miti"
+    },
+    {
+      "id": "TI-2AFB6987",
+      "title": "CISA KEV: TanStack TanStack — TanStack Unspecified Vulnerability",
+      "source": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "published": "2026-05-27T00:00:00Z",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "TanStack contains an unspecified vulnerability that allowed malicious versions of the product to be published to the npm registry to publish credential-stealing malware under a trusted identity. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
+    },
+    {
+      "id": "TI-BDDC621E",
+      "title": "CISA KEV: Daemon Daemon Tools Lite — Daemon Tools Lite Embedded Malicious Code Vulnerability",
+      "source": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "published": "2026-05-27T00:00:00Z",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Daemon Tools contains an unspecified vulnerability that has a high impact on confidentiality, integrity, and availability. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
     },
     {
       "id": "TI-441D0103",
@@ -174,34 +216,6 @@
       "summary": "Unit 42 analyzes npm supply chain evolution post-Shai Hulud. Discover wormable malware, CI/CD persistence, multi-stage attacks and more. The post The npm Threat Landscape: Attack Surface and Mitigations (Updated May 21) appeared first on Unit 42 ."
     },
     {
-      "id": "TI-417C8FF6",
-      "title": "CISA KEV: Langflow Langflow — Langflow Origin Validation Error Vulnerability",
-      "source": "CISA KEV",
-      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
-      "published": "2026-05-21T00:00:00Z",
-      "severity": "Critical",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Technology"
-      ],
-      "summary": "Langflow contains an origin validation error vulnerability in which an overly permissive CORS configuration combined with a refresh token cookie configured as SameSite=None allows a malicious webpage to perform cross-origin requests that include credentials and successfully call the refresh endpoint. This could allow the attacker to execute arbitrary code and achieve full system compromise via obt"
-    },
-    {
-      "id": "TI-1179A41F",
-      "title": "CISA KEV: Trend Micro Apex One — Trend Micro Apex One (On-Premise) Directory Traversal Vulnerability",
-      "source": "CISA KEV",
-      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
-      "published": "2026-05-21T00:00:00Z",
-      "severity": "Critical",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Technology"
-      ],
-      "summary": "Trend Micro Apex One (on-premise) contains a directory traversal vulnerability that could allow a pre-authenticated local attacker to modify a key table on the server to inject malicious code to deploy to agents on affected installations. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavaila"
-    },
-    {
       "id": "TI-8ED111BE",
       "title": "Tracking TamperedChef Clusters via Certificate and Code Reuse",
       "source": "Palo Alto Unit42 RSS",
@@ -214,21 +228,6 @@
         "Technology"
       ],
       "summary": "Unit 42 analyzes TamperedChef malware clusters that use trojanized productivity apps and malvertising to deliver stealthy payloads to targets. The post Tracking TamperedChef Clusters via Certificate and Code Reuse appeared first on Unit 42 ."
-    },
-    {
-      "id": "TI-202ABF4D",
-      "title": "CISA KEV: Microsoft Windows — Microsoft Windows Buffer Overflow Vulnerability",
-      "source": "CISA KEV",
-      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
-      "published": "2026-05-20T00:00:00Z",
-      "severity": "Critical",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Manufacturing",
-        "Technology"
-      ],
-      "summary": "Microsoft Windows contains a buffer overflow vulnerability in the Windows Server Service that allows remote attackers to execute arbitrary code via a crafted RPC request that triggers an overflow during path canonicalization. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
     },
     {
       "id": "TI-B033C486",
