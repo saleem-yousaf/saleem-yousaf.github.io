@@ -1,7 +1,35 @@
 {
-  "generated": "2026-05-27T09:59:10.069841+00:00",
+  "generated": "2026-05-27T15:53:38.562296+00:00",
   "source": "BreachForge TI Feed Collector v1.0",
   "threats": [
+    {
+      "id": "TI-ADE06E3E",
+      "title": "MediaArea heap-based buffer overflow vulnerabilities",
+      "source": "Cisco Talos RSS",
+      "source_url": "https://blog.talosintelligence.com",
+      "published": "2026-05-27T14:00:14+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Talos researchers find 4 heap-based buffer overflow vulnerabilities in MediaArea's MediaInfoLib."
+    },
+    {
+      "id": "TI-9CB7C1CF",
+      "title": "Introducing EvidenceForge: Synthetic security logs that don’t look (as) fake",
+      "source": "Cisco Talos RSS",
+      "source_url": "https://blog.talosintelligence.com",
+      "published": "2026-05-27T10:00:47+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "EvidenceForge generates high-quality, realistic, and consistent datasets across multiple log formats, enabling teams to effectively train personnel and validate detection models without the need for complex manual simulations."
+    },
     {
       "id": "TI-441D0103",
       "title": "From poisoned search results to GPU mining: A cryptojacking campaign abusing ScreenConnect and Microsoft .NET utilities",
@@ -214,35 +242,7 @@
       "sectors": [
         "Manufacturing"
       ],
-      "summary": "Cisco Talos&#x2019; Vulnerability Discovery &amp; Research team recently disclosed eight vulnerabilities in TP-Link, and one each in Adobe Photoshop, OpenVPN, and Gen Digital&apos;s Norton VPN. The vulnerabilities mentioned in this blog post have been patched by their respective vendors, in adherence to Cisco&#x2019;s third-party vulnerability"
-    },
-    {
-      "id": "TI-465F411E",
-      "title": "From PDB strings to MaaS: Tracking a commodity BadIIS ecosystem used by Chinese-speaking threat",
-      "source": "Cisco Talos RSS",
-      "source_url": "https://blog.talosintelligence.com",
-      "published": "2026-05-19T10:00:20+00:00",
-      "severity": "Medium",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Technology"
-      ],
-      "summary": "Cisco Talos has uncovered a BadIIS variant — identifiable by its embedded \"demo.pdb\" strings — that functions as commodity malware, likely sold or shared among multiple Chinese-speaking cyber crime groups operating under a malware-as-a-service (MaaS) model for continuous monetization."
-    },
-    {
-      "id": "TI-AAD0237E",
-      "title": "The time of much patching is coming",
-      "source": "Cisco Talos RSS",
-      "source_url": "https://blog.talosintelligence.com",
-      "published": "2026-05-14T18:00:24+00:00",
-      "severity": "Medium",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Technology"
-      ],
-      "summary": "In this week’s newsletter, Martin reflects on what the next iteration of AI tools means for vulnerability discovery and our ability to manage large-scale patch releases."
+      "summary": "Cisco Talos’ Vulnerability Discovery & Research team recently disclosed eight vulnerabilities in TP-Link, and one each in Adobe Photoshop, OpenVPN, and Gen Digital's Norton VPN."
     },
     {
       "id": "TI-784E2A1D",
