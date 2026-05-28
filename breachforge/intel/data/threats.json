@@ -1,7 +1,133 @@
 {
-  "generated": "2026-05-26T20:13:11.174690+00:00",
+  "generated": "2026-05-28T16:34:55.191477+00:00",
   "source": "BreachForge TI Feed Collector v1.0",
   "threats": [
+    {
+      "id": "TI-D01C86E4",
+      "title": "2026 World Cup: Discussing The World’s Biggest Game’s Attack Surface",
+      "source": "Palo Alto Unit42 RSS",
+      "source_url": "https://unit42.paloaltonetworks.com",
+      "published": "2026-05-28T10:00:53+00:00",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Manufacturing"
+      ],
+      "summary": "The 2026 World Cup presents major cyber risks from ransomware groups, state-aligned actors, and other groups targeting critical infrastructure. Learn more here. The post 2026 World Cup: Discussing The World’s Biggest Game’s Attack Surface appeared first on Unit 42 ."
+    },
+    {
+      "id": "TI-F534DA50",
+      "title": "DICOM, Pydicom, GDCM, and Orthanc: A technical tour of what really happens in the heap",
+      "source": "Cisco Talos RSS",
+      "source_url": "https://blog.talosintelligence.com",
+      "published": "2026-05-28T10:00:52+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "This white paper presents a concrete case study demonstrating the creation of a heap overflow vulnerability through the exploitation of the DICOM file format."
+    },
+    {
+      "id": "TI-EC150447",
+      "title": "Out of the Crypt: The Evolving Cyber Extortion Economy",
+      "source": "Palo Alto Unit42 RSS",
+      "source_url": "https://unit42.paloaltonetworks.com",
+      "published": "2026-05-27T22:00:46+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Unit 42 explores trends in data theft and extortion, outlining key strategies for organizations as frontier AI models advance. The post Out of the Crypt: The Evolving Cyber Extortion Economy appeared first on Unit 42 ."
+    },
+    {
+      "id": "TI-ADE06E3E",
+      "title": "MediaArea heap-based buffer overflow vulnerabilities",
+      "source": "Cisco Talos RSS",
+      "source_url": "https://blog.talosintelligence.com",
+      "published": "2026-05-27T14:00:14+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Talos researchers find 4 heap-based buffer overflow vulnerabilities in MediaArea's MediaInfoLib."
+    },
+    {
+      "id": "TI-9CB7C1CF",
+      "title": "Introducing EvidenceForge: Synthetic security logs that don’t look (as) fake",
+      "source": "Cisco Talos RSS",
+      "source_url": "https://blog.talosintelligence.com",
+      "published": "2026-05-27T10:00:47+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "EvidenceForge generates high-quality, realistic, and consistent datasets across multiple log formats, enabling teams to effectively train personnel and validate detection models without the need for complex manual simulations."
+    },
+    {
+      "id": "TI-E360D4F4",
+      "title": "CISA KEV: Nx Nx Console — Nx Console Embedded Malicious Code Vulnerability",
+      "source": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "published": "2026-05-27T00:00:00Z",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Nx Console contains an embedded malicious code vulnerability that allowed a malicious version of Nx Console to be published. The compromised extension fetched an obfuscated payload that could harvested credentials from multiple sources on disk and in memory. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if miti"
+    },
+    {
+      "id": "TI-2AFB6987",
+      "title": "CISA KEV: TanStack TanStack — TanStack Unspecified Vulnerability",
+      "source": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "published": "2026-05-27T00:00:00Z",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "TanStack contains an unspecified vulnerability that allowed malicious versions of the product to be published to the npm registry to publish credential-stealing malware under a trusted identity. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
+    },
+    {
+      "id": "TI-BDDC621E",
+      "title": "CISA KEV: Daemon Daemon Tools Lite — Daemon Tools Lite Embedded Malicious Code Vulnerability",
+      "source": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "published": "2026-05-27T00:00:00Z",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Daemon Tools contains an unspecified vulnerability that has a high impact on confidentiality, integrity, and availability. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
+    },
+    {
+      "id": "TI-441D0103",
+      "title": "From poisoned search results to GPU mining: A cryptojacking campaign abusing ScreenConnect and Microsoft .NET utilities",
+      "source": "Microsoft Threat Intel RSS",
+      "source_url": "https://www.microsoft.com/security/blog",
+      "published": "2026-05-26T21:35:34+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Manufacturing"
+      ],
+      "summary": "Microsoft exposes a cryptojacking campaign using SEO poisoning and ScreenConnect to target high-performance PCs, with malicious sites also surfaced through AI chatbots. The post From poisoned search results to GPU mining: A cryptojacking campaign abusing ScreenConnect and Microsoft .NET utilities appeared first on Microsoft Security Blog ."
+    },
     {
       "id": "TI-950BCC80",
       "title": "CISA KEV: LiteSpeed cPanel Plugin — LiteSpeed cPanel Plugin Privilege Escalation Vulnerability",
@@ -116,133 +242,6 @@
         "Technology"
       ],
       "summary": "In this edition of the Threat Source newsletter, William explores the value of being \"ungovernable\" in a professional setting, sharing how challenging the status quo and seeking out the smartest people in the room can lead to a more fulfilling and successful career."
-    },
-    {
-      "id": "TI-E8A80614",
-      "title": "What’s new in Microsoft Security: May 2026",
-      "source": "Microsoft Threat Intel RSS",
-      "source_url": "https://www.microsoft.com/security/blog",
-      "published": "2026-05-21T16:00:00+00:00",
-      "severity": "Medium",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Manufacturing"
-      ],
-      "summary": "Microsoft Security’s latest updates extend visibility, control, and protection across expanding ecosystems as organizations accelerate AI adoption. The post What’s new in Microsoft Security: May 2026 appeared first on Microsoft Security Blog ."
-    },
-    {
-      "id": "TI-11812FEE",
-      "title": "The npm Threat Landscape: Attack Surface and Mitigations (Updated May 21)",
-      "source": "Palo Alto Unit42 RSS",
-      "source_url": "https://unit42.paloaltonetworks.com",
-      "published": "2026-05-21T15:30:33+00:00",
-      "severity": "High",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Technology"
-      ],
-      "summary": "Unit 42 analyzes npm supply chain evolution post-Shai Hulud. Discover wormable malware, CI/CD persistence, multi-stage attacks and more. The post The npm Threat Landscape: Attack Surface and Mitigations (Updated May 21) appeared first on Unit 42 ."
-    },
-    {
-      "id": "TI-417C8FF6",
-      "title": "CISA KEV: Langflow Langflow — Langflow Origin Validation Error Vulnerability",
-      "source": "CISA KEV",
-      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
-      "published": "2026-05-21T00:00:00Z",
-      "severity": "Critical",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Technology"
-      ],
-      "summary": "Langflow contains an origin validation error vulnerability in which an overly permissive CORS configuration combined with a refresh token cookie configured as SameSite=None allows a malicious webpage to perform cross-origin requests that include credentials and successfully call the refresh endpoint. This could allow the attacker to execute arbitrary code and achieve full system compromise via obt"
-    },
-    {
-      "id": "TI-1179A41F",
-      "title": "CISA KEV: Trend Micro Apex One — Trend Micro Apex One (On-Premise) Directory Traversal Vulnerability",
-      "source": "CISA KEV",
-      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
-      "published": "2026-05-21T00:00:00Z",
-      "severity": "Critical",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Technology"
-      ],
-      "summary": "Trend Micro Apex One (on-premise) contains a directory traversal vulnerability that could allow a pre-authenticated local attacker to modify a key table on the server to inject malicious code to deploy to agents on affected installations. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavaila"
-    },
-    {
-      "id": "TI-8ED111BE",
-      "title": "Tracking TamperedChef Clusters via Certificate and Code Reuse",
-      "source": "Palo Alto Unit42 RSS",
-      "source_url": "https://unit42.paloaltonetworks.com",
-      "published": "2026-05-20T10:00:46+00:00",
-      "severity": "Medium",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Technology"
-      ],
-      "summary": "Unit 42 analyzes TamperedChef malware clusters that use trojanized productivity apps and malvertising to deliver stealthy payloads to targets. The post Tracking TamperedChef Clusters via Certificate and Code Reuse appeared first on Unit 42 ."
-    },
-    {
-      "id": "TI-202ABF4D",
-      "title": "CISA KEV: Microsoft Windows — Microsoft Windows Buffer Overflow Vulnerability",
-      "source": "CISA KEV",
-      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
-      "published": "2026-05-20T00:00:00Z",
-      "severity": "Critical",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Manufacturing",
-        "Technology"
-      ],
-      "summary": "Microsoft Windows contains a buffer overflow vulnerability in the Windows Server Service that allows remote attackers to execute arbitrary code via a crafted RPC request that triggers an overflow during path canonicalization. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
-    },
-    {
-      "id": "TI-B033C486",
-      "title": "TP-Link, Photoshop, OpenVPN, Norton VPN vulnerabilities",
-      "source": "Cisco Talos RSS",
-      "source_url": "https://blog.talosintelligence.com",
-      "published": "2026-05-19T15:39:37+00:00",
-      "severity": "Medium",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Manufacturing"
-      ],
-      "summary": "Cisco Talos&#x2019; Vulnerability Discovery &amp; Research team recently disclosed eight vulnerabilities in TP-Link, and one each in Adobe Photoshop, OpenVPN, and Gen Digital&apos;s Norton VPN. The vulnerabilities mentioned in this blog post have been patched by their respective vendors, in adherence to Cisco&#x2019;s third-party vulnerability"
-    },
-    {
-      "id": "TI-465F411E",
-      "title": "From PDB strings to MaaS: Tracking a commodity BadIIS ecosystem used by Chinese-speaking threat",
-      "source": "Cisco Talos RSS",
-      "source_url": "https://blog.talosintelligence.com",
-      "published": "2026-05-19T10:00:20+00:00",
-      "severity": "Medium",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Technology"
-      ],
-      "summary": "Cisco Talos has uncovered a BadIIS variant — identifiable by its embedded \"demo.pdb\" strings — that functions as commodity malware, likely sold or shared among multiple Chinese-speaking cyber crime groups operating under a malware-as-a-service (MaaS) model for continuous monetization."
-    },
-    {
-      "id": "TI-AAD0237E",
-      "title": "The time of much patching is coming",
-      "source": "Cisco Talos RSS",
-      "source_url": "https://blog.talosintelligence.com",
-      "published": "2026-05-14T18:00:24+00:00",
-      "severity": "Medium",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Technology"
-      ],
-      "summary": "In this week’s newsletter, Martin reflects on what the next iteration of AI tools means for vulnerability discovery and our ability to manage large-scale patch releases."
     },
     {
       "id": "TI-784E2A1D",
