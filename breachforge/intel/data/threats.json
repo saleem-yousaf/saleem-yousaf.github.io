@@ -1,7 +1,21 @@
 {
-  "generated": "2026-05-28T16:34:55.191477+00:00",
+  "generated": "2026-05-28T20:27:57.812578+00:00",
   "source": "BreachForge TI Feed Collector v1.0",
   "threats": [
+    {
+      "id": "TI-B19FF986",
+      "title": "The Gentlemen ransomware: Dissecting a self-propagating Go encryptor",
+      "source": "Microsoft Threat Intel RSS",
+      "source_url": "https://www.microsoft.com/security/blog",
+      "published": "2026-05-28T15:00:00+00:00",
+      "severity": "High",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Microsoft Threat Intelligence presents a comprehensive analysis of The Gentlemen, a Go-based ransomware deployed by affiliates of Storm-2697 that combines per-file ephemeral key encryption with an aggressive self-propagation module to deploy itself across an entire network using series of simultaneous lateral movement techniques per target. The post The Gentlemen ransomware: Dissecting a self-prop"
+    },
     {
       "id": "TI-D01C86E4",
       "title": "2026 World Cup: Discussing The World’s Biggest Game’s Attack Surface",
@@ -170,21 +184,6 @@
         "Manufacturing"
       ],
       "summary": "A multi-stage attack on Linux devices began with an exposed F5 BIG-IP edge appliance and pivoted to an internal Confluence server for credential theft and identity compromise. Learn how the threat actor attempted Kerberos relay and lateral movement, and how Microsoft Defender detected, blocked, and unraveled the attack. The post From edge appliance to enterprise compromise: Multi-stage Linux intru"
-    },
-    {
-      "id": "TI-882321EF",
-      "title": "Microsoft Security success stories: How St. Luke’s and ManpowerGroup are securing AI foundations",
-      "source": "Microsoft Threat Intel RSS",
-      "source_url": "https://www.microsoft.com/security/blog",
-      "published": "2026-05-22T16:00:00+00:00",
-      "severity": "Medium",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Manufacturing",
-        "Technology"
-      ],
-      "summary": "How Frontier firms secure AI at scale: read how Microsoft customers embed governance, identity, and cloud security to make protection an enabler of AI growth. The post Microsoft Security success stories: How St. Luke&#8217;s and ManpowerGroup are securing AI foundations appeared first on Microsoft Security Blog ."
     },
     {
       "id": "TI-D9654958",
