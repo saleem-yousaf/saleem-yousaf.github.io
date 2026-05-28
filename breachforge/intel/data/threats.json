@@ -1,7 +1,21 @@
 {
-  "generated": "2026-05-27T20:23:10.723339+00:00",
+  "generated": "2026-05-28T03:56:17.222614+00:00",
   "source": "BreachForge TI Feed Collector v1.0",
   "threats": [
+    {
+      "id": "TI-EC150447",
+      "title": "Out of the Crypt: The Evolving Cyber Extortion Economy",
+      "source": "Palo Alto Unit42 RSS",
+      "source_url": "https://unit42.paloaltonetworks.com",
+      "published": "2026-05-27T22:00:46+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Unit 42 explores trends in data theft and extortion, outlining key strategies for organizations as frontier AI models advance. The post Out of the Crypt: The Evolving Cyber Extortion Economy appeared first on Unit 42 ."
+    },
     {
       "id": "TI-ADE06E3E",
       "title": "MediaArea heap-based buffer overflow vulnerabilities",
@@ -214,20 +228,6 @@
         "Technology"
       ],
       "summary": "Unit 42 analyzes npm supply chain evolution post-Shai Hulud. Discover wormable malware, CI/CD persistence, multi-stage attacks and more. The post The npm Threat Landscape: Attack Surface and Mitigations (Updated May 21) appeared first on Unit 42 ."
-    },
-    {
-      "id": "TI-8ED111BE",
-      "title": "Tracking TamperedChef Clusters via Certificate and Code Reuse",
-      "source": "Palo Alto Unit42 RSS",
-      "source_url": "https://unit42.paloaltonetworks.com",
-      "published": "2026-05-20T10:00:46+00:00",
-      "severity": "Medium",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Technology"
-      ],
-      "summary": "Unit 42 analyzes TamperedChef malware clusters that use trojanized productivity apps and malvertising to deliver stealthy payloads to targets. The post Tracking TamperedChef Clusters via Certificate and Code Reuse appeared first on Unit 42 ."
     },
     {
       "id": "TI-B033C486",
