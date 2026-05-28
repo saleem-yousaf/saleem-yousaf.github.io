@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Saleem Yousaf | Cloud &amp; Cyber Security Architect UK</title>
+<meta name="description" content="Saleem Yousaf is a senior Cloud and Cyber Security Architect specialising in AWS, Azure, Zero Trust, AI Governance, OT Security, and enterprise security architecture across UK government, CNI, and global enterprise.">
+<meta name="author" content="Saleem Yousaf">
+<link rel="canonical" href="https://saleemyousaf.co.uk/about/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:         #090c10;
+  --bg2:        #0f1318;
+  --bg3:        #161b22;
+  --border:     rgba(255,255,255,0.07);
+  --border2:    rgba(255,255,255,0.12);
+  --text:       #e6eaf0;
+  --muted:      #7a8694;
+  --muted2:     #4a5568;
+  --teal:       #2dd4bf;
+  --teal-dim:   rgba(45,212,191,0.12);
+  --amber:      #f59e0b;
+  --amber-dim:  rgba(245,158,11,0.10);
+  --purple:     #a78bfa;
+  --purple-dim: rgba(167,139,250,0.10);
+  --mono:       'DM Mono', monospace;
+  --display:    'Syne', sans-serif;
+  --body:       'Inter', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--body); font-size: 16px; line-height: 1.7;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image: linear-gradient(rgba(45,212,191,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(45,212,191,0.015) 1px, transparent 1px);
+  background-size: 40px 40px; pointer-events: none; z-index: 0;
+}
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+section { position: relative; z-index: 1; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(9,12,16,0.88); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+}
+.nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+.nav-logo { font-family: var(--display); font-size: 15px; font-weight: 700; color: var(--text); text-decoration: none; letter-spacing: 0.02em; }
+.nav-logo span { color: var(--teal); }
+.nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+.nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; letter-spacing: 0.03em; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+.nav-links a.active { color: var(--teal); }
+.nav-dropdown { position: relative; }
+.nav-dropdown-toggle { font-size: 13px; color: var(--muted); background: none; border: none; cursor: pointer; letter-spacing: 0.03em; display: flex; align-items: center; gap: 5px; font-family: var(--body); padding: 0; transition: color 0.2s; }
+.nav-dropdown-toggle:hover { color: var(--teal); }
+.nav-dropdown-toggle svg { transition: transform 0.2s; }
+.nav-dropdown:hover .nav-dropdown-toggle svg { transform: rotate(180deg); }
+.nav-dropdown:hover .nav-dropdown-toggle { color: var(--teal); }
+.nav-dropdown-menu { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); padding-top: 12px; opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 200; }
+.nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: all; }
+.nav-dropdown-menu-inner { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 8px; min-width: 220px; }
+.nav-dropdown-menu a { display: block; padding: 9px 14px; font-size: 13px; color: var(--muted); text-decoration: none; border-radius: 5px; transition: background 0.15s, color 0.15s; white-space: nowrap; }
+.nav-dropdown-menu a:hover { background: var(--bg3); color: var(--text); }
+.nav-dropdown-menu a.active { color: var(--teal); }
+.nav-cta { font-size: 13px; font-weight: 500; color: var(--teal) !important; border: 1px solid rgba(45,212,191,0.3); padding: 6px 16px; border-radius: 4px; transition: background 0.2s, border-color 0.2s !important; }
+.nav-cta:hover { background: var(--teal-dim); border-color: var(--teal) !important; }
+
+/* ── PAGE HEADER ── */
+.page-header {
+  padding: 140px 0 80px; border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.page-header-glow { position: absolute; top: -160px; right: -120px; width: 640px; height: 640px; background: radial-gradient(circle, rgba(45,212,191,0.07) 0%, transparent 65%); pointer-events: none; }
+.page-header-glow-2 { position: absolute; bottom: -80px; left: -80px; width: 440px; height: 440px; background: radial-gradient(circle, rgba(245,158,11,0.04) 0%, transparent 65%); pointer-events: none; }
+
+.hero-grid { display: grid; grid-template-columns: 1fr 320px; gap: 72px; align-items: center; }
+
+.eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.eyebrow-line { width: 24px; height: 1px; background: var(--teal); }
+.eyebrow-text { font-family: var(--mono); font-size: 11px; color: var(--teal); letter-spacing: 0.12em; text-transform: uppercase; }
+
+h1 { font-family: var(--display); font-size: clamp(32px, 4vw, 52px); font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; color: #fff; margin-bottom: 20px; }
+h1 em { font-style: normal; color: var(--teal); }
+
+.hero-sub { font-size: 17px; color: var(--muted); line-height: 1.75; margin-bottom: 32px; }
+
+.hero-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 32px; }
+.hero-tag { font-family: var(--mono); font-size: 10px; padding: 4px 12px; border-radius: 3px; letter-spacing: 0.06em; text-transform: uppercase; }
+.hero-tag.teal   { background: var(--teal-dim);   color: var(--teal); }
+.hero-tag.amber  { background: var(--amber-dim);  color: var(--amber); }
+.hero-tag.purple { background: var(--purple-dim); color: var(--purple); }
+
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #090c10; font-size: 14px; font-weight: 600; padding: 12px 24px; border-radius: 4px; text-decoration: none; transition: opacity 0.2s, transform 0.15s; }
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-outline { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border2); color: var(--muted); font-size: 14px; padding: 11px 24px; border-radius: 4px; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+.btn-outline:hover { border-color: var(--teal); color: var(--teal); }
+
+/* hero profile card */
+.profile-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 32px; position: relative; overflow: hidden; }
+.profile-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--teal), transparent); }
+.profile-card-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); margin-bottom: 20px; }
+.profile-stat { display: flex; flex-direction: column; padding: 14px 0; border-bottom: 1px solid var(--border); }
+.profile-stat:last-of-type { border-bottom: none; padding-bottom: 0; }
+.profile-stat-num { font-family: var(--display); font-size: 32px; font-weight: 800; color: #fff; line-height: 1; margin-bottom: 4px; }
+.profile-stat-num span { color: var(--teal); font-size: 20px; }
+.profile-stat-label { font-size: 12px; color: var(--muted); }
+
+/* ── SECTION SHARED ── */
+.section-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.section-eyebrow-line { width: 24px; height: 1px; background: var(--teal); }
+.section-eyebrow-text { font-family: var(--mono); font-size: 11px; color: var(--teal); letter-spacing: 0.12em; text-transform: uppercase; }
+h2 { font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color: #fff; margin-bottom: 14px; }
+.section-sub { font-size: 16px; color: var(--muted); max-width: 600px; line-height: 1.7; margin-bottom: 48px; }
+
+/* ── STORY SECTION ── */
+.story { padding: 88px 0 0; }
+.story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.story-prose p { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 18px; }
+.story-prose p:last-child { margin-bottom: 0; }
+.story-highlights { display: flex; flex-direction: column; gap: 12px; }
+.highlight-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px; }
+.highlight-title { font-family: var(--display); font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.highlight-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* ── PHILOSOPHY ── */
+.philosophy { padding: 72px 0; }
+.philosophy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.philosophy-card { background: var(--bg2); padding: 28px; transition: background 0.2s; }
+.philosophy-card:hover { background: var(--bg3); }
+.philosophy-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+.philosophy-icon svg { width: 17px; height: 17px; }
+.philosophy-icon.teal   { background: var(--teal-dim);   color: var(--teal); }
+.philosophy-icon.amber  { background: var(--amber-dim);  color: var(--amber); }
+.philosophy-icon.purple { background: var(--purple-dim); color: var(--purple); }
+.philosophy-title { font-family: var(--display); font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.philosophy-body { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* ── EXPERTISE GRID ── */
+.expertise { padding: 0 0 72px; }
+.expertise-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.exp-card { background: var(--bg2); padding: 28px; transition: background 0.2s; }
+.exp-card:hover { background: var(--bg3); }
+.exp-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; background: var(--teal-dim); color: var(--teal); }
+.exp-icon svg { width: 17px; height: 17px; }
+.exp-title { font-family: var(--display); font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.exp-body { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* ── EXPERIENCE STRIP ── */
+.clients { padding: 0 0 72px; }
+.clients-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.client-row { background: var(--bg2); padding: 28px 36px; display: grid; grid-template-columns: 48px 200px 1fr; gap: 0 24px; align-items: center; transition: background 0.2s; }
+.client-row:hover { background: var(--bg3); }
+.client-num { font-family: var(--mono); font-size: 11px; color: var(--teal); letter-spacing: 0.06em; }
+.client-name { font-family: var(--display); font-size: 17px; font-weight: 700; color: #fff; }
+.client-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+/* ── CERTIFICATIONS ── */
+.certs { padding: 0 0 72px; }
+.certs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.cert-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 24px; position: relative; overflow: hidden; transition: border-color 0.2s; }
+.cert-card:hover { border-color: var(--border2); }
+.cert-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+.cert-card.azure::before { background: linear-gradient(90deg, #0078d4, transparent); }
+.cert-card.aws::before   { background: linear-gradient(90deg, var(--amber), transparent); }
+.cert-card.comp::before  { background: linear-gradient(90deg, #e02020, transparent); }
+.cert-card.ceh::before   { background: linear-gradient(90deg, var(--purple), transparent); }
+.cert-issuer { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted2); margin-bottom: 8px; }
+.cert-name { font-family: var(--display); font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.3; }
+.cert-badge { display: inline-block; font-family: var(--mono); font-size: 10px; padding: 4px 10px; border-radius: 3px; letter-spacing: 0.05em; }
+.cert-badge.azure { background: rgba(0,120,212,0.12); color: #60a5fa; }
+.cert-badge.aws   { background: var(--amber-dim); color: var(--amber); }
+.cert-badge.comp  { background: rgba(224,32,32,0.1); color: #f87171; }
+.cert-badge.ceh   { background: var(--purple-dim); color: var(--purple); }
+
+/* ── THOUGHT LEADERSHIP ── */
+.leadership { padding: 0 0 72px; }
+.leadership-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.leadership-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 28px; display: flex; gap: 20px; align-items: flex-start; text-decoration: none; color: inherit; transition: border-color 0.2s; }
+.leadership-card:hover { border-color: var(--border2); }
+.leadership-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.leadership-icon svg { width: 18px; height: 18px; }
+.leadership-icon.teal   { background: var(--teal-dim);   color: var(--teal); }
+.leadership-icon.amber  { background: var(--amber-dim);  color: var(--amber); }
+.leadership-icon.purple { background: var(--purple-dim); color: var(--purple); }
+.lc-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted2); margin-bottom: 5px; }
+.lc-title { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.lc-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* ── CTA STRIP ── */
+.cta-strip { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 80px 0; }
+.cta-inner { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
+.cta-heading { font-family: var(--display); font-size: clamp(20px, 2.2vw, 28px); font-weight: 700; color: #fff; margin-bottom: 10px; }
+.cta-sub { font-size: 15px; color: var(--muted); line-height: 1.6; }
+.cta-actions { display: flex; gap: 12px; flex-shrink: 0; align-items: center; }
+
+/* ── FOOTER ── */
+footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
+.footer-inner { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
+.footer-logo { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.footer-logo span { color: var(--teal); }
+.footer-desc { font-size: 13px; color: var(--muted); max-width: 380px; line-height: 1.6; }
+.footer-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--teal); }
+.footer-bottom { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.footer-copy { font-size: 12px; color: var(--muted2); }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.page-header .wrap > * { animation: fadeUp 0.55s ease both; }
+.page-header .wrap > *:nth-child(1) { animation-delay: 0.05s; }
+.page-header .wrap > *:nth-child(2) { animation-delay: 0.15s; }
+
+@media (max-width: 960px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+  .story-grid { grid-template-columns: 1fr; }
+  .philosophy-grid { grid-template-columns: repeat(2, 1fr); }
+  .expertise-grid { grid-template-columns: repeat(2, 1fr); }
+  .client-row { grid-template-columns: 48px 1fr; }
+  .client-desc { display: none; }
+  .certs-grid { grid-template-columns: repeat(2, 1fr); }
+  .leadership-grid { grid-template-columns: 1fr; }
+  .cta-inner { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .wrap { padding: 0 20px; }
+  .nav-links { display: none; }
+  .philosophy-grid, .expertise-grid { grid-template-columns: 1fr; }
+  .certs-grid { grid-template-columns: 1fr; }
+  .client-row { grid-template-columns: 1fr; }
+  .client-num { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="https://saleemyousaf.co.uk/" class="nav-logo">Saleem <span>Yousaf</span></a>
+    <ul class="nav-links">
+      <li><a href="https://saleemyousaf.co.uk/about/" class="active">About</a></li>
+      <li><a href="https://saleemyousaf.co.uk/experience/">Experience</a></li>
+      <li><a href="https://saleemyousaf.co.uk/projects/">Projects</a></li>
+      <li class="nav-dropdown">
+        <button class="nav-dropdown-toggle">
+          Articles
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="nav-dropdown-menu">
+          <a href="https://saleemyousaf.co.uk/articles/">All Articles</a>
+          <a href="https://saleemyousaf.co.uk/assume-breach/">Assume Breach</a>
+          <a href="https://saleemyousaf.co.uk/ai-security-governance/">AI Security &amp; Governance</a>
+          <a href="https://saleemyousaf.co.uk/breachforge/" style="color:#00d4ff;border-top:1px solid rgba(255,255,255,0.07);margin-top:4px;padding-top:12px;">⬡ BreachForge BAS</a>
+        </div>
+      </li>
+      <li><a href="https://saleemyousaf.co.uk/connect/" class="nav-cta">Connect</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-glow"></div>
+  <div class="page-header-glow-2"></div>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">
+          <div class="eyebrow-line"></div>
+          <span class="eyebrow-text">Cloud &amp; Cyber Security Architect · UK</span>
+        </div>
+        <h1>Security architecture<br>built for the <em>real world.</em></h1>
+        <p class="hero-sub">More than 20 years designing secure, scalable enterprise systems across UK government, Critical National Infrastructure, manufacturing, and global enterprise. The focus has always been on architecture that works in practice, not just on paper.</p>
+        <div class="hero-tags">
+          <span class="hero-tag teal">AWS</span>
+          <span class="hero-tag teal">Azure</span>
+          <span class="hero-tag teal">Zero Trust</span>
+          <span class="hero-tag amber">AI Governance</span>
+          <span class="hero-tag purple">OT Security</span>
+          <span class="hero-tag teal">SABSA</span>
+          <span class="hero-tag teal">MITRE ATT&amp;CK</span>
+        </div>
+        <div class="hero-actions">
+          <a href="https://saleemyousaf.co.uk/experience/" class="btn-primary">
+            View experience
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener" class="btn-outline">Connect on LinkedIn</a>
+        </div>
+      </div>
+
+      <div class="profile-card">
+        <div class="profile-card-label">// at a glance</div>
+        <div class="profile-stat">
+          <div class="profile-stat-num">20<span>+</span></div>
+          <div class="profile-stat-label">Years of architecture and security experience</div>
+        </div>
+        <div class="profile-stat">
+          <div class="profile-stat-num">10<span>+</span></div>
+          <div class="profile-stat-label">Cloud migration programmes delivered</div>
+        </div>
+        <div class="profile-stat">
+          <div class="profile-stat-num">15<span>+</span></div>
+          <div class="profile-stat-label">Enterprise cloud and security programmes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STORY -->
+<section class="story">
+  <div class="wrap">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line"></div>
+      <span class="section-eyebrow-text">Background</span>
+    </div>
+    <h2>The approach behind the work.</h2>
+    <p class="section-sub">Architecture grounded in real delivery, not theory. Tested across government, CNI, financial services, and manufacturing.</p>
+
+    <div class="story-grid">
+      <div class="story-prose">
+        <p>Saleem Yousaf is a senior Cloud and Cyber Security Architect with more than 20 years of experience across cloud transformation, cyber security, governance, and infrastructure modernisation. He has worked across some of the UK's most complex and regulated environments, delivering secure-by-design architectures, Zero Trust strategies, and AI governance capabilities for organisations where security cannot be an afterthought.</p>
+        <p>Having worked within sectors including UK central government, Critical National Infrastructure, automotive manufacturing, and financial services, the experience is grounded in environments where the stakes are high and the architecture decisions have lasting consequences. That background shapes an approach that is pragmatic, business-aligned, and always focused on what works in practice rather than what looks good in a diagram.</p>
+        <p>The work spans AWS and Azure cloud security architecture, Zero Trust design, OT security, threat modelling using STRIDE and MITRE ATT&CK, Breach Attack Simulation, AI governance frameworks, and enterprise architecture assurance. Alongside delivery work, Saleem contributes openly to the security community through GitHub repositories, published articles, and the Cyber Spartans security initiative.</p>
+        <p>The underlying belief is that security architecture works best when it is embedded from the start, aligned to business risk, and designed to be operationally sustainable. Not bolted on after the fact. Not driven by compliance checklists alone. Built to hold under real conditions.</p>
+      </div>
+
+      <div class="story-highlights">
+        <div class="highlight-card">
+          <div class="highlight-title">Secure by design</div>
+          <div class="highlight-body">Security decisions made at the same time as availability, scalability, and integration decisions. The secure path should be the easiest path for delivery teams.</div>
+        </div>
+        <div class="highlight-card">
+          <div class="highlight-title">Business-aligned architecture</div>
+          <div class="highlight-body">Every control traceable to a business risk. Every design decision explainable to both technical teams and governance stakeholders.</div>
+        </div>
+        <div class="highlight-card">
+          <div class="highlight-title">Operationally sustainable</div>
+          <div class="highlight-body">Architecture that works beyond the delivery phase. Designed to be monitored, maintained, and validated continuously rather than handed over and forgotten.</div>
+        </div>
+        <div class="highlight-card">
+          <div class="highlight-title">Open to the community</div>
+          <div class="highlight-body">Frameworks, reference architectures, and design patterns published openly on GitHub and written up in articles for the wider security architecture community.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy">
+  <div class="wrap">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line"></div>
+      <span class="section-eyebrow-text">How I work</span>
+    </div>
+    <h2>Six principles that shape the work.</h2>
+    <p class="section-sub">These are not values written for a website. They are the principles that consistently come out in how architecture is designed and delivered.</p>
+
+    <div class="philosophy-grid">
+      <div class="philosophy-card">
+        <div class="philosophy-icon teal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="philosophy-title">Security is a design discipline</div>
+        <div class="philosophy-body">Security controls work best when they are designed in from the start, not layered on after deployment. The architecture should make secure behaviour the default.</div>
+      </div>
+      <div class="philosophy-card">
+        <div class="philosophy-icon teal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        </div>
+        <div class="philosophy-title">Trust must be earned</div>
+        <div class="philosophy-body">Assume Breach is not just a detection philosophy. It is a design mindset. Architecture should remain observable and containable even when one layer fails.</div>
+      </div>
+      <div class="philosophy-card">
+        <div class="philosophy-icon amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div class="philosophy-title">Visibility is not optional</div>
+        <div class="philosophy-body">Architecture without observability is blind. Detection and logging requirements belong in the design from day one, not discovered when an incident occurs.</div>
+      </div>
+      <div class="philosophy-card">
+        <div class="philosophy-icon teal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="philosophy-title">Stakeholders need explanations</div>
+        <div class="philosophy-body">Technical architecture must be communicable. STRIDE and SABSA provide a shared language that connects design decisions to business risk across all levels of an organisation.</div>
+      </div>
+      <div class="philosophy-card">
+        <div class="philosophy-icon amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div class="philosophy-title">AI needs governance from the start</div>
+        <div class="philosophy-body">AI adoption without architecture and governance is a risk. The same secure-by-design principles that apply to cloud architecture apply equally to AI pipelines, LLM systems, and data flows.</div>
+      </div>
+      <div class="philosophy-card">
+        <div class="philosophy-icon purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        </div>
+        <div class="philosophy-title">Open architecture benefits everyone</div>
+        <div class="philosophy-body">Security frameworks, reference architectures, and design patterns published in the open raise the floor for the whole community and create better outcomes across the profession.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERTISE -->
+<section class="expertise">
+  <div class="wrap">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line"></div>
+      <span class="section-eyebrow-text">Areas of expertise</span>
+    </div>
+    <h2>What the work covers.</h2>
+    <p class="section-sub">Applied, deep experience across the core disciplines of modern enterprise security architecture.</p>
+
+    <div class="expertise-grid">
+      <div class="exp-card">
+        <div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 15a4 4 0 0 0 4 4h9a5 5 0 1 0-.1-9.999 5.002 5.002 0 0 0-9.78 2.096A4.001 4.001 0 0 0 3 15z"/></svg></div>
+        <div class="exp-title">AWS and Azure Security Architecture</div>
+        <div class="exp-body">Designing secure landing zones, private networking, IAM governance, cloud-native security controls, and enterprise platform security across AWS and Azure.</div>
+      </div>
+      <div class="exp-card">
+        <div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></div>
+        <div class="exp-title">Zero Trust and Identity Security</div>
+        <div class="exp-body">Applying Zero Trust principles across enterprise environments through identity-centric access control, segmentation, privileged access management, and continuous trust validation.</div>
+      </div>
+      <div class="exp-card">
+        <div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="exp-title">Threat Modelling and BAS</div>
+        <div class="exp-body">STRIDE-based threat modelling, Breach Attack Simulation integrated into CI/CD pipelines, and continuous security validation mapped to MITRE ATT&CK and SABSA.</div>
+      </div>
+      <div class="exp-card">
+        <div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div class="exp-title">AI Security and Governance</div>
+        <div class="exp-body">Governance frameworks for enterprise AI adoption, LLM security architecture, RAG pipeline security, prompt injection risk management, and responsible AI integration patterns.</div>
+      </div>
+      <div class="exp-card">
+        <div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <div class="exp-title">OT Security and Network Segmentation</div>
+        <div class="exp-body">Secure OT and IT separation, IDMZ design, industrial network segmentation, and security architecture for Critical National Infrastructure and regulated industrial environments.</div>
+      </div>
+      <div class="exp-card">
+        <div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <div class="exp-title">Security Architecture Assurance</div>
+        <div class="exp-body">Architecture risk reviews, SABSA-aligned security assurance, secure-by-design delivery, compliance governance, and design-phase security validation across enterprise transformation programmes.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<section class="clients">
+  <div class="wrap">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line"></div>
+      <span class="section-eyebrow-text">Selected experience</span>
+    </div>
+    <h2>Organisations and sectors.</h2>
+    <p class="section-sub">A cross-section of enterprise and public sector engagements across cloud, security architecture, and regulated environments.</p>
+
+    <div class="clients-list">
+      <div class="client-row">
+        <div class="client-num">01</div>
+        <div class="client-name">HM Land Registry</div>
+        <div class="client-desc">Cloud security architecture, secure platform design, AWS and Azure security assurance, STRIDE threat modelling, and enterprise security architecture across a major government transformation programme.</div>
+      </div>
+      <div class="client-row">
+        <div class="client-num">02</div>
+        <div class="client-name">Ministry of Justice</div>
+        <div class="client-desc">Lead Cloud Security Architect within MOJ Digital and Technology. Security architecture and governance support across enterprise cloud transformation and secure digital service delivery.</div>
+      </div>
+      <div class="client-row">
+        <div class="client-num">03</div>
+        <div class="client-name">Smart DCC</div>
+        <div class="client-desc">Security architecture activities supporting regulated Critical National Infrastructure systems, AWS-based PKI cloud architecture, and enterprise security governance.</div>
+      </div>
+      <div class="client-row">
+        <div class="client-num">04</div>
+        <div class="client-name">Jaguar Land Rover</div>
+        <div class="client-desc">Cloud and enterprise security architecture support across large-scale automotive manufacturing environments, covering OT security, third-party access governance, and Shadow IT reduction.</div>
+      </div>
+      <div class="client-row">
+        <div class="client-num">05</div>
+        <div class="client-name">AIG</div>
+        <div class="client-desc">Cloud security and solution architecture across enterprise platforms and transformation initiatives within a global financial services environment with complex regulatory obligations.</div>
+      </div>
+      <div class="client-row">
+        <div class="client-num">06</div>
+        <div class="client-name">Amer Sports</div>
+        <div class="client-desc">Security architecture and OT security within enterprise distribution and logistics environments, covering network segmentation, infrastructure security design, and secure operational architecture.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section class="certs">
+  <div class="wrap">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line"></div>
+      <span class="section-eyebrow-text">Professional certifications</span>
+    </div>
+    <h2>Qualifications and continuous development.</h2>
+    <p class="section-sub">Maintaining rigorous professional development across cloud security, enterprise architecture, and emerging security disciplines.</p>
+
+    <div class="certs-grid">
+      <div class="cert-card azure">
+        <div class="cert-issuer">Microsoft</div>
+        <div class="cert-name">Azure Solutions Architect Expert</div>
+        <span class="cert-badge azure">Azure · Expert</span>
+      </div>
+      <div class="cert-card azure">
+        <div class="cert-issuer">Microsoft</div>
+        <div class="cert-name">Azure Security Engineer Associate</div>
+        <span class="cert-badge azure">Azure · Security</span>
+      </div>
+      <div class="cert-card azure">
+        <div class="cert-issuer">Microsoft</div>
+        <div class="cert-name">Azure Network Engineer Associate</div>
+        <span class="cert-badge azure">Azure · Networking</span>
+      </div>
+      <div class="cert-card aws">
+        <div class="cert-issuer">Amazon Web Services</div>
+        <div class="cert-name">AWS Certified Cloud Practitioner</div>
+        <span class="cert-badge aws">AWS</span>
+      </div>
+      <div class="cert-card comp">
+        <div class="cert-issuer">CompTIA</div>
+        <div class="cert-name">Advanced Security Practitioner (CASP+)</div>
+        <span class="cert-badge comp">CASP+</span>
+      </div>
+      <div class="cert-card ceh">
+        <div class="cert-issuer">EC-Council</div>
+        <div class="cert-name">Certified Ethical Hacker (CEH)</div>
+        <span class="cert-badge ceh">CEH</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THOUGHT LEADERSHIP -->
+<section class="leadership">
+  <div class="wrap">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line"></div>
+      <span class="section-eyebrow-text">Technical contributions</span>
+    </div>
+    <h2>Published and shared openly.</h2>
+    <p class="section-sub">Articles, frameworks, and architecture thinking contributed to the security community across multiple platforms.</p>
+
+    <div class="leadership-grid">
+      <a href="https://saleemyousaf.co.uk/articles/" class="leadership-card">
+        <div class="leadership-icon teal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div>
+          <div class="lc-label">Articles</div>
+          <div class="lc-title">19 published articles</div>
+          <div class="lc-body">Technical articles on AWS, Azure, Zero Trust, AI governance, OT security, threat modelling, and enterprise security architecture. Actively published in 2026.</div>
+        </div>
+      </a>
+      <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener" class="leadership-card">
+        <div class="leadership-icon teal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        </div>
+        <div>
+          <div class="lc-label">GitHub</div>
+          <div class="lc-title">12 public repositories</div>
+          <div class="lc-body">Open source security frameworks, reference architectures, and design patterns covering cloud security, AI governance, Zero Trust, and OT security.</div>
+        </div>
+      </a>
+      <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener" class="leadership-card">
+        <div class="leadership-icon amber">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="width:18px;height:18px;"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zm7.42 0c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
+        </div>
+        <div>
+          <div class="lc-label">Medium</div>
+          <div class="lc-title">Long-form technical writing</div>
+          <div class="lc-body">In-depth articles on cloud security strategy, AI governance, Zero Trust adoption, and enterprise security architecture published for a broad technical audience.</div>
+        </div>
+      </a>
+      <a href="https://www.cyberspartans.co.uk" target="_blank" rel="noopener" class="leadership-card">
+        <div class="leadership-icon purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <div class="lc-label">Cyber Spartans</div>
+          <div class="lc-title">Security community</div>
+          <div class="lc-body">Security awareness, governance discussions, cloud security initiatives, and enterprise resilience content through the Cyber Spartans security community.</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<div class="cta-strip">
+  <div class="wrap">
+    <div class="cta-inner">
+      <div>
+        <div class="cta-heading">Want to work together or discuss an architecture challenge?</div>
+        <div class="cta-sub">LinkedIn is the best place to connect. GitHub is the best place to explore the work.</div>
+      </div>
+      <div class="cta-actions">
+        <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener" class="btn-primary">
+          Connect on LinkedIn
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+        <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener" class="btn-outline">GitHub</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Saleem <span>Yousaf</span></div>
+        <div class="footer-desc">Cloud &amp; Cyber Security Architect · AWS · Azure · Zero Trust · AI Governance · OT Security · Enterprise Architecture</div>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+        <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+        <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
+        <a href="https://saleem-yousaf.blogspot.com/" target="_blank" rel="noopener">Blogger</a>
+        <a href="https://codepen.io/Saleem-Yousaf" target="_blank" rel="noopener">CodePen</a>
+        <a href="https://www.cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
+      <a href="https://www.saleemyousaf.co.uk/privacy-policy/" style="font-size:12px;color:var(--muted2);text-decoration:none;">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+
+
+</body>
+</html>
