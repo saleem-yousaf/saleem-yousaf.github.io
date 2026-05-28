@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zero Trust in Practice: Where Does Zscaler Fit Within a Modern Security Architecture? | Saleem Yousaf</title>
-<meta name="description" content="Zero Trust is probably the most quoted term in modern cybersecurity. But at its core it is simple: trust no user by virtue of their network location alone.">
+<title>Public vs Private LLMs: Security, Governance and Architecture Considerations | Saleem Yousaf</title>
+<meta name="description" content="AI adoption is accelerating across organisations. But one of the most important decisions often gets overlooked: should we use public AI models or private ">
 <meta name="author" content="Saleem Yousaf">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -150,11 +150,11 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 <div class="article-hero">
   <div class="article-hero-glow"></div>
   <div class="hero-wrap">
-    <div class="article-eyebrow"><div class="article-eyebrow-line"></div><span class="article-tag teal">Zero Trust</span><span class="article-tag teal">Zscaler</span><span class="article-tag teal">SSE</span></div>
-    <h1 class="article-title">Zero Trust in Practice: Where Does Zscaler Fit Within a Modern Security Architecture?</h1>
-    <p class="article-intro">Zero Trust is probably the most quoted term in modern cybersecurity. But at its core it is simple: trust no user by virtue of their network location alone. Zscaler helps organisations migrate from network-centric access models toward identity-driven, application-level connectivity.</p>
+    <div class="article-eyebrow"><div class="article-eyebrow-line"></div><span class="article-tag amber">LLM</span><span class="article-tag amber">AI Governance</span><span class="article-tag amber">Architecture</span></div>
+    <h1 class="article-title">Public vs Private LLMs: Security, Governance and Architecture Considerations</h1>
+    <p class="article-intro">AI adoption is accelerating across organisations. But one of the most important decisions often gets overlooked: should we use public AI models or private LLMs? This is not just a technical choice. It is a security, governance, and risk decision.</p>
     <div class="article-meta-bar">
-      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>29 Apr 2026</div>
+      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>28 Apr 2026</div>
       <div class="meta-divider"></div>
       <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>~9 min read</div>
       <div class="meta-divider"></div>
@@ -165,75 +165,100 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 <div class="article-body">
   <article class="prose">
     
-<h2 id="framework">Zero Trust Is Not a Product</h2>
-<div class="section-intro">Zero Trust is better understood as an architectural framework rather than a technology or tooling choice. Many organisations believe buying a given platform can on its own provide Zero Trust capabilities. There is no single platform that will plug in and create Zero Trust by itself, but a right-fit platform can lead enterprise organisations away from old paradigms of trust.</div>
+<h2 id="public">Public LLMs: Fast, Scalable, Accessible</h2>
+<div class="section-intro">Public AI platforms such as ChatGPT, Copilot, and Gemini offer rapid deployment, high capability, and low barrier to entry. They are ideal for general productivity, content generation, and non-sensitive workloads. However, public LLMs introduce challenges: limited control over data processing, potential data retention and reuse, and reduced visibility and auditability.</div>
 
-<h2 id="legacy-problems">The Issues with Traditional Access Models</h2>
-<p>Legacy access methods are built on a flawed assumption: if you gain access to the network, you must be trusted. Users are typically provided access to network segments they do not need. Applications become reachable across overly broad connectivity paths. After gaining access, attackers find it easy to move laterally. Network segmentation at scale is complex and error-prone. Third-party access is often more permissive than required.</p>
+<h2 id="private">Private LLMs: Controlled, Secure, Customised</h2>
+<p>Private LLMs hosted in controlled environments offer full control over data, enhanced security and privacy, integration with internal systems, and customisation for business use. The trade-offs are higher cost, operational complexity, and maintenance overhead. Private models are the right choice when data sensitivity, regulatory obligations, or business criticality require it.</p>
 
-<h2 id="zscaler">Where Zscaler Fits</h2>
-<h3>Moving Away from VPN-Led Access</h3>
-<p>Zscaler supports access models in which users connect securely and directly to only the applications they need, not to the entire network environment. This reduces attack surfaces, limits paths for accessing resources, eliminates network-wide implicit trust, and makes lateral movement by malicious actors much more difficult.</p>
-<h3>Strengthening Private Application Access</h3>
-<p>Zscaler supports application-centric access control policies. Where once the mindset was network membership, now it is that this identity can access this application under these circumstances. This enables least privilege enforcement, improved segmentation and visibility, granular control of third-party access, and decreased attack surface in the internal kill chain.</p>
-<h3>Supporting Cloud-Delivered Policy Enforcement</h3>
-<p>Zscaler provides uniform, cloud-based policy enforcement for users regardless of location. This addresses siloed security architectures where in-office users are funnelled through one security stack while remote workers receive different treatment. Cloud-delivered policy enforcement enables controls closer to the user and the transaction rather than tying enforcement rigidly to a physical perimeter.</p>
-<div class="pull-quote">The organisations that get the most from Zscaler are those that have learned that Zero Trust cannot be realised through a new platform alone. It is brought about by intentional architectural reimagination and creating strong governance structures around trust itself.</div>
-    <div class="arch-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" style="width:100%;max-width:900px;display:block;"><rect width="900" height="400" rx="8" fill="#07090d"/>
-<text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Zscaler SSE — Zero Trust Security Architecture</text>
-<text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">ZIA + ZPA + ZDX · No VPN · App-level access only · Identity + Device verified at every request</text>
-<rect x="20" y="56" width="130" height="280" rx="5" fill="#0c1018" stroke="#FFAA00" stroke-width="1.5"/>
-<text x="85" y="74" font-family="Arial" font-size="9" font-weight="bold" fill="#FFAA00" text-anchor="middle">USERS</text>
-<rect x="30" y="82" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/><text x="85" y="97" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Corporate Laptop</text>
-<rect x="30" y="110" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/><text x="85" y="125" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Mobile / BYOD</text>
-<rect x="30" y="138" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/><text x="85" y="153" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Home Worker</text>
-<rect x="30" y="166" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/><text x="85" y="181" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Third Party</text>
-<rect x="165" y="56" width="220" height="280" rx="5" fill="#001520" stroke="#00d4ff" stroke-width="2"/>
-<text x="275" y="74" font-family="Arial" font-size="10" font-weight="bold" fill="#00d4ff" text-anchor="middle">ZSCALER SSE</text>
-<rect x="175" y="82" width="200" height="50" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="1"/>
-<text x="275" y="101" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">ZIA — Internet Access</text>
-<text x="275" y="116" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">SWG · CASB · DLP · DNS · Sandbox</text>
-<text x="275" y="128" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">SSL Inspection · Cloud FW</text>
-<rect x="175" y="140" width="200" height="50" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="1"/>
-<text x="275" y="159" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">ZPA — Private Access</text>
-<text x="275" y="174" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">ZTNA · App-level only</text>
-<text x="275" y="186" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">Inside-out · No VPN trust</text>
-<rect x="175" y="198" width="200" height="35" rx="3" fill="#001a20" stroke="#00d4ff" stroke-width="0.5"/><text x="275" y="219" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">ZDX · Policy Engine</text>
-<rect x="395" y="56" width="160" height="130" rx="5" fill="#0a0518" stroke="#a78bfa" stroke-width="1.5"/>
-<text x="475" y="74" font-family="Arial" font-size="9" font-weight="bold" fill="#a78bfa" text-anchor="middle">IDENTITY</text>
-<rect x="405" y="82" width="140" height="26" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/><text x="475" y="99" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Entra ID / MFA</text>
-<rect x="405" y="114" width="140" height="26" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/><text x="475" y="131" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Conditional Access</text>
-<rect x="405" y="146" width="140" height="26" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/><text x="475" y="163" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Device Compliance</text>
-<rect x="395" y="200" width="160" height="136" rx="5" fill="#001a0a" stroke="#00e87a" stroke-width="1.5"/>
-<text x="475" y="218" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a" text-anchor="middle">APPS</text>
-<rect x="405" y="226" width="140" height="26" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/><text x="475" y="243" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">M365 / SaaS</text>
-<rect x="405" y="258" width="140" height="26" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/><text x="475" y="275" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">AWS / Azure</text>
-<rect x="405" y="290" width="140" height="26" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/><text x="475" y="307" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">On-Prem Apps</text>
-<rect x="565" y="56" width="315" height="280" rx="5" fill="#050d10" stroke="#ff3355" stroke-width="1.5"/>
-<text x="722" y="74" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355" text-anchor="middle">SOC VISIBILITY</text>
-<rect x="575" y="82" width="295" height="35" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/><text x="722" y="104" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Splunk / Sentinel — ZIA/ZPA logs</text>
-<rect x="575" y="123" width="295" height="35" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/><text x="722" y="145" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">XSOAR — Block user via ZIA API</text>
-<rect x="575" y="164" width="295" height="35" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/><text x="722" y="186" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">TI feeds → ZIA policy update</text>
-<rect x="575" y="205" width="295" height="35" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/><text x="722" y="227" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Zscaler Analytics · User risk score</text>
-<rect x="575" y="246" width="295" height="35" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/><text x="722" y="268" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">DLP violations · Policy dashboard</text>
-<text x="450" y="362" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">No network-level trust · Every request evaluated: identity + device + location + risk · Full editable: lucid.app/lucidchart/dad6b218-f05d-4081-9560-29661503673a/edit</text>
+<h2 id="governance">Governance Is the Deciding Factor</h2>
+<p>The real decision is not public versus private. It is what level of control is required for the data and use case. Factors include data classification and sensitivity, regulatory obligations, business criticality, user base and access requirements, and cost versus control trade-offs.</p>
+
+<h2 id="hybrid">The Hybrid Model: Best Practice</h2>
+<p>Most organisations will adopt a hybrid approach. Public AI for low-risk, general tasks and non-sensitive workloads. Private LLM for sensitive data, critical workflows, regulated data, and proprietary business processes. The key is having a clear policy that defines which model tier applies to which data and use case.</p>
+
+<div class="key-points">
+  <div class="key-point"><div class="key-point-dot"></div>Data classification before any AI usage</div>
+  <div class="key-point"><div class="key-point-dot"></div>Identity and access control for AI services</div>
+  <div class="key-point"><div class="key-point-dot"></div>Monitoring and logging of all AI interactions</div>
+  <div class="key-point"><div class="key-point-dot"></div>Clear AI acceptable use policies</div>
+  <div class="key-point"><div class="key-point-dot"></div>Data residency and sovereignty requirements</div>
+  <div class="key-point"><div class="key-point-dot"></div>Vendor security assessment before procurement</div>
+</div>
+<div class="pull-quote">The organisations that succeed will not be the fastest adopters. They will be the ones that adopt AI with governance at the core.</div>
+    <div class="arch-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" style="width:100%;max-width:900px;display:block;">
+  <rect width="900" height="420" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Public vs Private LLM — Security and Governance Considerations</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Data residency · IP protection · Compliance · Cost · Control — decision framework for enterprise AI deployment</text>
+  <!-- Headers -->
+  <rect x="20" y="58" width="415" height="30" rx="5" fill="#ff3355"/>
+  <text x="227" y="78" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">PUBLIC LLM (ChatGPT / Gemini / Claude.ai)</text>
+  <rect x="465" y="58" width="415" height="30" rx="5" fill="#00e87a"/>
+  <text x="672" y="78" font-family="Arial" font-size="12" font-weight="bold" fill="#07090d" text-anchor="middle">PRIVATE LLM (Azure OpenAI / AWS Bedrock)</text>
+
+  <!-- Comparison rows -->
+  <rect x="20" y="95" width="415" height="36" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="30" y="110" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355">Data Residency</text>
+  <text x="30" y="124" font-family="Arial" font-size="8" fill="#aa4455">Data leaves your environment · Processed on vendor infrastructure · Jurisdiction unknown</text>
+  <rect x="465" y="95" width="415" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="475" y="110" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a">Data Residency</text>
+  <text x="475" y="124" font-family="Arial" font-size="8" fill="#008844">Data stays in your tenant · EU/UK data residency enforced · Full sovereignty</text>
+
+  <rect x="20" y="138" width="415" height="36" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="30" y="153" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355">IP and Confidential Data</text>
+  <text x="30" y="167" font-family="Arial" font-size="8" fill="#aa4455">Prompts may train future models · Source code / strategy leaked · No guarantee of deletion</text>
+  <rect x="465" y="138" width="415" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="475" y="153" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a">IP and Confidential Data</text>
+  <text x="475" y="167" font-family="Arial" font-size="8" fill="#008844">Prompts not used for training · Contractual data processing agreement · Auditable</text>
+
+  <rect x="20" y="181" width="415" height="36" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="30" y="196" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355">Compliance (GDPR / DORA)</text>
+  <text x="30" y="210" font-family="Arial" font-size="8" fill="#aa4455">Article 28 processor obligations unclear · Data transfer risk · ICO exposure</text>
+  <rect x="465" y="181" width="415" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="475" y="196" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a">Compliance (GDPR / DORA)</text>
+  <text x="475" y="210" font-family="Arial" font-size="8" fill="#008844">DPA in place · SCCs · EU AI Act ready · DORA operational resilience covered</text>
+
+  <rect x="20" y="224" width="415" height="36" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="30" y="239" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355">Access Control</text>
+  <text x="30" y="253" font-family="Arial" font-size="8" fill="#aa4455">Consumer auth only · No SSO · No RBAC · No session logging to SIEM</text>
+  <rect x="465" y="224" width="415" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="475" y="239" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a">Access Control</text>
+  <text x="475" y="253" font-family="Arial" font-size="8" fill="#008844">Entra ID SSO · RBAC · Conditional access · Full session audit log to SIEM</text>
+
+  <rect x="20" y="267" width="415" height="36" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="30" y="282" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355">Cost Model</text>
+  <text x="30" y="296" font-family="Arial" font-size="8" fill="#aa4455">Low upfront · Per token · Hidden cost at scale · No budget predictability</text>
+  <rect x="465" y="267" width="415" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="475" y="282" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a">Cost Model</text>
+  <text x="475" y="296" font-family="Arial" font-size="8" fill="#008844">Reserved capacity · Predictable Azure/AWS billing · Volume discounts · FinOps governed</text>
+
+  <rect x="20" y="310" width="415" height="36" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="30" y="325" font-family="Arial" font-size="9" font-weight="bold" fill="#FFAA00">When Appropriate</text>
+  <text x="30" y="339" font-family="Arial" font-size="8" fill="#aa8800">Non-sensitive tasks · Public content · Prototyping · Individual productivity tools</text>
+  <rect x="465" y="310" width="415" height="36" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="475" y="325" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff">When Required</text>
+  <text x="475" y="339" font-family="Arial" font-size="8" fill="#007799">Any business data · Customer PII · Financial data · IP · Regulated industries</text>
+
+  <rect x="20" y="360" width="860" height="46" rx="4" fill="#0a1018" stroke="#1a2235" stroke-width="1"/>
+  <text x="450" y="378" font-family="Arial" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">Decision Rule: If the prompt contains anything you would not email to a competitor, use private LLM only</text>
+  <text x="450" y="394" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">Azure OpenAI Service · AWS Bedrock · Google Vertex AI (private) · On-premises models (Llama / Mistral) all provide enterprise data protection</text>
 </svg>
-      <div class="arch-image-caption">// Zscaler SSE within a modern Zero Trust security architecture</div></div>
-    <div class="article-nav-bar"><a href="https://saleemyousaf.co.uk/articles/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back to all articles</a><a href="https://saleemyousaf.co.uk/articles/public-vs-private-llms/">Public vs Private LLMs <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+      <div class="arch-image-caption">// Public vs private LLM security and governance considerations</div></div>
+    <div class="article-nav-bar"><a href="https://saleemyousaf.co.uk/articles/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back to all articles</a><a href="https://saleemyousaf.co.uk/articles/socs-evolving/">SOCs Are Evolving <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
   </article>
 </div>
 <div class="related-section">
   <div class="related-wrap">
     <div class="related-label">Related articles</div>
-    <div class="related-grid"><a href="https://saleemyousaf.co.uk/articles/zero-trust-landing-zone/" class="rel-card"><div class="rel-tags"><span class="rel-tag teal">Zero Trust</span><span class="rel-tag teal">AWS</span></div><div class="rel-title">Enterprise Zero Trust Secure Landing Zone Reference Architecture</div><div class="rel-meta">14 May 2026 · ~30 min read</div></a><a href="https://saleemyousaf.co.uk/assume-breach/" class="rel-card"><div class="rel-tags"><span class="rel-tag red">Assume Breach</span></div><div class="rel-title">Assume Breach: The Framework</div><div class="rel-meta">Framework page</div></a><a href="https://saleemyousaf.co.uk/articles/assume-breach-continuous-validation/" class="rel-card"><div class="rel-tags"><span class="rel-tag red">BAS</span></div><div class="rel-title">Assume Breach and Continuous Security Validation</div><div class="rel-meta">30 Apr 2026 · ~11 min read</div></a></div>
+    <div class="related-grid"><a href="https://saleemyousaf.co.uk/articles/broken-rag-vs-governed-rag/" class="rel-card"><div class="rel-tags"><span class="rel-tag amber">RAG</span><span class="rel-tag amber">AI Security</span></div><div class="rel-title">Broken RAG vs Governed RAG Pipelines</div><div class="rel-meta">12 May 2026 · ~8 min read</div></a><a href="https://saleemyousaf.co.uk/ai-security-governance/" class="rel-card"><div class="rel-tags"><span class="rel-tag amber">AI Governance</span></div><div class="rel-title">AI Security and Governance Framework</div><div class="rel-meta">Framework page</div></a><a href="https://saleemyousaf.co.uk/articles/grc-age-of-ai/" class="rel-card"><div class="rel-tags"><span class="rel-tag amber">GRC</span></div><div class="rel-title">GRC in the Age of AI: Why Governance Matters More Than Ever</div><div class="rel-meta">3 May 2026 · ~9 min read</div></a></div>
   </div>
 </div>
 <div class="cta-strip">
   <div class="cta-wrap">
-    <div><div class="cta-heading">Working on a Zero Trust or SSE programme?</div><div class="cta-sub">Connect to discuss Zero Trust architecture, Zscaler integration, or cloud security design.</div></div>
+    <div><div class="cta-heading">Choosing between public and private AI for your organisation?</div><div class="cta-sub">Connect to discuss LLM architecture, governance frameworks, or secure AI adoption strategy.</div></div>
     <div class="cta-actions">
       <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener" class="btn-primary">Connect on LinkedIn</a>
-      <a href="https://github.com/saleem-yousaf/saleem-yousaf-zero-trust-architecture" target="_blank" rel="noopener" class="btn-outline">GitHub</a>
+      <a href="https://github.com/saleem-yousaf/LLM-Security-Architecture-Framework" target="_blank" rel="noopener" class="btn-outline">GitHub</a>
     </div>
   </div>
 </div>

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zero Trust in Practice: Where Does Zscaler Fit Within a Modern Security Architecture? | Saleem Yousaf</title>
-<meta name="description" content="Zero Trust is probably the most quoted term in modern cybersecurity. But at its core it is simple: trust no user by virtue of their network location alone.">
+<title>AI Security Assessment Blueprint (SABSA-Aligned for AWS and Enterprise AI) | Saleem Yousaf</title>
+<meta name="description" content="Secure AI starts with trusted data and resilient architecture. A practical AI Security Assessment Blueprint aligned to SABSA, demonstrating how to secure A">
 <meta name="author" content="Saleem Yousaf">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -150,13 +150,13 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 <div class="article-hero">
   <div class="article-hero-glow"></div>
   <div class="hero-wrap">
-    <div class="article-eyebrow"><div class="article-eyebrow-line"></div><span class="article-tag teal">Zero Trust</span><span class="article-tag teal">Zscaler</span><span class="article-tag teal">SSE</span></div>
-    <h1 class="article-title">Zero Trust in Practice: Where Does Zscaler Fit Within a Modern Security Architecture?</h1>
-    <p class="article-intro">Zero Trust is probably the most quoted term in modern cybersecurity. But at its core it is simple: trust no user by virtue of their network location alone. Zscaler helps organisations migrate from network-centric access models toward identity-driven, application-level connectivity.</p>
+    <div class="article-eyebrow"><div class="article-eyebrow-line"></div><span class="article-tag amber">AI Security</span><span class="article-tag amber">SABSA</span><span class="article-tag teal">AWS</span></div>
+    <h1 class="article-title">AI Security Assessment Blueprint (SABSA-Aligned for AWS and Enterprise AI)</h1>
+    <p class="article-intro">Secure AI starts with trusted data and resilient architecture. A practical AI Security Assessment Blueprint aligned to SABSA, demonstrating how to secure AI systems across all six SABSA layers from business context through to operational monitoring using AWS secure design patterns.</p>
     <div class="article-meta-bar">
-      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>29 Apr 2026</div>
+      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>5 May 2026</div>
       <div class="meta-divider"></div>
-      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>~9 min read</div>
+      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>~11 min read</div>
       <div class="meta-divider"></div>
       <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Saleem Yousaf</div>
     </div>
@@ -165,75 +165,89 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 <div class="article-body">
   <article class="prose">
     
-<h2 id="framework">Zero Trust Is Not a Product</h2>
-<div class="section-intro">Zero Trust is better understood as an architectural framework rather than a technology or tooling choice. Many organisations believe buying a given platform can on its own provide Zero Trust capabilities. There is no single platform that will plug in and create Zero Trust by itself, but a right-fit platform can lead enterprise organisations away from old paradigms of trust.</div>
+<h2 id="contextual">Contextual Layer: Business View</h2>
+<div class="section-intro">Business drivers include safe adoption of AI at scale, protection of sensitive data, regulatory compliance with the EU AI Act and GDPR, and maintaining trust in AI-driven decisions. SABSA attributes: Confidentiality prevents data leakage via prompts. Integrity ensures model outputs are not manipulated. Availability ensures AI services remain resilient. Accountability provides traceability of AI decisions.</div>
 
-<h2 id="legacy-problems">The Issues with Traditional Access Models</h2>
-<p>Legacy access methods are built on a flawed assumption: if you gain access to the network, you must be trusted. Users are typically provided access to network segments they do not need. Applications become reachable across overly broad connectivity paths. After gaining access, attackers find it easy to move laterally. Network segmentation at scale is complex and error-prone. Third-party access is often more permissive than required.</p>
+<h2 id="conceptual">Conceptual Layer: Architecture Strategy</h2>
+<p>Security concepts for AI include Zero Trust for AI interactions where every prompt is untrusted input, data-centric security protecting data across training and inference, model governance controlling behaviour and auditability, and secure AI supply chain covering models, datasets, and dependencies. Control objectives: prevent unauthorised access to AI services, detect and mitigate adversarial AI attacks, ensure responsible and compliant AI usage, and enable secure integration with enterprise systems.</p>
 
-<h2 id="zscaler">Where Zscaler Fits</h2>
-<h3>Moving Away from VPN-Led Access</h3>
-<p>Zscaler supports access models in which users connect securely and directly to only the applications they need, not to the entire network environment. This reduces attack surfaces, limits paths for accessing resources, eliminates network-wide implicit trust, and makes lateral movement by malicious actors much more difficult.</p>
-<h3>Strengthening Private Application Access</h3>
-<p>Zscaler supports application-centric access control policies. Where once the mindset was network membership, now it is that this identity can access this application under these circumstances. This enables least privilege enforcement, improved segmentation and visibility, granular control of third-party access, and decreased attack surface in the internal kill chain.</p>
-<h3>Supporting Cloud-Delivered Policy Enforcement</h3>
-<p>Zscaler provides uniform, cloud-based policy enforcement for users regardless of location. This addresses siloed security architectures where in-office users are funnelled through one security stack while remote workers receive different treatment. Cloud-delivered policy enforcement enables controls closer to the user and the transaction rather than tying enforcement rigidly to a physical perimeter.</p>
-<div class="pull-quote">The organisations that get the most from Zscaler are those that have learned that Zero Trust cannot be realised through a new platform alone. It is brought about by intentional architectural reimagination and creating strong governance structures around trust itself.</div>
-    <div class="arch-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" style="width:100%;max-width:900px;display:block;"><rect width="900" height="400" rx="8" fill="#07090d"/>
-<text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Zscaler SSE — Zero Trust Security Architecture</text>
-<text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">ZIA + ZPA + ZDX · No VPN · App-level access only · Identity + Device verified at every request</text>
-<rect x="20" y="56" width="130" height="280" rx="5" fill="#0c1018" stroke="#FFAA00" stroke-width="1.5"/>
-<text x="85" y="74" font-family="Arial" font-size="9" font-weight="bold" fill="#FFAA00" text-anchor="middle">USERS</text>
-<rect x="30" y="82" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/><text x="85" y="97" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Corporate Laptop</text>
-<rect x="30" y="110" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/><text x="85" y="125" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Mobile / BYOD</text>
-<rect x="30" y="138" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/><text x="85" y="153" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Home Worker</text>
-<rect x="30" y="166" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/><text x="85" y="181" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Third Party</text>
-<rect x="165" y="56" width="220" height="280" rx="5" fill="#001520" stroke="#00d4ff" stroke-width="2"/>
-<text x="275" y="74" font-family="Arial" font-size="10" font-weight="bold" fill="#00d4ff" text-anchor="middle">ZSCALER SSE</text>
-<rect x="175" y="82" width="200" height="50" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="1"/>
-<text x="275" y="101" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">ZIA — Internet Access</text>
-<text x="275" y="116" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">SWG · CASB · DLP · DNS · Sandbox</text>
-<text x="275" y="128" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">SSL Inspection · Cloud FW</text>
-<rect x="175" y="140" width="200" height="50" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="1"/>
-<text x="275" y="159" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">ZPA — Private Access</text>
-<text x="275" y="174" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">ZTNA · App-level only</text>
-<text x="275" y="186" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">Inside-out · No VPN trust</text>
-<rect x="175" y="198" width="200" height="35" rx="3" fill="#001a20" stroke="#00d4ff" stroke-width="0.5"/><text x="275" y="219" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">ZDX · Policy Engine</text>
-<rect x="395" y="56" width="160" height="130" rx="5" fill="#0a0518" stroke="#a78bfa" stroke-width="1.5"/>
-<text x="475" y="74" font-family="Arial" font-size="9" font-weight="bold" fill="#a78bfa" text-anchor="middle">IDENTITY</text>
-<rect x="405" y="82" width="140" height="26" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/><text x="475" y="99" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Entra ID / MFA</text>
-<rect x="405" y="114" width="140" height="26" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/><text x="475" y="131" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Conditional Access</text>
-<rect x="405" y="146" width="140" height="26" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/><text x="475" y="163" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Device Compliance</text>
-<rect x="395" y="200" width="160" height="136" rx="5" fill="#001a0a" stroke="#00e87a" stroke-width="1.5"/>
-<text x="475" y="218" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a" text-anchor="middle">APPS</text>
-<rect x="405" y="226" width="140" height="26" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/><text x="475" y="243" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">M365 / SaaS</text>
-<rect x="405" y="258" width="140" height="26" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/><text x="475" y="275" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">AWS / Azure</text>
-<rect x="405" y="290" width="140" height="26" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/><text x="475" y="307" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">On-Prem Apps</text>
-<rect x="565" y="56" width="315" height="280" rx="5" fill="#050d10" stroke="#ff3355" stroke-width="1.5"/>
-<text x="722" y="74" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355" text-anchor="middle">SOC VISIBILITY</text>
-<rect x="575" y="82" width="295" height="35" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/><text x="722" y="104" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Splunk / Sentinel — ZIA/ZPA logs</text>
-<rect x="575" y="123" width="295" height="35" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/><text x="722" y="145" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">XSOAR — Block user via ZIA API</text>
-<rect x="575" y="164" width="295" height="35" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/><text x="722" y="186" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">TI feeds → ZIA policy update</text>
-<rect x="575" y="205" width="295" height="35" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/><text x="722" y="227" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Zscaler Analytics · User risk score</text>
-<rect x="575" y="246" width="295" height="35" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/><text x="722" y="268" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">DLP violations · Policy dashboard</text>
-<text x="450" y="362" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">No network-level trust · Every request evaluated: identity + device + location + risk · Full editable: lucid.app/lucidchart/dad6b218-f05d-4081-9560-29661503673a/edit</text>
+<h2 id="logical">Logical Layer: Security Services and Controls</h2>
+<p>Identity and access control: fine-grained IAM and RBAC for AI services, managed identities for AI workloads, and just-in-time access for model operations. Data security: encryption at rest and in transit using KMS and Key Vault, data classification and tagging, and tokenisation for sensitive inputs. Application and model security: prompt validation and filtering, output guardrails and moderation, and isolation of system prompts and context. Monitoring and detection: AI-specific logging of prompts, responses, and decisions, anomaly detection for prompt abuse and exfiltration patterns, and SIEM integration.</p>
+
+<h2 id="physical">Physical Layer: Technology and Platform Mapping</h2>
+<p>AWS implementation: Identity via IAM roles and SCPs. AI services via Bedrock and SageMaker. Network via VPC, PrivateLink, and API Gateway. Data via S3 with KMS encryption. Monitoring via CloudTrail, GuardDuty, and Security Hub. Azure implementation: Identity via Entra ID and Managed Identities. AI services via Azure OpenAI and Azure ML. Network via VNet and Private Endpoints. Monitoring via Defender for Cloud, Azure Monitor, and Sentinel.</p>
+
+<h2 id="component">Component Layer: Secure AI Design Patterns</h2>
+<p>Private AI Access Pattern routes all traffic via API Gateway or APIM with private endpoints enforced. Prompt Isolation Pattern separates user input, system prompts, and retrieved knowledge to prevent injection escalation. Secure RAG Pattern controls access to vector databases and logs all retrieval queries. AI Guardrails Pattern applies input sanitisation, output moderation, and policy enforcement.</p>
+
+<h2 id="operational">Operational Layer: Run and Monitor</h2>
+<p>Continuous monitoring of AI usage patterns, threat detection for prompt anomalies and abuse indicators, and integration with SOC workflows. Key operational controls include drift detection for model and behaviour changes, logging of all inference interactions, and incident response playbooks for prompt injection attacks, data leakage incidents, and model compromise events.</p>
+<div class="pull-quote">Applying SABSA to AI security ensures that every control from prompt validation to cloud configuration is directly traceable to business risk and organisational trust.</div>
+    <div class="arch-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" style="width:100%;max-width:900px;display:block;">
+  <rect width="900" height="460" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">SABSA-Aligned AI Security Architecture Framework</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Six SABSA layers applied to AI/ML systems · Contextual to component · Business risk to technical control</text>
+  <!-- SABSA layers stacked -->
+  <rect x="20" y="58" width="860" height="52" rx="5" fill="#1a0d00" stroke="#f97316" stroke-width="1.5"/>
+  <text x="140" y="78" font-family="Arial" font-size="11" font-weight="bold" fill="#f97316">CONTEXTUAL</text>
+  <text x="140" y="94" font-family="Arial" font-size="9" fill="#884400">Business risk view</text>
+  <rect x="280" y="65" width="580" height="36" rx="3" fill="#2a1500" stroke="#f97316" stroke-width="0.5"/>
+  <text x="570" y="80" font-family="Arial" font-size="8" fill="#f97316" text-anchor="middle">AI/ML systems present novel business risks: IP theft via model inversion · Regulatory exposure (EU AI Act, DORA) · Reputational harm from bias</text>
+  <text x="570" y="94" font-family="Arial" font-size="8" fill="#884400" text-anchor="middle">Decision: AI use case risk classification required before deployment · Board-level AI risk appetite statement</text>
+
+  <rect x="20" y="118" width="860" height="52" rx="5" fill="#150a00" stroke="#FFAA00" stroke-width="1.5"/>
+  <text x="140" y="138" font-family="Arial" font-size="11" font-weight="bold" fill="#FFAA00">CONCEPTUAL</text>
+  <text x="140" y="154" font-family="Arial" font-size="9" fill="#aa8800">Architecture principles</text>
+  <rect x="280" y="125" width="580" height="36" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/>
+  <text x="570" y="140" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Principles: Data minimisation · Purpose limitation · Human oversight · Explainability requirement · Fail-safe defaults</text>
+  <text x="570" y="154" font-family="Arial" font-size="8" fill="#aa8800" text-anchor="middle">AI governance policy · Model risk register · Use case approval process · Ethical AI review board</text>
+
+  <rect x="20" y="178" width="860" height="52" rx="5" fill="#0a0518" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="140" y="198" font-family="Arial" font-size="11" font-weight="bold" fill="#a78bfa">LOGICAL</text>
+  <text x="140" y="214" font-family="Arial" font-size="9" fill="#7755aa">Security services design</text>
+  <rect x="280" y="185" width="580" height="36" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="570" y="200" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Access control to training data · Model versioning and rollback · Inference API authentication · Prompt injection detection</text>
+  <text x="570" y="214" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">Output classification · PII redaction in responses · Audit logging of all queries and outputs · RBAC on model endpoints</text>
+
+  <rect x="20" y="238" width="860" height="52" rx="5" fill="#080d14" stroke="#00d4ff" stroke-width="1.5"/>
+  <text x="140" y="258" font-family="Arial" font-size="11" font-weight="bold" fill="#00d4ff">PHYSICAL</text>
+  <text x="140" y="274" font-family="Arial" font-size="9" fill="#007799">Platform and infrastructure</text>
+  <rect x="280" y="245" width="580" height="36" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="570" y="260" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Private LLM deployment (Azure OpenAI / AWS Bedrock) · VPC isolation · Private endpoints · No public model APIs</text>
+  <text x="570" y="274" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">Encryption at rest (AES-256) · TLS 1.3 in transit · Key management via KMS/Key Vault · GPU isolation for training</text>
+
+  <rect x="20" y="298" width="860" height="52" rx="5" fill="#001a0a" stroke="#00e87a" stroke-width="1.5"/>
+  <text x="140" y="318" font-family="Arial" font-size="11" font-weight="bold" fill="#00e87a">COMPONENT</text>
+  <text x="140" y="334" font-family="Arial" font-size="9" fill="#008844">Technical controls</text>
+  <rect x="280" y="305" width="580" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="570" y="320" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Guardrails API · Content safety filters · Azure AI Content Safety · AWS Bedrock Guardrails · Lakera Guard</text>
+  <text x="570" y="334" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">Prompt injection regex + ML classifiers · Output PII scanning (Presidio) · OWASP LLM Top 10 mitigations</text>
+
+  <rect x="20" y="358" width="860" height="52" rx="5" fill="#050d10" stroke="#22d3ee" stroke-width="1.5"/>
+  <text x="140" y="378" font-family="Arial" font-size="11" font-weight="bold" fill="#22d3ee">OPERATIONAL</text>
+  <text x="140" y="394" font-family="Arial" font-size="9" fill="#007799">Running and monitoring</text>
+  <rect x="280" y="365" width="580" height="36" rx="3" fill="#001a20" stroke="#22d3ee" stroke-width="0.5"/>
+  <text x="570" y="380" font-family="Arial" font-size="8" fill="#22d3ee" text-anchor="middle">Model drift monitoring · Bias detection · Performance SLAs · Incident response for AI failures · Model retraining cadence</text>
+  <text x="570" y="394" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">SIEM integration for AI API logs · SOAR playbooks for AI abuse · Red team AI models quarterly · Responsible AI reporting</text>
+
+  <text x="450" y="440" font-family="Arial" font-size="9" fill="#55677a" text-anchor="middle">SABSA ensures AI security is designed from business risk down to technical control — not retrofitted · EU AI Act compliance · saleemyousaf.co.uk</text>
 </svg>
-      <div class="arch-image-caption">// Zscaler SSE within a modern Zero Trust security architecture</div></div>
-    <div class="article-nav-bar"><a href="https://saleemyousaf.co.uk/articles/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back to all articles</a><a href="https://saleemyousaf.co.uk/articles/public-vs-private-llms/">Public vs Private LLMs <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+      <div class="arch-image-caption">// SABSA-aligned AI security architecture framework</div></div>
+    <div class="article-nav-bar"><a href="https://saleemyousaf.co.uk/articles/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back to all articles</a><a href="https://saleemyousaf.co.uk/articles/secure-landing-zone-private-apis/">Secure Cloud Landing Zone: Private APIs <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
   </article>
 </div>
 <div class="related-section">
   <div class="related-wrap">
     <div class="related-label">Related articles</div>
-    <div class="related-grid"><a href="https://saleemyousaf.co.uk/articles/zero-trust-landing-zone/" class="rel-card"><div class="rel-tags"><span class="rel-tag teal">Zero Trust</span><span class="rel-tag teal">AWS</span></div><div class="rel-title">Enterprise Zero Trust Secure Landing Zone Reference Architecture</div><div class="rel-meta">14 May 2026 · ~30 min read</div></a><a href="https://saleemyousaf.co.uk/assume-breach/" class="rel-card"><div class="rel-tags"><span class="rel-tag red">Assume Breach</span></div><div class="rel-title">Assume Breach: The Framework</div><div class="rel-meta">Framework page</div></a><a href="https://saleemyousaf.co.uk/articles/assume-breach-continuous-validation/" class="rel-card"><div class="rel-tags"><span class="rel-tag red">BAS</span></div><div class="rel-title">Assume Breach and Continuous Security Validation</div><div class="rel-meta">30 Apr 2026 · ~11 min read</div></a></div>
+    <div class="related-grid"><a href="https://saleemyousaf.co.uk/articles/broken-rag-vs-governed-rag/" class="rel-card"><div class="rel-tags"><span class="rel-tag amber">RAG</span><span class="rel-tag amber">AI Security</span></div><div class="rel-title">Broken RAG vs Governed RAG Pipelines</div><div class="rel-meta">12 May 2026 · ~8 min read</div></a><a href="https://saleemyousaf.co.uk/ai-security-governance/" class="rel-card"><div class="rel-tags"><span class="rel-tag amber">AI Governance</span></div><div class="rel-title">AI Security and Governance Framework</div><div class="rel-meta">Framework page</div></a><a href="https://saleemyousaf.co.uk/articles/public-vs-private-llms/" class="rel-card"><div class="rel-tags"><span class="rel-tag amber">LLM</span></div><div class="rel-title">Public vs Private LLMs: Security, Governance and Architecture Considerations</div><div class="rel-meta">28 Apr 2026 · ~9 min read</div></a></div>
   </div>
 </div>
 <div class="cta-strip">
   <div class="cta-wrap">
-    <div><div class="cta-heading">Working on a Zero Trust or SSE programme?</div><div class="cta-sub">Connect to discuss Zero Trust architecture, Zscaler integration, or cloud security design.</div></div>
+    <div><div class="cta-heading">Building a secure AI programme?</div><div class="cta-sub">Connect to discuss AI security architecture, SABSA alignment, or AWS AI security controls.</div></div>
     <div class="cta-actions">
       <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener" class="btn-primary">Connect on LinkedIn</a>
-      <a href="https://github.com/saleem-yousaf/saleem-yousaf-zero-trust-architecture" target="_blank" rel="noopener" class="btn-outline">GitHub</a>
+      <a href="https://github.com/saleem-yousaf/LLM-Security-Architecture-Framework" target="_blank" rel="noopener" class="btn-outline">GitHub</a>
     </div>
   </div>
 </div>

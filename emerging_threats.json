@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zero Trust in Practice: Where Does Zscaler Fit Within a Modern Security Architecture? | Saleem Yousaf</title>
-<meta name="description" content="Zero Trust is probably the most quoted term in modern cybersecurity. But at its core it is simple: trust no user by virtue of their network location alone.">
+<title>MITRE ATT&CK vs MITRE ATLAS: Understanding Modern Threat-Informed Defence | Saleem Yousaf</title>
+<meta name="description" content="Cyber threats are evolving from traditional ransomware and credential theft to sophisticated AI-enabled attacks. MITRE ATT&CK and MITRE ATLAS provide the s">
 <meta name="author" content="Saleem Yousaf">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -150,13 +150,13 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 <div class="article-hero">
   <div class="article-hero-glow"></div>
   <div class="hero-wrap">
-    <div class="article-eyebrow"><div class="article-eyebrow-line"></div><span class="article-tag teal">Zero Trust</span><span class="article-tag teal">Zscaler</span><span class="article-tag teal">SSE</span></div>
-    <h1 class="article-title">Zero Trust in Practice: Where Does Zscaler Fit Within a Modern Security Architecture?</h1>
-    <p class="article-intro">Zero Trust is probably the most quoted term in modern cybersecurity. But at its core it is simple: trust no user by virtue of their network location alone. Zscaler helps organisations migrate from network-centric access models toward identity-driven, application-level connectivity.</p>
+    <div class="article-eyebrow"><div class="article-eyebrow-line"></div><span class="article-tag red">MITRE ATT&CK</span><span class="article-tag red">ATLAS</span><span class="article-tag red">Threat Intel</span></div>
+    <h1 class="article-title">MITRE ATT&CK vs MITRE ATLAS: Understanding Modern Threat-Informed Defence</h1>
+    <p class="article-intro">Cyber threats are evolving from traditional ransomware and credential theft to sophisticated AI-enabled attacks. MITRE ATT&CK and MITRE ATLAS provide the structured framework organisations need to understand adversary behaviour, map detection capabilities, and build resilient security controls.</p>
     <div class="article-meta-bar">
-      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>29 Apr 2026</div>
+      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>12 May 2026</div>
       <div class="meta-divider"></div>
-      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>~9 min read</div>
+      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>~10 min read</div>
       <div class="meta-divider"></div>
       <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Saleem Yousaf</div>
     </div>
@@ -165,75 +165,93 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 <div class="article-body">
   <article class="prose">
     
-<h2 id="framework">Zero Trust Is Not a Product</h2>
-<div class="section-intro">Zero Trust is better understood as an architectural framework rather than a technology or tooling choice. Many organisations believe buying a given platform can on its own provide Zero Trust capabilities. There is no single platform that will plug in and create Zero Trust by itself, but a right-fit platform can lead enterprise organisations away from old paradigms of trust.</div>
-
-<h2 id="legacy-problems">The Issues with Traditional Access Models</h2>
-<p>Legacy access methods are built on a flawed assumption: if you gain access to the network, you must be trusted. Users are typically provided access to network segments they do not need. Applications become reachable across overly broad connectivity paths. After gaining access, attackers find it easy to move laterally. Network segmentation at scale is complex and error-prone. Third-party access is often more permissive than required.</p>
-
-<h2 id="zscaler">Where Zscaler Fits</h2>
-<h3>Moving Away from VPN-Led Access</h3>
-<p>Zscaler supports access models in which users connect securely and directly to only the applications they need, not to the entire network environment. This reduces attack surfaces, limits paths for accessing resources, eliminates network-wide implicit trust, and makes lateral movement by malicious actors much more difficult.</p>
-<h3>Strengthening Private Application Access</h3>
-<p>Zscaler supports application-centric access control policies. Where once the mindset was network membership, now it is that this identity can access this application under these circumstances. This enables least privilege enforcement, improved segmentation and visibility, granular control of third-party access, and decreased attack surface in the internal kill chain.</p>
-<h3>Supporting Cloud-Delivered Policy Enforcement</h3>
-<p>Zscaler provides uniform, cloud-based policy enforcement for users regardless of location. This addresses siloed security architectures where in-office users are funnelled through one security stack while remote workers receive different treatment. Cloud-delivered policy enforcement enables controls closer to the user and the transaction rather than tying enforcement rigidly to a physical perimeter.</p>
-<div class="pull-quote">The organisations that get the most from Zscaler are those that have learned that Zero Trust cannot be realised through a new platform alone. It is brought about by intentional architectural reimagination and creating strong governance structures around trust itself.</div>
-    <div class="arch-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" style="width:100%;max-width:900px;display:block;"><rect width="900" height="400" rx="8" fill="#07090d"/>
-<text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Zscaler SSE — Zero Trust Security Architecture</text>
-<text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">ZIA + ZPA + ZDX · No VPN · App-level access only · Identity + Device verified at every request</text>
-<rect x="20" y="56" width="130" height="280" rx="5" fill="#0c1018" stroke="#FFAA00" stroke-width="1.5"/>
-<text x="85" y="74" font-family="Arial" font-size="9" font-weight="bold" fill="#FFAA00" text-anchor="middle">USERS</text>
-<rect x="30" y="82" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/><text x="85" y="97" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Corporate Laptop</text>
-<rect x="30" y="110" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/><text x="85" y="125" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Mobile / BYOD</text>
-<rect x="30" y="138" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/><text x="85" y="153" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Home Worker</text>
-<rect x="30" y="166" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/><text x="85" y="181" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Third Party</text>
-<rect x="165" y="56" width="220" height="280" rx="5" fill="#001520" stroke="#00d4ff" stroke-width="2"/>
-<text x="275" y="74" font-family="Arial" font-size="10" font-weight="bold" fill="#00d4ff" text-anchor="middle">ZSCALER SSE</text>
-<rect x="175" y="82" width="200" height="50" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="1"/>
-<text x="275" y="101" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">ZIA — Internet Access</text>
-<text x="275" y="116" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">SWG · CASB · DLP · DNS · Sandbox</text>
-<text x="275" y="128" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">SSL Inspection · Cloud FW</text>
-<rect x="175" y="140" width="200" height="50" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="1"/>
-<text x="275" y="159" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">ZPA — Private Access</text>
-<text x="275" y="174" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">ZTNA · App-level only</text>
-<text x="275" y="186" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">Inside-out · No VPN trust</text>
-<rect x="175" y="198" width="200" height="35" rx="3" fill="#001a20" stroke="#00d4ff" stroke-width="0.5"/><text x="275" y="219" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">ZDX · Policy Engine</text>
-<rect x="395" y="56" width="160" height="130" rx="5" fill="#0a0518" stroke="#a78bfa" stroke-width="1.5"/>
-<text x="475" y="74" font-family="Arial" font-size="9" font-weight="bold" fill="#a78bfa" text-anchor="middle">IDENTITY</text>
-<rect x="405" y="82" width="140" height="26" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/><text x="475" y="99" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Entra ID / MFA</text>
-<rect x="405" y="114" width="140" height="26" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/><text x="475" y="131" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Conditional Access</text>
-<rect x="405" y="146" width="140" height="26" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/><text x="475" y="163" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Device Compliance</text>
-<rect x="395" y="200" width="160" height="136" rx="5" fill="#001a0a" stroke="#00e87a" stroke-width="1.5"/>
-<text x="475" y="218" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a" text-anchor="middle">APPS</text>
-<rect x="405" y="226" width="140" height="26" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/><text x="475" y="243" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">M365 / SaaS</text>
-<rect x="405" y="258" width="140" height="26" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/><text x="475" y="275" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">AWS / Azure</text>
-<rect x="405" y="290" width="140" height="26" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/><text x="475" y="307" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">On-Prem Apps</text>
-<rect x="565" y="56" width="315" height="280" rx="5" fill="#050d10" stroke="#ff3355" stroke-width="1.5"/>
-<text x="722" y="74" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355" text-anchor="middle">SOC VISIBILITY</text>
-<rect x="575" y="82" width="295" height="35" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/><text x="722" y="104" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Splunk / Sentinel — ZIA/ZPA logs</text>
-<rect x="575" y="123" width="295" height="35" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/><text x="722" y="145" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">XSOAR — Block user via ZIA API</text>
-<rect x="575" y="164" width="295" height="35" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/><text x="722" y="186" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">TI feeds → ZIA policy update</text>
-<rect x="575" y="205" width="295" height="35" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/><text x="722" y="227" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Zscaler Analytics · User risk score</text>
-<rect x="575" y="246" width="295" height="35" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/><text x="722" y="268" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">DLP violations · Policy dashboard</text>
-<text x="450" y="362" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">No network-level trust · Every request evaluated: identity + device + location + risk · Full editable: lucid.app/lucidchart/dad6b218-f05d-4081-9560-29661503673a/edit</text>
+<h2 id="attck">What is MITRE ATT&CK?</h2>
+<div class="section-intro">MITRE ATT&CK is a globally recognised knowledge base of adversary tactics and techniques based on real-world observations. It helps organisations understand how attackers operate, common attack paths, detection opportunities, security control gaps, and threat hunting methodologies.</div>
+<p>The framework categorises attacks into Initial Access, Execution, Persistence, Privilege Escalation, Defence Evasion, Credential Access, Discovery, Lateral Movement, and Impact. Security teams use ATT&CK to improve SOC operations, SIEM detections, threat intelligence, purple teaming, and security architecture.</p>
+    <div class="arch-image" style="margin:28px 0;border:1px solid var(--border,#1a2235);border-radius:10px;overflow:hidden;background:var(--bg2,#0f1318);">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" style="width:100%;max-width:900px;display:block;">
+  <rect width="900" height="420" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">MITRE ATT&amp;CK vs MITRE ATLAS — Threat-Informed Defence</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">ATT&amp;CK covers traditional cyber threats · ATLAS extends coverage to AI/ML system attacks</text>
+  <!-- ATT&CK left -->
+  <rect x="20" y="58" width="400" height="300" rx="6" fill="#080d14" stroke="#00d4ff" stroke-width="2"/>
+  <rect x="20" y="58" width="400" height="28" rx="6" fill="#00d4ff"/>
+  <text x="220" y="79" font-family="Arial" font-size="12" font-weight="bold" fill="#07090d" text-anchor="middle">MITRE ATT&amp;CK</text>
+  <text x="30" y="106" font-family="Arial" font-size="9" fill="#00d4ff">Scope: Traditional cyber attack techniques</text>
+  <text x="30" y="120" font-family="Arial" font-size="9" fill="#00d4ff">Target: IT systems · Cloud · OT · Mobile</text>
+  <rect x="30" y="132" width="380" height="26" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="220" y="149" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">14 Tactics · 200+ Techniques · 400+ Sub-techniques</text>
+  <text x="30" y="174" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff">Key tactics covered:</text>
+  <text x="30" y="189" font-family="Arial" font-size="8" fill="#007799">Reconnaissance · Initial Access · Execution</text>
+  <text x="30" y="203" font-family="Arial" font-size="8" fill="#007799">Privilege Escalation · Defence Evasion · C2</text>
+  <text x="30" y="217" font-family="Arial" font-size="8" fill="#007799">Lateral Movement · Exfiltration · Impact</text>
+  <text x="30" y="237" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff">Used for:</text>
+  <text x="30" y="252" font-family="Arial" font-size="8" fill="#007799">Red team planning · Detection engineering</text>
+  <text x="30" y="266" font-family="Arial" font-size="8" fill="#007799">BAS scenario mapping · SIEM rule alignment</text>
+  <text x="30" y="280" font-family="Arial" font-size="8" fill="#007799">Threat hunting · SOC coverage measurement</text>
+  <rect x="30" y="296" width="380" height="48" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="220" y="314" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">BreachForge BAS maps all 10 scenarios</text>
+  <text x="220" y="328" font-family="Arial" font-size="9" fill="#007799" text-anchor="middle">to ATT&amp;CK techniques — 154 atomics validated</text>
+  <text x="220" y="342" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">attack.mitre.org · Enterprise matrix</text>
+  <!-- ATLAS right -->
+  <rect x="480" y="58" width="400" height="300" rx="6" fill="#0a0518" stroke="#a78bfa" stroke-width="2"/>
+  <rect x="480" y="58" width="400" height="28" rx="6" fill="#a78bfa"/>
+  <text x="680" y="79" font-family="Arial" font-size="12" font-weight="bold" fill="#07090d" text-anchor="middle">MITRE ATLAS</text>
+  <text x="490" y="106" font-family="Arial" font-size="9" fill="#a78bfa">Scope: Adversarial attacks on AI/ML systems</text>
+  <text x="490" y="120" font-family="Arial" font-size="9" fill="#a78bfa">Target: ML models · Training pipelines · APIs</text>
+  <rect x="490" y="132" width="380" height="26" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="680" y="149" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">12 Tactics · 60+ Techniques · Growing repository</text>
+  <text x="490" y="174" font-family="Arial" font-size="9" font-weight="bold" fill="#a78bfa">Key tactics covered:</text>
+  <text x="490" y="189" font-family="Arial" font-size="8" fill="#7755aa">ML Model Access · ML Attack Staging</text>
+  <text x="490" y="203" font-family="Arial" font-size="8" fill="#7755aa">Reconnaissance · Initial Access (AI-specific)</text>
+  <text x="490" y="217" font-family="Arial" font-size="8" fill="#7755aa">Exfiltration · Impact on AI systems</text>
+  <text x="490" y="237" font-family="Arial" font-size="9" font-weight="bold" fill="#a78bfa">Used for:</text>
+  <text x="490" y="252" font-family="Arial" font-size="8" fill="#7755aa">AI red teaming · LLM security assessment</text>
+  <text x="490" y="266" font-family="Arial" font-size="8" fill="#7755aa">Model risk classification · SABSA AI layer</text>
+  <text x="490" y="280" font-family="Arial" font-size="8" fill="#7755aa">EU AI Act compliance · RAG pipeline security</text>
+  <rect x="490" y="296" width="380" height="48" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/>
+  <text x="680" y="314" font-family="Arial" font-size="9" fill="#a78bfa" text-anchor="middle">ATLAS complements ATT&amp;CK — use both</text>
+  <text x="680" y="328" font-family="Arial" font-size="9" fill="#7755aa" text-anchor="middle">for organisations deploying AI/ML workloads</text>
+  <text x="680" y="342" font-family="Arial" font-size="8" fill="#7755aa" text-anchor="middle">atlas.mitre.org · AI threat library</text>
+  <!-- Bottom -->
+  <rect x="20" y="370" width="860" height="36" rx="4" fill="#0a1018" stroke="#1a2235" stroke-width="1"/>
+  <text x="450" y="388" font-family="Arial" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">Use ATT&amp;CK for your security operations baseline · Layer ATLAS on top for any AI/ML workload</text>
+  <text x="450" y="403" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">Both are living frameworks updated regularly · BAS validates ATT&amp;CK coverage · saleemyousaf.co.uk</text>
 </svg>
-      <div class="arch-image-caption">// Zscaler SSE within a modern Zero Trust security architecture</div></div>
-    <div class="article-nav-bar"><a href="https://saleemyousaf.co.uk/articles/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back to all articles</a><a href="https://saleemyousaf.co.uk/articles/public-vs-private-llms/">Public vs Private LLMs <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+      <div class="arch-image-caption" style="padding:10px 16px;font-family:var(--mono,monospace);font-size:11px;color:var(--muted2,#55677a);letter-spacing:0.04em;border-top:1px solid var(--border,#1a2235);background:var(--bg2,#0f1318);">// MITRE ATT&CK vs MITRE ATLAS — threat-informed defence for traditional and AI/ML attack surfaces</div>
+    </div>
+
+
+<h2 id="atlas">What is MITRE ATLAS?</h2>
+<p>MITRE ATLAS extends the ATT&CK concept into AI-enabled systems and modern cloud environments. ATLAS maps adversarial AI techniques, data source visibility, detection telemetry, security mitigations, and control validation. It connects what attackers do with how defenders detect and stop it. This makes ATLAS highly valuable for cloud security, AI security, SaaS environments, identity-centric architectures, and modern enterprise platforms.</p>
+
+<h2 id="why">Why These Frameworks Matter</h2>
+<p>Modern attacks rarely target a single system. Attackers move across cloud environments, identity platforms, SaaS applications, APIs, endpoints, and AI models. By combining MITRE ATT&CK and MITRE ATLAS, organisations can map adversary behaviour to telemetry, improve visibility, prioritise detections, strengthen controls, reduce dwell time, and improve resilience.</p>
+<div class="key-points">
+  <div class="key-point"><div class="key-point-dot"></div>Map SIEM telemetry to ATT&CK techniques and identify coverage gaps</div>
+  <div class="key-point"><div class="key-point-dot"></div>Understand attacker progression and contain threats faster</div>
+  <div class="key-point"><div class="key-point-dot"></div>Validate AWS, Azure, and SaaS monitoring capabilities</div>
+  <div class="key-point"><div class="key-point-dot"></div>Build security architectures around real attack behaviour</div>
+  <div class="key-point"><div class="key-point-dot"></div>Translate technical threats into executive risk visibility</div>
+  <div class="key-point"><div class="key-point-dot"></div>Align detection engineering with real adversary techniques</div>
+</div>
+<div class="pull-quote">MITRE ATT&CK and MITRE ATLAS provide a common language that aligns security operations, threat intelligence, cloud security, governance, detection engineering, and executive risk management.</div>
+    
+    <div class="article-nav-bar"><a href="https://saleemyousaf.co.uk/articles/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back to all articles</a><a href="https://saleemyousaf.co.uk/articles/ai-security-blueprint-sabsa/">AI Security Assessment Blueprint <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
   </article>
 </div>
 <div class="related-section">
   <div class="related-wrap">
     <div class="related-label">Related articles</div>
-    <div class="related-grid"><a href="https://saleemyousaf.co.uk/articles/zero-trust-landing-zone/" class="rel-card"><div class="rel-tags"><span class="rel-tag teal">Zero Trust</span><span class="rel-tag teal">AWS</span></div><div class="rel-title">Enterprise Zero Trust Secure Landing Zone Reference Architecture</div><div class="rel-meta">14 May 2026 · ~30 min read</div></a><a href="https://saleemyousaf.co.uk/assume-breach/" class="rel-card"><div class="rel-tags"><span class="rel-tag red">Assume Breach</span></div><div class="rel-title">Assume Breach: The Framework</div><div class="rel-meta">Framework page</div></a><a href="https://saleemyousaf.co.uk/articles/assume-breach-continuous-validation/" class="rel-card"><div class="rel-tags"><span class="rel-tag red">BAS</span></div><div class="rel-title">Assume Breach and Continuous Security Validation</div><div class="rel-meta">30 Apr 2026 · ~11 min read</div></a></div>
+    <div class="related-grid"><a href="https://saleemyousaf.co.uk/assume-breach/" class="rel-card"><div class="rel-tags"><span class="rel-tag red">Assume Breach</span><span class="rel-tag red">MITRE</span></div><div class="rel-title">Assume Breach: The Framework</div><div class="rel-meta">Framework page</div></a><a href="https://saleemyousaf.co.uk/articles/stride-cloud-detection/" class="rel-card"><div class="rel-tags"><span class="rel-tag teal">STRIDE</span></div><div class="rel-title">From Threat Modelling to Threat Detection: Making STRIDE Work in Cloud Environments</div><div class="rel-meta">22 Apr 2026 · ~10 min read</div></a><a href="https://saleemyousaf.co.uk/articles/assume-breach-continuous-validation/" class="rel-card"><div class="rel-tags"><span class="rel-tag red">BAS</span><span class="rel-tag red">Validation</span></div><div class="rel-title">Assume Breach and Continuous Security Validation</div><div class="rel-meta">30 Apr 2026 · ~11 min read</div></a></div>
   </div>
 </div>
 <div class="cta-strip">
   <div class="cta-wrap">
-    <div><div class="cta-heading">Working on a Zero Trust or SSE programme?</div><div class="cta-sub">Connect to discuss Zero Trust architecture, Zscaler integration, or cloud security design.</div></div>
+    <div><div class="cta-heading">Building a threat-informed defence programme?</div><div class="cta-sub">Connect to discuss MITRE ATT&CK mapping, detection engineering, or SOC maturity.</div></div>
     <div class="cta-actions">
       <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener" class="btn-primary">Connect on LinkedIn</a>
-      <a href="https://github.com/saleem-yousaf/saleem-yousaf-zero-trust-architecture" target="_blank" rel="noopener" class="btn-outline">GitHub</a>
+      <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener" class="btn-outline">GitHub</a>
     </div>
   </div>
 </div>

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zero Trust in Practice: Where Does Zscaler Fit Within a Modern Security Architecture? | Saleem Yousaf</title>
-<meta name="description" content="Zero Trust is probably the most quoted term in modern cybersecurity. But at its core it is simple: trust no user by virtue of their network location alone.">
+<title>Common Security Mistakes in Cloud Architecture | Saleem Yousaf</title>
+<meta name="description" content="Security becomes an afterthought time and again in cloud environments. Decisions made during architectural design become embedded and difficult, expensive,">
 <meta name="author" content="Saleem Yousaf">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -150,13 +150,13 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 <div class="article-hero">
   <div class="article-hero-glow"></div>
   <div class="hero-wrap">
-    <div class="article-eyebrow"><div class="article-eyebrow-line"></div><span class="article-tag teal">Zero Trust</span><span class="article-tag teal">Zscaler</span><span class="article-tag teal">SSE</span></div>
-    <h1 class="article-title">Zero Trust in Practice: Where Does Zscaler Fit Within a Modern Security Architecture?</h1>
-    <p class="article-intro">Zero Trust is probably the most quoted term in modern cybersecurity. But at its core it is simple: trust no user by virtue of their network location alone. Zscaler helps organisations migrate from network-centric access models toward identity-driven, application-level connectivity.</p>
+    <div class="article-eyebrow"><div class="article-eyebrow-line"></div><span class="article-tag teal">Cloud Security</span><span class="article-tag red">Risk</span><span class="article-tag teal">AWS</span></div>
+    <h1 class="article-title">Common Security Mistakes in Cloud Architecture</h1>
+    <p class="article-intro">Security becomes an afterthought time and again in cloud environments. Decisions made during architectural design become embedded and difficult, expensive, or sometimes painful to change later. These are the most common security mistakes and how to avoid them.</p>
     <div class="article-meta-bar">
-      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>29 Apr 2026</div>
+      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>15 Apr 2026</div>
       <div class="meta-divider"></div>
-      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>~9 min read</div>
+      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>~8 min read</div>
       <div class="meta-divider"></div>
       <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Saleem Yousaf</div>
     </div>
@@ -165,75 +165,110 @@ footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-ind
 <div class="article-body">
   <article class="prose">
     
-<h2 id="framework">Zero Trust Is Not a Product</h2>
-<div class="section-intro">Zero Trust is better understood as an architectural framework rather than a technology or tooling choice. Many organisations believe buying a given platform can on its own provide Zero Trust capabilities. There is no single platform that will plug in and create Zero Trust by itself, but a right-fit platform can lead enterprise organisations away from old paradigms of trust.</div>
+<h2 id="too-late">1. Security Considered Too Late</h2>
+<div class="section-intro">One of the most significant challenges is security being considered too late when the architecture is already established. At that point, teams are frequently scrambling to retrofit controls into systems never built with security as a consideration. A better approach is to adopt a secure-by-design mindset from the outset, alongside functionality and performance.</div>
 
-<h2 id="legacy-problems">The Issues with Traditional Access Models</h2>
-<p>Legacy access methods are built on a flawed assumption: if you gain access to the network, you must be trusted. Users are typically provided access to network segments they do not need. Applications become reachable across overly broad connectivity paths. After gaining access, attackers find it easy to move laterally. Network segmentation at scale is complex and error-prone. Third-party access is often more permissive than required.</p>
-
-<h2 id="zscaler">Where Zscaler Fits</h2>
-<h3>Moving Away from VPN-Led Access</h3>
-<p>Zscaler supports access models in which users connect securely and directly to only the applications they need, not to the entire network environment. This reduces attack surfaces, limits paths for accessing resources, eliminates network-wide implicit trust, and makes lateral movement by malicious actors much more difficult.</p>
-<h3>Strengthening Private Application Access</h3>
-<p>Zscaler supports application-centric access control policies. Where once the mindset was network membership, now it is that this identity can access this application under these circumstances. This enables least privilege enforcement, improved segmentation and visibility, granular control of third-party access, and decreased attack surface in the internal kill chain.</p>
-<h3>Supporting Cloud-Delivered Policy Enforcement</h3>
-<p>Zscaler provides uniform, cloud-based policy enforcement for users regardless of location. This addresses siloed security architectures where in-office users are funnelled through one security stack while remote workers receive different treatment. Cloud-delivered policy enforcement enables controls closer to the user and the transaction rather than tying enforcement rigidly to a physical perimeter.</p>
-<div class="pull-quote">The organisations that get the most from Zscaler are those that have learned that Zero Trust cannot be realised through a new platform alone. It is brought about by intentional architectural reimagination and creating strong governance structures around trust itself.</div>
-    <div class="arch-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" style="width:100%;max-width:900px;display:block;"><rect width="900" height="400" rx="8" fill="#07090d"/>
-<text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Zscaler SSE — Zero Trust Security Architecture</text>
-<text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">ZIA + ZPA + ZDX · No VPN · App-level access only · Identity + Device verified at every request</text>
-<rect x="20" y="56" width="130" height="280" rx="5" fill="#0c1018" stroke="#FFAA00" stroke-width="1.5"/>
-<text x="85" y="74" font-family="Arial" font-size="9" font-weight="bold" fill="#FFAA00" text-anchor="middle">USERS</text>
-<rect x="30" y="82" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/><text x="85" y="97" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Corporate Laptop</text>
-<rect x="30" y="110" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/><text x="85" y="125" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Mobile / BYOD</text>
-<rect x="30" y="138" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/><text x="85" y="153" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Home Worker</text>
-<rect x="30" y="166" width="110" height="22" rx="3" fill="#1a1200" stroke="#FFAA00" stroke-width="0.5"/><text x="85" y="181" font-family="Arial" font-size="8" fill="#FFAA00" text-anchor="middle">Third Party</text>
-<rect x="165" y="56" width="220" height="280" rx="5" fill="#001520" stroke="#00d4ff" stroke-width="2"/>
-<text x="275" y="74" font-family="Arial" font-size="10" font-weight="bold" fill="#00d4ff" text-anchor="middle">ZSCALER SSE</text>
-<rect x="175" y="82" width="200" height="50" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="1"/>
-<text x="275" y="101" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">ZIA — Internet Access</text>
-<text x="275" y="116" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">SWG · CASB · DLP · DNS · Sandbox</text>
-<text x="275" y="128" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">SSL Inspection · Cloud FW</text>
-<rect x="175" y="140" width="200" height="50" rx="3" fill="#002030" stroke="#00d4ff" stroke-width="1"/>
-<text x="275" y="159" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">ZPA — Private Access</text>
-<text x="275" y="174" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">ZTNA · App-level only</text>
-<text x="275" y="186" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">Inside-out · No VPN trust</text>
-<rect x="175" y="198" width="200" height="35" rx="3" fill="#001a20" stroke="#00d4ff" stroke-width="0.5"/><text x="275" y="219" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">ZDX · Policy Engine</text>
-<rect x="395" y="56" width="160" height="130" rx="5" fill="#0a0518" stroke="#a78bfa" stroke-width="1.5"/>
-<text x="475" y="74" font-family="Arial" font-size="9" font-weight="bold" fill="#a78bfa" text-anchor="middle">IDENTITY</text>
-<rect x="405" y="82" width="140" height="26" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/><text x="475" y="99" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Entra ID / MFA</text>
-<rect x="405" y="114" width="140" height="26" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/><text x="475" y="131" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Conditional Access</text>
-<rect x="405" y="146" width="140" height="26" rx="3" fill="#150a28" stroke="#a78bfa" stroke-width="0.5"/><text x="475" y="163" font-family="Arial" font-size="8" fill="#a78bfa" text-anchor="middle">Device Compliance</text>
-<rect x="395" y="200" width="160" height="136" rx="5" fill="#001a0a" stroke="#00e87a" stroke-width="1.5"/>
-<text x="475" y="218" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a" text-anchor="middle">APPS</text>
-<rect x="405" y="226" width="140" height="26" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/><text x="475" y="243" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">M365 / SaaS</text>
-<rect x="405" y="258" width="140" height="26" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/><text x="475" y="275" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">AWS / Azure</text>
-<rect x="405" y="290" width="140" height="26" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/><text x="475" y="307" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">On-Prem Apps</text>
-<rect x="565" y="56" width="315" height="280" rx="5" fill="#050d10" stroke="#ff3355" stroke-width="1.5"/>
-<text x="722" y="74" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355" text-anchor="middle">SOC VISIBILITY</text>
-<rect x="575" y="82" width="295" height="35" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/><text x="722" y="104" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Splunk / Sentinel — ZIA/ZPA logs</text>
-<rect x="575" y="123" width="295" height="35" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/><text x="722" y="145" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">XSOAR — Block user via ZIA API</text>
-<rect x="575" y="164" width="295" height="35" rx="3" fill="#1a0808" stroke="#ff3355" stroke-width="0.5"/><text x="722" y="186" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">TI feeds → ZIA policy update</text>
-<rect x="575" y="205" width="295" height="35" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/><text x="722" y="227" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">Zscaler Analytics · User risk score</text>
-<rect x="575" y="246" width="295" height="35" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/><text x="722" y="268" font-family="Arial" font-size="8" fill="#00d4ff" text-anchor="middle">DLP violations · Policy dashboard</text>
-<text x="450" y="362" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">No network-level trust · Every request evaluated: identity + device + location + risk · Full editable: lucid.app/lucidchart/dad6b218-f05d-4081-9560-29661503673a/edit</text>
+<h2 id="iam">2. Overly Permissive Access (IAM)</h2>
+<p>Cloud environments frequently operate with overly broad access permissions, typically done for convenience or speed during early development stages. With increased permissions comes heightened risk. Implementing least privilege access from day one ensures users and services only have access to what they require and nothing more. If a workload is compromised, the blast radius is contained.</p>
+    <div class="arch-image" style="margin:28px 0;border:1px solid var(--border,#1a2235);border-radius:10px;overflow:hidden;background:var(--bg2,#0f1318);">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" style="width:100%;max-width:900px;display:block;">
+  <rect width="900" height="420" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Top 5 Cloud Security Mistakes — and How to Fix Them</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Patterns that repeat across every enterprise cloud migration · Each is preventable at design time</text>
+  <!-- Mistake 1 -->
+  <rect x="20" y="58" width="168" height="300" rx="5" fill="#1a0808" stroke="#ff3355" stroke-width="1.5"/>
+  <rect x="20" y="58" width="168" height="26" rx="5" fill="#ff3355"/>
+  <text x="104" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">MISTAKE 1</text>
+  <text x="104" y="102" font-family="Arial" font-size="9" font-weight="bold" fill="#ff3355" text-anchor="middle">Security Too Late</text>
+  <text x="30" y="122" font-family="Arial" font-size="8" fill="#aa4455">Architecture built first,</text>
+  <text x="30" y="135" font-family="Arial" font-size="8" fill="#aa4455">security bolted on after</text>
+  <text x="30" y="155" font-family="Arial" font-size="8" fill="#664444">Controls cost 10x more</text>
+  <text x="30" y="168" font-family="Arial" font-size="8" fill="#664444">to retrofit than design in</text>
+  <rect x="30" y="188" width="148" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="104" y="204" font-family="Arial" font-size="8" font-weight="bold" fill="#00e87a" text-anchor="middle">Fix: Threat model</text>
+  <text x="104" y="217" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">before first commit</text>
+  <!-- Mistake 2 -->
+  <rect x="198" y="58" width="168" height="300" rx="5" fill="#1a0808" stroke="#f97316" stroke-width="1.5"/>
+  <rect x="198" y="58" width="168" height="26" rx="5" fill="#f97316"/>
+  <text x="282" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#07090d" text-anchor="middle">MISTAKE 2</text>
+  <text x="282" y="102" font-family="Arial" font-size="9" font-weight="bold" fill="#f97316" text-anchor="middle">Over-Permissive IAM</text>
+  <text x="208" y="122" font-family="Arial" font-size="8" fill="#884400">AdministratorAccess</text>
+  <text x="208" y="135" font-family="Arial" font-size="8" fill="#884400">attached everywhere</text>
+  <text x="208" y="155" font-family="Arial" font-size="8" fill="#553300">Wildcard * actions</text>
+  <text x="208" y="168" font-family="Arial" font-size="8" fill="#553300">and resources common</text>
+  <rect x="208" y="188" width="148" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="282" y="204" font-family="Arial" font-size="8" font-weight="bold" fill="#00e87a" text-anchor="middle">Fix: Least privilege</text>
+  <text x="282" y="217" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">IAM Access Analyser</text>
+  <!-- Mistake 3 -->
+  <rect x="376" y="58" width="168" height="300" rx="5" fill="#0a0f18" stroke="#FFAA00" stroke-width="1.5"/>
+  <rect x="376" y="58" width="168" height="26" rx="5" fill="#FFAA00"/>
+  <text x="460" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#07090d" text-anchor="middle">MISTAKE 3</text>
+  <text x="460" y="102" font-family="Arial" font-size="9" font-weight="bold" fill="#FFAA00" text-anchor="middle">No Segmentation</text>
+  <text x="386" y="122" font-family="Arial" font-size="8" fill="#aa8800">Flat VPC — everything</text>
+  <text x="386" y="135" font-family="Arial" font-size="8" fill="#aa8800">talks to everything</text>
+  <text x="386" y="155" font-family="Arial" font-size="8" fill="#664400">0.0.0.0/0 security groups</text>
+  <text x="386" y="168" font-family="Arial" font-size="8" fill="#664400">No east-west inspection</text>
+  <rect x="386" y="188" width="148" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="460" y="204" font-family="Arial" font-size="8" font-weight="bold" fill="#00e87a" text-anchor="middle">Fix: Subnet tiers</text>
+  <text x="460" y="217" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">NACLs + Network FW</text>
+  <!-- Mistake 4 -->
+  <rect x="554" y="58" width="168" height="300" rx="5" fill="#080d14" stroke="#a78bfa" stroke-width="1.5"/>
+  <rect x="554" y="58" width="168" height="26" rx="5" fill="#a78bfa"/>
+  <text x="638" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#07090d" text-anchor="middle">MISTAKE 4</text>
+  <text x="638" y="102" font-family="Arial" font-size="9" font-weight="bold" fill="#a78bfa" text-anchor="middle">No Logging</text>
+  <text x="564" y="122" font-family="Arial" font-size="8" fill="#7755aa">CloudTrail disabled</text>
+  <text x="564" y="135" font-family="Arial" font-size="8" fill="#7755aa">GuardDuty not enabled</text>
+  <text x="564" y="155" font-family="Arial" font-size="8" fill="#554488">VPC Flow Logs off</text>
+  <text x="564" y="168" font-family="Arial" font-size="8" fill="#554488">No SIEM integration</text>
+  <rect x="564" y="188" width="148" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="638" y="204" font-family="Arial" font-size="8" font-weight="bold" fill="#00e87a" text-anchor="middle">Fix: Security Hub</text>
+  <text x="638" y="217" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">GuardDuty + CloudTrail</text>
+  <!-- Mistake 5 -->
+  <rect x="732" y="58" width="148" height="300" rx="5" fill="#080d14" stroke="#00d4ff" stroke-width="1.5"/>
+  <rect x="732" y="58" width="148" height="26" rx="5" fill="#00d4ff"/>
+  <text x="806" y="76" font-family="Arial" font-size="9" font-weight="bold" fill="#07090d" text-anchor="middle">MISTAKE 5</text>
+  <text x="806" y="102" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">No Threat Model</text>
+  <text x="742" y="122" font-family="Arial" font-size="8" fill="#007799">No STRIDE analysis</text>
+  <text x="742" y="135" font-family="Arial" font-size="8" fill="#007799">before deployment</text>
+  <text x="742" y="155" font-family="Arial" font-size="8" fill="#004455">Attack paths not</text>
+  <text x="742" y="168" font-family="Arial" font-size="8" fill="#004455">considered by design</text>
+  <rect x="742" y="188" width="128" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="806" y="204" font-family="Arial" font-size="8" font-weight="bold" fill="#00e87a" text-anchor="middle">Fix: STRIDE early</text>
+  <text x="806" y="217" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">BAS validation</text>
+  <!-- Bottom bar -->
+  <rect x="20" y="372" width="860" height="36" rx="4" fill="#0a1018" stroke="#1a2235" stroke-width="1"/>
+  <text x="450" y="388" font-family="Arial" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">All five mistakes are preventable at design time — not discoverable only after a breach</text>
+  <text x="450" y="403" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">IaC policy gates · CSPM · BAS continuous validation · Threat modelling at sprint zero · saleemyousaf.co.uk</text>
 </svg>
-      <div class="arch-image-caption">// Zscaler SSE within a modern Zero Trust security architecture</div></div>
-    <div class="article-nav-bar"><a href="https://saleemyousaf.co.uk/articles/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back to all articles</a><a href="https://saleemyousaf.co.uk/articles/public-vs-private-llms/">Public vs Private LLMs <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+      <div class="arch-image-caption" style="padding:10px 16px;font-family:var(--mono,monospace);font-size:11px;color:var(--muted2,#55677a);letter-spacing:0.04em;border-top:1px solid var(--border,#1a2235);background:var(--bg2,#0f1318);">// Top 5 cloud security mistakes and how to fix them at design time</div>
+    </div>
+
+
+<h2 id="segmentation">3. Lack of Clear Network Segmentation</h2>
+<p>Flat network design is a common problem where workloads are not properly segmented. This enables lateral movement of threats from system to system if one component is compromised. Applying patterns like segmented VPCs, controlled routing, and central inspection limits exposure and increases overall resilience.</p>
+
+<h2 id="monitoring">4. Insufficient Logging and Monitoring</h2>
+<p>In many environments logging is enabled but not properly configured. Logs are not centralised, not reviewed, or not tied to any alerting mechanism. Without observation, threats are hardest to identify and respond to. Centralised logging with telemetry and alerting gives visibility into what is happening in the environment. Reduce the noise and focus on security and audit logs for meaningful signal.</p>
+
+<h2 id="threat-modelling">5. Not Using Threat Modelling Early</h2>
+<p>One of the best ways to drive better security outcomes is through early threat modelling. Techniques such as STRIDE at the design level help identify possible risks before systems are built and deployed. This enables teams to be proactive in designing controls instead of reactive after the fact. Threat models should be revisited as the architecture evolves, not treated as a one-time artefact.</p>
+<div class="pull-quote">The organisations that succeed treat security as part of design, not an afterthought. If you get the fundamentals right early across identity, network design, monitoring, and threat modelling, it makes a significant difference to long-term risk reduction.</div>
+    
+    <div class="article-nav-bar"><a href="https://saleemyousaf.co.uk/articles/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back to all articles</a><a href="https://saleemyousaf.co.uk/articles/api-security-stride/">API Security and STRIDE Threat Modelling <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
   </article>
 </div>
 <div class="related-section">
   <div class="related-wrap">
     <div class="related-label">Related articles</div>
-    <div class="related-grid"><a href="https://saleemyousaf.co.uk/articles/zero-trust-landing-zone/" class="rel-card"><div class="rel-tags"><span class="rel-tag teal">Zero Trust</span><span class="rel-tag teal">AWS</span></div><div class="rel-title">Enterprise Zero Trust Secure Landing Zone Reference Architecture</div><div class="rel-meta">14 May 2026 · ~30 min read</div></a><a href="https://saleemyousaf.co.uk/assume-breach/" class="rel-card"><div class="rel-tags"><span class="rel-tag red">Assume Breach</span></div><div class="rel-title">Assume Breach: The Framework</div><div class="rel-meta">Framework page</div></a><a href="https://saleemyousaf.co.uk/articles/assume-breach-continuous-validation/" class="rel-card"><div class="rel-tags"><span class="rel-tag red">BAS</span></div><div class="rel-title">Assume Breach and Continuous Security Validation</div><div class="rel-meta">30 Apr 2026 · ~11 min read</div></a></div>
+    <div class="related-grid"><a href="https://saleemyousaf.co.uk/articles/secure-by-design-aws/" class="rel-card"><div class="rel-tags"><span class="rel-tag teal">Secure by Design</span></div><div class="rel-title">Secure by Design for Consultancy-Led AWS Architecture</div><div class="rel-meta">21 Apr 2026 · ~8 min read</div></a><a href="https://saleemyousaf.co.uk/articles/stride-cloud-detection/" class="rel-card"><div class="rel-tags"><span class="rel-tag red">STRIDE</span></div><div class="rel-title">From Threat Modelling to Threat Detection: Making STRIDE Work in Cloud Environments</div><div class="rel-meta">22 Apr 2026 · ~10 min read</div></a><a href="https://saleemyousaf.co.uk/articles/api-security-stride/" class="rel-card"><div class="rel-tags"><span class="rel-tag red">API Security</span></div><div class="rel-title">API Security and STRIDE Threat Modelling in Modern Architectures</div><div class="rel-meta">12 Apr 2026 · ~8 min read</div></a></div>
   </div>
 </div>
 <div class="cta-strip">
   <div class="cta-wrap">
-    <div><div class="cta-heading">Working on a Zero Trust or SSE programme?</div><div class="cta-sub">Connect to discuss Zero Trust architecture, Zscaler integration, or cloud security design.</div></div>
+    <div><div class="cta-heading">Reviewing your cloud security posture?</div><div class="cta-sub">Connect to discuss cloud architecture review, threat modelling, or security control design.</div></div>
     <div class="cta-actions">
       <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener" class="btn-primary">Connect on LinkedIn</a>
-      <a href="https://github.com/saleem-yousaf/saleem-yousaf-zero-trust-architecture" target="_blank" rel="noopener" class="btn-outline">GitHub</a>
+      <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener" class="btn-outline">GitHub</a>
     </div>
   </div>
 </div>
