@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Breach Attack Simulation: The Framework and Technical Paper | Saleem Yousaf</title>
+<meta name="description" content="The definitive BAS technical framework by Saleem Yousaf. Infographic, methodology, MITRE ATT&CK mapping, SABSA controls, and the full Breach Attack Simulation paper for enterprise security architects.">
+<meta name="author" content="Saleem Yousaf">
+<link rel="canonical" href="https://saleemyousaf.co.uk/assume-breach/bas-framework/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:         #090c10;
+  --bg2:        #0f1318;
+  --bg3:        #161b22;
+  --border:     rgba(255,255,255,0.07);
+  --border2:    rgba(255,255,255,0.12);
+  --text:       #e6eaf0;
+  --muted:      #7a8694;
+  --muted2:     #4a5568;
+  --teal:       #2dd4bf;
+  --teal-dim:   rgba(45,212,191,0.12);
+  --amber:      #f59e0b;
+  --amber-dim:  rgba(245,158,11,0.10);
+  --red:        #f87171;
+  --red-dim:    rgba(248,113,113,0.10);
+  --purple:     #a78bfa;
+  --purple-dim: rgba(167,139,250,0.10);
+  --green:      #4ade80;
+  --green-dim:  rgba(74,222,128,0.10);
+  --mono:       'DM Mono', monospace;
+  --display:    'Syne', sans-serif;
+  --body:       'Inter', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--body); font-size: 16px; line-height: 1.7;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image: linear-gradient(rgba(45,212,191,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45,212,191,0.015) 1px, transparent 1px);
+  background-size: 40px 40px; pointer-events: none; z-index: 0;
+}
+
+/* ── NAV ── */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(9,12,16,0.88); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+.nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+.nav-logo { font-family: var(--display); font-size: 15px; font-weight: 700; color: var(--text); text-decoration: none; }
+.nav-logo span { color: var(--teal); }
+.nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+.nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover, .nav-links a.active { color: var(--teal); }
+.nav-dropdown { position: relative; }
+.nav-dropdown-toggle { font-size: 13px; color: var(--muted); background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: var(--body); padding: 0; transition: color 0.2s; }
+.nav-dropdown-toggle:hover { color: var(--teal); }
+.nav-dropdown:hover .nav-dropdown-toggle { color: var(--teal); }
+.nav-dropdown-toggle svg { transition: transform 0.2s; }
+.nav-dropdown-toggle.open svg { transform: rotate(180deg); }
+.nav-dropdown-toggle.open { color: var(--teal); }
+.nav-dropdown-menu { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); padding-top: 12px; opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 200; }
+.nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: all; }
+.nav-dropdown-menu-inner { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 8px; min-width: 220px; }
+.nav-dropdown-menu a { display: block; padding: 9px 14px; font-size: 13px; color: var(--muted); text-decoration: none; border-radius: 5px; transition: background 0.15s, color 0.15s; white-space: nowrap; }
+.nav-dropdown-menu a:hover { background: var(--bg3); color: var(--text); }
+.nav-dropdown-menu a.active { color: var(--teal); }
+.nav-cta { font-size: 13px; font-weight: 500; color: var(--teal) !important; border: 1px solid rgba(45,212,191,0.3); padding: 6px 16px; border-radius: 4px; }
+.nav-cta:hover { background: var(--teal-dim); border-color: var(--teal) !important; }
+
+/* ── LAYOUT ── */
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+.wrap-narrow { max-width: 800px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+section { position: relative; z-index: 1; }
+
+/* ── PAGE HEADER ── */
+.page-header { padding: 120px 0 72px; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+.header-glow { position: absolute; top: -150px; right: -120px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(248,113,113,0.08) 0%, transparent 65%); pointer-events: none; }
+.header-glow-2 { position: absolute; bottom: -80px; left: -80px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(45,212,191,0.05) 0%, transparent 65%); pointer-events: none; }
+.breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; font-family: var(--mono); font-size: 11px; color: var(--muted2); }
+.breadcrumb a { color: var(--muted2); text-decoration: none; transition: color 0.2s; }
+.breadcrumb a:hover { color: var(--teal); }
+.breadcrumb-sep { color: var(--muted2); }
+.eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.eyebrow-line { width: 32px; height: 1px; background: var(--red); }
+.eyebrow-text { font-family: var(--mono); font-size: 11px; color: var(--red); letter-spacing: 0.12em; text-transform: uppercase; }
+h1 { font-family: var(--display); font-size: clamp(30px, 3.8vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; color: #fff; margin-bottom: 20px; }
+h1 em { font-style: normal; color: var(--red); }
+.page-sub { font-size: 17px; color: var(--muted); line-height: 1.75; max-width: 640px; margin-bottom: 36px; }
+.header-meta { display: flex; gap: 24px; flex-wrap: wrap; }
+.header-meta-item { display: flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 12px; color: var(--muted2); }
+.header-meta-item svg { color: var(--teal); }
+
+/* ── SECTION SHARED ── */
+.section-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.section-eyebrow-line { width: 24px; height: 1px; }
+.section-eyebrow-line.teal { background: var(--teal); }
+.section-eyebrow-line.red  { background: var(--red); }
+.section-eyebrow-text { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+.section-eyebrow-text.teal { color: var(--teal); }
+.section-eyebrow-text.red  { color: var(--red); }
+h2 { font-family: var(--display); font-size: clamp(22px, 2.6vw, 34px); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color: #fff; margin-bottom: 14px; }
+.section-sub { font-size: 16px; color: var(--muted); max-width: 600px; line-height: 1.7; margin-bottom: 48px; }
+
+/* ── INFOGRAPHIC ── */
+.infographic-section { padding: 80px 0; }
+
+.infographic-container {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+.infographic-container::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--red), var(--amber), var(--teal));
+}
+
+/* header */
+.infographic-header {
+  background: var(--bg3);
+  padding: 36px 48px;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: center;
+}
+.ig-title { font-family: var(--display); font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+.ig-subtitle { font-size: 14px; color: var(--muted); line-height: 1.6; max-width: 560px; }
+.ig-badges { display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+.ig-badge { font-family: var(--mono); font-size: 10px; padding: 5px 14px; border-radius: 3px; text-align: center; letter-spacing: 0.06em; }
+.ig-badge.red    { background: var(--red-dim);    color: var(--red);    border: 1px solid rgba(248,113,113,0.2); }
+.ig-badge.teal   { background: var(--teal-dim);   color: var(--teal);  border: 1px solid rgba(45,212,191,0.2); }
+.ig-badge.amber  { background: var(--amber-dim);  color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+
+/* pipeline */
+.ig-pipeline { padding: 40px 48px; border-bottom: 1px solid var(--border); }
+.ig-pipeline-label { font-family: var(--mono); font-size: 10px; color: var(--muted2); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 24px; }
+.ig-pipeline-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; position: relative; }
+.ig-pipeline-steps::before {
+  content: '';
+  position: absolute;
+  top: 28px; left: 10%; right: 10%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--red), var(--amber), var(--teal), var(--teal), var(--green));
+  z-index: 0;
+}
+.ig-step { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+.ig-step-circle {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 13px; font-weight: 500;
+  margin-bottom: 14px;
+  border: 2px solid;
+  transition: transform 0.2s;
+}
+.ig-step:hover .ig-step-circle { transform: scale(1.08); }
+.ig-step-circle.red    { background: var(--red-dim);    color: var(--red);    border-color: var(--red);    box-shadow: 0 0 16px rgba(248,113,113,0.2); }
+.ig-step-circle.amber  { background: var(--amber-dim);  color: var(--amber);  border-color: var(--amber);  box-shadow: 0 0 16px rgba(245,158,11,0.2); }
+.ig-step-circle.teal   { background: var(--teal-dim);   color: var(--teal);   border-color: var(--teal);   box-shadow: 0 0 16px rgba(45,212,191,0.2); }
+.ig-step-circle.purple { background: var(--purple-dim); color: var(--purple); border-color: var(--purple); box-shadow: 0 0 16px rgba(167,139,250,0.2); }
+.ig-step-circle.green  { background: var(--green-dim);  color: var(--green);  border-color: var(--green);  box-shadow: 0 0 16px rgba(74,222,128,0.2); }
+.ig-step-title { font-family: var(--display); font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 6px; text-align: center; }
+.ig-step-desc { font-size: 11px; color: var(--muted); line-height: 1.5; text-align: center; padding: 0 4px; }
+
+/* mindset grid */
+.ig-mindset { padding: 40px 48px; border-bottom: 1px solid var(--border); }
+.ig-mindset-label { font-family: var(--mono); font-size: 10px; color: var(--muted2); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px; }
+.ig-mindset-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ig-mindset-card { background: var(--bg3); border-radius: 8px; padding: 18px 20px; }
+.ig-mindset-card-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
+.ig-mindset-card-label.old { color: var(--muted2); }
+.ig-mindset-card-label.new { color: var(--teal); }
+.ig-mindset-q { font-size: 13px; color: var(--muted); padding: 7px 0; border-bottom: 1px solid var(--border); display: flex; gap: 8px; line-height: 1.45; }
+.ig-mindset-q:last-child { border-bottom: none; }
+.ig-mindset-q-icon { font-family: var(--mono); font-size: 11px; flex-shrink: 0; }
+.ig-mindset-q-icon.old { color: var(--muted2); }
+.ig-mindset-q-icon.new { color: var(--teal); }
+
+/* attack lifecycle */
+.ig-lifecycle { padding: 40px 48px; border-bottom: 1px solid var(--border); }
+.ig-lifecycle-label { font-family: var(--mono); font-size: 10px; color: var(--muted2); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px; }
+.ig-lifecycle-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.ig-lifecycle-card {
+  background: var(--bg3); border-radius: 8px; padding: 16px;
+  border-left: 3px solid;
+  transition: transform 0.15s;
+}
+.ig-lifecycle-card:hover { transform: translateY(-2px); }
+.ig-lifecycle-card.initial  { border-left-color: var(--red); }
+.ig-lifecycle-card.lateral  { border-left-color: var(--amber); }
+.ig-lifecycle-card.persist  { border-left-color: var(--purple); }
+.ig-lifecycle-card.impact   { border-left-color: #f87171; }
+.ig-lifecycle-tactic { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+.ig-lifecycle-card.initial .ig-lifecycle-tactic  { color: var(--red); }
+.ig-lifecycle-card.lateral .ig-lifecycle-tactic  { color: var(--amber); }
+.ig-lifecycle-card.persist .ig-lifecycle-tactic  { color: var(--purple); }
+.ig-lifecycle-card.impact  .ig-lifecycle-tactic  { color: #f87171; }
+.ig-lifecycle-title { font-family: var(--display); font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.ig-lifecycle-items { display: flex; flex-direction: column; gap: 4px; }
+.ig-lifecycle-item { font-size: 11px; color: var(--muted); display: flex; gap: 6px; align-items: flex-start; line-height: 1.4; }
+.ig-lifecycle-item::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: currentColor; flex-shrink: 0; margin-top: 5px; opacity: 0.5; }
+
+/* validation comparison */
+.ig-validation { padding: 40px 48px; border-bottom: 1px solid var(--border); }
+.ig-validation-label { font-family: var(--mono); font-size: 10px; color: var(--muted2); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px; }
+.ig-validation-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.ig-val-card { background: var(--bg3); border-radius: 8px; padding: 20px; position: relative; overflow: hidden; }
+.ig-val-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+.ig-val-card.bas::before    { background: var(--teal); }
+.ig-val-card.red::before    { background: var(--red); }
+.ig-val-card.purple::before { background: var(--purple); }
+.ig-val-type { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+.ig-val-card.bas    .ig-val-type { color: var(--teal); }
+.ig-val-card.red    .ig-val-type { color: var(--red); }
+.ig-val-card.purple .ig-val-type { color: var(--purple); }
+.ig-val-title { font-family: var(--display); font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+.ig-val-items { display: flex; flex-direction: column; gap: 5px; }
+.ig-val-item { font-size: 12px; color: var(--muted); display: flex; gap: 7px; }
+.ig-val-item-icon { flex-shrink: 0; font-family: var(--mono); font-size: 11px; }
+.ig-val-card.bas    .ig-val-item-icon { color: var(--teal); }
+.ig-val-card.red    .ig-val-item-icon { color: var(--red); }
+.ig-val-card.purple .ig-val-item-icon { color: var(--purple); }
+
+/* cloud coverage */
+.ig-cloud { padding: 40px 48px; }
+.ig-cloud-label { font-family: var(--mono); font-size: 10px; color: var(--muted2); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px; }
+.ig-cloud-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ig-cloud-card { background: var(--bg3); border-radius: 8px; padding: 20px; }
+.ig-cloud-platform { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; }
+.ig-cloud-questions { display: flex; flex-direction: column; gap: 6px; }
+.ig-cloud-q { font-size: 12px; color: var(--muted); display: flex; gap: 8px; line-height: 1.4; }
+.ig-cloud-q-icon { font-family: var(--mono); font-size: 11px; color: var(--amber); flex-shrink: 0; }
+
+/* ── PAPER SECTION ── */
+.paper-section { padding: 0 0 80px; }
+.paper-toc {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 10px;
+  padding: 28px; margin-bottom: 48px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+}
+.paper-toc-label { font-family: var(--mono); font-size: 10px; color: var(--teal); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px; grid-column: 1/-1; }
+.paper-toc-item { font-size: 13px; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: 8px; padding: 6px 0; transition: color 0.2s; }
+.paper-toc-item:hover { color: var(--teal); }
+.paper-toc-item::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--teal); flex-shrink: 0; opacity: 0.5; }
+
+/* prose */
+.prose h2 { font-family: var(--display); font-size: 22px; font-weight: 700; color: #fff; margin: 52px 0 14px; padding-top: 8px; border-top: 1px solid var(--border); }
+.prose h2:first-child { margin-top: 0; border-top: none; }
+.prose h3 { font-family: var(--display); font-size: 17px; font-weight: 700; color: #fff; margin: 28px 0 10px; }
+.prose h4 { font-family: var(--mono); font-size: 11px; color: var(--teal); letter-spacing: 0.1em; text-transform: uppercase; margin: 20px 0 8px; }
+.prose p { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 16px; max-width: 680px; }
+.prose ul { list-style: none; margin: 0 0 18px; padding: 0; max-width: 680px; }
+.prose li { font-size: 14px; color: var(--muted); line-height: 1.7; padding: 4px 0 4px 20px; position: relative; }
+.prose li::before { content: ''; position: absolute; left: 0; top: 13px; width: 5px; height: 5px; border-radius: 50%; background: var(--teal); opacity: 0.6; }
+.section-intro { background: var(--bg2); border: 1px solid var(--border); border-left: 3px solid var(--teal); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 0 0 24px; font-size: 15px; color: var(--text); line-height: 1.7; max-width: 680px; }
+.pull-quote { border-left: 3px solid var(--amber); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 24px 0; font-size: 16px; color: var(--text); font-style: italic; line-height: 1.7; background: var(--amber-dim); max-width: 680px; }
+.key-points { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 20px 0 28px; max-width: 680px; }
+.key-point { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--muted); line-height: 1.5; }
+.key-point-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); flex-shrink: 0; margin-top: 5px; }
+.threat-table { width: 100%; border-collapse: collapse; margin: 20px 0 28px; max-width: 680px; }
+.threat-table th { background: var(--bg3); font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted2); padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+.threat-table td { padding: 12px 16px; font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--border); background: var(--bg2); vertical-align: top; line-height: 1.5; }
+.threat-table tr:last-child td { border-bottom: none; }
+.threat-table tr:hover td { background: var(--bg3); }
+.td-tactic { font-family: var(--mono); font-size: 10px; color: var(--red); letter-spacing: 0.06em; }
+.gh-callout { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin: 28px 0; display: flex; align-items: center; gap: 18px; max-width: 680px; }
+.gh-callout-icon { color: var(--teal); flex-shrink: 0; }
+.gh-callout-title { font-family: var(--display); font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 5px; }
+.gh-callout-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.gh-callout-link { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 12px; color: var(--teal); text-decoration: none; margin-top: 8px; }
+.disclaimer { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 18px 22px; margin-top: 40px; font-size: 13px; color: var(--muted2); line-height: 1.6; max-width: 680px; }
+
+/* ── NAV BAR BOTTOM ── */
+.article-nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 28px 0; margin-top: 40px; border-top: 1px solid var(--border); max-width: 680px; }
+.article-nav-bar a { display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.article-nav-bar a:hover { color: var(--teal); }
+
+/* ── CTA ── */
+.cta-strip { background: var(--bg2); border-top: 1px solid var(--border); padding: 64px 0; }
+.cta-inner { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
+.cta-heading { font-family: var(--display); font-size: clamp(18px, 2vw, 26px); font-weight: 700; color: #fff; margin-bottom: 8px; }
+.cta-sub { font-size: 15px; color: var(--muted); }
+.cta-actions { display: flex; gap: 12px; flex-shrink: 0; }
+.btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #090c10; font-size: 14px; font-weight: 600; padding: 11px 22px; border-radius: 4px; text-decoration: none; transition: opacity 0.2s; }
+.btn-primary:hover { opacity: 0.9; }
+.btn-outline { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border2); color: var(--muted); font-size: 14px; padding: 10px 22px; border-radius: 4px; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+.btn-outline:hover { border-color: var(--teal); color: var(--teal); }
+
+/* ── FOOTER ── */
+footer { padding: 40px 0; border-top: 1px solid var(--border); }
+.footer-inner { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
+.footer-logo { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.footer-logo span { color: var(--teal); }
+.footer-desc { font-size: 13px; color: var(--muted); max-width: 380px; line-height: 1.6; }
+.footer-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--teal); }
+.footer-bottom { margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.footer-copy { font-size: 12px; color: var(--muted2); }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.page-header .wrap > * { animation: fadeUp 0.55s ease both; }
+.page-header .wrap > *:nth-child(1) { animation-delay: 0.05s; }
+.page-header .wrap > *:nth-child(2) { animation-delay: 0.15s; }
+.page-header .wrap > *:nth-child(3) { animation-delay: 0.25s; }
+
+@media (max-width: 960px) {
+  .ig-pipeline-steps { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .ig-pipeline-steps::before { display: none; }
+  .ig-mindset-grid { grid-template-columns: 1fr; }
+  .ig-lifecycle-grid { grid-template-columns: repeat(2, 1fr); }
+  .ig-validation-grid { grid-template-columns: 1fr; }
+  .ig-cloud-grid { grid-template-columns: 1fr; }
+  .paper-toc { grid-template-columns: 1fr 1fr; }
+  .key-points { grid-template-columns: 1fr; }
+  .cta-inner { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .infographic-header { grid-template-columns: 1fr; }
+  .infographic-header, .ig-pipeline, .ig-mindset, .ig-lifecycle, .ig-validation, .ig-cloud { padding: 28px; }
+}
+@media (max-width: 600px) {
+  .wrap, .wrap-narrow { padding: 0 20px; }
+  .nav-links { display: none; }
+  .ig-pipeline-steps { grid-template-columns: 1fr 1fr; }
+  .ig-lifecycle-grid { grid-template-columns: 1fr; }
+  .paper-toc { grid-template-columns: 1fr; }
+  .footer-inner, .footer-bottom { padding: 0 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="https://saleemyousaf.co.uk/" class="nav-logo">Saleem <span>Yousaf</span></a>
+    <ul class="nav-links">
+      <li><a href="https://saleemyousaf.co.uk/about/">About</a></li>
+      <li><a href="https://saleemyousaf.co.uk/experience/">Experience</a></li>
+      <li><a href="https://saleemyousaf.co.uk/projects/">Projects</a></li>
+      <li class="nav-dropdown">
+        <button class="nav-dropdown-toggle" style="color:var(--teal);">
+          Articles
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="nav-dropdown-menu"><div class="nav-dropdown-menu-inner">
+          <a href="https://saleemyousaf.co.uk/articles/">All Articles</a>
+          <a href="https://saleemyousaf.co.uk/assume-breach/" class="active">Assume Breach</a>
+          <a href="https://saleemyousaf.co.uk/ai-security-governance/">AI Security &amp; Governance</a>
+          <a href="https://saleemyousaf.co.uk/breachforge/" style="color:#00d4ff;border-top:1px solid rgba(255,255,255,0.07);margin-top:4px;padding-top:12px;">⬡ BreachForge BAS</a>
+        </div></div>
+      </li>
+      <li><a href="https://saleemyousaf.co.uk/connect/" class="nav-cta">Connect</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="header-glow"></div>
+  <div class="header-glow-2"></div>
+  <div class="wrap">
+    <div class="breadcrumb">
+      <a href="https://saleemyousaf.co.uk/">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <a href="https://saleemyousaf.co.uk/assume-breach/">Assume Breach</a>
+      <span class="breadcrumb-sep">/</span>
+      <span>BAS Framework</span>
+    </div>
+    <div class="eyebrow">
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">Technical Paper and Infographic</span>
+    </div>
+    <h1>Breach Attack Simulation.<br><em>The complete framework.</em></h1>
+    <p class="page-sub">A visual infographic and technical paper covering the full BAS methodology, MITRE ATT&CK mapping, SABSA controls, validation approaches, and cloud-specific security validation across AWS and Azure. Designed for security architects, engineers, and programme leads.</p>
+    <div class="header-meta">
+      <div class="header-meta-item">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        2026
+      </div>
+      <div class="header-meta-item">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        ~25 min read
+      </div>
+      <div class="header-meta-item">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Saleem Yousaf
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INFOGRAPHIC -->
+<section class="infographic-section">
+  <div class="wrap">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line red"></div>
+      <span class="section-eyebrow-text red">Visual framework</span>
+    </div>
+    <h2>The BAS methodology at a glance.</h2>
+    <p class="section-sub">The full Breach Attack Simulation framework visualised, covering the mindset shift through to MITRE ATT&CK mapping, validation approaches, and cloud coverage.</p>
+
+    <div class="infographic-container">
+
+      <!-- HEADER -->
+      <div class="infographic-header">
+        <div>
+          <div class="ig-title">Breach Attack Simulation: Enterprise Security Validation Framework</div>
+          <div class="ig-subtitle">A structured methodology for proving security controls work under realistic attacker conditions. Continuous, evidence-based, mapped to MITRE ATT&CK and SABSA across AWS, Azure, and hybrid enterprise environments.</div>
+        </div>
+        <div class="ig-badges">
+          <span class="ig-badge red">Assume Breach</span>
+          <span class="ig-badge teal">MITRE ATT&CK</span>
+          <span class="ig-badge amber">SABSA Aligned</span>
+        </div>
+      </div>
+
+      <!-- BAS PIPELINE -->
+      <div class="ig-pipeline">
+        <div class="ig-pipeline-label">// The continuous validation pipeline</div>
+        <div class="ig-pipeline-steps">
+          <div class="ig-step">
+            <div class="ig-step-circle red">01</div>
+            <div class="ig-step-title">Scenario Selection</div>
+            <div class="ig-step-desc">Map adversary behaviours to environment using ATT&CK. Select scenarios by threat profile, sector, and architecture.</div>
+          </div>
+          <div class="ig-step">
+            <div class="ig-step-circle amber">02</div>
+            <div class="ig-step-title">Safe Simulation</div>
+            <div class="ig-step-desc">Execute attack simulations safely across live controls: endpoint, identity, email, network, cloud logging, and lateral movement paths.</div>
+          </div>
+          <div class="ig-step">
+            <div class="ig-step-circle teal">03</div>
+            <div class="ig-step-title">Detection Analysis</div>
+            <div class="ig-step-desc">Measure what SIEM, XDR, EDR, and cloud alerting actually detected. Surface blind spots between what fired and what should have.</div>
+          </div>
+          <div class="ig-step">
+            <div class="ig-step-circle purple">04</div>
+            <div class="ig-step-title">Remediation</div>
+            <div class="ig-step-desc">Fix the control gap, tune the detection rule, update the playbook, or adjust architecture, based on evidence, not assumption.</div>
+          </div>
+          <div class="ig-step">
+            <div class="ig-step-circle green">05</div>
+            <div class="ig-step-title">Retest and Evidence</div>
+            <div class="ig-step-desc">Re-run the scenario after remediation. Produce evidence that the control now works. Build a repeatable proof model over time.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MINDSET SHIFT -->
+      <div class="ig-mindset">
+        <div class="ig-mindset-label">// The mindset shift: from compliance questions to adversarial ones</div>
+        <div class="ig-mindset-grid">
+          <div class="ig-mindset-card">
+            <div class="ig-mindset-card-label old">Traditional posture</div>
+            <div class="ig-mindset-q"><span class="ig-mindset-q-icon old">?</span>Do we have endpoint protection deployed?</div>
+            <div class="ig-mindset-q"><span class="ig-mindset-q-icon old">?</span>Do we have MFA enabled?</div>
+            <div class="ig-mindset-q"><span class="ig-mindset-q-icon old">?</span>Do we have logging configured?</div>
+            <div class="ig-mindset-q"><span class="ig-mindset-q-icon old">?</span>Did the pen test find critical findings?</div>
+          </div>
+          <div class="ig-mindset-card">
+            <div class="ig-mindset-card-label new">Assume Breach posture</div>
+            <div class="ig-mindset-q"><span class="ig-mindset-q-icon new">></span>If an attacker lands on a device, what can they reach?</div>
+            <div class="ig-mindset-q"><span class="ig-mindset-q-icon new">></span>If a token is stolen, what detects its misuse?</div>
+            <div class="ig-mindset-q"><span class="ig-mindset-q-icon new">></span>If a workload identity is abused, how far can it move?</div>
+            <div class="ig-mindset-q"><span class="ig-mindset-q-icon new">></span>If we think we would detect it, have we proven that?</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ATTACK LIFECYCLE -->
+      <div class="ig-lifecycle">
+        <div class="ig-lifecycle-label">// MITRE ATT&CK tactic coverage across the attack lifecycle</div>
+        <div class="ig-lifecycle-grid">
+          <div class="ig-lifecycle-card initial">
+            <div class="ig-lifecycle-tactic">Initial Access and Execution</div>
+            <div class="ig-lifecycle-title">Gaining the Foothold</div>
+            <div class="ig-lifecycle-items">
+              <div class="ig-lifecycle-item">Phishing and spearphishing</div>
+              <div class="ig-lifecycle-item">Valid account abuse</div>
+              <div class="ig-lifecycle-item">Exposed service exploitation</div>
+              <div class="ig-lifecycle-item">Supply chain compromise</div>
+            </div>
+          </div>
+          <div class="ig-lifecycle-card lateral">
+            <div class="ig-lifecycle-tactic">Persistence and Lateral Movement</div>
+            <div class="ig-lifecycle-title">Spreading and Maintaining Access</div>
+            <div class="ig-lifecycle-items">
+              <div class="ig-lifecycle-item">Pass-the-hash and ticket attacks</div>
+              <div class="ig-lifecycle-item">Cloud role assumption chains</div>
+              <div class="ig-lifecycle-item">VPC and subnet traversal</div>
+              <div class="ig-lifecycle-item">Scheduled task and service abuse</div>
+            </div>
+          </div>
+          <div class="ig-lifecycle-card persist">
+            <div class="ig-lifecycle-tactic">Privilege Escalation and Evasion</div>
+            <div class="ig-lifecycle-title">Elevating and Hiding</div>
+            <div class="ig-lifecycle-items">
+              <div class="ig-lifecycle-item">IAM misconfiguration abuse</div>
+              <div class="ig-lifecycle-item">Token impersonation</div>
+              <div class="ig-lifecycle-item">Log tampering and disabling</div>
+              <div class="ig-lifecycle-item">Living off the land binaries</div>
+            </div>
+          </div>
+          <div class="ig-lifecycle-card impact">
+            <div class="ig-lifecycle-tactic">Exfiltration and Impact</div>
+            <div class="ig-lifecycle-title">Data Theft and Disruption</div>
+            <div class="ig-lifecycle-items">
+              <div class="ig-lifecycle-item">Cloud storage exfiltration</div>
+              <div class="ig-lifecycle-item">Ransomware simulation</div>
+              <div class="ig-lifecycle-item">C2 beaconing and DNS tunnelling</div>
+              <div class="ig-lifecycle-item">Resource hijacking</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VALIDATION TYPES -->
+      <div class="ig-validation">
+        <div class="ig-validation-label">// Validation approaches: what each answers</div>
+        <div class="ig-validation-grid">
+          <div class="ig-val-card bas">
+            <div class="ig-val-type">Breach Attack Simulation</div>
+            <div class="ig-val-title">Continuous Automated Validation</div>
+            <div class="ig-val-items">
+              <div class="ig-val-item"><span class="ig-val-item-icon">+</span>Continuous, not point-in-time</div>
+              <div class="ig-val-item"><span class="ig-val-item-icon">+</span>Scalable across all controls</div>
+              <div class="ig-val-item"><span class="ig-val-item-icon">+</span>Repeatable after every change</div>
+              <div class="ig-val-item"><span class="ig-val-item-icon">+</span>Evidence-based assurance output</div>
+            </div>
+          </div>
+          <div class="ig-val-card red">
+            <div class="ig-val-type">Red Team Exercise</div>
+            <div class="ig-val-title">Adversarial Campaign Testing</div>
+            <div class="ig-val-items">
+              <div class="ig-val-item"><span class="ig-val-item-icon">+</span>Human creativity and judgment</div>
+              <div class="ig-val-item"><span class="ig-val-item-icon">+</span>Full campaign simulation</div>
+              <div class="ig-val-item"><span class="ig-val-item-icon">+</span>Novel technique coverage</div>
+              <div class="ig-val-item"><span class="ig-val-item-icon">+</span>Tests people and process too</div>
+            </div>
+          </div>
+          <div class="ig-val-card purple">
+            <div class="ig-val-type">Purple Team Exercise</div>
+            <div class="ig-val-title">Collaborative Detection Building</div>
+            <div class="ig-val-items">
+              <div class="ig-val-item"><span class="ig-val-item-icon">+</span>Immediate detection feedback</div>
+              <div class="ig-val-item"><span class="ig-val-item-icon">+</span>Collaborative rule improvement</div>
+              <div class="ig-val-item"><span class="ig-val-item-icon">+</span>Knowledge transfer to Blue Team</div>
+              <div class="ig-val-item"><span class="ig-val-item-icon">+</span>Targeted control improvement</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLOUD COVERAGE -->
+      <div class="ig-cloud">
+        <div class="ig-cloud-label">// Cloud validation questions: AWS and Azure under breach conditions</div>
+        <div class="ig-cloud-grid">
+          <div class="ig-cloud-card">
+            <div class="ig-cloud-platform">AWS Validation Questions</div>
+            <div class="ig-cloud-questions">
+              <div class="ig-cloud-q"><span class="ig-cloud-q-icon">?</span>Do CloudTrail and GuardDuty surface meaningful signals from simulated activity?</div>
+              <div class="ig-cloud-q"><span class="ig-cloud-q-icon">?</span>Are IAM role assumption chains visible and constrained?</div>
+              <div class="ig-cloud-q"><span class="ig-cloud-q-icon">?</span>Does east-west movement between VPCs trigger detection?</div>
+              <div class="ig-cloud-q"><span class="ig-cloud-q-icon">?</span>Are S3 exfiltration patterns detected by Macie or SIEM?</div>
+              <div class="ig-cloud-q"><span class="ig-cloud-q-icon">?</span>Are Lambda and ECS workload identity abuses generating alerts?</div>
+            </div>
+          </div>
+          <div class="ig-cloud-card">
+            <div class="ig-cloud-platform">Azure Validation Questions</div>
+            <div class="ig-cloud-questions">
+              <div class="ig-cloud-q"><span class="ig-cloud-q-icon">?</span>Does Microsoft Defender for Cloud detect simulated attacker behaviours?</div>
+              <div class="ig-cloud-q"><span class="ig-cloud-q-icon">?</span>Are Entra ID token theft and misuse scenarios visible in Sentinel?</div>
+              <div class="ig-cloud-q"><span class="ig-cloud-q-icon">?</span>Do lateral movement paths between subscriptions trigger alerts?</div>
+              <div class="ig-cloud-q"><span class="ig-cloud-q-icon">?</span>Are Managed Identity abuse scenarios detected and contained?</div>
+              <div class="ig-cloud-q"><span class="ig-cloud-q-icon">?</span>Are privileged role assignments and PIM abuse scenarios logged and alerted?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end infographic-container -->
+  </div>
+</section>
+
+<!-- PAPER -->
+<section class="paper-section">
+  <div class="wrap">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line teal"></div>
+      <span class="section-eyebrow-text teal">Technical paper</span>
+    </div>
+    <h2>The full BAS framework paper.</h2>
+    <p class="section-sub">The complete technical reference covering the Assume Breach methodology, continuous validation design, MITRE ATT&CK integration, SABSA security architecture alignment, and architect implementation guidance.</p>
+
+    <div class="paper-toc">
+      <div class="paper-toc-label">// Contents</div>
+      <a href="#abstract" class="paper-toc-item">Abstract</a>
+      <a href="#introduction" class="paper-toc-item">Introduction</a>
+      <a href="#traditional-limitations" class="paper-toc-item">Traditional Assurance Limitations</a>
+      <a href="#assume-breach" class="paper-toc-item">The Assume Breach Methodology</a>
+      <a href="#bas-framework" class="paper-toc-item">BAS Framework and Pipeline</a>
+      <a href="#mitre-mapping" class="paper-toc-item">MITRE ATT&CK Integration</a>
+      <a href="#sabsa" class="paper-toc-item">SABSA Security Architecture Alignment</a>
+      <a href="#cloud-validation" class="paper-toc-item">Cloud Validation: AWS and Azure</a>
+      <a href="#architect-guidance" class="paper-toc-item">Architect Implementation Guidance</a>
+      <a href="#conclusion" class="paper-toc-item">Conclusion</a>
+    </div>
+  </div>
+
+  <div class="wrap-narrow">
+    <div class="prose">
+
+      <h2 id="abstract">Abstract</h2>
+      <div class="section-intro">Traditional security assurance approaches including penetration testing, vulnerability scanning, and periodic compliance assessments answer the question of whether a control exists. They do not continuously answer whether that control works under realistic attacker conditions. This paper presents the Assume Breach methodology and Breach Attack Simulation as a continuous, evidence-based approach to proving security controls perform as designed.</div>
+      <p>The framework presented covers the conceptual foundation of Assume Breach as a design and operational philosophy, the BAS validation pipeline, MITRE ATT&CK tactic and technique mapping, SABSA security architecture layer alignment, cloud-specific validation across AWS and Azure, and practical guidance for security architects responsible for implementing and sustaining continuous security validation programmes.</p>
+
+      <h2 id="introduction">Introduction</h2>
+      <p>The security assurance challenge facing enterprise organisations is not a shortage of tools or frameworks. It is a fundamental gap between what security teams believe their controls do and what those controls actually do under adversary conditions.</p>
+      <p>A firewall policy may exist in a policy management system. An EDR agent may be deployed across endpoints. SIEM correlation rules may have been written and committed. But none of these facts individually prove that the organisation can detect, contain, and respond to a realistic attack. They prove only that the components are present. The question of whether they work together   under realistic attacker behaviour, across real infrastructure, in response to actual threat techniques   remains unanswered until someone tests it.</p>
+      <p>Penetration testing has historically been the primary mechanism for this kind of challenge. Red team exercises provide depth and human adversarial judgment. Both remain valuable. But both share a fundamental limitation: they are time-bound, periodic, and scope-limited. An environment changes continuously. New services are deployed, configurations drift, detection rules are modified, and new attack techniques emerge. A quarterly or annual assurance exercise cannot keep pace with the rate of change in modern enterprise environments.</p>
+      <p>Assume Breach and Breach Attack Simulation address this gap by shifting from periodic challenge to continuous validation. The core premise is simple: assume an attacker may already have an initial foothold, and continuously prove that detection, containment, and response controls work against that assumption.</p>
+
+      <h2 id="traditional-limitations">Limitations of Traditional Assurance</h2>
+      <h3>Penetration Testing</h3>
+      <p>Penetration testing provides independent, adversarial challenge against a defined scope and within a defined time window. It is valuable for identifying exploitable vulnerabilities, misconfigurations, and weak trust boundaries that internal teams may have normalised. A skilled penetration tester brings creative adversarial thinking that automated tools cannot replicate.</p>
+      <p>However, penetration testing does not prove continuous control effectiveness. A finding remediated after a test may reappear through configuration drift before the next test. A control that successfully blocked a technique in one test may fail against a slightly modified version of the same technique. The test validates a point in time, not the ongoing operational state of the control environment.</p>
+      <h3>Vulnerability Scanning</h3>
+      <p>Vulnerability scanning identifies missing patches, known misconfigurations, and publicly disclosed weaknesses at scale. It is operationally essential and should be continuous. But it cannot answer whether detection controls are working, whether lateral movement paths are visible to SIEM, whether identity abuse patterns trigger alerts, or whether response playbooks execute correctly.</p>
+      <h3>Compliance-Driven Assessment</h3>
+      <p>Compliance frameworks provide a structured baseline for control requirements. Audits against those frameworks confirm that controls exist and are documented. But compliance is not security. An organisation can pass a compliance audit with controls that are technically present but operationally ineffective, poorly tuned, incorrectly scoped, or unable to detect the specific techniques attackers actually use.</p>
+      <div class="pull-quote">Attackers do not work in snapshots. They work in sequences, chains, privilege escalation paths, missed detections, and control drift. They exploit the spaces between controls, not just the controls themselves.</div>
+
+      <h2 id="assume-breach">The Assume Breach Methodology</h2>
+      <p>Assume Breach is both a design philosophy and an operational posture. As a design philosophy, it changes the questions architects ask during system design. As an operational posture, it changes the standard against which security controls are measured.</p>
+      <h3>As a Design Philosophy</h3>
+      <p>Traditional security design asks: how do we prevent an attacker from gaining access? Assume Breach asks: if an attacker gains an initial foothold, what happens next, and can we detect and contain it?</p>
+      <p>This shift has significant architectural implications. Trust boundaries must be designed to contain compromise, not just prevent it. Segmentation must limit lateral movement, not just separate networks. Identity design must minimise blast radius, not just enforce authentication. Logging and telemetry must be treated as first-class architectural requirements, not operational afterthoughts.</p>
+      <h3>As an Operational Posture</h3>
+      <p>As an operational posture, Assume Breach means continuously asking: if we think a control would detect this, have we proven it? If we believe a segment would contain lateral movement, have we validated it? If we expect a playbook to trigger, have we tested it recently?</p>
+      <p>The answer to these questions should not be "we believe so based on the last assessment." It should be "yes, and here is the evidence from this week's simulation run."</p>
+
+      <div class="key-points">
+        <div class="key-point"><div class="key-point-dot"></div>Trust boundaries designed to contain, not just prevent</div>
+        <div class="key-point"><div class="key-point-dot"></div>Segmentation validated for lateral movement containment</div>
+        <div class="key-point"><div class="key-point-dot"></div>Identity design minimising blast radius by design</div>
+        <div class="key-point"><div class="key-point-dot"></div>Logging treated as a first-class architectural requirement</div>
+        <div class="key-point"><div class="key-point-dot"></div>Detection coverage proven, not assumed</div>
+        <div class="key-point"><div class="key-point-dot"></div>Response playbooks tested against realistic conditions</div>
+      </div>
+
+      <h2 id="bas-framework">The BAS Framework and Validation Pipeline</h2>
+      <p>Breach Attack Simulation operationalises the Assume Breach posture through a structured, repeatable validation pipeline. The pipeline has five stages that together create a continuous improvement loop for security control effectiveness.</p>
+      <h3>Stage 1: Scenario Selection</h3>
+      <p>Effective BAS begins with threat-informed scenario selection. Scenarios should be chosen based on realistic adversary behaviour relevant to the organisation's sector, technology stack, and threat profile. MITRE ATT&CK provides the framework for this selection, mapping attacker tactics and techniques to the specific controls and telemetry sources the organisation has deployed. A government organisation with a cloud-first architecture should run different scenarios than a manufacturing organisation with significant OT infrastructure, even if both use the same core BAS platform.</p>
+      <h3>Stage 2: Safe Simulation</h3>
+      <p>BAS platforms execute attack simulations safely by replicating attacker behaviours without causing actual harm. This includes simulating credential harvesting techniques without actually stealing credentials, executing lateral movement patterns without disrupting production systems, and triggering C2 communication behaviours without establishing external connectivity. Safe simulation allows organisations to test controls in production environments without the operational risk associated with live red team activities.</p>
+      <h3>Stage 3: Detection Analysis</h3>
+      <p>The detection analysis stage is where the core value of BAS is realised. After a simulation runs, the platform correlates what happened against what was detected by SIEM, XDR, EDR, and cloud-native security services. This produces a gap analysis: techniques executed versus techniques detected, alerts generated versus alerts that should have generated, response playbooks triggered versus playbooks that should have triggered. This gap analysis is objective, evidence-based, and directly actionable.</p>
+      <h3>Stage 4: Remediation</h3>
+      <p>Remediation actions following a BAS run may span multiple layers of the security architecture. Detection rules may need to be tuned or written. Response playbooks may need to be updated. Architecture changes may be required to reduce attack surface or improve segmentation. IAM configurations may need to be tightened. The key distinction from traditional assessment-driven remediation is that the remediation is directly linked to a specific, reproducible simulation that can be re-run to verify the fix.</p>
+      <h3>Stage 5: Retest and Evidence Production</h3>
+      <p>Once remediation actions are complete, the original simulation scenario is re-run. If the control now works correctly, meaning the technique is detected, the alert fires, and the playbook triggers, the organisation has produced evidence of control effectiveness that can be used for assurance reporting, board-level security reporting, and regulatory compliance documentation. This evidence model represents a fundamentally different quality of assurance than a point-in-time assessment.</p>
+
+      <h2 id="mitre-mapping">MITRE ATT&CK Integration</h2>
+      <p>MITRE ATT&CK is the primary reference framework for BAS scenario selection and coverage measurement. The framework maps adversary tactics, the high-level objectives of an attack, to specific techniques and sub-techniques that represent how those objectives are achieved.</p>
+
+      <table class="threat-table">
+        <thead>
+          <tr>
+            <th>Tactic</th>
+            <th>Key techniques for BAS coverage</th>
+            <th>Primary detection sources</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-tactic">Initial Access</td>
+            <td>Phishing, valid account abuse, exposed service exploitation</td>
+            <td>Email security, identity logs, VPN and access logs</td>
+          </tr>
+          <tr>
+            <td class="td-tactic">Execution</td>
+            <td>Command and script interpreter abuse, scheduled task execution</td>
+            <td>EDR process telemetry, SIEM command line logging</td>
+          </tr>
+          <tr>
+            <td class="td-tactic">Persistence</td>
+            <td>Account creation, cloud backdoor creation, identity token persistence</td>
+            <td>IAM logs, CloudTrail, Azure Activity Logs</td>
+          </tr>
+          <tr>
+            <td class="td-tactic">Privilege Escalation</td>
+            <td>IAM misconfiguration abuse, token impersonation, role chaining</td>
+            <td>IAM logs, PIM alerts, CloudTrail AssumeRole events</td>
+          </tr>
+          <tr>
+            <td class="td-tactic">Defence Evasion</td>
+            <td>Log tampering, timestomping, living off the land techniques</td>
+            <td>SIEM log gap detection, EDR behavioural analytics</td>
+          </tr>
+          <tr>
+            <td class="td-tactic">Lateral Movement</td>
+            <td>Pass-the-hash, remote service abuse, VPC traversal</td>
+            <td>Network flow logs, east-west traffic analytics, SIEM</td>
+          </tr>
+          <tr>
+            <td class="td-tactic">Exfiltration</td>
+            <td>Cloud storage exfiltration, encrypted channel exfiltration</td>
+            <td>DLP, S3 and Blob access logs, Macie, DNS analytics</td>
+          </tr>
+          <tr>
+            <td class="td-tactic">Impact</td>
+            <td>Ransomware simulation, data destruction, resource hijacking</td>
+            <td>File integrity monitoring, cloud resource change detection</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 id="sabsa">SABSA Security Architecture Alignment</h2>
+      <p>SABSA provides a risk-driven framework for security architecture that maps controls from business context through to operational execution. BAS aligns naturally to SABSA because it validates that the controls designed at each layer of the architecture are actually working as intended at the operational layer.</p>
+      <p>At the contextual layer, BAS scenarios are selected based on the organisation's business risk profile and threat environment. At the conceptual layer, Assume Breach principles inform the architectural design of trust boundaries, identity models, and segmentation. At the logical layer, BAS validates that security services including SIEM, XDR, EDR, and DLP are delivering the detection and response outcomes they were designed to deliver. At the physical layer, BAS exercises specific technology controls including firewall rules, endpoint agent configurations, and cloud security service policies. At the component layer, BAS validates the specific configuration of detection rules, response playbooks, and integration between security tools. At the operational layer, BAS produces the continuous evidence of control effectiveness that supports ongoing assurance and governance reporting.</p>
+
+      <h2 id="cloud-validation">Cloud Validation: AWS and Azure</h2>
+      <p>Cloud environments present particular challenges for security validation because they are dynamic, API-driven, and heavily dependent on identity for access control. Static validation approaches are especially inadequate for cloud because infrastructure changes continuously and the boundaries between what is internal and external are less clearly defined than in on-premise environments.</p>
+      <h3>AWS Validation Focus Areas</h3>
+      <p>In AWS environments, BAS should validate whether CloudTrail and GuardDuty are correctly ingesting and correlating security events, whether IAM role assumption chains are constrained and generate alerts when abused, whether east-west traffic between VPCs triggers network-level detection, whether Lambda and ECS workload identity abuse scenarios generate alerts through Security Hub, and whether S3 exfiltration patterns are detected by Macie or through SIEM ingestion of access logs. AWS Security Hub provides a consolidated view that should be used as the primary validation target for AWS-based BAS scenarios.</p>
+      <h3>Azure Validation Focus Areas</h3>
+      <p>In Azure environments, BAS should validate whether Microsoft Defender for Cloud correctly surfaces simulated attacker behaviours across workloads, whether Entra ID token theft and misuse scenarios are visible in Microsoft Sentinel, whether lateral movement paths between subscriptions and resource groups trigger conditional access policies and alerts, whether Managed Identity abuse scenarios are detected through activity logs and Defender alerts, and whether Azure Blob Storage exfiltration patterns surface through Defender for Storage or SIEM integration.</p>
+
+      <h2 id="architect-guidance">Architect Implementation Guidance</h2>
+      <p>Security architects responsible for implementing BAS programmes should consider the following areas when designing a continuous validation capability.</p>
+      <h3>Start with threat modelling</h3>
+      <p>BAS is most effective when scenario selection is informed by a current threat model. STRIDE-based threat modelling at the architecture level, combined with MITRE ATT&CK mapping, produces a prioritised list of scenarios that reflects the organisation's actual threat profile rather than a generic simulation checklist.</p>
+      <h3>Treat detection as an architecture requirement</h3>
+      <p>The most common finding from initial BAS runs is that detection telemetry is missing or incomplete. Logging is not enabled. SIEM rules are not written. Cloud security services are not forwarding to SIEM. These are architecture failures, not configuration issues. Architects should treat detection and logging requirements as first-class deliverables in any cloud or security programme, specified and validated alongside functional requirements.</p>
+      <h3>Design for blast radius reduction</h3>
+      <p>Before running BAS simulations, review the identity and segmentation architecture with blast radius in mind. If a user credential is compromised, how far can it reach? If a workload identity is abused, which other workloads can it access? The answers to these questions should guide both the BAS scenario selection and any architectural remediation required before validation begins.</p>
+      <h3>Integrate into CI/CD and change processes</h3>
+      <p>BAS provides the most value when it is integrated into the change management process. Every significant infrastructure or security configuration change should trigger a relevant simulation run. This ensures that security controls are continuously validated against the current state of the environment, not the state at the last formal assessment.</p>
+      <h3>Produce evidence for governance</h3>
+      <p>The evidence produced by BAS runs   simulation executed, technique detected or not detected, control gap identified, remediation applied, retest passed, forms a continuous assurance record. This record has value beyond the security team. It can be used for board-level security reporting, regulatory compliance evidence, and security programme maturity assessment.</p>
+
+      <h2 id="conclusion">Conclusion</h2>
+      <p>The gap between what organisations believe their security controls do and what those controls actually do under adversarial conditions is one of the most significant risks in enterprise security management. Penetration testing, vulnerability scanning, and compliance assessments provide valuable inputs but cannot close this gap on their own.</p>
+      <p>Assume Breach as a design and operational philosophy changes the question from "do we have controls?" to "do our controls work?" Breach Attack Simulation provides the mechanism for answering that question continuously, with evidence, at the speed modern enterprise environments change.</p>
+      <p>Security architects who embed Assume Breach principles into their design process and implement continuous BAS validation as an operational capability will build environments that are not just harder to compromise but genuinely more observable, more containable, and more defensible when compromise occurs. That is the architectural outcome the discipline demands.</p>
+
+      <div class="gh-callout">
+        <div class="gh-callout-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        </div>
+        <div>
+          <div class="gh-callout-title">Assume Breach Reference Architecture</div>
+          <div class="gh-callout-body">Related frameworks, reference architectures, and security design patterns supporting the BAS methodology are available on GitHub.</div>
+          <a href="https://github.com/saleem-yousaf?tab=repositories" target="_blank" rel="noopener" class="gh-callout-link">
+            github.com/saleem-yousaf
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="disclaimer">
+        <strong>Reference Paper Disclaimer.</strong> This paper is provided for educational and professional development purposes. All examples, scenarios, and architecture patterns are illustrative. No client-specific or production-specific information is disclosed.
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:16px 20px;margin:28px 0;max-width:680px;display:flex;justify-content:space-between;align-items:center;gap:20px;">
+      <div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--red);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">// Visual reference</div>
+        <div style="font-family:var(--display);font-size:16px;font-weight:700;color:#fff;margin-bottom:4px;">Full infographic available</div>
+        <div style="font-size:13px;color:var(--muted);">MITRE ATT&CK v14 kill chain, SABSA control matrix, lateral movement techniques, and BAS outputs   all in one visual.</div>
+      </div>
+      <a href="https://saleemyousaf.co.uk/assume-breach/bas-infographic/" style="display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;font-size:13px;font-weight:600;padding:10px 20px;border-radius:4px;text-decoration:none;flex-shrink:0;font-family:var(--body);">View infographic <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+    <div class="article-nav-bar">
+        <a href="https://saleemyousaf.co.uk/assume-breach/">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+          Back to Assume Breach
+        </a>
+        <a href="https://saleemyousaf.co.uk/articles/">
+          All articles
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-strip">
+  <div class="wrap">
+    <div class="cta-inner">
+      <div>
+        <div class="cta-heading">Working on a continuous security validation programme?</div>
+        <div class="cta-sub">Connect to discuss BAS implementation, Assume Breach architecture, or cloud security validation strategy.</div>
+      </div>
+      <div class="cta-actions">
+        <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener" class="btn-primary">Connect on LinkedIn</a>
+        <a href="https://saleemyousaf.co.uk/assume-breach/" class="btn-outline">Framework overview</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Saleem <span>Yousaf</span></div>
+        <div class="footer-desc">Cloud &amp; Cyber Security Architect · AWS · Azure · Zero Trust · AI Governance · OT Security · Enterprise Architecture</div>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/saleem-yousaf?tab=repositories" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+        <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+        <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
+        <a href="https://saleem-yousaf.blogspot.com/" target="_blank" rel="noopener">Blogger</a>
+        <a href="https://codepen.io/Saleem-Yousaf" target="_blank" rel="noopener">CodePen</a>
+        <a href="https://www.cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
+      <a href="https://www.saleemyousaf.co.uk/privacy-policy/" style="font-size:12px;color:var(--muted2);text-decoration:none;">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+
+
+
+</body>
+</html>

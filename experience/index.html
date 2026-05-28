@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Architecture &amp; Security Experience | Saleem Yousaf</title>
+<meta name="description" content="Saleem Yousaf's cloud security and enterprise architecture experience across UK government, Critical National Infrastructure, manufacturing, and global enterprise environments.">
+<meta name="author" content="Saleem Yousaf">
+<link rel="canonical" href="https://saleemyousaf.co.uk/experience/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ── TOKENS ─────────────────────────────────────────── */
+:root {
+  --bg:         #090c10;
+  --bg2:        #0f1318;
+  --bg3:        #161b22;
+  --border:     rgba(255,255,255,0.07);
+  --border2:    rgba(255,255,255,0.12);
+  --text:       #e6eaf0;
+  --muted:      #7a8694;
+  --muted2:     #4a5568;
+  --teal:       #2dd4bf;
+  --teal-dim:   rgba(45,212,191,0.12);
+  --amber:      #f59e0b;
+  --amber-dim:  rgba(245,158,11,0.1);
+  --mono:       'DM Mono', monospace;
+  --display:    'Syne', sans-serif;
+  --body:       'Inter', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(45,212,191,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45,212,191,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── LAYOUT ─────────────────────────────────────────── */
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+section { position: relative; z-index: 1; }
+
+/* ── NAV ─────────────────────────────────────────────── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(9,12,16,0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+.nav-logo span { color: var(--teal); }
+.nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+.nav-links a {
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a.active { color: var(--teal); }
+.nav-dropdown { position: relative; }
+.nav-dropdown-toggle {
+  font-size: 13px; color: var(--muted); background: none; border: none;
+  cursor: pointer; letter-spacing: 0.03em; display: flex; align-items: center; gap: 5px;
+  font-family: var(--body); padding: 0; transition: color 0.2s;
+}
+.nav-dropdown-toggle:hover { color: var(--teal); }
+.nav-dropdown:hover .nav-dropdown-toggle { color: var(--teal); }
+.nav-dropdown-toggle svg { transition: transform 0.2s; }
+.nav-dropdown:hover .nav-dropdown-toggle svg { transform: rotate(180deg); }
+.nav-dropdown-menu {
+  position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  padding-top: 12px; opacity: 0; pointer-events: none;
+  transition: opacity 0.15s; z-index: 200;
+}
+.nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: all; }
+.nav-dropdown-menu-inner {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+  padding: 8px; min-width: 220px;
+}
+.nav-dropdown-menu a {
+  display: block; padding: 9px 14px; font-size: 13px; color: var(--muted);
+  text-decoration: none; border-radius: 5px; transition: background 0.15s, color 0.15s; white-space: nowrap;
+}
+.nav-dropdown-menu a:hover { background: var(--bg3); color: var(--text); }
+.nav-dropdown-menu a.active { color: var(--teal); }
+.nav-cta {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--teal) !important;
+  border: 1px solid rgba(45,212,191,0.3);
+  padding: 6px 16px;
+  border-radius: 4px;
+  transition: background 0.2s, border-color 0.2s !important;
+}
+.nav-cta:hover { background: var(--teal-dim); border-color: var(--teal) !important; }
+
+/* ── PAGE HEADER ────────────────────────────────────── */
+.page-header {
+  padding: 140px 0 80px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+.page-header-glow {
+  position: absolute;
+  top: -150px; right: -150px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(45,212,191,0.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.eyebrow-line { width: 24px; height: 1px; background: var(--teal); }
+.eyebrow-text {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--teal);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+h1 {
+  font-family: var(--display);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 20px;
+}
+h1 em { font-style: normal; color: var(--teal); }
+.page-sub {
+  font-size: 17px;
+  color: var(--muted);
+  max-width: 620px;
+  line-height: 1.7;
+}
+
+/* ── SECTION SHARED ─────────────────────────────────── */
+.section-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.section-eyebrow-line { width: 24px; height: 1px; background: var(--teal); }
+.section-eyebrow-text {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--teal);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+h2 {
+  font-family: var(--display);
+  font-size: clamp(24px, 2.8vw, 36px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 14px;
+}
+.section-sub {
+  font-size: 16px;
+  color: var(--muted);
+  max-width: 600px;
+  line-height: 1.7;
+  margin-bottom: 52px;
+}
+
+/* ── EXPERTISE SECTION ──────────────────────────────── */
+.expertise { padding: 88px 0; }
+
+.expertise-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.exp-nav {
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 8px;
+}
+.exp-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  color: var(--muted);
+  font-family: var(--body);
+  font-size: 14px;
+}
+.exp-nav-item:hover { background: var(--bg3); color: var(--text); }
+.exp-nav-item.active {
+  background: var(--teal-dim);
+  color: var(--teal);
+}
+.exp-nav-icon {
+  width: 32px; height: 32px;
+  background: var(--bg3);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.exp-nav-item.active .exp-nav-icon { background: rgba(45,212,191,0.15); }
+.exp-nav-icon svg { width: 16px; height: 16px; }
+
+.exp-panel {
+  background: var(--bg2);
+  padding: 40px;
+  display: none;
+}
+.exp-panel.active { display: block; }
+.exp-panel-title {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+}
+.exp-panel-intro {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 28px;
+  max-width: 560px;
+}
+.exp-skills {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.exp-skill {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 14px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.exp-skill-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--teal);
+  flex-shrink: 0;
+}
+
+/* ── ENGAGEMENTS ────────────────────────────────────── */
+.engagements { padding: 0 0 88px; }
+
+.engagement-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+
+.engagement {
+  background: var(--bg2);
+  padding: 36px 40px;
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  gap: 0 28px;
+  align-items: start;
+  transition: background 0.2s;
+}
+.engagement:hover { background: var(--bg3); }
+
+.eng-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--teal);
+  letter-spacing: 0.08em;
+  padding-top: 4px;
+}
+
+.eng-sector {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  margin-bottom: 6px;
+}
+.eng-name {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.eng-role {
+  font-size: 13px;
+  color: var(--teal);
+  font-family: var(--mono);
+  margin-bottom: 14px;
+  letter-spacing: 0.03em;
+}
+.eng-body {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 640px;
+  margin-bottom: 16px;
+}
+.eng-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.eng-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 3px 10px;
+  background: var(--teal-dim);
+  color: var(--teal);
+  border-radius: 3px;
+  letter-spacing: 0.04em;
+}
+.eng-tag-amber {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 3px 10px;
+  background: var(--amber-dim);
+  color: var(--amber);
+  border-radius: 3px;
+  letter-spacing: 0.04em;
+}
+
+.eng-badge {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--muted2);
+  white-space: nowrap;
+  margin-top: 4px;
+}
+.eng-badge.gov { border-color: rgba(45,212,191,0.2); color: var(--teal); }
+.eng-badge.cni { border-color: rgba(245,158,11,0.2); color: var(--amber); }
+.eng-badge.ent { border-color: rgba(255,255,255,0.1); color: var(--muted); }
+
+/* ── CERTIFICATIONS ─────────────────────────────────── */
+.certifications { padding: 0 0 88px; }
+
+.certs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.cert-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.cert-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.cert-card.azure::before { background: linear-gradient(90deg, #0078d4, transparent); }
+.cert-card.aws::before   { background: linear-gradient(90deg, #f59e0b, transparent); }
+.cert-card.comp::before  { background: linear-gradient(90deg, #e02020, transparent); }
+.cert-card.ceh::before   { background: linear-gradient(90deg, #8b5cf6, transparent); }
+.cert-card:hover { border-color: var(--border2); }
+
+.cert-issuer {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted2);
+}
+.cert-name {
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+}
+.cert-focus {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  flex: 1;
+}
+.cert-badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  letter-spacing: 0.05em;
+  align-self: flex-start;
+}
+.cert-badge.azure { background: rgba(0,120,212,0.12); color: #60a5fa; }
+.cert-badge.aws   { background: var(--amber-dim); color: var(--amber); }
+.cert-badge.comp  { background: rgba(224,32,32,0.1); color: #f87171; }
+.cert-badge.ceh   { background: rgba(139,92,246,0.12); color: #a78bfa; }
+
+/* ── CTA STRIP ──────────────────────────────────────── */
+.cta-strip {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 80px 0;
+}
+.cta-inner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: center;
+}
+.cta-heading {
+  font-family: var(--display);
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10px;
+}
+.cta-sub { font-size: 15px; color: var(--muted); line-height: 1.6; }
+.cta-actions { display: flex; gap: 12px; flex-shrink: 0; align-items: center; }
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--teal);
+  color: #090c10;
+  font-family: var(--body);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 4px;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  font-size: 14px;
+  padding: 11px 24px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-outline:hover { border-color: var(--teal); color: var(--teal); }
+
+/* ── FOOTER ─────────────────────────────────────────── */
+footer {
+  padding: 48px 0 40px;
+  border-top: 1px solid var(--border);
+}
+.footer-inner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: start;
+}
+.footer-logo { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.footer-logo span { color: var(--teal); }
+.footer-desc { font-size: 13px; color: var(--muted); max-width: 380px; line-height: 1.6; }
+.footer-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--teal); }
+.footer-bottom {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-copy { font-size: 12px; color: var(--muted2); }
+
+/* ── ANIMATIONS ─────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-header > .wrap > * { animation: fadeUp 0.55s ease both; }
+.page-header > .wrap > *:nth-child(1) { animation-delay: 0.05s; }
+.page-header > .wrap > *:nth-child(2) { animation-delay: 0.15s; }
+.page-header > .wrap > *:nth-child(3) { animation-delay: 0.25s; }
+
+/* ── RESPONSIVE ─────────────────────────────────────── */
+@media (max-width: 900px) {
+  .expertise-layout { grid-template-columns: 1fr; }
+  .exp-nav { border-right: none; border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 4px; }
+  .exp-nav-item { width: auto; flex: 1 1 auto; }
+  .exp-skills { grid-template-columns: 1fr; }
+  .engagement { grid-template-columns: 48px 1fr; }
+  .eng-badge { display: none; }
+  .certs-grid { grid-template-columns: repeat(2, 1fr); }
+  .cta-inner { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .wrap { padding: 0 20px; }
+  .nav-links { display: none; }
+  .certs-grid { grid-template-columns: 1fr; }
+  .engagement { grid-template-columns: 1fr; }
+  .eng-num { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══════════════════════════════════════════ -->
+<nav>
+  <div class="nav-inner">
+    <a href="https://saleemyousaf.co.uk/" class="nav-logo">Saleem <span>Yousaf</span></a>
+    <ul class="nav-links">
+      <li><a href="https://saleemyousaf.co.uk/about/">About</a></li>
+      <li><a href="https://saleemyousaf.co.uk/experience/" class="active">Experience</a></li>
+      <li><a href="https://saleemyousaf.co.uk/projects/">Projects</a></li>
+      <li class="nav-dropdown">
+        <button class="nav-dropdown-toggle">
+          Articles
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="nav-dropdown-menu"><div class="nav-dropdown-menu-inner">
+          <a href="https://saleemyousaf.co.uk/articles/">All Articles</a>
+          <a href="https://saleemyousaf.co.uk/assume-breach/">Assume Breach</a>
+          <a href="https://saleemyousaf.co.uk/ai-security-governance/">AI Security &amp; Governance</a>
+          <a href="https://saleemyousaf.co.uk/breachforge/" style="color:#00d4ff;border-top:1px solid rgba(255,255,255,0.07);margin-top:4px;padding-top:12px;">⬡ BreachForge BAS</a>
+        </div></div>
+      </li>
+      <li><a href="https://saleemyousaf.co.uk/connect/" class="nav-cta">Connect</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ═══ PAGE HEADER ════════════════════════════════════ -->
+<div class="page-header">
+  <div class="page-header-glow"></div>
+  <div class="wrap">
+    <div class="eyebrow">
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">Architecture &amp; Security Experience</span>
+    </div>
+    <h1>Built across the sectors<br>that <em>cannot afford to fail.</em></h1>
+    <p class="page-sub">20+ years of enterprise cloud and security architecture spanning UK government, Critical National Infrastructure, manufacturing, and regulated enterprise environments.</p>
+  </div>
+</div>
+
+<!-- ═══ EXPERTISE ═══════════════════════════════════════ -->
+<section class="expertise">
+  <div class="wrap">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line"></div>
+      <span class="section-eyebrow-text">Core expertise</span>
+    </div>
+    <h2>Areas of practice.</h2>
+    <p class="section-sub">Deep, applied experience across the full breadth of modern enterprise security architecture.</p>
+
+    <div class="expertise-layout">
+      <div class="exp-nav">
+
+        <button class="exp-nav-item active" onclick="showPanel('cloud')">
+          <div class="exp-nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 15a4 4 0 0 0 4 4h9a5 5 0 1 0-.1-9.999 5.002 5.002 0 0 0-9.78 2.096A4.001 4.001 0 0 0 3 15z"/></svg>
+          </div>
+          Cloud Security Architecture
+        </button>
+
+        <button class="exp-nav-item" onclick="showPanel('zerotrust')">
+          <div class="exp-nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+          </div>
+          Zero Trust &amp; Identity
+        </button>
+
+        <button class="exp-nav-item" onclick="showPanel('assurance')">
+          <div class="exp-nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          Security Assurance
+        </button>
+
+        <button class="exp-nav-item" onclick="showPanel('ai')">
+          <div class="exp-nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          AI Governance &amp; Security
+        </button>
+
+        <button class="exp-nav-item" onclick="showPanel('ot')">
+          <div class="exp-nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          OT Security &amp; Segmentation
+        </button>
+
+      </div>
+
+      <div id="panel-cloud" class="exp-panel active">
+        <div class="exp-panel-title">Cloud Security Architecture</div>
+        <div class="exp-panel-intro">Designing and reviewing secure cloud architectures across AWS and Azure, from initial platform design through to enterprise-scale deployment and ongoing security assurance.</div>
+        <div class="exp-skills">
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Secure landing zones</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Identity and access management</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Network segmentation</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Cloud-native security controls</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Platform security assurance</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Secure hybrid connectivity</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Enterprise cloud governance</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>API security architecture</div>
+        </div>
+      </div>
+
+      <div id="panel-zerotrust" class="exp-panel">
+        <div class="exp-panel-title">Zero Trust &amp; Identity Security</div>
+        <div class="exp-panel-intro">Applying Zero Trust principles across complex enterprise environments, with a focus on identity as the primary security boundary and layered access controls across workloads, devices, and networks.</div>
+        <div class="exp-skills">
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Identity-centric security design</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Conditional access strategies</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Privileged access management</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Secure remote access</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Device and workload trust models</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Enterprise segmentation</div>
+        </div>
+      </div>
+
+      <div id="panel-assurance" class="exp-panel">
+        <div class="exp-panel-title">Security Architecture &amp; Assurance</div>
+        <div class="exp-panel-intro">Supporting organisations with architecture reviews, threat modelling, and security assurance across enterprise transformation programmes, from secure-by-design to continuous validation through Breach Attack Simulation.</div>
+        <div class="exp-skills">
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Secure-by-Design implementation</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>STRIDE threat modelling</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Architecture risk reviews</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Breach Attack Simulation (BAS)</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>MITRE ATT&amp;CK mapping</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Regulatory and governance alignment</div>
+        </div>
+      </div>
+
+      <div id="panel-ai" class="exp-panel">
+        <div class="exp-panel-title">AI Governance &amp; Emerging Technology Security</div>
+        <div class="exp-panel-intro">Helping organisations adopt AI and emerging technologies securely, through practical governance frameworks, security architecture for LLM systems, and risk management approaches grounded in real-world enterprise requirements.</div>
+        <div class="exp-skills">
+          <div class="exp-skill"><div class="exp-skill-dot"></div>AI governance frameworks</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>LLM security architecture</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>RAG pipeline security</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>AI risk management</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Data governance considerations</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Secure AI integration patterns</div>
+        </div>
+      </div>
+
+      <div id="panel-ot" class="exp-panel">
+        <div class="exp-panel-title">OT Security &amp; Network Segmentation</div>
+        <div class="exp-panel-intro">Providing security architecture guidance across operational technology and enterprise network environments, with particular experience in Critical National Infrastructure and regulated industrial settings.</div>
+        <div class="exp-skills">
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Secure OT/IT separation</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>IDMZ design and implementation</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Network zoning and segmentation</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Operational resilience design</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>Infrastructure security architecture</div>
+          <div class="exp-skill"><div class="exp-skill-dot"></div>CNI security governance</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ENGAGEMENTS ════════════════════════════════════ -->
+<section class="engagements">
+  <div class="wrap">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line"></div>
+      <span class="section-eyebrow-text">Selected engagements</span>
+    </div>
+    <h2>Enterprise and public sector.</h2>
+    <p class="section-sub">A cross-section of enterprise and public sector engagements spanning cloud transformation, security architecture, and regulated environments.</p>
+
+    <div class="engagement-list">
+
+      <div class="engagement">
+        <div class="eng-num">01</div>
+        <div>
+          <div class="eng-sector">Government · AWS</div>
+          <div class="eng-name">HM Land Registry</div>
+          <div class="eng-role">Senior Security Solution Architect</div>
+          <div class="eng-body">Delivered security architecture across APIs and middleware within a fully AWS-based enterprise platform. Strengthened API security controls and implemented structured STRIDE threat modelling across cloud services and integrations, with a focus on secure-by-design across a large-scale government transformation programme.</div>
+          <div class="eng-tags">
+            <span class="eng-tag">AWS</span>
+            <span class="eng-tag">API Security</span>
+            <span class="eng-tag">STRIDE</span>
+            <span class="eng-tag">Threat Modelling</span>
+            <span class="eng-tag">Enterprise Architecture</span>
+          </div>
+        </div>
+        <span class="eng-badge gov">Government</span>
+      </div>
+
+      <div class="engagement">
+        <div class="eng-num">02</div>
+        <div>
+          <div class="eng-sector">Government · Cloud Security</div>
+          <div class="eng-name">Ministry of Justice</div>
+          <div class="eng-role">Lead Cloud Security Architect</div>
+          <div class="eng-body">Lead Cloud Security Architect within MOJ Digital and Technology, supporting secure-by-design principles across enterprise cloud platforms. Contributed to cloud assurance, threat modelling, Breach Attack Simulation, and API security across a portfolio of digital services and transformation programmes.</div>
+          <div class="eng-tags">
+            <span class="eng-tag">Cloud Assurance</span>
+            <span class="eng-tag">BAS</span>
+            <span class="eng-tag">Zero Trust</span>
+            <span class="eng-tag">API Security</span>
+            <span class="eng-tag">AWS</span>
+            <span class="eng-tag">Azure</span>
+          </div>
+        </div>
+        <span class="eng-badge gov">Government</span>
+      </div>
+
+      <div class="engagement">
+        <div class="eng-num">03</div>
+        <div>
+          <div class="eng-sector">Critical National Infrastructure</div>
+          <div class="eng-name">Smart DCC</div>
+          <div class="eng-role">Enterprise Security Architect</div>
+          <div class="eng-body">Security architecture activities supporting regulated CNI systems. Defined AWS-based PKI cloud architecture, strengthened threat detection capabilities, and improved security governance across enterprise platforms operating within a tightly regulated national infrastructure environment.</div>
+          <div class="eng-tags">
+            <span class="eng-tag">CNI</span>
+            <span class="eng-tag">PKI</span>
+            <span class="eng-tag">AWS</span>
+            <span class="eng-tag">Threat Detection</span>
+            <span class="eng-tag">Security Governance</span>
+          </div>
+        </div>
+        <span class="eng-badge cni">CNI</span>
+      </div>
+
+      <div class="engagement">
+        <div class="eng-num">04</div>
+        <div>
+          <div class="eng-sector">Manufacturing · Enterprise</div>
+          <div class="eng-name">Jaguar Land Rover</div>
+          <div class="eng-role">Senior Solutions Architect</div>
+          <div class="eng-body">Enterprise architecture and security governance across complex manufacturing environments. Delivered improvements to third-party access controls, reduced Shadow IT exposure, and strengthened the overall security posture across enterprise systems supporting global automotive operations.</div>
+          <div class="eng-tags">
+            <span class="eng-tag">Enterprise Architecture</span>
+            <span class="eng-tag">OT Security</span>
+            <span class="eng-tag">Governance</span>
+            <span class="eng-tag">Third-party Risk</span>
+          </div>
+        </div>
+        <span class="eng-badge ent">Enterprise</span>
+      </div>
+
+      <div class="engagement">
+        <div class="eng-num">05</div>
+        <div>
+          <div class="eng-sector">Financial Services · Enterprise</div>
+          <div class="eng-name">AIG</div>
+          <div class="eng-role">Cloud Security &amp; Solution Architect</div>
+          <div class="eng-body">Security architecture and cloud security support across enterprise platforms and transformation initiatives. Contributed to secure design, governance frameworks, and modern security architecture practices across a global financial services environment with complex regulatory obligations.</div>
+          <div class="eng-tags">
+            <span class="eng-tag">Cloud Security</span>
+            <span class="eng-tag">Governance</span>
+            <span class="eng-tag">Secure Design</span>
+            <span class="eng-tag">Enterprise Architecture</span>
+          </div>
+        </div>
+        <span class="eng-badge ent">Enterprise</span>
+      </div>
+
+      <div class="engagement">
+        <div class="eng-num">06</div>
+        <div>
+          <div class="eng-sector">Manufacturing · Distribution</div>
+          <div class="eng-name">Amer Sports</div>
+          <div class="eng-role">Lead Security Architect</div>
+          <div class="eng-body">Security architecture and operational technology security within enterprise distribution and logistics environments. Delivered network segmentation, infrastructure security design, and secure operational architecture across a global sporting goods enterprise with significant OT and logistics infrastructure.</div>
+          <div class="eng-tags">
+            <span class="eng-tag">OT Security</span>
+            <span class="eng-tag">Network Segmentation</span>
+            <span class="eng-tag">Infrastructure Security</span>
+            <span class="eng-tag">Logistics</span>
+          </div>
+        </div>
+        <span class="eng-badge ent">Enterprise</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CERTIFICATIONS ════════════════════════════════ -->
+<section class="certifications">
+  <div class="wrap">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line"></div>
+      <span class="section-eyebrow-text">Professional certifications</span>
+    </div>
+    <h2>Qualifications &amp; continuous development.</h2>
+    <p class="section-sub">Maintaining rigorous professional development across cloud security, enterprise architecture, and emerging security disciplines.</p>
+
+    <div class="certs-grid">
+
+      <div class="cert-card azure">
+        <div class="cert-issuer">Microsoft</div>
+        <div class="cert-name">Azure Solutions Architect Expert</div>
+        <div class="cert-focus">Enterprise Azure architecture, governance, secure cloud design, and hybrid infrastructure strategy across complex enterprise environments.</div>
+        <span class="cert-badge azure">Azure · Expert</span>
+      </div>
+
+      <div class="cert-card azure">
+        <div class="cert-issuer">Microsoft</div>
+        <div class="cert-name">Azure Security Engineer Associate</div>
+        <div class="cert-focus">Implementing robust security controls across Azure environments, with a focus on identity, data, and infrastructure protection by design.</div>
+        <span class="cert-badge azure">Azure · Security</span>
+      </div>
+
+      <div class="cert-card azure">
+        <div class="cert-issuer">Microsoft</div>
+        <div class="cert-name">Azure Network Engineer Associate</div>
+        <div class="cert-focus">Designing and securing complex cloud networking, covering hub-spoke topologies, private endpoints, and secure hybrid connectivity.</div>
+        <span class="cert-badge azure">Azure · Networking</span>
+      </div>
+
+      <div class="cert-card aws">
+        <div class="cert-issuer">Amazon Web Services</div>
+        <div class="cert-name">AWS Certified Cloud Practitioner</div>
+        <div class="cert-focus">Foundational understanding of AWS cloud services, security principles, cloud architecture, and governance supporting enterprise transformation.</div>
+        <span class="cert-badge aws">AWS</span>
+      </div>
+
+      <div class="cert-card comp">
+        <div class="cert-issuer">CompTIA</div>
+        <div class="cert-name">Advanced Security Practitioner (CASP+)</div>
+        <div class="cert-focus">Advanced enterprise-level security thinking across cloud and hybrid environments, focused on risk reduction and real-world defensive architecture strategies.</div>
+        <span class="cert-badge comp">CASP+</span>
+      </div>
+
+      <div class="cert-card ceh">
+        <div class="cert-issuer">EC-Council</div>
+        <div class="cert-name">Certified Ethical Hacker (CEH)</div>
+        <div class="cert-focus">Understanding attacker techniques and operations to design and test systems against real-world attack patterns, improving resilience and reducing exploitable weaknesses.</div>
+        <span class="cert-badge ceh">CEH</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA STRIP ═════════════════════════════════════ -->
+<div class="cta-strip">
+  <div class="wrap">
+    <div class="cta-inner">
+      <div>
+        <div class="cta-heading">Interested in working together?</div>
+        <div class="cta-sub">Connect to discuss cloud security architecture, Zero Trust strategy, AI governance, or enterprise security challenges.</div>
+      </div>
+      <div class="cta-actions">
+        <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener" class="btn-primary">
+          Connect on LinkedIn
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+        <a href="https://saleemyousaf.co.uk/projects/" class="btn-outline">View projects</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ════════════════════════════════════════ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Saleem <span>Yousaf</span></div>
+        <div class="footer-desc">Cloud &amp; Cyber Security Architect · AWS · Azure · Zero Trust · AI Governance · OT Security · Enterprise Architecture</div>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+        <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+        <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
+        <a href="https://saleem-yousaf.blogspot.com/" target="_blank" rel="noopener">Blogger</a>
+        <a href="https://codepen.io/Saleem-Yousaf" target="_blank" rel="noopener">CodePen</a>
+        <a href="https://www.cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
+      <a href="https://www.saleemyousaf.co.uk/privacy-policy/" style="font-size:12px; color:var(--muted2); text-decoration:none;">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function showPanel(id) {
+  document.querySelectorAll('.exp-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.exp-nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+
+</body>
+</html>

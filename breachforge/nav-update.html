@@ -1,0 +1,69 @@
+<!-- 
+  NAV UPDATE — saleem-yousaf.github.io/index.html
+  
+  Find the Articles dropdown in your nav (appears in every page's nav block).
+  It currently looks like this:
+-->
+
+<!-- BEFORE -->
+<li class="nav-dropdown">
+  <span class="nav-dropdown-toggle">Articles ▾</span>
+  <div class="nav-dropdown-menu">
+    <a href="/articles/">All Articles</a>
+    <a href="/assume-breach/">Assume Breach</a>
+    <a href="/ai-security-governance/">AI Security &amp; Governance</a>
+  </div>
+</li>
+
+<!-- AFTER — add the BreachForge link -->
+<li class="nav-dropdown">
+  <span class="nav-dropdown-toggle">Articles ▾</span>
+  <div class="nav-dropdown-menu">
+    <a href="/articles/">All Articles</a>
+    <a href="/assume-breach/">Assume Breach</a>
+    <a href="/ai-security-governance/">AI Security &amp; Governance</a>
+    <a href="/breachforge/">BreachForge BAS</a>
+  </div>
+</li>
+
+
+<!--
+  NOTE: Your site nav is likely in a shared pattern repeated across pages.
+  If you have a _includes/ or shared nav component, update it there.
+  If nav is copy-pasted per page, update it in:
+    - index.html         (home)
+    - about/index.html
+    - experience/index.html
+    - projects/index.html
+    - articles/index.html
+    - assume-breach/index.html
+    - ai-security-governance/index.html
+    - connect/index.html
+    - All articles pages
+    
+  The breachforge/index.html already has BreachForge in its own nav.
+-->
+
+
+<!--
+  OPTIONAL — also add a card to your Projects page or home page featured section.
+  
+  Add this card block in projects/index.html alongside your other project cards:
+-->
+
+<a href="https://saleem-yousaf.github.io/breachforge/" class="project-card">
+  <div class="project-tag">// BAS Platform</div>
+  <div class="project-name">BreachForge — Breach Attack Simulation</div>
+  <div class="project-desc">
+    Interactive BAS platform demonstrating what breach attack simulation looks, 
+    feels, and operates like. Run attack chains across endpoint, cloud, identity, 
+    WAF, and network surfaces. Every TTP mapped to MITRE ATT&amp;CK. 
+    Multi-persona views for CISO, SOC, Architect, PM, and Developer.
+  </div>
+  <div class="project-tags">
+    <span>BAS</span>
+    <span>MITRE ATT&amp;CK</span>
+    <span>Assume Breach</span>
+    <span>React</span>
+  </div>
+</a>
