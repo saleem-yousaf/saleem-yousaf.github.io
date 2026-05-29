@@ -1,7 +1,21 @@
 {
-  "generated": "2026-05-29T03:57:43.598872+00:00",
+  "generated": "2026-05-29T09:59:49.028636+00:00",
   "source": "BreachForge TI Feed Collector v1.0",
   "threats": [
+    {
+      "id": "TI-495CED40",
+      "title": "Typosquatted npm packages used to steal cloud and CI/CD secrets",
+      "source": "Microsoft Threat Intel RSS",
+      "source_url": "https://www.microsoft.com/security/blog",
+      "published": "2026-05-29T03:04:52+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "The Mini Shai-Hulud campaign used malicious npm packages to target cloud and CI/CD credentials across developer environments. This report details the attack chain, detection opportunities, and mitigation guidance to help organizations identify and disrupt related activity. The post Typosquatted npm packages used to steal cloud and CI/CD secrets appeared first on Microsoft Security Blog ."
+    },
     {
       "id": "TI-2AC70F98",
       "title": "Less panic patching, more precision",
@@ -184,20 +198,6 @@
         "Manufacturing"
       ],
       "summary": "Microsoft has been recognized as a Leader in The Forrester Wave™: Workforce Identity Security Platforms, Q2 2026, receiving the highest scores in both the current offering and strategy categories. The post Microsoft recognized as a Leader in The Forrester Wave™ for Workforce Identity Security Platforms appeared first on Microsoft Security Blog ."
-    },
-    {
-      "id": "TI-EF3B2B4D",
-      "title": "From edge appliance to enterprise compromise: Multi-stage Linux intrusion via F5 and Confluence",
-      "source": "Microsoft Threat Intel RSS",
-      "source_url": "https://www.microsoft.com/security/blog",
-      "published": "2026-05-22T16:53:39+00:00",
-      "severity": "Medium",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Manufacturing"
-      ],
-      "summary": "A multi-stage attack on Linux devices began with an exposed F5 BIG-IP edge appliance and pivoted to an internal Confluence server for credential theft and identity compromise. Learn how the threat actor attempted Kerberos relay and lateral movement, and how Microsoft Defender detected, blocked, and unraveled the attack. The post From edge appliance to enterprise compromise: Multi-stage Linux intru"
     },
     {
       "id": "TI-D9654958",
