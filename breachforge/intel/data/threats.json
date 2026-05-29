@@ -1,6 +1,12 @@
 {
-  "timestamp": "2026-05-29T16:59:43.079Z",
+  "timestamp": "2026-05-29T20:05:18.435Z",
   "vulnerabilities": [
+    {
+      "cveId": "CVE-2026-0257",
+      "description": "Palo Alto Networks PAN-OS contains an authentication bypass vulnerability that allows attackers to bypass security restrictions and establish an unauthorized VPN connection.",
+      "dateAdded": "2026-05-29",
+      "severity": "high"
+    },
     {
       "cveId": "CVE-2026-48027",
       "description": "Nx Console contains an embedded malicious code vulnerability that allowed a malicious version of Nx Console to be published. The compromised extension fetched an obfuscated payload that could harvested credentials from multiple sources on disk and in memory.",
@@ -54,12 +60,6 @@
       "description": "Microsoft DirectX contains a NULL byte overwrite vulnerability in the QuickTime Movie Parser Filter in quartz.dll in DirectShow which could allow remote attackers to execute arbitrary code via a crafted QuickTime media file.",
       "dateAdded": "2026-05-20",
       "severity": "high"
-    },
-    {
-      "cveId": "CVE-2009-3459",
-      "description": "Adobe Acrobat and Reader contain a heap-based buffer overflow vulnerability which could allow remote attackers to execute arbitrary code via a crafted PDF file that triggers memory corruption.",
-      "dateAdded": "2026-05-20",
-      "severity": "high"
     }
   ],
   "actors": [
@@ -77,7 +77,7 @@
         "T1566.001",
         "T1082"
       ],
-      "lastActivity": "2026-05-27T16:59:43.584Z"
+      "lastActivity": "2026-05-27T20:05:19.454Z"
     },
     {
       "id": "teamtnt",
@@ -93,7 +93,7 @@
         "T1199",
         "T1021"
       ],
-      "lastActivity": "2026-05-28T16:59:43.584Z"
+      "lastActivity": "2026-05-28T20:05:19.454Z"
     },
     {
       "id": "apt29",
@@ -109,7 +109,7 @@
         "T1550.004",
         "T1566"
       ],
-      "lastActivity": "2026-05-26T16:59:43.584Z"
+      "lastActivity": "2026-05-26T20:05:19.454Z"
     },
     {
       "id": "fin7",
@@ -125,7 +125,7 @@
         "T1566",
         "T1059"
       ],
-      "lastActivity": "2026-05-25T16:59:43.584Z"
+      "lastActivity": "2026-05-25T20:05:19.454Z"
     },
     {
       "id": "lazarus",
@@ -141,7 +141,7 @@
         "T1105",
         "T1204.001"
       ],
-      "lastActivity": "2026-05-24T16:59:43.584Z"
+      "lastActivity": "2026-05-24T20:05:19.454Z"
     }
   ]
 }

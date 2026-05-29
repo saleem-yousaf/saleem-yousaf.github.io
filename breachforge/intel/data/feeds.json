@@ -1,33 +1,33 @@
 {
-  "timestamp": "2026-05-29T16:59:43.079Z",
+  "timestamp": "2026-05-29T20:05:18.435Z",
   "sources": [
     {
       "name": "CISA KEV",
       "status": "healthy",
       "accuracy": 100,
-      "totalRecords": 1606,
-      "lastUpdate": "2026-05-28T16:27:12.922Z"
+      "totalRecords": 1607,
+      "lastUpdate": "2026-05-29T19:00:06.342Z"
     },
     {
       "name": "MITRE ATT&CK",
       "status": "healthy",
       "accuracy": 100,
       "totalRecords": 15,
-      "lastUpdate": "2026-05-29T16:59:43.079Z"
+      "lastUpdate": "2026-05-29T20:05:18.435Z"
     },
     {
       "name": "AlienVault OTX",
       "status": "healthy",
       "accuracy": 92,
       "totalRecords": 1247,
-      "lastUpdate": "2026-05-29T14:59:43.584Z"
+      "lastUpdate": "2026-05-29T18:05:19.454Z"
     },
     {
       "name": "Abuse.ch",
       "status": "healthy",
       "accuracy": 88,
       "totalRecords": 3456,
-      "lastUpdate": "2026-05-29T13:59:43.584Z"
+      "lastUpdate": "2026-05-29T17:05:19.454Z"
     }
   ]
 }
