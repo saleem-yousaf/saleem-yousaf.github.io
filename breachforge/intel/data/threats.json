@@ -1,7 +1,21 @@
 {
-  "generated": "2026-05-28T20:27:57.812578+00:00",
+  "generated": "2026-05-29T03:57:43.598872+00:00",
   "source": "BreachForge TI Feed Collector v1.0",
   "threats": [
+    {
+      "id": "TI-2AC70F98",
+      "title": "Less panic patching, more precision",
+      "source": "Cisco Talos RSS",
+      "source_url": "https://blog.talosintelligence.com",
+      "published": "2026-05-28T18:00:27+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "In this newsletter, Thor breaks down why you should stop relying solely on CVSS and start using EPSS and GCVE to focus your patching efforts on the threats that actually matter."
+    },
     {
       "id": "TI-B19FF986",
       "title": "The Gentlemen ransomware: Dissecting a self-propagating Go encryptor",
@@ -227,20 +241,6 @@
         "Technology"
       ],
       "summary": "Drupal Core contains a SQL injection vulnerability that could allow for privilege escalation and remote code execution via specially crafted requests sent with the database abstraction API. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
-    },
-    {
-      "id": "TI-4101AF0D",
-      "title": "The art of being ungovernable",
-      "source": "Cisco Talos RSS",
-      "source_url": "https://blog.talosintelligence.com",
-      "published": "2026-05-21T18:00:14+00:00",
-      "severity": "Medium",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Technology"
-      ],
-      "summary": "In this edition of the Threat Source newsletter, William explores the value of being \"ungovernable\" in a professional setting, sharing how challenging the status quo and seeking out the smartest people in the room can lead to a more fulfilling and successful career."
     },
     {
       "id": "TI-784E2A1D",
