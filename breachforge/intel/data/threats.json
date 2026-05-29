@@ -1,7 +1,21 @@
 {
-  "generated": "2026-05-29T15:43:59.020771+00:00",
+  "generated": "2026-05-29T16:58:36.452057+00:00",
   "source": "BreachForge TI Feed Collector v1.0",
   "threats": [
+    {
+      "id": "TI-DB198092",
+      "title": "Microsoft is named a Leader in the 2026 Gartner® Magic Quadrant™ for Endpoint Protection",
+      "source": "Microsoft Threat Intel RSS",
+      "source_url": "https://www.microsoft.com/security/blog",
+      "published": "2026-05-29T16:00:00+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Manufacturing"
+      ],
+      "summary": "Microsoft is named a Leader in the 2026 Gartner® Magic Quadrant™ for Endpoint Protection. The post Microsoft is named a Leader in the 2026 Gartner® Magic Quadrant™ for Endpoint Protection appeared first on Microsoft Security Blog ."
+    },
     {
       "id": "TI-495CED40",
       "title": "Typosquatted npm packages used to steal cloud and CI/CD secrets",
@@ -184,20 +198,6 @@
         "Technology"
       ],
       "summary": "LiteSpeed cPanel Plugin contains privilege escalation vulnerability that is exposed via the user-end cPanel plugin, which can be abused by any cPanel user account to execute arbitrary scripts with root privileges. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
-    },
-    {
-      "id": "TI-1590801C",
-      "title": "Microsoft recognized as a Leader in The Forrester Wave™ for Workforce Identity Security Platforms",
-      "source": "Microsoft Threat Intel RSS",
-      "source_url": "https://www.microsoft.com/security/blog",
-      "published": "2026-05-22T17:00:00+00:00",
-      "severity": "Medium",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Manufacturing"
-      ],
-      "summary": "Microsoft has been recognized as a Leader in The Forrester Wave™: Workforce Identity Security Platforms, Q2 2026, receiving the highest scores in both the current offering and strategy categories. The post Microsoft recognized as a Leader in The Forrester Wave™ for Workforce Identity Security Platforms appeared first on Microsoft Security Blog ."
     },
     {
       "id": "TI-D9654958",
