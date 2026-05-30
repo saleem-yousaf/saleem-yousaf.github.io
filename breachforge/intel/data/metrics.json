@@ -1,93 +1,47 @@
 {
-  "timestamp": "2026-05-30T12:58:56.567Z",
-  "activeThreats": {
-    "shodan": 407,
-    "virusTotal": 276,
-    "mitre": 15,
-    "industryAlerts": 65
-  },
-  "trendingTechniques": {
-    "initialAccess": [
-      42,
-      46,
-      50,
-      54,
-      58,
-      62,
-      66,
-      70
-    ],
-    "persistence": [
-      38,
-      41,
-      44,
-      47,
-      50,
-      53,
-      56,
-      59
-    ],
-    "exfiltration": [
-      25,
-      28,
-      31,
-      34,
-      37,
-      40,
-      43,
-      46
-    ],
-    "commandControl": [
-      35,
-      37,
-      39,
-      41,
-      43,
-      45,
-      47,
-      49
-    ],
+  "timestamp": "2026-05-30T13:07:22.675Z",
+  "tiles": [
+    {
+      "label": "KEV Total",
+      "value": 1607,
+      "source": "CISA KEV"
+    },
+    {
+      "label": "KEV (7 days)",
+      "value": 5,
+      "source": "CISA KEV"
+    },
+    {
+      "label": "ATT&CK Techniques",
+      "value": 697,
+      "source": "MITRE"
+    },
+    {
+      "label": "ATT&CK Groups",
+      "value": 174,
+      "source": "MITRE"
+    }
+  ],
+  "kevByWeek": {
     "weeks": [
-      "W1",
-      "W2",
-      "W3",
-      "W4",
-      "W5",
-      "W6",
-      "W7",
-      "W8"
-    ]
-  },
-  "threatHeatmap": {
-    "sectors": [
-      "Healthcare",
-      "Finance",
-      "Government",
-      "Tech",
-      "Manufacturing",
-      "Retail",
-      "Energy",
-      "Education"
+      "4/11",
+      "4/18",
+      "4/25",
+      "5/2",
+      "5/9",
+      "5/16",
+      "5/23",
+      "5/30"
     ],
-    "threatLevels": [
-      8,
-      9,
+    "counts": [
+      2,
       10,
-      8,
-      6,
-      5,
-      8,
-      4
+      14,
+      4,
+      3,
+      2,
+      10,
+      5
     ]
-  },
-  "sectorThreatLevels": {
-    "healthcare": 8,
-    "finance": 16,
-    "government": 12,
-    "technology": 9,
-    "manufacturing": 5,
-    "retail": 5,
-    "energy": 16,
-    "education": 8
   }
 }

@@ -1,33 +1,30 @@
 {
-  "timestamp": "2026-05-30T12:58:56.567Z",
+  "timestamp": "2026-05-30T13:07:22.675Z",
   "sources": [
     {
       "name": "CISA KEV",
       "status": "healthy",
-      "accuracy": 100,
-      "totalRecords": 1607,
+      "records": 1607,
       "lastUpdate": "2026-05-29T19:00:06.342Z"
     },
     {
       "name": "MITRE ATT&CK",
       "status": "healthy",
-      "accuracy": 100,
-      "totalRecords": 15,
-      "lastUpdate": "2026-05-30T12:58:56.567Z"
+      "records": 697,
+      "lastUpdate": "2026-05-30T13:07:22.675Z"
     },
     {
       "name": "AlienVault OTX",
-      "status": "healthy",
-      "accuracy": 92,
-      "totalRecords": 1247,
-      "lastUpdate": "2026-05-30T10:58:57.119Z"
+      "status": "degraded",
+      "records": null,
+      "lastUpdate": null,
+      "note": "Invalid character in header content [\"X-OTX-API-KEY\"]"
     },
     {
-      "name": "Abuse.ch",
+      "name": "Abuse.ch ThreatFox",
       "status": "healthy",
-      "accuracy": 88,
-      "totalRecords": 3456,
-      "lastUpdate": "2026-05-30T09:58:57.119Z"
+      "records": 280,
+      "lastUpdate": "2026-05-30T13:07:22.675Z"
     }
   ]
 }
