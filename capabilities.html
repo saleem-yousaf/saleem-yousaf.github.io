@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capabilities: BreachForge & Threat Intelligence | CyberSpartans</title>
+<meta name="description" content="BreachForge is our reference breach and attack simulation platform, the standard we hold commercial BAS tools to. Plus a free threat intelligence portal built from open-source feeds.">
+<link rel="canonical" href="https://cyberspartans.co.uk/capabilities.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="BreachForge & Threat Intelligence | CyberSpartans">
+<meta property="og:description" content="Our reference BAS platform and a free open-source threat intelligence portal.">
+<meta property="og:url" content="https://cyberspartans.co.uk/capabilities.html">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="stylesheet" href="shared.css">
+<style>
+.product-hero {
+    padding: 90px 60px 50px;
+    text-align: center;
+    background: radial-gradient(ellipse at top, rgba(230, 57, 70, 0.08) 0%, transparent 60%);
+}
+
+.product-hero h1 {
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -2px;
+    margin-bottom: 22px;
+    max-width: 880px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.product-hero p {
+    font-size: 18px;
+    color: var(--text-dim);
+    max-width: 700px;
+    margin: 0 auto 32px;
+    line-height: 1.65;
+}
+
+/* Section status badge */
+.cap-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+}
+
+.cap-status.coming {
+    color: var(--red-bright);
+    background: rgba(230, 57, 70, 0.08);
+    border: 1px solid rgba(230, 57, 70, 0.25);
+}
+
+.cap-status.live {
+    color: var(--cyan);
+    background: rgba(0, 217, 255, 0.08);
+    border: 1px solid rgba(0, 217, 255, 0.25);
+}
+
+.cap-status-dot {
+    width: 6px;
+    height: 6px;
+    background: currentColor;
+    border-radius: 50%;
+    animation: dot-pulse 1.4s infinite;
+}
+
+/* BreachForge block */
+.bf-block {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.bf-text h2 {
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+}
+
+.bf-text > p {
+    font-size: 15px;
+    color: var(--text-dim);
+    line-height: 1.75;
+    margin-bottom: 16px;
+}
+
+.bf-text .why {
+    background: var(--bg-elevated);
+    border-left: 3px solid var(--red);
+    border-radius: 0 8px 8px 0;
+    padding: 18px 22px;
+    margin: 22px 0;
+}
+
+.bf-text .why p {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* Terminal */
+.terminal {
+    background: #050811;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    min-height: 360px;
+    position: relative;
+}
+
+.terminal-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 14px;
+}
+
+.term-dot { width: 11px; height: 11px; border-radius: 50%; }
+.term-dot.red { background: #ff5f56; }
+.term-dot.yellow { background: #ffbd2e; }
+.term-dot.green { background: #27c93f; }
+
+.term-title { margin-left: 12px; color: var(--text-dim); font-size: 11px; }
+
+.term-line {
+    line-height: 1.9;
+    opacity: 0;
+    animation: type-in 0.3s forwards;
+    color: var(--text-dim);
+}
+
+.term-line:nth-child(1) { animation-delay: 0.3s; }
+.term-line:nth-child(2) { animation-delay: 0.7s; }
+.term-line:nth-child(3) { animation-delay: 1.1s; }
+.term-line:nth-child(4) { animation-delay: 1.5s; }
+.term-line:nth-child(5) { animation-delay: 1.9s; }
+.term-line:nth-child(6) { animation-delay: 2.3s; }
+.term-line:nth-child(7) { animation-delay: 2.7s; }
+.term-line:nth-child(8) { animation-delay: 3.1s; }
+.term-line:nth-child(9) { animation-delay: 3.5s; }
+.term-line:nth-child(10) { animation-delay: 3.9s; }
+
+@keyframes type-in {
+    from { opacity: 0; transform: translateX(-8px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.term-prompt { color: var(--red-bright); }
+.term-success { color: #27c93f; }
+.term-info { color: var(--cyan); }
+.term-warn { color: #ffbd2e; }
+.term-error { color: #ff4757; }
+
+.term-cursor {
+    display: inline-block;
+    width: 7px;
+    height: 13px;
+    background: var(--red-bright);
+    animation: blink 1s infinite;
+    vertical-align: middle;
+}
+
+@keyframes blink { 0%,50%{opacity:1;} 51%,100%{opacity:0;} }
+
+/* Scenarios mini-grid */
+.scenarios-mini {
+    max-width: 1200px;
+    margin: 40px auto 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+
+.scn {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 10px;
+    text-align: center;
+    transition: all 0.25s;
+}
+
+.scn:hover { border-color: var(--red); transform: translateY(-2px); }
+
+.scn-num { font-size: 10px; color: var(--red-bright); font-weight: 700; letter-spacing: 1px; }
+.scn-name { font-size: 12px; color: var(--text); font-weight: 600; margin-top: 4px; }
+
+/* What to look for in a BAS */
+.checklist-section { background: var(--bg-card); }
+
+.checklist {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.check-item {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.check-item .mark {
+    color: var(--red-bright);
+    font-weight: 700;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.check-item p {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.check-item strong { color: var(--text); }
+
+/* TI block */
+.ti-section { background: var(--bg); }
+
+.ti-block {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.ti-text h2 {
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+}
+
+.ti-text > p {
+    font-size: 15px;
+    color: var(--text-dim);
+    line-height: 1.75;
+    margin-bottom: 16px;
+}
+
+.ti-feed {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 22px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+
+.feed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+}
+
+.feed-title { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 13px; }
+
+.feed-live-dot {
+    width: 8px; height: 8px;
+    background: var(--cyan);
+    border-radius: 50%;
+    animation: live-pulse 1.5s infinite;
+}
+
+@keyframes live-pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(0,217,255,0.7); }
+    70% { box-shadow: 0 0 0 8px rgba(0,217,255,0); }
+}
+
+.feed-status { font-size: 10px; color: var(--cyan); letter-spacing: 1.5px; font-weight: 700; }
+
+.feed-items { display: flex; flex-direction: column; gap: 9px; }
+
+.feed-item {
+    padding: 10px 13px;
+    background: rgba(0, 217, 255, 0.04);
+    border-left: 3px solid var(--cyan);
+    border-radius: 4px;
+    opacity: 0;
+    animation: slide-in 0.5s forwards;
+}
+
+.feed-item:nth-child(1) { animation-delay: 0.2s; }
+.feed-item:nth-child(2) { animation-delay: 0.6s; }
+.feed-item:nth-child(3) { animation-delay: 1.0s; }
+.feed-item:nth-child(4) { animation-delay: 1.4s; }
+.feed-item:nth-child(5) { animation-delay: 1.8s; }
+
+@keyframes slide-in {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.feed-time { color: var(--cyan); font-size: 10px; font-weight: 700; margin-bottom: 3px; letter-spacing: 0.5px; font-family: 'JetBrains Mono', monospace; }
+.feed-msg { color: var(--text); font-size: 12px; line-height: 1.5; }
+
+/* Sources strip */
+.sources-strip {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.source-chip {
+    padding: 10px 18px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.source-chip span { color: var(--cyan); }
+
+@media (max-width: 1024px) {
+    .product-hero h1 { font-size: 40px; }
+    .bf-block, .ti-block { grid-template-columns: 1fr; gap: 36px; }
+    .bf-text h2, .ti-text h2 { font-size: 28px; }
+    .scenarios-mini { grid-template-columns: repeat(2, 1fr); }
+    .checklist { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+    .product-hero h1 { font-size: 28px; }
+    .scenarios-mini { grid-template-columns: 1fr 1fr; }
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Capabilities: BreachForge and Threat Intelligence",
+  "url": "https://cyberspartans.co.uk/capabilities.html",
+  "description": "BreachForge is a reference breach and attack simulation platform mapped to MITRE ATT&CK. CyberSpartans also offers a free threat intelligence portal built from open-source feeds.",
+  "isPartOf": {
+    "@type": "Organization",
+    "name": "CyberSpartans",
+    "url": "https://cyberspartans.co.uk"
+  },
+  "about": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "BreachForge",
+      "applicationCategory": "SecurityApplication",
+      "description": "Reference breach and attack simulation platform with 10 scenarios mapped to MITRE ATT&CK Enterprise and 154 atomic techniques.",
+      "operatingSystem": "Web"
+    },
+    {
+      "@type": "WebApplication",
+      "name": "Threat Intelligence Portal",
+      "applicationCategory": "SecurityApplication",
+      "description": "Free threat intelligence portal built from open-source feeds: CISA KEV, MITRE ATT&CK, AlienVault OTX, and abuse.ch.",
+      "operatingSystem": "Web",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="brand">
+        <img class="brand-logo" src="logo.png" alt="CyberSpartans"/>
+        <span class="brand-name">CYBER SPARTANS</span>
+    </a>
+    <nav>
+        <a href="index.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="capabilities.html" class="active">Capabilities</a>
+        <a href="#connect" class="nav-cta">Connect</a>
+    </nav>
+</header>
+
+<section class="product-hero">
+    <div class="eyebrow"><span class="eyebrow-dot"></span>OUR CAPABILITIES</div>
+    <h1>We build the tools we <span class="red">believe in</span>.</h1>
+    <p>Choosing a breach and attack simulation platform or a threat intelligence feed is hard when every vendor sounds the same. So we built both, to show what good actually looks like.</p>
+</section>
+
+<!-- BREACHFORGE -->
+<section class="section">
+    <div class="bf-block">
+        <div class="bf-text">
+            <span class="cap-status coming"><span class="cap-status-dot"></span>In Development</span>
+            <h2>BreachForge</h2>
+            <p>BreachForge is our reference breach and attack simulation platform. Ten scenarios mapped to MITRE ATT&CK Enterprise, covering the full chain from initial access to command and control, with 154 atomic techniques behind them.</p>
+            <div class="why">
+                <p><strong>Why it matters to you:</strong> when we help you evaluate or run a commercial BAS platform, BreachForge is the benchmark we measure against. It is how we know what a good tool should do, rather than taking a vendor's word for it.</p>
+            </div>
+            <p>It is arriving in the coming months. Today it shapes how we advise on BAS selection and how we run validation engagements with Cymulate.</p>
+        </div>
+
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="term-dot red"></div>
+                <div class="term-dot yellow"></div>
+                <div class="term-dot green"></div>
+                <span class="term-title">breachforge — S4: Privilege Escalation</span>
+            </div>
+            <div class="term-line"><span class="term-prompt">$</span> breachforge run --scenario S4</div>
+            <div class="term-line"><span class="term-info">[INFO]</span> Privilege Escalation (T1068)</div>
+            <div class="term-line"><span class="term-info">[INFO]</span> Techniques: T1068, T1548.002, T1134</div>
+            <div class="term-line"><span class="term-warn">[EXEC]</span> Local exploit attempt</div>
+            <div class="term-line"><span class="term-warn">[EXEC]</span> UAC bypass simulation</div>
+            <div class="term-line"><span class="term-success">[DETECT]</span> EDR: escalation blocked ✓</div>
+            <div class="term-line"><span class="term-success">[DETECT]</span> SIEM: alert raised, IR notified ✓</div>
+            <div class="term-line"><span class="term-error">[GAP]</span> Sysmon: process create not logged ✗</div>
+            <div class="term-line"><span class="term-info">[RESULT]</span> Detection 67% · gap identified</div>
+            <div class="term-line"><span class="term-prompt">$</span> <span class="term-cursor"></span></div>
+        </div>
+    </div>
+
+    <!-- Scenarios -->
+    <div class="scenarios-mini">
+        <div class="scn"><div class="scn-num">S1</div><div class="scn-name">Initial Access</div></div>
+        <div class="scn"><div class="scn-num">S2</div><div class="scn-name">Execution</div></div>
+        <div class="scn"><div class="scn-num">S3</div><div class="scn-name">Persistence</div></div>
+        <div class="scn"><div class="scn-num">S4</div><div class="scn-name">Priv Esc</div></div>
+        <div class="scn"><div class="scn-num">S5</div><div class="scn-name">Defense Evasion</div></div>
+        <div class="scn"><div class="scn-num">S6</div><div class="scn-name">Cred Access</div></div>
+        <div class="scn"><div class="scn-num">S7</div><div class="scn-name">Discovery</div></div>
+        <div class="scn"><div class="scn-num">S8</div><div class="scn-name">Lateral Move</div></div>
+        <div class="scn"><div class="scn-num">S9</div><div class="scn-name">Exfiltration</div></div>
+        <div class="scn"><div class="scn-num">S10</div><div class="scn-name">C2</div></div>
+    </div>
+</section>
+
+<!-- WHAT TO LOOK FOR IN A BAS -->
+<section class="section checklist-section">
+    <div class="section-header">
+        <div class="eyebrow"><span class="eyebrow-dot"></span>BUYER'S GUIDE</div>
+        <h2>Choosing a BAS platform? <span class="red">Here's the bar.</span></h2>
+        <p>When you evaluate breach and attack simulation tools, these are the things that separate a useful platform from an expensive dashboard. This is what BreachForge is built to demonstrate.</p>
+    </div>
+
+    <div class="checklist">
+        <div class="check-item">
+            <span class="mark">✓</span>
+            <p><strong>Real MITRE ATT&CK mapping.</strong> Not a marketing claim. Every test should tie to a specific technique you can verify.</p>
+        </div>
+        <div class="check-item">
+            <span class="mark">✓</span>
+            <p><strong>Measurable detection rates.</strong> A clear percentage of what was caught, not a vague risk score.</p>
+        </div>
+        <div class="check-item">
+            <span class="mark">✓</span>
+            <p><strong>Coverage gaps named specifically.</strong> "Sysmon Event ID 1 not enabled", not "improve logging".</p>
+        </div>
+        <div class="check-item">
+            <span class="mark">✓</span>
+            <p><strong>Continuous, not point-in-time.</strong> Validation that runs all year and tracks improvement over time.</p>
+        </div>
+        <div class="check-item">
+            <span class="mark">✓</span>
+            <p><strong>Safe against production.</strong> Real techniques executed safely, with control and rollback.</p>
+        </div>
+        <div class="check-item">
+            <span class="mark">✓</span>
+            <p><strong>Outputs your team can act on.</strong> Findings that lead to a fix, not a report that sits unread.</p>
+        </div>
+    </div>
+
+    <div style="text-align:center;margin-top:36px;">
+        <a href="services.html" class="btn btn-primary">See how we run validation</a>
+    </div>
+</section>
+
+<!-- THREAT INTELLIGENCE -->
+<section class="section ti-section">
+    <div class="ti-block">
+        <div class="ti-feed">
+            <div class="feed-header">
+                <div class="feed-title"><div class="feed-live-dot"></div><span>Threat Intelligence Feed</span></div>
+                <div class="feed-status">LIVE</div>
+            </div>
+            <div class="feed-items">
+                <div class="feed-item">
+                    <div class="feed-time">CISA KEV</div>
+                    <div class="feed-msg">New CVE added to Known Exploited Vulnerabilities</div>
+                </div>
+                <div class="feed-item">
+                    <div class="feed-time">MITRE ATT&CK</div>
+                    <div class="feed-msg">Technique observed in the wild: T1059.001 PowerShell</div>
+                </div>
+                <div class="feed-item">
+                    <div class="feed-time">AlienVault OTX</div>
+                    <div class="feed-msg">New indicators of compromise published</div>
+                </div>
+                <div class="feed-item">
+                    <div class="feed-time">Abuse.ch</div>
+                    <div class="feed-msg">New C2 domains detected, sector targeting noted</div>
+                </div>
+                <div class="feed-item">
+                    <div class="feed-time">MITRE ATT&CK</div>
+                    <div class="feed-msg">Threat actor TTPs updated with new procedures</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ti-text">
+            <span class="cap-status live"><span class="cap-status-dot"></span>Free to Use</span>
+            <h2>Threat Intelligence Portal</h2>
+            <p>A free threat intelligence portal built entirely from open-source feeds: CISA KEV, MITRE ATT&CK, AlienVault OTX, and abuse.ch. Aggregated, normalised, mapped to MITRE ATT&CK, and updated automatically.</p>
+            <p>No login. No cost. Use it to keep an eye on what is being exploited in the wild and how it maps to the techniques that matter for your environment.</p>
+            <a href="#connect" class="btn btn-cyan" style="margin-top:8px;">Get access to the TI Portal</a>
+        </div>
+    </div>
+
+    <div class="sources-strip">
+        <div class="source-chip"><span>CISA</span> KEV</div>
+        <div class="source-chip"><span>MITRE</span> ATT&CK</div>
+        <div class="source-chip"><span>AlienVault</span> OTX</div>
+        <div class="source-chip"><span>Abuse.ch</span> Feeds</div>
+    </div>
+</section>
+
+<!-- CONNECT -->
+<section class="section" id="connect" style="text-align:center;background:linear-gradient(180deg, var(--bg) 0%, var(--bg-card) 100%);">
+    <h2 style="font-size:40px;font-weight:700;letter-spacing:-1.2px;margin-bottom:18px;">Want a look at what we're <span class="red">building</span>?</h2>
+    <p style="font-size:17px;color:var(--text-dim);margin-bottom:34px;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.6;">Get early access to the TI Portal, or talk to us about how BreachForge thinking shapes a validation engagement.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+        <a href="mailto:info@cyberspartans.co.uk" class="btn btn-primary">info@cyberspartans.co.uk</a>
+        <a href="https://www.linkedin.com/in/saleemyousaf" class="btn btn-ghost">Connect on LinkedIn</a>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <a href="index.html" class="brand">
+                <img class="brand-logo" src="logo.png" alt="CyberSpartans"/>
+                <span class="brand-name">CYBER SPARTANS</span>
+            </a>
+            <p>The cybersecurity and cloud consultancy practice of Saleem Yousaf. Security validation, vulnerability management, cloud audits and FinOps.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Practice</h4>
+            <a href="services.html">Services</a>
+            <a href="capabilities.html">Capabilities</a>
+            <a href="index.html">About</a>
+        </div>
+        <div class="footer-col">
+            <h4>Capabilities</h4>
+            <a href="capabilities.html">BreachForge</a>
+            <a href="capabilities.html">TI Portal</a>
+        </div>
+        <div class="footer-col">
+            <h4>Connect</h4>
+            <a href="mailto:info@cyberspartans.co.uk">info@cyberspartans.co.uk</a>
+            <a href="https://www.linkedin.com/in/saleemyousaf">LinkedIn</a>
+            <a href="https://www.saleemyousaf.co.uk">saleemyousaf.co.uk</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <span>© 2026 CyberSpartans · cyberspartans.co.uk</span>
+        <span>Cybersecurity and cloud, done properly.</span>
+    </div>
+</footer>
+
+</body>
+</html>

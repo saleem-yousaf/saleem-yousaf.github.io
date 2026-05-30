@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services | Cybersecurity & Cloud Consultancy | CyberSpartans</title>
+<meta name="description" content="CyberSpartans services: cybersecurity and cloud architecture, continuous security validation with Cymulate, vulnerability management with Intruder, cloud audits and FinOps.">
+<link rel="canonical" href="https://cyberspartans.co.uk/services.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Services | CyberSpartans Cybersecurity & Cloud Consultancy">
+<meta property="og:description" content="Security validation, vulnerability management, cloud audits and FinOps from a consultancy that does the work.">
+<meta property="og:url" content="https://cyberspartans.co.uk/services.html">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="stylesheet" href="shared.css">
+<style>
+.product-hero {
+    padding: 90px 60px 50px;
+    text-align: center;
+    background: radial-gradient(ellipse at top, rgba(230, 57, 70, 0.08) 0%, transparent 60%);
+}
+
+.product-hero h1 {
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -2px;
+    margin-bottom: 22px;
+    max-width: 880px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.product-hero p {
+    font-size: 18px;
+    color: var(--text-dim);
+    max-width: 680px;
+    margin: 0 auto 32px;
+    line-height: 1.65;
+}
+
+/* Detailed service blocks */
+.service-detail {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    padding: 50px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.service-detail:last-child { border-bottom: none; }
+
+.service-detail.reverse .service-visual { order: -1; }
+
+.service-detail .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 4px;
+    margin-bottom: 18px;
+    color: var(--red-bright);
+    background: rgba(230, 57, 70, 0.08);
+    border: 1px solid rgba(230, 57, 70, 0.2);
+}
+
+.service-detail .tag.partner {
+    color: var(--cyan);
+    background: rgba(0, 217, 255, 0.08);
+    border-color: rgba(0, 217, 255, 0.2);
+}
+
+.service-detail h2 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.8px;
+    margin-bottom: 16px;
+}
+
+.service-detail > div > p {
+    font-size: 15px;
+    color: var(--text-dim);
+    line-height: 1.75;
+    margin-bottom: 16px;
+}
+
+.service-detail ul {
+    list-style: none;
+    margin-top: 20px;
+}
+
+.service-detail ul li {
+    padding: 9px 0;
+    font-size: 14px;
+    color: var(--text);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.service-detail ul li::before {
+    content: '→';
+    color: var(--red-bright);
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.service-detail.partner-svc ul li::before { color: var(--cyan); }
+
+/* Visual panel */
+.service-visual {
+    background: linear-gradient(180deg, #0e1424 0%, #0a0e1a 100%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 40px;
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.visual-icon {
+    font-size: 80px;
+    opacity: 0.9;
+    position: relative;
+    z-index: 2;
+}
+
+.service-visual::before {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(230, 57, 70, 0.15), transparent 70%);
+}
+
+.service-visual.cyan-glow::before {
+    background: radial-gradient(circle, rgba(0, 217, 255, 0.15), transparent 70%);
+}
+
+.visual-stat {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+}
+
+.visual-stat span { color: var(--red-bright); font-weight: 700; }
+.service-visual.cyan-glow .visual-stat span { color: var(--cyan); }
+
+/* Partner logos note */
+.partners-note {
+    background: var(--bg-card);
+    text-align: center;
+}
+
+.partner-badges {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.partner-badge {
+    padding: 16px 28px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.5px;
+}
+
+.partner-badge small {
+    display: block;
+    font-size: 11px;
+    color: var(--text-dim);
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-top: 4px;
+    text-transform: uppercase;
+}
+
+@media (max-width: 1024px) {
+    .product-hero h1 { font-size: 40px; }
+    .service-detail { grid-template-columns: 1fr; gap: 32px; }
+    .service-detail.reverse .service-visual { order: 0; }
+    .service-detail h2 { font-size: 26px; }
+}
+
+@media (max-width: 640px) {
+    .product-hero h1 { font-size: 28px; }
+    .service-visual { min-height: 200px; padding: 30px; }
+    .visual-icon { font-size: 56px; }
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "CyberSpartans",
+  "url": "https://cyberspartans.co.uk/services.html",
+  "image": "https://cyberspartans.co.uk/logo.png",
+  "description": "Cybersecurity and cloud consultancy services: security architecture, continuous security validation, vulnerability management, cloud audits and FinOps.",
+  "email": "info@cyberspartans.co.uk",
+  "areaServed": "GB",
+  "provider": {
+    "@type": "Organization",
+    "name": "CyberSpartans",
+    "url": "https://cyberspartans.co.uk"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Cybersecurity and Cloud Services",
+    "itemListElement": [
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Cybersecurity & Cloud Expertise", "description": "Security architecture, cloud design, and assume-breach thinking for AWS and Azure." } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Continuous Security Validation", "description": "Breach and attack simulation through Cymulate to continuously test security controls." } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Vulnerability Management", "description": "Continuous scanning and risk-based remediation through Intruder." } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Audits & FinOps", "description": "Security and architecture audits paired with cloud cost optimisation." } }
+    ]
+  }
+}
+</script>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="brand">
+        <img class="brand-logo" src="logo.png" alt="CyberSpartans"/>
+        <span class="brand-name">CYBER SPARTANS</span>
+    </a>
+    <nav>
+        <a href="index.html">About</a>
+        <a href="services.html" class="active">Services</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="#connect" class="nav-cta">Connect</a>
+    </nav>
+</header>
+
+<section class="product-hero">
+    <div class="eyebrow"><span class="eyebrow-dot"></span>WHAT WE DO</div>
+    <h1>Security and cloud work that <span class="red">earns its keep</span>.</h1>
+    <p>Four areas where CyberSpartans helps organisations test their defences, fix what matters, and run cloud that is both secure and cost-aware.</p>
+    <a href="#connect" class="btn btn-primary">Start a conversation</a>
+</section>
+
+<section class="section">
+    <!-- 1. Cyber & Cloud -->
+    <div class="service-detail">
+        <div>
+            <span class="tag">Core Practice</span>
+            <h2>Cybersecurity & Cloud Expertise</h2>
+            <p>The foundation of everything we do. Security architecture, cloud design, and assume-breach thinking applied to your actual environment rather than a slide deck.</p>
+            <p>Whether you are migrating to cloud, hardening what you already run, or designing something new, you get hands-on architecture experience from someone who has defended enterprise infrastructure for two decades.</p>
+            <ul>
+                <li>Security architecture reviews and design</li>
+                <li>Cloud architecture for AWS and Azure</li>
+                <li>Assume-breach posture and threat modelling</li>
+                <li>Identity, access, and segmentation design</li>
+            </ul>
+        </div>
+        <div class="service-visual">
+            <div class="visual-icon">🛡</div>
+            <div class="visual-stat">PRACTICE · <span>20+ YEARS</span></div>
+        </div>
+    </div>
+
+    <!-- 2. Continuous Validation (Cymulate) -->
+    <div class="service-detail reverse partner-svc">
+        <div>
+            <span class="tag partner">Powered by Cymulate</span>
+            <h2>Continuous Security Validation</h2>
+            <p>Knowing your controls work is different from hoping they do. We deploy and run Cymulate to continuously test your defences against real attack techniques, safely, against your live environment.</p>
+            <p>You see what your controls catch, what slips through, and exactly where to focus. This runs all year, not as a once-a-year point-in-time test that is stale the moment it finishes.</p>
+            <ul>
+                <li>Breach and attack simulation via Cymulate</li>
+                <li>Detection and response validation</li>
+                <li>Control coverage measured against MITRE ATT&CK</li>
+                <li>Prioritised, evidence-based remediation</li>
+            </ul>
+        </div>
+        <div class="service-visual cyan-glow">
+            <div class="visual-icon">🎯</div>
+            <div class="visual-stat">VALIDATION · <span>CONTINUOUS</span></div>
+        </div>
+    </div>
+
+    <!-- 3. Vuln Management (Intruder) -->
+    <div class="service-detail partner-svc">
+        <div>
+            <span class="tag partner">Powered by Intruder</span>
+            <h2>Vulnerability Management</h2>
+            <p>A scanner that produces a thousand findings is not helpful. We run continuous scanning through Intruder and turn the output into a clear plan: what to fix, in what order, and why it matters for your specific exposure.</p>
+            <p>The goal is a shorter list of things that genuinely reduce risk, not a longer report that sits unread.</p>
+            <ul>
+                <li>Continuous external and internal scanning</li>
+                <li>Risk-based prioritisation, not raw CVSS dumps</li>
+                <li>Remediation guidance your team can act on</li>
+                <li>Trend tracking so you can see progress</li>
+            </ul>
+        </div>
+        <div class="service-visual cyan-glow">
+            <div class="visual-icon">🔍</div>
+            <div class="visual-stat">SCANNING · <span>ALWAYS ON</span></div>
+        </div>
+    </div>
+
+    <!-- 4. Audits & FinOps -->
+    <div class="service-detail reverse">
+        <div>
+            <span class="tag">Assurance & Cost</span>
+            <h2>Audits & FinOps</h2>
+            <p>Two sides of the same coin: knowing where you stand on security, and knowing your cloud spend is under control. Security and architecture audits tell you the truth about your posture. FinOps brings cloud cost back in line.</p>
+            <p>Most FinOps engagements find enough savings to cover the cost of the work, which makes this one of the easier conversations to have with finance.</p>
+            <ul>
+                <li>Security and architecture audits</li>
+                <li>Cloud cost analysis and FinOps</li>
+                <li>Right-sizing, waste removal, commitment planning</li>
+                <li>Clear reporting for technical and finance audiences</li>
+            </ul>
+        </div>
+        <div class="service-visual">
+            <div class="visual-icon">📊</div>
+            <div class="visual-stat">AUDIT · <span>FINOPS</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- PARTNERS -->
+<section class="section partners-note">
+    <div class="section-header">
+        <div class="eyebrow"><span class="eyebrow-dot"></span>TOOLING PARTNERS</div>
+        <h2>We bring the <span class="red">right tools</span>, and the experience to run them.</h2>
+        <p>We resell and operate best-in-class platforms so you get enterprise tooling without building the expertise in-house.</p>
+    </div>
+    <div class="partner-badges">
+        <div class="partner-badge">Cymulate<small>Security Validation</small></div>
+        <div class="partner-badge">Intruder<small>Vulnerability Management</small></div>
+        <div class="partner-badge">AWS<small>Cloud</small></div>
+        <div class="partner-badge">Azure<small>Cloud</small></div>
+    </div>
+</section>
+
+<!-- CONNECT -->
+<section class="section" id="connect" style="text-align:center;background:linear-gradient(180deg, var(--bg) 0%, var(--bg-card) 100%);">
+    <h2 style="font-size:40px;font-weight:700;letter-spacing:-1.2px;margin-bottom:18px;">Need any of this? <span class="red">Let's talk.</span></h2>
+    <p style="font-size:17px;color:var(--text-dim);margin-bottom:34px;max-width:540px;margin-left:auto;margin-right:auto;line-height:1.6;">No sales script. Just a useful conversation about what you are trying to protect and where you want to get to.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+        <a href="mailto:info@cyberspartans.co.uk" class="btn btn-primary">info@cyberspartans.co.uk</a>
+        <a href="https://www.linkedin.com/in/saleemyousaf" class="btn btn-ghost">Connect on LinkedIn</a>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <a href="index.html" class="brand">
+                <img class="brand-logo" src="logo.png" alt="CyberSpartans"/>
+                <span class="brand-name">CYBER SPARTANS</span>
+            </a>
+            <p>The cybersecurity and cloud consultancy practice of Saleem Yousaf. Security validation, vulnerability management, cloud audits and FinOps.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Practice</h4>
+            <a href="services.html">Services</a>
+            <a href="capabilities.html">Capabilities</a>
+            <a href="index.html">About</a>
+        </div>
+        <div class="footer-col">
+            <h4>Capabilities</h4>
+            <a href="capabilities.html">BreachForge</a>
+            <a href="capabilities.html">TI Portal</a>
+        </div>
+        <div class="footer-col">
+            <h4>Connect</h4>
+            <a href="mailto:info@cyberspartans.co.uk">info@cyberspartans.co.uk</a>
+            <a href="https://www.linkedin.com/in/saleemyousaf">LinkedIn</a>
+            <a href="https://www.saleemyousaf.co.uk">saleemyousaf.co.uk</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <span>© 2026 CyberSpartans · cyberspartans.co.uk</span>
+        <span>Cybersecurity and cloud, done properly.</span>
+    </div>
+</footer>
+
+</body>
+</html>
