@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-05-30T01:53:29.410Z",
+  "timestamp": "2026-05-30T08:13:43.023Z",
   "activeThreats": {
-    "shodan": 334,
-    "virusTotal": 294,
+    "shodan": 288,
+    "virusTotal": 120,
     "mitre": 15,
-    "industryAlerts": 92
+    "industryAlerts": 66
   },
   "trendingTechniques": {
     "initialAccess": [
@@ -81,13 +81,13 @@
     ]
   },
   "sectorThreatLevels": {
-    "healthcare": 12,
-    "finance": 8,
-    "government": 11,
-    "technology": 10,
-    "manufacturing": 10,
-    "retail": 14,
-    "energy": 12,
-    "education": 12
+    "healthcare": 6,
+    "finance": 7,
+    "government": 13,
+    "technology": 6,
+    "manufacturing": 5,
+    "retail": 6,
+    "energy": 16,
+    "education": 4
   }
 }
