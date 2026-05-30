@@ -1,258 +1,247 @@
 #!/usr/bin/env node
 
+// BreachForge TI Portal - OSINT data fetcher (honest v1)
+// Sources:
+//   CISA KEV       - real, no API key
+//   MITRE ATT&CK   - real, no API key
+//   AlienVault OTX - real, needs OTX_API_KEY (GitHub secret)
+//   Abuse.ch       - real, needs ABUSE_CH_AUTH_KEY (GitHub secret), via ThreatFox
+// No values are invented. A feed that cannot connect is reported as
+// "degraded" or "not_connected", never as fake-healthy.
+
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
 
-// FIX (Bug 2): write to <repo-root>/breachforge/intel/data regardless of where
-// this script file sits. GitHub Actions runs every step from the repo root, so
-// process.cwd() is the repo root. The old code used __dirname + '../...', which
-// resolved to .github/breachforge/... when the script lived in .github/scripts/,
-// a folder GitHub Pages never serves.
 const DATA_DIR = path.join(process.cwd(), 'breachforge/intel/data');
+if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
-}
+const OTX_API_KEY = process.env.OTX_API_KEY || '';
+const ABUSE_CH_AUTH_KEY = process.env.ABUSE_CH_AUTH_KEY || '';
 
-// Helper to fetch JSON from HTTPS endpoints.
-// Now follows redirects and rejects on non-200 so a failed source surfaces
-// cleanly instead of trying to JSON.parse an error page.
-function fetchJSON(url) {
+const DAY = 24 * 60 * 60 * 1000;
+
+// Generic HTTPS request returning parsed JSON. Supports GET and POST,
+// custom headers, redirects, and surfaces non-2xx responses as errors.
+function httpRequest(url, { method = 'GET', headers = {}, body = null } = {}) {
   return new Promise((resolve, reject) => {
-    https.get(url, { headers: { 'User-Agent': 'BreachForge-TI-Bot/1.0' } }, (res) => {
+    const u = new URL(url);
+    const payload = body == null ? null : (typeof body === 'string' ? body : JSON.stringify(body));
+    const baseHeaders = { 'User-Agent': 'BreachForge-TI-Bot/1.0', ...headers };
+    if (payload != null) baseHeaders['Content-Length'] = Buffer.byteLength(payload);
+
+    const options = { method, hostname: u.hostname, path: u.pathname + u.search, headers: baseHeaders };
+    const req = https.request(options, (res) => {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
         res.resume();
-        return resolve(fetchJSON(res.headers.location));
+        return resolve(httpRequest(res.headers.location, { method, headers, body }));
       }
-      if (res.statusCode !== 200) {
-        res.resume();
-        return reject(new Error(`HTTP ${res.statusCode} for ${url}`));
+      if (res.statusCode < 200 || res.statusCode >= 300) {
+        let errBody = '';
+        res.on('data', c => errBody += c);
+        res.on('end', () => reject(new Error(`HTTP ${res.statusCode} for ${url}${errBody ? ': ' + errBody.slice(0, 200) : ''}`)));
+        return;
       }
       let data = '';
-      res.on('data', chunk => data += chunk);
+      res.on('data', c => data += c);
       res.on('end', () => {
-        try {
-          resolve(JSON.parse(data));
-        } catch (e) {
-          reject(new Error(`Invalid JSON from ${url}: ${e.message}`));
-        }
+        try { resolve(JSON.parse(data)); }
+        catch (e) { reject(new Error(`Invalid JSON from ${url}: ${e.message}`)); }
       });
-    }).on('error', reject);
+    });
+    req.on('error', reject);
+    if (payload != null) req.write(payload);
+    req.end();
   });
 }
 
-async function fetchOSINTData() {
-  console.log('Starting OSINT data fetch...');
-  const timestamp = new Date().toISOString();
+// ---- AlienVault OTX (real, key required) ----
+async function getOtx() {
+  if (!OTX_API_KEY) {
+    return { status: 'not_connected', records: null, note: 'OTX_API_KEY secret not set' };
+  }
+  try {
+    const res = await httpRequest('https://otx.alienvault.com/api/v1/pulses/subscribed?limit=10&page=1', {
+      headers: { 'X-OTX-API-KEY': OTX_API_KEY }
+    });
+    const count = typeof res.count === 'number'
+      ? res.count
+      : (Array.isArray(res.results) ? res.results.length : 0);
+    return { status: 'healthy', records: count };
+  } catch (e) {
+    return { status: 'degraded', records: null, note: e.message };
+  }
+}
 
-  // 1. CISA KEV (Known Exploited Vulnerabilities)
-  // Wrapped on its own so a CISA outage cannot blank the rest of the portal.
-  let cisaVulns = [];
-  let cisaTotal = 0;
-  let cisaLastUpdate = timestamp;
+// ---- Abuse.ch ThreatFox (real, key required) ----
+async function getThreatFox() {
+  if (!ABUSE_CH_AUTH_KEY) {
+    return { status: 'not_connected', records: null, note: 'ABUSE_CH_AUTH_KEY secret not set' };
+  }
+  try {
+    const res = await httpRequest('https://threatfox-api.abuse.ch/api/v1/', {
+      method: 'POST',
+      headers: { 'Auth-Key': ABUSE_CH_AUTH_KEY, 'Content-Type': 'application/json' },
+      body: { query: 'get_iocs', days: 1 }
+    });
+    const rows = Array.isArray(res.data) ? res.data : [];
+    if (res.query_status && res.query_status !== 'ok') {
+      return { status: 'degraded', records: rows.length, note: `query_status: ${res.query_status}` };
+    }
+    return { status: 'healthy', records: rows.length };
+  } catch (e) {
+    return { status: 'degraded', records: null, note: e.message };
+  }
+}
+
+async function run() {
+  const timestamp = new Date().toISOString();
+  const now = Date.now();
+
+  // ---- CISA KEV (real, no key) ----
   let cisaStatus = 'healthy';
+  let cisaTotal = 0;
+  let cisaReleased = null;
+  let cisaVulns = [];
+  let kev7 = 0;
+  let kevByWeek = { weeks: [], counts: [] };
   try {
     console.log('Fetching CISA KEV...');
-    const cisaData = await fetchJSON('https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json');
-    const vulns = Array.isArray(cisaData.vulnerabilities) ? cisaData.vulnerabilities : [];
+    const data = await httpRequest('https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json');
+    const vulns = Array.isArray(data.vulnerabilities) ? data.vulnerabilities : [];
     cisaTotal = vulns.length;
-    cisaVulns = vulns.slice(0, 10).map(v => ({
+    cisaReleased = data.dateReleased ? new Date(data.dateReleased).toISOString() : timestamp;
+
+    const sorted = [...vulns].sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
+    cisaVulns = sorted.slice(0, 10).map(v => ({
       cveId: v.cveID,
-      description: v.shortDescription,
+      description: v.shortDescription || '',
       dateAdded: v.dateAdded,
-      exploitType: v.exploitType,
-      severity: 'high'
+      vendor: v.vendorProject || '',
+      product: v.product || ''
     }));
-    // FIX (Bug 1): CISA KEV exposes dateReleased / catalogVersion, never meta.lastModified.
-    cisaLastUpdate = cisaData.dateReleased
-      ? new Date(cisaData.dateReleased).toISOString()
-      : timestamp;
+
+    kev7 = vulns.filter(v => (now - new Date(v.dateAdded).getTime()) <= 7 * DAY).length;
+
+    // Real 8-week histogram of KEV additions (bucket 0 = this week)
+    const buckets = new Array(8).fill(0);
+    for (const v of vulns) {
+      const ageDays = (now - new Date(v.dateAdded).getTime()) / DAY;
+      if (ageDays >= 0 && ageDays < 56) buckets[Math.floor(ageDays / 7)]++;
+    }
+    const weeks = [];
+    const counts = [];
+    for (let i = 7; i >= 0; i--) {
+      counts.push(buckets[i]);
+      const d = new Date(now - i * 7 * DAY);
+      weeks.push(`${d.getMonth() + 1}/${d.getDate()}`);
+    }
+    kevByWeek = { weeks, counts };
   } catch (e) {
-    console.error('CISA KEV fetch failed, continuing with fallback:', e.message);
+    console.error('CISA KEV failed:', e.message);
     cisaStatus = 'degraded';
   }
 
-  // 2. MITRE ATT&CK Enterprise techniques
-  let techniques = [];
-  let mitreTotal = 0;
+  // ---- MITRE ATT&CK Enterprise (real, no key) ----
   let mitreStatus = 'healthy';
+  let techCount = 0;
+  let groupCount = 0;
+  let actors = [];
   try {
     console.log('Fetching MITRE ATT&CK Enterprise...');
-    const mitreData = await fetchJSON('https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json');
-    const objects = Array.isArray(mitreData.objects) ? mitreData.objects : [];
-    const attackPatterns = objects.filter(o => o.type === 'attack-pattern');
-    mitreTotal = attackPatterns.length;
-    techniques = attackPatterns.slice(0, 15).map(t => ({
-      id: t.external_references?.find(ref => ref.source_name === 'mitre-attack')?.external_id || 'N/A',
-      name: t.name,
-      description: t.description?.substring(0, 100) || '',
-      created: t.created
-    }));
+    const data = await httpRequest('https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json');
+    const objects = Array.isArray(data.objects) ? data.objects : [];
+    const isActive = o => !o.revoked && !o.x_mitre_deprecated;
+
+    const techniques = objects.filter(o => o.type === 'attack-pattern' && isActive(o));
+    techCount = techniques.length;
+
+    const groups = objects.filter(o => o.type === 'intrusion-set' && isActive(o));
+    groupCount = groups.length;
+
+    // Count techniques each group "uses" via STIX relationship objects (real)
+    const techniqueIds = new Set(techniques.map(t => t.id));
+    const usesByGroup = {};
+    for (const o of objects) {
+      if (o.type === 'relationship' && o.relationship_type === 'uses'
+        && typeof o.source_ref === 'string' && o.source_ref.startsWith('intrusion-set--')
+        && typeof o.target_ref === 'string' && techniqueIds.has(o.target_ref)) {
+        usesByGroup[o.source_ref] = (usesByGroup[o.source_ref] || 0) + 1;
+      }
+    }
+
+    actors = groups.map(g => {
+      const rawAliases = Array.isArray(g.aliases) ? g.aliases
+        : (Array.isArray(g.x_mitre_aliases) ? g.x_mitre_aliases : []);
+      return {
+        name: g.name,
+        aliases: rawAliases.filter(a => a && a !== g.name),
+        techniqueCount: usesByGroup[g.id] || 0,
+        lastModified: g.modified ? new Date(g.modified).toISOString() : null
+      };
+    })
+      .sort((a, b) => b.techniqueCount - a.techniqueCount)
+      .slice(0, 10);
   } catch (e) {
-    console.error('MITRE ATT&CK fetch failed, continuing with fallback:', e.message);
+    console.error('MITRE ATT&CK failed:', e.message);
     mitreStatus = 'degraded';
   }
 
-  // 3. Threat actors (static list, no free real-time API)
-  const threatActors = [
-    {
-      id: 'storm-0558',
-      name: 'Storm-0558',
-      origin: 'China',
-      type: 'Nation-State',
-      sectors: ['Government', 'Technology'],
-      ttps: ['T1566.002', 'T1566.001', 'T1082'],
-      lastActivity: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
-    },
-    {
-      id: 'teamtnt',
-      name: 'TeamTNT',
-      origin: 'Unknown',
-      type: 'Cybercriminal',
-      sectors: ['Cloud', 'All'],
-      ttps: ['T1136', 'T1199', 'T1021'],
-      lastActivity: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
-    },
-    {
-      id: 'apt29',
-      name: 'APT29',
-      origin: 'Russia',
-      type: 'Nation-State',
-      sectors: ['Government', 'Energy'],
-      ttps: ['T1078.003', 'T1550.004', 'T1566'],
-      lastActivity: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
-    },
-    {
-      id: 'fin7',
-      name: 'FIN7',
-      origin: 'Unclear',
-      type: 'APT',
-      sectors: ['Finance', 'Retail'],
-      ttps: ['T1589', 'T1566', 'T1059'],
-      lastActivity: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString()
-    },
-    {
-      id: 'lazarus',
-      name: 'Lazarus Group',
-      origin: 'North Korea',
-      type: 'Nation-State',
-      sectors: ['Finance', 'Government'],
-      ttps: ['T1204', 'T1105', 'T1204.001'],
-      lastActivity: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
-    }
-  ];
+  // ---- Keyed feeds ----
+  console.log('Checking AlienVault OTX...');
+  const otx = await getOtx();
+  console.log('Checking Abuse.ch ThreatFox...');
+  const tf = await getThreatFox();
 
-  // 4. OSINT feed status. CISA and MITRE statuses now reflect whether the
-  // fetch actually succeeded this run.
-  const feedStatus = {
+  // ---- feeds.json ----
+  const feeds = {
     timestamp,
     sources: [
-      {
-        name: 'CISA KEV',
-        status: cisaStatus,
-        accuracy: 100,
-        totalRecords: cisaTotal,
-        lastUpdate: cisaLastUpdate
-      },
-      {
-        name: 'MITRE ATT&CK',
-        status: mitreStatus,
-        accuracy: 100,
-        totalRecords: techniques.length,
-        lastUpdate: timestamp
-      },
-      {
-        name: 'AlienVault OTX',
-        status: 'healthy',
-        accuracy: 92,
-        totalRecords: 1247,
-        lastUpdate: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
-      },
-      {
-        name: 'Abuse.ch',
-        status: 'healthy',
-        accuracy: 88,
-        totalRecords: 3456,
-        lastUpdate: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString()
-      }
+      { name: 'CISA KEV', status: cisaStatus, records: cisaTotal, lastUpdate: cisaReleased || timestamp },
+      { name: 'MITRE ATT&CK', status: mitreStatus, records: techCount, lastUpdate: timestamp },
+      { name: 'AlienVault OTX', status: otx.status, records: otx.records, lastUpdate: otx.status === 'healthy' ? timestamp : null, note: otx.note },
+      { name: 'Abuse.ch ThreatFox', status: tf.status, records: tf.records, lastUpdate: tf.status === 'healthy' ? timestamp : null, note: tf.note }
     ]
   };
 
-  // 5. Metric aggregates
+  // ---- metrics.json (real tiles + real KEV histogram) ----
   const metrics = {
     timestamp,
-    activeThreats: {
-      shodan: Math.floor(Math.random() * 300) + 200,
-      virusTotal: Math.floor(Math.random() * 200) + 100,
-      mitre: techniques.length,
-      industryAlerts: Math.floor(Math.random() * 80) + 40
-    },
-    trendingTechniques: generateTrendingData(),
-    threatHeatmap: generateHeatmapData(),
-    sectorThreatLevels: {
-      healthcare: Math.floor(Math.random() * 10) + 6,
-      finance: Math.floor(Math.random() * 10) + 7,
-      government: Math.floor(Math.random() * 10) + 8,
-      technology: Math.floor(Math.random() * 10) + 6,
-      manufacturing: Math.floor(Math.random() * 10) + 5,
-      retail: Math.floor(Math.random() * 10) + 5,
-      energy: Math.floor(Math.random() * 10) + 7,
-      education: Math.floor(Math.random() * 10) + 4
-    }
+    tiles: [
+      { label: 'KEV Total', value: cisaTotal, source: 'CISA KEV' },
+      { label: 'KEV (7 days)', value: kev7, source: 'CISA KEV' },
+      { label: 'ATT&CK Techniques', value: techCount, source: 'MITRE' },
+      { label: 'ATT&CK Groups', value: groupCount, source: 'MITRE' }
+    ],
+    kevByWeek
   };
 
-  // 6. Write all JSON files. Filenames and field names are unchanged from the
-  // original so the frontend reads them exactly as before.
+  // ---- threats.json ----
+  const threats = { timestamp, vulnerabilities: cisaVulns, actors };
+
+  // ---- write ----
   try {
-    fs.writeFileSync(
-      path.join(DATA_DIR, 'threats.json'),
-      JSON.stringify({ timestamp, vulnerabilities: cisaVulns, actors: threatActors }, null, 2)
-    );
-
-    fs.writeFileSync(
-      path.join(DATA_DIR, 'techniques.json'),
-      JSON.stringify({ timestamp, techniques, total: mitreTotal }, null, 2)
-    );
-
-    fs.writeFileSync(
-      path.join(DATA_DIR, 'feeds.json'),
-      JSON.stringify(feedStatus, null, 2)
-    );
-
-    fs.writeFileSync(
-      path.join(DATA_DIR, 'metrics.json'),
-      JSON.stringify(metrics, null, 2)
-    );
-
-    console.log('OSINT data fetch completed.');
-    console.log(`CISA: ${cisaStatus} (${cisaTotal} records). MITRE: ${mitreStatus} (${mitreTotal} techniques).`);
-    console.log(`Updated files in ${DATA_DIR}`);
+    writeJson('feeds.json', feeds);
+    writeJson('metrics.json', metrics);
+    writeJson('threats.json', threats);
   } catch (e) {
     console.error('Failed to write data files:', e.message);
     process.exit(1);
   }
+
+  console.log('OSINT data fetch completed.');
+  console.log(`CISA KEV: ${cisaStatus} (${cisaTotal} total, ${kev7} in 7d)`);
+  console.log(`MITRE: ${mitreStatus} (${techCount} techniques, ${groupCount} groups)`);
+  console.log(`OTX: ${otx.status}${otx.note ? ' - ' + otx.note : ''}`);
+  console.log(`ThreatFox: ${tf.status}${tf.note ? ' - ' + tf.note : ''}`);
 }
 
-function generateTrendingData() {
-  const weeks = ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8'];
-  return {
-    initialAccess: weeks.map((w, i) => 42 + (i * 4)),
-    persistence: weeks.map((w, i) => 38 + (i * 3)),
-    exfiltration: weeks.map((w, i) => 25 + (i * 3)),
-    commandControl: weeks.map((w, i) => 35 + (i * 2)),
-    weeks
-  };
+function writeJson(name, obj) {
+  fs.writeFileSync(path.join(DATA_DIR, name), JSON.stringify(obj, null, 2));
+  console.log(`Wrote ${name}`);
 }
 
-function generateHeatmapData() {
-  return {
-    sectors: ['Healthcare', 'Finance', 'Government', 'Tech', 'Manufacturing', 'Retail', 'Energy', 'Education'],
-    threatLevels: [8, 9, 10, 8, 6, 5, 8, 4]
-  };
-}
-
-fetchOSINTData().catch(err => {
-  console.error('Unexpected error:', err.message);
+run().catch(e => {
+  console.error('Unexpected error:', e.message);
   process.exit(1);
 });
