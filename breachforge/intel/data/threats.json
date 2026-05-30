@@ -1,236 +1,289 @@
 {
-  "timestamp": "2026-05-30T13:49:16.767Z",
-  "vulnerabilities": [
+  "generated": "2026-05-30T13:50:07.610765+00:00",
+  "source": "BreachForge TI Feed Collector v1.0",
+  "threats": [
     {
-      "cveId": "CVE-2026-0257",
-      "description": "Palo Alto Networks PAN-OS contains an authentication bypass vulnerability that allows attackers to bypass security restrictions and establish an unauthorized VPN connection.",
-      "dateAdded": "2026-05-29",
-      "vendor": "Palo Alto Networks",
-      "product": "PAN-OS"
-    },
-    {
-      "cveId": "CVE-2026-48027",
-      "description": "Nx Console contains an embedded malicious code vulnerability that allowed a malicious version of Nx Console to be published. The compromised extension fetched an obfuscated payload that could harvested credentials from multiple sources on disk and in memory.",
-      "dateAdded": "2026-05-27",
-      "vendor": "Nx",
-      "product": "Nx Console"
-    },
-    {
-      "cveId": "CVE-2026-45321",
-      "description": "TanStack contains an unspecified vulnerability that allowed malicious versions of the product to be published to the npm registry to publish credential-stealing malware under a trusted identity.",
-      "dateAdded": "2026-05-27",
-      "vendor": "TanStack",
-      "product": "TanStack"
-    },
-    {
-      "cveId": "CVE-2026-8398",
-      "description": "Daemon Tools contains an unspecified vulnerability that has a high impact on confidentiality, integrity, and availability.",
-      "dateAdded": "2026-05-27",
-      "vendor": "Daemon",
-      "product": "Daemon Tools Lite"
-    },
-    {
-      "cveId": "CVE-2026-48172",
-      "description": "LiteSpeed cPanel Plugin contains privilege escalation vulnerability that is exposed via the user-end cPanel plugin, which can be abused by any cPanel user account to execute arbitrary scripts with root privileges.",
-      "dateAdded": "2026-05-26",
-      "vendor": "LiteSpeed",
-      "product": "cPanel Plugin"
-    },
-    {
-      "cveId": "CVE-2026-9082",
-      "description": "Drupal Core contains a SQL injection vulnerability that could allow for privilege escalation and remote code execution via specially crafted requests sent with the database abstraction API.",
-      "dateAdded": "2026-05-22",
-      "vendor": "Drupal",
-      "product": "Core"
-    },
-    {
-      "cveId": "CVE-2025-34291",
-      "description": "Langflow contains an origin validation error vulnerability in which an overly permissive CORS configuration combined with a refresh token cookie configured as SameSite=None allows a malicious webpage to perform cross-origin requests that include credentials and successfully call the refresh endpoint. This could allow the attacker to execute arbitrary code and achieve full system compromise via obtained tokens that permit access to authenticated endpoints.",
-      "dateAdded": "2026-05-21",
-      "vendor": "Langflow",
-      "product": "Langflow"
-    },
-    {
-      "cveId": "CVE-2026-34926",
-      "description": "Trend Micro Apex One (on-premise) contains a directory traversal vulnerability that could allow a pre-authenticated local attacker to modify a key table on the server to inject malicious code to deploy to agents on affected installations.",
-      "dateAdded": "2026-05-21",
-      "vendor": "Trend Micro",
-      "product": "Apex One"
-    },
-    {
-      "cveId": "CVE-2008-4250",
-      "description": "Microsoft Windows contains a buffer overflow vulnerability in the Windows Server Service that allows remote attackers to execute arbitrary code via a crafted RPC request that triggers an overflow during path canonicalization.",
-      "dateAdded": "2026-05-20",
-      "vendor": "Microsoft",
-      "product": "Windows"
-    },
-    {
-      "cveId": "CVE-2009-1537",
-      "description": "Microsoft DirectX contains a NULL byte overwrite vulnerability in the QuickTime Movie Parser Filter in quartz.dll in DirectShow which could allow remote attackers to execute arbitrary code via a crafted QuickTime media file.",
-      "dateAdded": "2026-05-20",
-      "vendor": "Microsoft",
-      "product": "DirectX"
-    }
-  ],
-  "actors": [
-    {
-      "name": "Kimsuky",
-      "aliases": [
-        "Black Banshee",
-        "Velvet Chollima",
-        "Emerald Sleet",
-        "THALLIUM",
-        "APT43",
-        "TA427",
-        "Springtail",
-        "Earth Kumiho",
-        "PatheticSlug"
+      "id": "TI-7FE466F4",
+      "title": "Malicious npm packages abuse dependency confusion to profile developer environments",
+      "source": "Microsoft Threat Intel RSS",
+      "source_url": "https://www.microsoft.com/security/blog",
+      "published": "2026-05-30T00:06:20+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
       ],
-      "techniqueCount": 130,
-      "lastModified": "2026-04-23T18:46:50.938Z"
+      "summary": "A dependency confusion campaign leveraged 33 malicious npm packages to collect reconnaissance data from developer and build environments. This report details the attack chain, observed tradecraft, and detection opportunities to help organizations identify and disrupt related activity. The post Malicious npm packages abuse dependency confusion to profile developer environments appeared first on Mic"
     },
     {
-      "name": "Lazarus Group",
-      "aliases": [
-        "Labyrinth Chollima",
-        "HIDDEN COBRA",
-        "Guardians of Peace",
-        "ZINC",
-        "NICKEL ACADEMY",
-        "Diamond Sleet"
+      "id": "TI-DB198092",
+      "title": "Microsoft is named a Leader in the 2026 Gartner® Magic Quadrant™ for Endpoint Protection",
+      "source": "Microsoft Threat Intel RSS",
+      "source_url": "https://www.microsoft.com/security/blog",
+      "published": "2026-05-29T16:00:00+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Manufacturing"
       ],
-      "techniqueCount": 93,
-      "lastModified": "2026-05-12T15:12:00.732Z"
+      "summary": "Microsoft is named a Leader in the 2026 Gartner® Magic Quadrant™ for Endpoint Protection. The post Microsoft is named a Leader in the 2026 Gartner® Magic Quadrant™ for Endpoint Protection appeared first on Microsoft Security Blog ."
     },
     {
-      "name": "APT28",
-      "aliases": [
-        "IRON TWILIGHT",
-        "SNAKEMACKEREL",
-        "Swallowtail",
-        "Group 74",
-        "Sednit",
-        "Sofacy",
-        "Pawn Storm",
-        "Fancy Bear",
-        "STRONTIUM",
-        "Tsar Team",
-        "Threat Group-4127",
-        "TG-4127",
-        "Forest Blizzard",
-        "FROZENLAKE",
-        "GruesomeLarch"
+      "id": "TI-495CED40",
+      "title": "Typosquatted npm packages used to steal cloud and CI/CD secrets",
+      "source": "Microsoft Threat Intel RSS",
+      "source_url": "https://www.microsoft.com/security/blog",
+      "published": "2026-05-29T03:04:52+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
       ],
-      "techniqueCount": 93,
-      "lastModified": "2026-05-12T15:12:00.732Z"
+      "summary": "The Mini Shai-Hulud campaign used malicious npm packages to target cloud and CI/CD credentials across developer environments. This report details the attack chain, detection opportunities, and mitigation guidance to help organizations identify and disrupt related activity. The post Typosquatted npm packages used to steal cloud and CI/CD secrets appeared first on Microsoft Security Blog ."
     },
     {
-      "name": "Mustang Panda",
-      "aliases": [
-        "TA416",
-        "RedDelta",
-        "BRONZE PRESIDENT",
-        "STATELY TAURUS",
-        "FIREANT",
-        "CAMARO DRAGON",
-        "EARTH PRETA",
-        "HIVE0154",
-        "TWILL TYPHOON",
-        "TANTALUM",
-        "LUMINOUS MOTH",
-        "UNC6384",
-        "TEMP.Hex",
-        "Red Lich",
-        "ClumsyToad"
+      "id": "TI-FAF03F69",
+      "title": "CISA KEV: Palo Alto Networks PAN-OS — Palo Alto Networks PAN-OS Authentication Bypass Vulnerability",
+      "source": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "published": "2026-05-29T00:00:00Z",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
       ],
-      "techniqueCount": 85,
-      "lastModified": "2026-05-12T15:12:00.732Z"
+      "summary": "Palo Alto Networks PAN-OS contains an authentication bypass vulnerability that allows attackers to bypass security restrictions and establish an unauthorized VPN connection. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
     },
     {
-      "name": "APT41",
-      "aliases": [
-        "Wicked Panda",
-        "Brass Typhoon",
-        "BARIUM"
+      "id": "TI-2AC70F98",
+      "title": "Less panic patching, more precision",
+      "source": "Cisco Talos RSS",
+      "source_url": "https://blog.talosintelligence.com",
+      "published": "2026-05-28T18:00:27+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
       ],
-      "techniqueCount": 82,
-      "lastModified": "2025-06-11T20:13:29.024Z"
+      "summary": "In this newsletter, Thor breaks down why you should stop relying solely on CVSS and start using EPSS and GCVE to focus your patching efforts on the threats that actually matter."
     },
     {
-      "name": "Volt Typhoon",
-      "aliases": [
-        "BRONZE SILHOUETTE",
-        "Vanguard Panda",
-        "DEV-0391",
-        "UNC3236",
-        "Voltzite",
-        "Insidious Taurus",
-        "DazedToad"
+      "id": "TI-B19FF986",
+      "title": "The Gentlemen ransomware: Dissecting a self-propagating Go encryptor",
+      "source": "Microsoft Threat Intel RSS",
+      "source_url": "https://www.microsoft.com/security/blog",
+      "published": "2026-05-28T15:00:00+00:00",
+      "severity": "High",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
       ],
-      "techniqueCount": 81,
-      "lastModified": "2026-04-27T03:57:23.174Z"
+      "summary": "Microsoft Threat Intelligence presents a comprehensive analysis of The Gentlemen, a Go-based ransomware deployed by affiliates of Storm-2697 that combines per-file ephemeral key encryption with an aggressive self-propagation module to deploy itself across an entire network using series of simultaneous lateral movement techniques per target. The post The Gentlemen ransomware: Dissecting a self-prop"
     },
     {
-      "name": "Sandworm Team",
-      "aliases": [
-        "ELECTRUM",
-        "Telebots",
-        "IRON VIKING",
-        "BlackEnergy (Group)",
-        "Quedagh",
-        "Voodoo Bear",
-        "IRIDIUM",
-        "Seashell Blizzard",
-        "FROZENBARENTS",
-        "APT44"
+      "id": "TI-D01C86E4",
+      "title": "2026 World Cup: Discussing The World’s Biggest Game’s Attack Surface",
+      "source": "Palo Alto Unit42 RSS",
+      "source_url": "https://unit42.paloaltonetworks.com",
+      "published": "2026-05-28T10:00:53+00:00",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Manufacturing"
       ],
-      "techniqueCount": 79,
-      "lastModified": "2024-12-04T21:17:08.593Z"
+      "summary": "The 2026 World Cup presents major cyber risks from ransomware groups, state-aligned actors, and other groups targeting critical infrastructure. Learn more here. The post 2026 World Cup: Discussing The World’s Biggest Game’s Attack Surface appeared first on Unit 42 ."
     },
     {
-      "name": "Magic Hound",
-      "aliases": [
-        "TA453",
-        "COBALT ILLUSION",
-        "Charming Kitten",
-        "ITG18",
-        "Phosphorus",
-        "Newscaster",
-        "APT35",
-        "Mint Sandstorm"
+      "id": "TI-F534DA50",
+      "title": "DICOM, Pydicom, GDCM, and Orthanc: A technical tour of what really happens in the heap",
+      "source": "Cisco Talos RSS",
+      "source_url": "https://blog.talosintelligence.com",
+      "published": "2026-05-28T10:00:52+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
       ],
-      "techniqueCount": 78,
-      "lastModified": "2026-05-12T15:12:00.732Z"
+      "summary": "This white paper presents a concrete case study demonstrating the creation of a heap overflow vulnerability through the exploitation of the DICOM file format."
     },
     {
-      "name": "APT32",
-      "aliases": [
-        "SeaLotus",
-        "OceanLotus",
-        "APT-C-00",
-        "Canvas Cyclone",
-        "BISMUTH"
+      "id": "TI-EC150447",
+      "title": "Out of the Crypt: The Evolving Cyber Extortion Economy",
+      "source": "Palo Alto Unit42 RSS",
+      "source_url": "https://unit42.paloaltonetworks.com",
+      "published": "2026-05-27T22:00:46+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
       ],
-      "techniqueCount": 78,
-      "lastModified": "2024-04-17T22:07:49.430Z"
+      "summary": "Unit 42 explores trends in data theft and extortion, outlining key strategies for organizations as frontier AI models advance. The post Out of the Crypt: The Evolving Cyber Extortion Economy appeared first on Unit 42 ."
     },
     {
-      "name": "OilRig",
-      "aliases": [
-        "COBALT GYPSY",
-        "IRN2",
-        "APT34",
-        "Helix Kitten",
-        "Evasive Serpens",
-        "Hazel Sandstorm",
-        "EUROPIUM",
-        "ITG13",
-        "Earth Simnavaz",
-        "Crambus",
-        "TA452"
+      "id": "TI-ADE06E3E",
+      "title": "MediaArea heap-based buffer overflow vulnerabilities",
+      "source": "Cisco Talos RSS",
+      "source_url": "https://blog.talosintelligence.com",
+      "published": "2026-05-27T14:00:14+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
       ],
-      "techniqueCount": 76,
-      "lastModified": "2026-05-12T15:12:00.732Z"
+      "summary": "Talos researchers find 4 heap-based buffer overflow vulnerabilities in MediaArea's MediaInfoLib."
+    },
+    {
+      "id": "TI-9CB7C1CF",
+      "title": "Introducing EvidenceForge: Synthetic security logs that don’t look (as) fake",
+      "source": "Cisco Talos RSS",
+      "source_url": "https://blog.talosintelligence.com",
+      "published": "2026-05-27T10:00:47+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "EvidenceForge generates high-quality, realistic, and consistent datasets across multiple log formats, enabling teams to effectively train personnel and validate detection models without the need for complex manual simulations."
+    },
+    {
+      "id": "TI-E360D4F4",
+      "title": "CISA KEV: Nx Nx Console — Nx Console Embedded Malicious Code Vulnerability",
+      "source": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "published": "2026-05-27T00:00:00Z",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Nx Console contains an embedded malicious code vulnerability that allowed a malicious version of Nx Console to be published. The compromised extension fetched an obfuscated payload that could harvested credentials from multiple sources on disk and in memory. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if miti"
+    },
+    {
+      "id": "TI-2AFB6987",
+      "title": "CISA KEV: TanStack TanStack — TanStack Unspecified Vulnerability",
+      "source": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "published": "2026-05-27T00:00:00Z",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "TanStack contains an unspecified vulnerability that allowed malicious versions of the product to be published to the npm registry to publish credential-stealing malware under a trusted identity. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
+    },
+    {
+      "id": "TI-BDDC621E",
+      "title": "CISA KEV: Daemon Daemon Tools Lite — Daemon Tools Lite Embedded Malicious Code Vulnerability",
+      "source": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "published": "2026-05-27T00:00:00Z",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Daemon Tools contains an unspecified vulnerability that has a high impact on confidentiality, integrity, and availability. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
+    },
+    {
+      "id": "TI-950BCC80",
+      "title": "CISA KEV: LiteSpeed cPanel Plugin — LiteSpeed cPanel Plugin Privilege Escalation Vulnerability",
+      "source": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "published": "2026-05-26T00:00:00Z",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Manufacturing",
+        "Technology"
+      ],
+      "summary": "LiteSpeed cPanel Plugin contains privilege escalation vulnerability that is exposed via the user-end cPanel plugin, which can be abused by any cPanel user account to execute arbitrary scripts with root privileges. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
+    },
+    {
+      "id": "TI-D9654958",
+      "title": "Tracking Iranian APT Screening Serpens’ 2026 Espionage Campaigns",
+      "source": "Palo Alto Unit42 RSS",
+      "source_url": "https://unit42.paloaltonetworks.com",
+      "published": "2026-05-22T13:00:42+00:00",
+      "severity": "High",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Defence"
+      ],
+      "summary": "Unit 42 details Screening Serpens' use of AppDomainManager hijacking and new RAT variants to target tech and defense sectors in recent campaigns. The post Tracking Iranian APT Screening Serpens’ 2026 Espionage Campaigns appeared first on Unit 42 ."
+    },
+    {
+      "id": "TI-23E5A5A8",
+      "title": "Paved With Intent: ROADtools and Nation-State Tactics in the Cloud",
+      "source": "Palo Alto Unit42 RSS",
+      "source_url": "https://unit42.paloaltonetworks.com",
+      "published": "2026-05-22T10:00:24+00:00",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Open-source framework ROADtools is being misused by threat actors for cloud intrusions. Learn how to identify its malicious use. The post Paved With Intent: ROADtools and Nation-State Tactics in the Cloud appeared first on Unit 42 ."
+    },
+    {
+      "id": "TI-784E2A1D",
+      "title": "Flash Alert: EtherRat and TukTuk C2 End in The Gentleman Ransomware",
+      "source": "DFIR Report RSS",
+      "source_url": "https://thedfirreport.com",
+      "published": "2026-05-11T14:05:04+00:00",
+      "severity": "High",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "The EtherRAT malware family was first reported by Sysdig back in December 2025. At that time, the initial access vector was exploitation of CVE-2025-55182 (React2Shell) targeting Linux servers. In March 2026, a Windows variant campaign was reported by Atos, with their investigation showing evidence of activity going back to the previous December. In April, we [&#8230;] The post Flash Alert: EtherR"
+    },
+    {
+      "id": "TI-3434ED0F",
+      "title": "Bissa Scanner Exposed: AI-Assisted Mass Exploitation and Credential Harvesting",
+      "source": "DFIR Report RSS",
+      "source_url": "https://thedfirreport.com",
+      "published": "2026-04-22T14:51:21+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Manufacturing"
+      ],
+      "summary": "Key Takeaways We identified an exposed server that provided unusual visibility into a large-scale, multi-victim exploitation and collection operation. Artifacts on the host showed that Claude Code and OpenClaw were embedded in the operator’s day-to-day workflow, supporting troubleshooting, orchestration, and refinement of the collection pipeline. This AI-assisted workflow resulted in the modular p"
+    },
+    {
+      "id": "TI-8A3BF2D8",
+      "title": "Apache ActiveMQ Exploit Leads to LockBit Ransomware",
+      "source": "DFIR Report RSS",
+      "source_url": "https://thedfirreport.com",
+      "published": "2026-02-23T14:09:43+00:00",
+      "severity": "High",
+      "techniques": [],
+      "actors": [
+        "LockBit"
+      ],
+      "sectors": [
+        "Manufacturing"
+      ],
+      "summary": "Key Takeaways An audio version of this report can be found on&#160;Spotify,&#160;Apple,&#160;YouTube,&#160;Audible, &#38;&#160;Amazon.&#160; This intrusion began in mid-February 2024 after a threat actor exploited a vulnerability (CVE-2023-46604) on an exposed Apache ActiveMQ server. The threat actor was able to perform remote code execution (RCE) by using a Java Spring class and a custom Java Spr"
     }
   ]
 }
