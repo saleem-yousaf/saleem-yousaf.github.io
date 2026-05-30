@@ -8,6 +8,7 @@
 <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.3/babel.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docx@9.6.1/dist/index.iife.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
 <style>
@@ -2419,7 +2420,7 @@ function tiRunScenario(id){
         data: { labels: ORDER.map(k => LABELS[k]), datasets },
         plugins: [bgPlugin],
         options: {
-          responsive: true, maintainAspectRatio: false,
+          responsive: true, maintainAspectRatio: true, aspectRatio: 1,
           scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, color: '#55677a', backdropColor: 'transparent', font: {size: 10} }, grid: { color: 'rgba(255,255,255,0.08)' }, angleLines: { color: 'rgba(255,255,255,0.08)' }, pointLabels: { color: '#dde4ef', font: {size: 12, weight: '500'} } } },
           plugins: { legend: { position: 'bottom', labels: { color: '#dde4ef', boxWidth: 14, padding: 14, font: {size: 12} } }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + c.raw.toFixed(1) + ' / 5' } } }
         }
@@ -2428,6 +2429,86 @@ function tiRunScenario(id){
       return () => chart.destroy();
     }, [userScores, sectorScores, previousScores, sectorName]);
     return <canvas ref={canvasRef}></canvas>;
+  }
+
+  function downloadMaturityReport({report, role, sector, bench, benchOverall, imgB64}) {
+    if (!window.docx) { alert('The Word report library is still loading. Please try again in a moment.'); return; }
+    const { Document, Packer, Paragraph, TextRun, HeadingLevel, Table, TableRow, TableCell, WidthType, BorderStyle, ImageRun, ShadingType } = window.docx;
+    const ORDER = ['detection', 'response', 'coverage', 'process', 'tooling'];
+    const LABELS = {detection: 'Detection', response: 'Response', coverage: 'Coverage', process: 'Process', tooling: 'Tooling'};
+    const LVL = {1: 'Initial', 2: 'Developing', 3: 'Defined', 4: 'Managed', 5: 'Optimised'};
+    const level = s => LVL[Math.max(1, Math.min(5, Math.floor(Number(s))))];
+    const weakId = Object.entries(report.scores).sort((a, b) => a[1] - b[1])[0][0];
+    const gapOverall = (report.overall - benchOverall).toFixed(1);
+    const b64ToU8 = b => { const bin = atob(b); const u8 = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i); return u8; };
+
+    const SCEN = {
+      detection: [['S1', 'Ransomware Kill Chain'], ['S5', 'Lateral Movement Chain'], ['S3', 'Active Directory Compromise']],
+      response: [['S1', 'Ransomware Kill Chain'], ['S6', 'Insider Threat Data Theft'], ['S8', 'Azure / Entra Identity Attack']],
+      coverage: [['S2', 'Cloud Control-Plane Pivot'], ['S4', 'WAF Bypass & Web Exploit'], ['S9', 'Container & Kubernetes Escape']],
+      process: [['S7', 'Supply Chain Compromise'], ['S10', 'API Abuse & Business Logic'], ['S6', 'Insider Threat Data Theft']],
+      tooling: [['S8', 'Azure / Entra Identity Attack'], ['S2', 'Cloud Control-Plane Pivot'], ['S9', 'Container & Kubernetes Escape']]
+    };
+    const ROADMAP = {
+      detection: ['Inventory current detection coverage and tune the noisiest SIEM rules; close the most exposed gaps from this assessment.', 'Run the recommended scenarios and record which techniques are detected, then build rules for the misses.', 'Re-measure mean time to detect and target moving Detection up one maturity level.'],
+      response: ['Document an incident response runbook for the top scenarios and define on-call ownership.', 'Run one tabletop and one simulated drill, capturing mean time to respond.', 'Automate the most repeated response steps and re-measure response time.'],
+      coverage: ['Map current ATT&CK coverage and identify the untested attack surface this assessment highlighted.', 'Run the recommended scenarios across the weakest surfaces and record covered versus gap.', 'Move to recurring simulations so coverage is continuous rather than point in time.'],
+      process: ['Set a regular security-metrics cadence and integrate at least one threat intel feed into triage.', 'Formalise vulnerability triage and link findings to the recommended scenarios.', 'Review process maturity against the sector baseline and close the largest gap.'],
+      tooling: ['Catalogue the current tool stack and identify the integration gaps surfaced here.', 'Pilot automation or SOAR for one common workflow tied to the recommended scenarios.', 'Consolidate toward an integrated stack and re-measure tooling maturity.']
+    };
+    const METRICS = ['Overall maturity score against the sector baseline', 'Mean time to detect and mean time to respond', 'Percentage of attack surface validated', 'ATT&CK techniques with active detection coverage', 'Maturity level movement per dimension over 90 days'];
+
+    const P = (t, o) => new Paragraph({ spacing: {after: 80}, children: [new TextRun(Object.assign({text: t}, o || {}))] });
+    const H = (t, h) => new Paragraph({ heading: h, spacing: {before: 240, after: 100}, children: [new TextRun(t)] });
+    const bullet = t => new Paragraph({ bullet: {level: 0}, spacing: {after: 40}, children: [new TextRun(t)] });
+    const cell = (t, o) => { o = o || {}; return new TableCell({ width: {size: o.w || 1800, type: WidthType.DXA}, shading: o.head ? {fill: '0C1018', type: ShadingType.CLEAR, color: 'auto'} : undefined, margins: {top: 60, bottom: 60, left: 100, right: 100}, children: [new Paragraph({children: [new TextRun({text: t, bold: !!o.head, color: o.color || (o.head ? '00D4FF' : '333333')})]})] }); };
+
+    const COLW = [2600, 1400, 2000, 1600, 1400];
+    const headRow = new TableRow({children: ['Dimension', 'You', 'Level', 'Sector', 'Gap'].map((h, i) => cell(h, {w: COLW[i], head: true}))});
+    const dataRows = ORDER.map(k => {
+      const you = report.scores[k], b = bench[k], g = (you - b).toFixed(1);
+      return new TableRow({children: [
+        cell(LABELS[k], {w: COLW[0]}), cell(String(you), {w: COLW[1]}), cell(level(you), {w: COLW[2]}),
+        cell(String(b), {w: COLW[3]}), cell((Number(g) >= 0 ? '+' : '') + g, {w: COLW[4], color: Number(g) >= 0 ? '1D9E75' : 'B06A00'})
+      ]});
+    });
+    const bd = {style: BorderStyle.SINGLE, size: 2, color: 'CCCCCC'};
+    const table = new Table({ width: {size: 9000, type: WidthType.DXA}, columnWidths: COLW, borders: {top: bd, bottom: bd, left: bd, right: bd, insideHorizontal: bd, insideVertical: bd}, rows: [headRow, ...dataRows] });
+
+    const children = [];
+    children.push(new Paragraph({ heading: HeadingLevel.TITLE, children: [new TextRun('BreachForge Security Maturity Report')] }));
+    children.push(P('Breach and Attack Simulation Platform', {italics: true, color: '777777'}));
+    children.push(P('Generated: ' + new Date().toLocaleDateString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'})));
+    children.push(P('Role: ' + (role || 'Not set')));
+    children.push(P('Sector: ' + sector));
+    children.push(H('Overall maturity', HeadingLevel.HEADING_1));
+    children.push(P('Your overall maturity is ' + report.overall + ' out of 5.0 (' + level(report.overall) + ').'));
+    children.push(P(sector + ' sector baseline is ' + benchOverall + ' out of 5.0 (' + level(benchOverall) + '). Gap: ' + (Number(gapOverall) >= 0 ? '+' : '') + gapOverall + ' points.'));
+    if (imgB64) {
+      try { children.push(new Paragraph({ spacing: {before: 120, after: 120}, children: [new ImageRun({ type: 'png', data: b64ToU8(imgB64.split(',')[1]), transformation: {width: 400, height: 400} })] })); } catch (e) {}
+    }
+    children.push(H('Dimension scores', HeadingLevel.HEADING_1));
+    children.push(table);
+    children.push(H('Weakest area', HeadingLevel.HEADING_1));
+    children.push(P(LABELS[weakId] + ' is your weakest dimension at ' + report.scores[weakId] + ' out of 5.0 (' + level(report.scores[weakId]) + '), ' + (report.scores[weakId] - bench[weakId]).toFixed(1) + ' versus the ' + sector + ' baseline.'));
+    children.push(H('Recommended scenarios', HeadingLevel.HEADING_1));
+    children.push(P('Based on your weakest dimension, prioritise these simulations:'));
+    SCEN[weakId].forEach(s => children.push(bullet(s[0] + ': ' + s[1])));
+    children.push(H('30-60-90 day roadmap', HeadingLevel.HEADING_1));
+    children.push(P('First 30 days: ' + ROADMAP[weakId][0]));
+    children.push(P('Days 31 to 60: ' + ROADMAP[weakId][1]));
+    children.push(P('Days 61 to 90: ' + ROADMAP[weakId][2]));
+    children.push(H('Key metrics to track', HeadingLevel.HEADING_1));
+    METRICS.forEach(m => children.push(bullet(m)));
+    children.push(P('Generated from a self-reported maturity assessment. Scores are indicative and based on the answers provided.', {italics: true, color: '777777', size: 18}));
+
+    const doc = new Document({ sections: [{ properties: {page: {size: {width: 12240, height: 15840}, margin: {top: 1440, right: 1440, bottom: 1440, left: 1440}}}, children }] });
+    Packer.toBlob(doc).then(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'BreachForge-Maturity-Report.docx'; a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }).catch(e => alert('Could not generate the Word report: ' + e.message));
   }
 
   function AssessmentPage({role}) {
@@ -2536,9 +2617,12 @@ function tiRunScenario(id){
         <div style={{marginBottom: 20, padding: 16, background: C.card, borderRadius: 8, border: '1px solid ' + C.border}}>
           <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10}}>
             <h3 style={{margin: 0}}>Maturity Radar</h3>
-            <button onClick={() => { if (radarRef.current) { const u = radarRef.current.toBase64Image('image/png', 1); const a = document.createElement('a'); a.href = u; a.download = 'maturity-radar.png'; a.click(); } }} style={{padding: '6px 12px', background: C.accent, color: '#04263a', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 12, fontWeight: 'bold'}}>Download PNG</button>
+            <div style={{display: 'flex', gap: 8}}>
+              <button onClick={() => { if (radarRef.current) { const u = radarRef.current.toBase64Image('image/png', 1); const a = document.createElement('a'); a.href = u; a.download = 'maturity-radar.png'; a.click(); } }} style={{padding: '6px 12px', background: C.surface, color: C.accent, border: '1px solid ' + C.accent, borderRadius: 4, cursor: 'pointer', fontSize: 12, fontWeight: 'bold'}}>Download PNG</button>
+              <button onClick={() => downloadMaturityReport({report, role, sector: activeSector, bench: activeBench, benchOverall: activeBenchOverall, imgB64: radarRef.current ? radarRef.current.toBase64Image('image/png', 1) : null})} style={{padding: '6px 12px', background: C.accent, color: '#04263a', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 12, fontWeight: 'bold'}}>Download Word report</button>
+            </div>
           </div>
-          <div style={{height: 360, position: 'relative'}}>
+          <div style={{maxWidth: 460, margin: '0 auto'}}>
             <AssessmentRadar userScores={report.scores} sectorScores={activeBench} previousScores={report.previous} sectorName={activeSector} chartRef={radarRef} />
           </div>
           {report.previous && <div style={{fontSize: 11, color: C.dim, marginTop: 8}}>Dotted line shows your previous assessment.</div>}
