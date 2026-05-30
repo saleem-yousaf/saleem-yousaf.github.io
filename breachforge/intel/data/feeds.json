@@ -1,33 +1,61 @@
 {
-  "timestamp": "2026-05-30T08:33:41.635Z",
-  "sources": [
+  "generated": "2026-05-30T08:34:26.912459+00:00",
+  "feeds": [
     {
       "name": "CISA KEV",
+      "url": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
       "status": "healthy",
-      "accuracy": 100,
-      "totalRecords": 1607,
-      "lastUpdate": "2026-05-29T19:00:06.342Z"
+      "last_updated": "2026-05-30T08:34:26.912459+00:00",
+      "items_today": 5
     },
     {
-      "name": "MITRE ATT&CK",
+      "name": "Cisco Talos RSS",
+      "url": "https://feeds.feedburner.com/feedburner/Talos",
       "status": "healthy",
-      "accuracy": 100,
-      "totalRecords": 15,
-      "lastUpdate": "2026-05-30T08:33:41.635Z"
+      "last_updated": "2026-05-30T08:34:26.912459+00:00",
+      "items_today": 4
+    },
+    {
+      "name": "Microsoft Threat Intel RSS",
+      "url": "https://www.microsoft.com/security/blog/feed/",
+      "status": "healthy",
+      "last_updated": "2026-05-30T08:34:26.912459+00:00",
+      "items_today": 4
+    },
+    {
+      "name": "Palo Alto Unit42 RSS",
+      "url": "https://unit42.paloaltonetworks.com/feed/",
+      "status": "healthy",
+      "last_updated": "2026-05-30T08:34:26.912459+00:00",
+      "items_today": 4
+    },
+    {
+      "name": "DFIR Report RSS",
+      "url": "https://thedfirreport.com/feed/",
+      "status": "healthy",
+      "last_updated": "2026-05-30T08:34:26.912459+00:00",
+      "items_today": 4
+    },
+    {
+      "name": "Abuse.ch URLHaus",
+      "url": "https://urlhaus-api.abuse.ch/v1/urls/recent/",
+      "status": "healthy",
+      "last_updated": "2026-05-30T08:34:26.912459+00:00",
+      "items_today": 0
     },
     {
       "name": "AlienVault OTX",
+      "url": "https://otx.alienvault.com",
       "status": "healthy",
-      "accuracy": 92,
-      "totalRecords": 1247,
-      "lastUpdate": "2026-05-30T06:33:42.091Z"
+      "last_updated": "2026-05-30T08:34:26.912459+00:00",
+      "items_today": 0
     },
     {
-      "name": "Abuse.ch",
+      "name": "MITRE ATT&CK STIX",
+      "url": "https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json",
       "status": "healthy",
-      "accuracy": 88,
-      "totalRecords": 3456,
-      "lastUpdate": "2026-05-30T05:33:42.091Z"
+      "last_updated": "2026-05-30T08:34:26.912459+00:00",
+      "items_today": 0
     }
   ]
 }
