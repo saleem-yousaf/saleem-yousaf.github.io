@@ -1,61 +1,30 @@
 {
-  "generated": "2026-05-30T13:48:46.372873+00:00",
-  "feeds": [
+  "timestamp": "2026-05-30T13:49:16.767Z",
+  "sources": [
     {
       "name": "CISA KEV",
-      "url": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
       "status": "healthy",
-      "last_updated": "2026-05-30T13:48:46.372873+00:00",
-      "items_today": 5
+      "records": 1607,
+      "lastUpdate": "2026-05-29T19:00:06.342Z"
     },
     {
-      "name": "Cisco Talos RSS",
-      "url": "https://feeds.feedburner.com/feedburner/Talos",
+      "name": "MITRE ATT&CK",
       "status": "healthy",
-      "last_updated": "2026-05-30T13:48:46.372873+00:00",
-      "items_today": 4
-    },
-    {
-      "name": "Microsoft Threat Intel RSS",
-      "url": "https://www.microsoft.com/security/blog/feed/",
-      "status": "healthy",
-      "last_updated": "2026-05-30T13:48:46.372873+00:00",
-      "items_today": 4
-    },
-    {
-      "name": "Palo Alto Unit42 RSS",
-      "url": "https://unit42.paloaltonetworks.com/feed/",
-      "status": "healthy",
-      "last_updated": "2026-05-30T13:48:46.372873+00:00",
-      "items_today": 4
-    },
-    {
-      "name": "DFIR Report RSS",
-      "url": "https://thedfirreport.com/feed/",
-      "status": "healthy",
-      "last_updated": "2026-05-30T13:48:46.372873+00:00",
-      "items_today": 4
-    },
-    {
-      "name": "Abuse.ch URLHaus",
-      "url": "https://urlhaus-api.abuse.ch/v1/urls/recent/",
-      "status": "healthy",
-      "last_updated": "2026-05-30T13:48:46.372873+00:00",
-      "items_today": 0
+      "records": 697,
+      "lastUpdate": "2026-05-30T13:49:16.767Z"
     },
     {
       "name": "AlienVault OTX",
-      "url": "https://otx.alienvault.com",
-      "status": "healthy",
-      "last_updated": "2026-05-30T13:48:46.372873+00:00",
-      "items_today": 0
+      "status": "degraded",
+      "records": null,
+      "lastUpdate": null,
+      "note": "HTTP 403 for https://otx.alienvault.com/api/v1/pulses/subscribed?limit=10&page=1: {\"detail\": \"Authentication required\"}"
     },
     {
-      "name": "MITRE ATT&CK STIX",
-      "url": "https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json",
+      "name": "Abuse.ch ThreatFox",
       "status": "healthy",
-      "last_updated": "2026-05-30T13:48:46.372873+00:00",
-      "items_today": 0
+      "records": 266,
+      "lastUpdate": "2026-05-30T13:49:16.767Z"
     }
   ]
 }
