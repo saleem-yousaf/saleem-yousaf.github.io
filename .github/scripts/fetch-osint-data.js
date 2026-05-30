@@ -16,8 +16,11 @@ const https = require('https');
 const DATA_DIR = path.join(process.cwd(), 'breachforge/intel/data');
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
-const OTX_API_KEY = (process.env.OTX_API_KEY || '').replace(/\s/g, '');
-const ABUSE_CH_AUTH_KEY = (process.env.ABUSE_CH_AUTH_KEY || '').replace(/\s/g, '');
+// Strip everything except printable ASCII so any stray whitespace, newline,
+// or invisible/zero-width character pasted into the secret cannot break the
+// HTTP header it gets sent in.
+const OTX_API_KEY = (process.env.OTX_API_KEY || '').replace(/[^\x21-\x7E]/g, '');
+const ABUSE_CH_AUTH_KEY = (process.env.ABUSE_CH_AUTH_KEY || '').replace(/[^\x21-\x7E]/g, '');
 
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -60,6 +63,7 @@ async function getOtx() {
   if (!OTX_API_KEY) {
     return { status: 'not_connected', records: null, note: 'OTX_API_KEY secret not set' };
   }
+  console.log(`OTX key length after sanitising: ${OTX_API_KEY.length} (expect ~64)`);
   try {
     const res = await httpRequest('https://otx.alienvault.com/api/v1/pulses/subscribed?limit=10&page=1', {
       headers: { 'X-OTX-API-KEY': OTX_API_KEY }
