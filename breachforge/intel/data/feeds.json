@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-30T13:07:22.675Z",
+  "timestamp": "2026-05-30T13:16:04.298Z",
   "sources": [
     {
       "name": "CISA KEV",
@@ -11,20 +11,20 @@
       "name": "MITRE ATT&CK",
       "status": "healthy",
       "records": 697,
-      "lastUpdate": "2026-05-30T13:07:22.675Z"
+      "lastUpdate": "2026-05-30T13:16:04.298Z"
     },
     {
       "name": "AlienVault OTX",
       "status": "degraded",
       "records": null,
       "lastUpdate": null,
-      "note": "Invalid character in header content [\"X-OTX-API-KEY\"]"
+      "note": "HTTP 403 for https://otx.alienvault.com/api/v1/pulses/subscribed?limit=10&page=1: {\"detail\": \"Authentication required\"}"
     },
     {
       "name": "Abuse.ch ThreatFox",
       "status": "healthy",
-      "records": 280,
-      "lastUpdate": "2026-05-30T13:07:22.675Z"
+      "records": 284,
+      "lastUpdate": "2026-05-30T13:16:04.298Z"
     }
   ]
 }
