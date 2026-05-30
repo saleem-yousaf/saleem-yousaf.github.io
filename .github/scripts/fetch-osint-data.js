@@ -16,8 +16,8 @@ const https = require('https');
 const DATA_DIR = path.join(process.cwd(), 'breachforge/intel/data');
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
-const OTX_API_KEY = process.env.OTX_API_KEY || '';
-const ABUSE_CH_AUTH_KEY = process.env.ABUSE_CH_AUTH_KEY || '';
+const OTX_API_KEY = (process.env.OTX_API_KEY || '').replace(/\s/g, '');
+const ABUSE_CH_AUTH_KEY = (process.env.ABUSE_CH_AUTH_KEY || '').replace(/\s/g, '');
 
 const DAY = 24 * 60 * 60 * 1000;
 
