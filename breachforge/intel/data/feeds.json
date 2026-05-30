@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-30T13:16:04.298Z",
+  "timestamp": "2026-05-30T13:20:34.042Z",
   "sources": [
     {
       "name": "CISA KEV",
@@ -11,7 +11,7 @@
       "name": "MITRE ATT&CK",
       "status": "healthy",
       "records": 697,
-      "lastUpdate": "2026-05-30T13:16:04.298Z"
+      "lastUpdate": "2026-05-30T13:20:34.042Z"
     },
     {
       "name": "AlienVault OTX",
@@ -24,7 +24,7 @@
       "name": "Abuse.ch ThreatFox",
       "status": "healthy",
       "records": 284,
-      "lastUpdate": "2026-05-30T13:16:04.298Z"
+      "lastUpdate": "2026-05-30T13:20:34.042Z"
     }
   ]
 }
