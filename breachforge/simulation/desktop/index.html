@@ -7,6 +7,7 @@
 <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.3/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
 <style>
@@ -2399,11 +2400,43 @@ function tiRunScenario(id){
 }
 
 
+  function AssessmentRadar({userScores, sectorScores, previousScores, sectorName, chartRef}) {
+    const canvasRef = React.useRef(null);
+    React.useEffect(() => {
+      if (!window.Chart || !canvasRef.current) return;
+      const ORDER = ['detection', 'response', 'coverage', 'process', 'tooling'];
+      const LABELS = {detection: 'Detection', response: 'Response', coverage: 'Coverage', process: 'Process', tooling: 'Tooling'};
+      const datasets = [
+        { label: 'You', data: ORDER.map(k => userScores[k]), borderColor: '#00d4ff', backgroundColor: 'rgba(0,212,255,0.18)', borderWidth: 2, pointBackgroundColor: '#00d4ff', pointRadius: 3 },
+        { label: sectorName + ' benchmark', data: ORDER.map(k => sectorScores[k]), borderColor: '#00e87a', backgroundColor: 'rgba(0,232,122,0.07)', borderWidth: 2, borderDash: [6, 4], pointBackgroundColor: '#00e87a', pointRadius: 3 }
+      ];
+      if (previousScores) {
+        datasets.push({ label: 'Previous assessment', data: ORDER.map(k => previousScores[k]), borderColor: '#7c8aa0', backgroundColor: 'rgba(124,138,160,0.05)', borderWidth: 1.5, borderDash: [2, 3], pointBackgroundColor: '#7c8aa0', pointRadius: 2 });
+      }
+      const bgPlugin = { id: 'bfBg', beforeDraw: (c) => { const ctx = c.ctx; ctx.save(); ctx.globalCompositeOperation = 'destination-over'; ctx.fillStyle = C.card; ctx.fillRect(0, 0, c.width, c.height); ctx.restore(); } };
+      const chart = new window.Chart(canvasRef.current, {
+        type: 'radar',
+        data: { labels: ORDER.map(k => LABELS[k]), datasets },
+        plugins: [bgPlugin],
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, color: '#55677a', backdropColor: 'transparent', font: {size: 10} }, grid: { color: 'rgba(255,255,255,0.08)' }, angleLines: { color: 'rgba(255,255,255,0.08)' }, pointLabels: { color: '#dde4ef', font: {size: 12, weight: '500'} } } },
+          plugins: { legend: { position: 'bottom', labels: { color: '#dde4ef', boxWidth: 14, padding: 14, font: {size: 12} } }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + c.raw.toFixed(1) + ' / 5' } } }
+        }
+      });
+      if (chartRef) chartRef.current = chart;
+      return () => chart.destroy();
+    }, [userScores, sectorScores, previousScores, sectorName]);
+    return <canvas ref={canvasRef}></canvas>;
+  }
+
   function AssessmentPage({role}) {
     const [step, setStep] = React.useState(0);
     const [answers, setAnswers] = React.useState({});
     const [report, setReport] = React.useState(null);
     const [selectedSector, setSelectedSector] = React.useState('Healthcare');
+    const radarRef = React.useRef(null);
+    const [compareSector, setCompareSector] = React.useState(null);
     
     const SECTOR_BENCHMARKS = {"Public Sector": {"detection": 3.2, "response": 3.4, "coverage": 2.9, "process": 3.1, "tooling": 2.8}, "Healthcare": {"detection": 3.4, "response": 3.5, "coverage": 3.0, "process": 3.3, "tooling": 2.9}, "Manufacturing": {"detection": 2.7, "response": 2.8, "coverage": 2.6, "process": 2.7, "tooling": 2.4}, "Retail": {"detection": 2.1, "response": 2.3, "coverage": 2.0, "process": 2.2, "tooling": 2.0}, "Airlines": {"detection": 3.5, "response": 3.6, "coverage": 3.2, "process": 3.4, "tooling": 3.0}, "Hospitality": {"detection": 2.0, "response": 2.2, "coverage": 1.9, "process": 2.1, "tooling": 1.9}, "Local Authority": {"detection": 2.9, "response": 2.8, "coverage": 2.7, "process": 2.9, "tooling": 2.6}, "CNI": {"detection": 4.0, "response": 4.1, "coverage": 3.8, "process": 4.0, "tooling": 3.7}, "Government": {"detection": 3.6, "response": 3.7, "coverage": 3.3, "process": 3.5, "tooling": 3.1}, "Financial Services": {"detection": 3.8, "response": 3.9, "coverage": 3.4, "process": 3.7, "tooling": 3.3}};
     
@@ -2449,6 +2482,13 @@ function tiRunScenario(id){
       const weakest = Object.entries(scores).sort((a, b) => a[1] - b[1])[0];
       const benchmark = SECTOR_BENCHMARKS[selectedSector];
       const benchmarkOverall = (Object.values(benchmark).reduce((a, b) => a + b) / 5).toFixed(1);
+      let _bfHist = [];
+      try { _bfHist = JSON.parse(localStorage.getItem('bf_assessment_history') || '[]'); } catch (e) {}
+      const previous = _bfHist.length ? _bfHist[_bfHist.length - 1].scores : null;
+      try {
+        _bfHist.push({ timestamp: new Date().toISOString(), role, sector: selectedSector, answers, scores, overallScore: parseFloat(overall), weakestDimension: weakest[0] });
+        localStorage.setItem('bf_assessment_history', JSON.stringify(_bfHist.slice(-5)));
+      } catch (e) {}
       
       setReport({
         overall, 
@@ -2456,51 +2496,76 @@ function tiRunScenario(id){
         sector: selectedSector,
         benchmark,
         benchmarkOverall,
+        previous,
         weakest: {name: DIMS.find(d => d.id === weakest[0]).name, score: weakest[1]}
       });
     }
 
     if (report) {
-      return <div style={{padding: 20}}>
-        <h2>Assessment Results</h2>
-        <div style={{marginBottom: 30, padding: 15, background: '#f0f0f0', borderRadius: 8}}>
+      const activeSector = compareSector || report.sector;
+      const activeBench = SECTOR_BENCHMARKS[activeSector];
+      const activeBenchOverall = (Object.values(activeBench).reduce((a, b) => a + b, 0) / 5).toFixed(1);
+      const gapOverall = (report.overall - activeBenchOverall).toFixed(1);
+      return <div style={{padding: 20, color: C.text}}>
+        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12, marginBottom: 16}}>
+          <h2 style={{margin: 0}}>Assessment Results</h2>
+          <label style={{fontSize: 12, color: C.dim, display: 'flex', alignItems: 'center', gap: 8}}>
+            Benchmark sector
+            <select value={activeSector} onChange={e => setCompareSector(e.target.value)} style={{background: C.surface, color: C.text, border: '1px solid ' + C.border, borderRadius: 6, padding: '6px 10px', fontSize: 13}}>
+              {Object.keys(SECTOR_BENCHMARKS).map(s => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </label>
+        </div>
+
+        <div style={{marginBottom: 20, padding: 16, background: C.card, border: '1px solid ' + C.border, borderRadius: 8}}>
           <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20}}>
             <div>
-              <div style={{fontSize: 12, color: '#666', marginBottom: 5}}>Your Maturity</div>
-              <div style={{fontSize: 28, fontWeight: 'bold', color: '#00D4FF'}}>{report.overall}/5.0</div>
+              <div style={{fontSize: 12, color: C.dim, marginBottom: 5}}>Your Maturity</div>
+              <div style={{fontSize: 28, fontWeight: 'bold', color: C.accent}}>{report.overall}/5.0</div>
             </div>
             <div>
-              <div style={{fontSize: 12, color: '#666', marginBottom: 5}}>{report.sector} Baseline</div>
-              <div style={{fontSize: 28, fontWeight: 'bold', color: '#00E87A'}}>{report.benchmarkOverall}/5.0</div>
+              <div style={{fontSize: 12, color: C.dim, marginBottom: 5}}>{activeSector} Baseline</div>
+              <div style={{fontSize: 28, fontWeight: 'bold', color: C.green}}>{activeBenchOverall}/5.0</div>
             </div>
           </div>
-          <div style={{marginTop: 15, fontSize: 13, color: '#333'}}>
-            Gap vs {report.sector}: <strong>{(report.overall - report.benchmarkOverall).toFixed(1)}</strong> points
+          <div style={{marginTop: 15, fontSize: 13, color: C.text}}>
+            Gap vs {activeSector}: <strong style={{color: Number(gapOverall) >= 0 ? C.green : C.amber}}>{Number(gapOverall) >= 0 ? '+' : ''}{gapOverall}</strong> points
           </div>
+        </div>
+
+        <div style={{marginBottom: 20, padding: 16, background: C.card, borderRadius: 8, border: '1px solid ' + C.border}}>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10}}>
+            <h3 style={{margin: 0}}>Maturity Radar</h3>
+            <button onClick={() => { if (radarRef.current) { const u = radarRef.current.toBase64Image('image/png', 1); const a = document.createElement('a'); a.href = u; a.download = 'maturity-radar.png'; a.click(); } }} style={{padding: '6px 12px', background: C.accent, color: '#04263a', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 12, fontWeight: 'bold'}}>Download PNG</button>
+          </div>
+          <div style={{height: 360, position: 'relative'}}>
+            <AssessmentRadar userScores={report.scores} sectorScores={activeBench} previousScores={report.previous} sectorName={activeSector} chartRef={radarRef} />
+          </div>
+          {report.previous && <div style={{fontSize: 11, color: C.dim, marginTop: 8}}>Dotted line shows your previous assessment.</div>}
         </div>
 
         <div style={{marginBottom: 20}}>
           <h3>Dimension Scores</h3>
           {Object.entries(report.scores).map(([d, s]) => {
-            const bench = report.benchmark[d];
+            const bench = activeBench[d];
             const gap = (s - bench).toFixed(1);
-            return <div key={d} style={{marginBottom: 12, padding: 10, border: '1px solid #ddd', borderRadius: 4}}>
+            return <div key={d} style={{marginBottom: 12, padding: 10, border: '1px solid ' + C.border, background: C.surface, borderRadius: 4}}>
               <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: 5}}>
-                <strong style={{textTransform: 'capitalize'}}>{d}</strong>
-                <span>{s}/5.0 vs {bench}/5.0 baseline</span>
+                <strong style={{textTransform: 'capitalize', color: C.text}}>{d}</strong>
+                <span style={{color: C.dim}}>{s}/5.0 vs {bench}/5.0 baseline</span>
               </div>
-              <div style={{fontSize: 12, color: gap > 0 ? '#00E87A' : '#FFAA00'}}>
-                {gap > 0 ? '+' : ''}{gap} vs sector
+              <div style={{fontSize: 12, color: Number(gap) >= 0 ? C.green : C.amber}}>
+                {Number(gap) >= 0 ? '+' : ''}{gap} vs sector
               </div>
             </div>;
           })}
         </div>
 
-        <div style={{marginBottom: 20}}>
+        <div style={{marginBottom: 20, color: C.text}}>
           <strong>Weakest Area:</strong> {report.weakest.name} ({report.weakest.score}/5.0)
         </div>
 
-        <button onClick={() => {setReport(null); setAnswers({});}} style={{padding: '8px 16px', background: '#555', color: 'white', border: 'none', borderRadius: 4, cursor: 'pointer'}}>Retake Assessment</button>
+        <button onClick={() => {setReport(null); setAnswers({}); setCompareSector(null);}} style={{padding: '8px 16px', background: C.surface, color: C.text, border: '1px solid ' + C.border, borderRadius: 4, cursor: 'pointer'}}>Retake Assessment</button>
       </div>;
     }
 
