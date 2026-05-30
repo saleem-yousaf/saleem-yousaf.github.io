@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="BreachForge live threat intelligence portal. Real-time OSINT feeds, MITRE ATT&CK mapping, trending techniques, and BAS simulation recommendations.">
+    <meta name="description" content="BreachForge threat intelligence portal. OSINT feeds from CISA KEV and MITRE ATT&CK, with AlienVault OTX and Abuse.ch when connected.">
     <title>BreachForge Threat Intelligence | Saleem Yousaf</title>
     <link rel="canonical" href="https://saleemyousaf.co.uk/breachforge/intel/">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
         body {
             font-family: 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
@@ -56,29 +56,18 @@
             align-items: center;
         }
 
-        .live-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .live-indicator { display: inline-flex; align-items: center; gap: 6px; }
 
         .live-dot {
-            width: 8px;
-            height: 8px;
+            width: 8px; height: 8px;
             background: #00d084;
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
 
-        .last-update {
-            color: #606060;
-            font-size: 11px;
-        }
+        .last-update { color: #606060; font-size: 11px; }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
         .main-grid {
             display: grid;
@@ -101,9 +90,7 @@
         .placeholder-section::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 1px;
             background: linear-gradient(90deg, transparent, rgba(100, 200, 255, 0.5), transparent);
         }
@@ -116,6 +103,8 @@
             margin-bottom: 16px;
             text-transform: uppercase;
         }
+
+        .section-note { color: #707070; font-size: 11px; margin-bottom: 8px; }
 
         .data-layer { position: relative; z-index: 2; }
 
@@ -165,12 +154,7 @@
             min-height: 240px;
         }
 
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 12px;
-            font-size: 12px;
-        }
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 12px; }
 
         .data-table th {
             background: rgba(0, 210, 132, 0.08);
@@ -183,32 +167,12 @@
             letter-spacing: 0.5px;
         }
 
-        .data-table td {
-            padding: 10px;
-            border: 1px solid rgba(100, 150, 200, 0.1);
-            color: #c0c0c0;
-        }
+        .data-table td { padding: 10px; border: 1px solid rgba(100, 150, 200, 0.1); color: #c0c0c0; }
+        .data-table tr:hover { background: rgba(0, 210, 132, 0.05); }
 
-        .data-table tr:hover {
-            background: rgba(0, 210, 132, 0.05);
-        }
+        .actor-link { color: #00d084; text-decoration: none; font-weight: 500; }
 
-        .actor-link {
-            color: #00d084;
-            text-decoration: none;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .actor-link:hover {
-            text-decoration: underline;
-        }
-
-        .side-widgets {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
+        .side-widgets { display: flex; flex-direction: column; gap: 16px; }
 
         .widget {
             background: rgba(30, 40, 60, 0.5);
@@ -227,11 +191,7 @@
             font-weight: 500;
         }
 
-        .widget p {
-            color: #909090;
-            margin-bottom: 8px;
-            line-height: 1.5;
-        }
+        .widget p { color: #909090; margin-bottom: 8px; line-height: 1.5; }
 
         .widget-metric {
             display: flex;
@@ -243,16 +203,8 @@
         }
 
         .widget-metric:last-child { border-bottom: none; }
-
-        .widget-status {
-            color: #00d084;
-            font-weight: 500;
-        }
-
-        .loading {
-            color: #606060;
-            font-style: italic;
-        }
+        .widget-status { color: #00d084; font-weight: 500; }
+        .loading { color: #606060; font-style: italic; }
 
         .button {
             display: inline-block;
@@ -272,10 +224,7 @@
             text-align: center;
         }
 
-        .button:hover {
-            background: rgba(0, 210, 132, 0.3);
-            border-color: rgba(0, 210, 132, 0.7);
-        }
+        .button:hover { background: rgba(0, 210, 132, 0.3); border-color: rgba(0, 210, 132, 0.7); }
 
         footer {
             background: rgba(20, 25, 40, 0.6);
@@ -308,7 +257,7 @@
     <header>
         <div class="container">
             <h1>Threat Intelligence Dashboard</h1>
-            <p class="intro">Live OSINT feeds aggregated from CISA KEV, MITRE ATT&CK, AlienVault OTX, and Abuse.ch. Updated every 6 hours via automated GitHub Actions.</p>
+            <p class="intro">OSINT aggregated from CISA KEV and MITRE ATT&CK, with AlienVault OTX and Abuse.ch ThreatFox shown when connected. Refreshed every 6 hours via automated GitHub Actions. Each feed reports its real status; nothing on this page is simulated.</p>
             <div class="meta">
                 <div class="live-indicator">
                     <div class="live-dot"></div>
@@ -322,34 +271,23 @@
     <div class="container">
         <div class="main-grid">
             <div>
-                <!-- Active Threats Section -->
+                <!-- Metrics Section -->
                 <div class="placeholder-section">
-                    <h3>Active Threats</h3>
+                    <h3>Live Metrics</h3>
                     <div class="data-layer">
                         <div class="metrics-row" id="metricsContainer">
-                            <div class="metric-card">
-                                <div class="metric-label">Shodan</div>
-                                <div class="metric-value loading">-</div>
-                            </div>
-                            <div class="metric-card">
-                                <div class="metric-label">VirusTotal</div>
-                                <div class="metric-value loading">-</div>
-                            </div>
-                            <div class="metric-card">
-                                <div class="metric-label">MITRE</div>
-                                <div class="metric-value loading">-</div>
-                            </div>
-                            <div class="metric-card">
-                                <div class="metric-label">Industry</div>
-                                <div class="metric-value loading">-</div>
-                            </div>
+                            <div class="metric-card"><div class="metric-label">Loading</div><div class="metric-value loading">-</div></div>
+                            <div class="metric-card"><div class="metric-label">Loading</div><div class="metric-value loading">-</div></div>
+                            <div class="metric-card"><div class="metric-label">Loading</div><div class="metric-value loading">-</div></div>
+                            <div class="metric-card"><div class="metric-label">Loading</div><div class="metric-value loading">-</div></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Trending Techniques Section -->
+                <!-- KEV Additions Chart -->
                 <div class="placeholder-section">
-                    <h3>Trending Techniques</h3>
+                    <h3>CISA KEV Additions (last 8 weeks)</h3>
+                    <p class="section-note">Count of vulnerabilities added to the CISA Known Exploited Vulnerabilities catalog, by week.</p>
                     <div class="chart-container">
                         <canvas id="trendingChart"></canvas>
                     </div>
@@ -357,20 +295,20 @@
 
                 <!-- Threat Actors Section -->
                 <div class="placeholder-section">
-                    <h3>Active Threat Actors</h3>
+                    <h3>MITRE ATT&CK Groups</h3>
+                    <p class="section-note">Tracked adversary groups, ranked by number of techniques attributed to them in ATT&CK.</p>
                     <div class="data-layer">
                         <table class="data-table" id="actorsTable">
                             <thead>
                                 <tr>
-                                    <th>Actor</th>
-                                    <th>Origin</th>
-                                    <th>Type</th>
-                                    <th>Sectors</th>
-                                    <th>Action</th>
+                                    <th>Group</th>
+                                    <th>Aliases</th>
+                                    <th>Techniques</th>
+                                    <th>Last Updated</th>
                                 </tr>
                             </thead>
                             <tbody id="actorsTableBody">
-                                <tr><td colspan="5" class="loading">Loading threat actors...</td></tr>
+                                <tr><td colspan="4" class="loading">Loading groups...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -385,7 +323,7 @@
                                 <tr>
                                     <th>Source</th>
                                     <th>Status</th>
-                                    <th>Accuracy</th>
+                                    <th>Records</th>
                                     <th>Last Update</th>
                                 </tr>
                             </thead>
@@ -397,28 +335,21 @@
                 </div>
 
                 <div class="disclaimer">
-                    <strong>ℹ</strong> All threat intelligence displayed is sourced from publicly available OSINT feeds and is provided for defensive security awareness and detection validation purposes only. BreachForge is a community-driven defensive platform.
+                    <strong>&#8505;</strong> All intelligence shown is sourced from publicly available OSINT feeds and provided for defensive security awareness and detection validation only. Feed status reflects live connection state. BreachForge is a community-driven defensive platform.
                 </div>
             </div>
 
             <!-- Side Widgets -->
             <div class="side-widgets">
                 <div class="widget">
-                    <h4>⚡ Emerging Threats</h4>
-                    <p id="emergingText">New CVEs detected outside current BAS coverage</p>
+                    <h4>Most Recent KEV</h4>
+                    <p id="emergingText">Latest addition to the CISA Known Exploited Vulnerabilities catalog</p>
                     <p id="emergingDetail" style="color: #606060; font-size: 10px; margin-top: 8px;">Loading...</p>
-                    <button class="button" onclick="viewEmergingDetails()">View Details</button>
+                    <a class="button" href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener">View KEV Catalog</a>
                 </div>
 
                 <div class="widget">
-                    <h4>↑ BAS Recommendations</h4>
-                    <p>Based on this week's threat intelligence</p>
-                    <p id="basRecs" style="background: rgba(0, 210, 132, 0.1); padding: 6px; border-radius: 4px; margin: 8px 0; font-size: 11px; color: #00d084; font-family: monospace;">Loading...</p>
-                    <button class="button" onclick="runRecommended()">Run Recommended</button>
-                </div>
-
-                <div class="widget">
-                    <h4>ℹ Feed Health</h4>
+                    <h4>Feed Health</h4>
                     <div id="feedHealthContainer">
                         <div class="loading">Loading feed health...</div>
                     </div>
@@ -430,42 +361,54 @@
                         <p class="loading">Loading threats...</p>
                     </div>
                 </div>
+
+                <div class="widget">
+                    <h4>Roadmap</h4>
+                    <p>Planned live integrations:</p>
+                    <div class="widget-metric"><span>VirusTotal IOC lookup</span><span style="color:#888;">Planned</span></div>
+                    <div class="widget-metric"><span>Shodan asset exposure</span><span style="color:#888;">Planned</span></div>
+                    <div class="widget-metric"><span>BAS scenario recommendations</span><span style="color:#888;">Planned</span></div>
+                    <a class="button" href="/breachforge/simulation/desktop/">Open BAS Platform</a>
+                </div>
             </div>
         </div>
     </div>
 
     <footer>
         <div class="container">
-            <p><strong>Saleem Yousaf</strong> | Cloud & Cyber Security Architect · BreachForge Threat Intelligence Portal · © 2026</p>
+            <p><strong>Saleem Yousaf</strong> | Cloud &amp; Cyber Security Architect &middot; BreachForge Threat Intelligence Portal &middot; &copy; 2026</p>
         </div>
     </footer>
 
     <script>
-        let trendingChart;
+        let kevChart;
         const DATA_BASE_PATH = '/breachforge/intel/data';
 
-        // Fetch one JSON file. Throws on a non-200 so a missing file is obvious
-        // rather than silently parsing an error page. cache:'no-store' avoids a
-        // stale browser/Pages cache hiding fresh data.
+        function statusBadge(status) {
+            if (status === 'healthy') return { color: '#00d084', text: 'Healthy' };
+            if (status === 'degraded') return { color: '#ff8c42', text: 'Degraded' };
+            if (status === 'not_connected') return { color: '#888888', text: 'Not connected' };
+            return { color: '#888888', text: status || 'Unknown' };
+        }
+
+        // Fetch one JSON file. cache-buster defeats stale CDN copies; no-store
+        // stops the browser caching. Throws on non-200 so a missing file is clear.
         async function fetchJSON(file) {
-            const res = await fetch(`${DATA_BASE_PATH}/${file}`, { cache: 'no-store' });
+            const res = await fetch(`${DATA_BASE_PATH}/${file}?t=${Date.now()}`, { cache: 'no-store' });
             if (!res.ok) throw new Error(`HTTP ${res.status} for ${file}`);
             return res.json();
         }
 
         async function loadData() {
-            // Load each file independently. A failure in one does not block the others.
             const [metrics, threats, feeds] = await Promise.all([
                 fetchJSON('metrics.json').catch(e => { console.error('metrics.json failed:', e.message); return null; }),
                 fetchJSON('threats.json').catch(e => { console.error('threats.json failed:', e.message); return null; }),
                 fetchJSON('feeds.json').catch(e => { console.error('feeds.json failed:', e.message); return null; })
             ]);
 
-            // Each section renders inside its own guard. One thrown error is
-            // logged against that section's name and never cascades.
             if (metrics) {
-                runSection('metrics', () => updateMetrics(metrics));
-                runSection('trendingChart', () => updateTrendingChart(metrics.trendingTechniques));
+                runSection('metrics', () => updateMetrics(metrics.tiles));
+                runSection('kevChart', () => updateKevChart(metrics.kevByWeek));
                 runSection('lastUpdate', () => updateLastUpdate(metrics.timestamp));
             }
             if (threats) {
@@ -474,93 +417,48 @@
             if (feeds) {
                 runSection('feeds', () => updateFeedsTable(feeds.sources));
             }
-            runSection('widgets', () => updateWidgets(metrics, threats, feeds));
+            runSection('widgets', () => updateWidgets(threats, feeds));
         }
 
         function runSection(name, fn) {
-            try {
-                fn();
-            } catch (e) {
-                console.error(`Section "${name}" failed to render:`, e.message);
-            }
+            try { fn(); }
+            catch (e) { console.error(`Section "${name}" failed to render:`, e.message); }
         }
 
-        function updateMetrics(metrics) {
-            const a = metrics.activeThreats || {};
-            const cards = document.querySelectorAll('.metric-card');
-            const values = [a.shodan, a.virusTotal, a.mitre, a.industryAlerts];
-            cards.forEach((card, i) => {
-                const el = card.querySelector('.metric-value');
-                el.textContent = (values[i] ?? '-');
-                el.classList.remove('loading');
-            });
+        function updateMetrics(tiles) {
+            if (!Array.isArray(tiles) || !tiles.length) return;
+            document.getElementById('metricsContainer').innerHTML = tiles.map(t => `
+                <div class="metric-card">
+                    <div class="metric-label">${t.label}</div>
+                    <div class="metric-value">${t.value ?? '-'}</div>
+                </div>
+            `).join('');
         }
 
-        function updateTrendingChart(trendingData) {
-            if (typeof Chart === 'undefined') throw new Error('Chart.js library failed to load from CDN');
-            if (!trendingData) throw new Error('trendingTechniques missing from metrics.json');
+        function updateKevChart(kev) {
+            if (typeof Chart === 'undefined') throw new Error('Chart.js failed to load from CDN');
+            if (!kev || !Array.isArray(kev.counts)) throw new Error('kevByWeek missing from metrics.json');
             const ctx = document.getElementById('trendingChart').getContext('2d');
-            // Destroy any existing chart before recreating, otherwise Chart.js
-            // throws "Canvas is already in use" on the 30-minute auto-refresh.
-            if (trendingChart) trendingChart.destroy();
-            trendingChart = new Chart(ctx, {
-                type: 'line',
+            if (kevChart) kevChart.destroy();
+            kevChart = new Chart(ctx, {
+                type: 'bar',
                 data: {
-                    labels: trendingData.weeks,
-                    datasets: [
-                        {
-                            label: 'Initial Access',
-                            data: trendingData.initialAccess,
-                            borderColor: '#00d084',
-                            backgroundColor: 'rgba(0, 208, 132, 0.1)',
-                            tension: 0.4,
-                            fill: true,
-                            borderWidth: 2
-                        },
-                        {
-                            label: 'Persistence',
-                            data: trendingData.persistence,
-                            borderColor: '#ff8c42',
-                            backgroundColor: 'rgba(255, 140, 66, 0.1)',
-                            tension: 0.4,
-                            fill: true,
-                            borderWidth: 2
-                        },
-                        {
-                            label: 'Exfiltration',
-                            data: trendingData.exfiltration,
-                            borderColor: '#6c5ce7',
-                            backgroundColor: 'rgba(108, 92, 231, 0.1)',
-                            tension: 0.4,
-                            fill: true,
-                            borderWidth: 2
-                        }
-                    ]
+                    labels: kev.weeks,
+                    datasets: [{
+                        label: 'KEV entries added',
+                        data: kev.counts,
+                        backgroundColor: 'rgba(0, 208, 132, 0.35)',
+                        borderColor: '#00d084',
+                        borderWidth: 1
+                    }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: '#a0a0a0',
-                                font: { size: 11 },
-                                usePointStyle: true,
-                                padding: 15
-                            }
-                        }
-                    },
+                    plugins: { legend: { labels: { color: '#a0a0a0', font: { size: 11 }, usePointStyle: true, padding: 15 } } },
                     scales: {
-                        x: {
-                            grid: { color: 'rgba(100, 150, 200, 0.1)' },
-                            ticks: { color: '#606060', font: { size: 10 } }
-                        },
-                        y: {
-                            grid: { color: 'rgba(100, 150, 200, 0.1)' },
-                            ticks: { color: '#606060', font: { size: 10 } },
-                            min: 0,
-                            max: 100
-                        }
+                        x: { grid: { color: 'rgba(100, 150, 200, 0.1)' }, ticks: { color: '#606060', font: { size: 10 } } },
+                        y: { grid: { color: 'rgba(100, 150, 200, 0.1)' }, ticks: { color: '#606060', font: { size: 10 } }, beginAtZero: true }
                     }
                 }
             });
@@ -569,16 +467,15 @@
         function updateActorsTable(actors) {
             const tbody = document.getElementById('actorsTableBody');
             if (!Array.isArray(actors) || actors.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="loading">No threat actors available</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" class="loading">No groups available</td></tr>';
                 return;
             }
-            tbody.innerHTML = actors.slice(0, 5).map(actor => `
+            tbody.innerHTML = actors.slice(0, 8).map(a => `
                 <tr>
-                    <td><span class="actor-link">${actor.name}</span></td>
-                    <td>${actor.origin}</td>
-                    <td>${actor.type}</td>
-                    <td>${Array.isArray(actor.sectors) ? actor.sectors.join(', ') : ''}</td>
-                    <td><button class="button" style="width: auto; padding: 4px 8px; font-size: 10px; margin-top: 0;">Run Scenario</button></td>
+                    <td><span class="actor-link">${a.name}</span></td>
+                    <td>${Array.isArray(a.aliases) && a.aliases.length ? a.aliases.slice(0, 3).join(', ') : '-'}</td>
+                    <td>${a.techniqueCount ?? 0}</td>
+                    <td>${a.lastModified ? new Date(a.lastModified).toLocaleDateString() : '-'}</td>
                 </tr>
             `).join('');
         }
@@ -589,46 +486,37 @@
                 tbody.innerHTML = '<tr><td colspan="4" class="loading">No feed sources available</td></tr>';
                 return;
             }
-            tbody.innerHTML = sources.map(source => {
-                const healthy = (source.status || 'healthy') === 'healthy';
+            tbody.innerHTML = sources.map(s => {
+                const b = statusBadge(s.status);
                 return `
                 <tr>
-                    <td><strong>${source.name}</strong></td>
-                    <td><span style="color: ${healthy ? '#00d084' : '#ff8c42'};">${healthy ? 'Healthy' : 'Degraded'}</span></td>
-                    <td>${source.accuracy}%</td>
-                    <td>${source.lastUpdate ? new Date(source.lastUpdate).toLocaleString() : '-'}</td>
+                    <td><strong>${s.name}</strong></td>
+                    <td><span style="color: ${b.color};">${b.text}</span></td>
+                    <td>${s.records ?? '-'}</td>
+                    <td>${s.lastUpdate ? new Date(s.lastUpdate).toLocaleString() : '-'}</td>
                 </tr>`;
             }).join('');
         }
 
-        function updateWidgets(metrics, threats, feeds) {
-            // Feed health
+        function updateWidgets(threats, feeds) {
             if (feeds && Array.isArray(feeds.sources)) {
-                document.getElementById('feedHealthContainer').innerHTML = feeds.sources.map(source => {
-                    const healthy = (source.status || 'healthy') === 'healthy';
-                    return `
-                    <div class="widget-metric">
-                        <span>${source.name}</span>
-                        <span class="widget-status" style="color: ${healthy ? '#00d084' : '#ff8c42'};">${healthy ? 'Healthy' : 'Degraded'}</span>
-                    </div>`;
+                document.getElementById('feedHealthContainer').innerHTML = feeds.sources.map(s => {
+                    const b = statusBadge(s.status);
+                    return `<div class="widget-metric"><span>${s.name}</span><span class="widget-status" style="color: ${b.color};">${b.text}</span></div>`;
                 }).join('');
             }
 
-            // Latest threats and emerging detail
             if (threats && Array.isArray(threats.vulnerabilities)) {
                 const latest = threats.vulnerabilities.slice(0, 3);
-                const html = latest.map(v => {
-                    const desc = (v.description || '').substring(0, 50);
-                    return `<p style="margin-bottom: 6px; font-size: 10px; color: #909090;">${v.cveId}: ${desc}...</p>`;
-                }).join('');
-                document.getElementById('latestThreatsContainer').innerHTML = html || '<p class="loading">No threats detected</p>';
+                document.getElementById('latestThreatsContainer').innerHTML = latest.map(v =>
+                    `<p style="margin-bottom: 6px; font-size: 10px; color: #909090;">${v.cveId}: ${(v.description || '').substring(0, 50)}...</p>`
+                ).join('') || '<p class="loading">No recent entries</p>';
 
-                const topCVE = threats.vulnerabilities[0];
-                document.getElementById('emergingDetail').textContent = topCVE?.cveId || 'None';
+                const top = threats.vulnerabilities[0];
+                document.getElementById('emergingDetail').textContent = top
+                    ? `${top.cveId}${top.vendor ? ' (' + top.vendor + ')' : ''}`
+                    : 'None';
             }
-
-            // BAS recommendations (static placeholder, unchanged)
-            document.getElementById('basRecs').textContent = 'S1, S3, S5, S7';
         }
 
         function updateLastUpdate(timestamp) {
@@ -637,18 +525,7 @@
                 : 'Unavailable';
         }
 
-        function viewEmergingDetails() {
-            alert('View full emerging threats list in BAS Platform');
-        }
-
-        function runRecommended() {
-            window.location.href = '/breachforge/simulation/desktop/';
-        }
-
-        // Load data on page load
         window.addEventListener('load', loadData);
-
-        // Refresh data every 30 minutes
         setInterval(loadData, 30 * 60 * 1000);
     </script>
 </body>
