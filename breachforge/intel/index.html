@@ -444,44 +444,65 @@
         let trendingChart;
         const DATA_BASE_PATH = '/breachforge/intel/data';
 
+        // Fetch one JSON file. Throws on a non-200 so a missing file is obvious
+        // rather than silently parsing an error page. cache:'no-store' avoids a
+        // stale browser/Pages cache hiding fresh data.
+        async function fetchJSON(file) {
+            const res = await fetch(`${DATA_BASE_PATH}/${file}`, { cache: 'no-store' });
+            if (!res.ok) throw new Error(`HTTP ${res.status} for ${file}`);
+            return res.json();
+        }
+
         async function loadData() {
+            // Load each file independently. A failure in one does not block the others.
+            const [metrics, threats, feeds] = await Promise.all([
+                fetchJSON('metrics.json').catch(e => { console.error('metrics.json failed:', e.message); return null; }),
+                fetchJSON('threats.json').catch(e => { console.error('threats.json failed:', e.message); return null; }),
+                fetchJSON('feeds.json').catch(e => { console.error('feeds.json failed:', e.message); return null; })
+            ]);
+
+            // Each section renders inside its own guard. One thrown error is
+            // logged against that section's name and never cascades.
+            if (metrics) {
+                runSection('metrics', () => updateMetrics(metrics));
+                runSection('trendingChart', () => updateTrendingChart(metrics.trendingTechniques));
+                runSection('lastUpdate', () => updateLastUpdate(metrics.timestamp));
+            }
+            if (threats) {
+                runSection('actors', () => updateActorsTable(threats.actors));
+            }
+            if (feeds) {
+                runSection('feeds', () => updateFeedsTable(feeds.sources));
+            }
+            runSection('widgets', () => updateWidgets(metrics, threats, feeds));
+        }
+
+        function runSection(name, fn) {
             try {
-                // Fetch all data files
-                const metricsRes = await fetch(`${DATA_BASE_PATH}/metrics.json`);
-                const threatRes = await fetch(`${DATA_BASE_PATH}/threats.json`);
-                const feedRes = await fetch(`${DATA_BASE_PATH}/feeds.json`);
-
-                const metrics = await metricsRes.json();
-                const threats = await threatRes.json();
-                const feeds = await feedRes.json();
-
-                // Update metrics
-                updateMetrics(metrics);
-                updateTrendingChart(metrics.trendingTechniques);
-                updateActorsTable(threats.actors);
-                updateFeedsTable(feeds.sources);
-                updateWidgets(metrics, threats, feeds);
-                updateLastUpdate(metrics.timestamp);
-
-            } catch (error) {
-                console.error('Error loading data:', error);
-                // Show error gracefully
-                document.querySelector('.metric-value').textContent = 'Error loading data';
+                fn();
+            } catch (e) {
+                console.error(`Section "${name}" failed to render:`, e.message);
             }
         }
 
         function updateMetrics(metrics) {
-            const { shodan, virusTotal, mitre, industryAlerts } = metrics.activeThreats;
+            const a = metrics.activeThreats || {};
             const cards = document.querySelectorAll('.metric-card');
-
-            cards[0].querySelector('.metric-value').textContent = shodan;
-            cards[1].querySelector('.metric-value').textContent = virusTotal;
-            cards[2].querySelector('.metric-value').textContent = mitre;
-            cards[3].querySelector('.metric-value').textContent = industryAlerts;
+            const values = [a.shodan, a.virusTotal, a.mitre, a.industryAlerts];
+            cards.forEach((card, i) => {
+                const el = card.querySelector('.metric-value');
+                el.textContent = (values[i] ?? '-');
+                el.classList.remove('loading');
+            });
         }
 
         function updateTrendingChart(trendingData) {
+            if (typeof Chart === 'undefined') throw new Error('Chart.js library failed to load from CDN');
+            if (!trendingData) throw new Error('trendingTechniques missing from metrics.json');
             const ctx = document.getElementById('trendingChart').getContext('2d');
+            // Destroy any existing chart before recreating, otherwise Chart.js
+            // throws "Canvas is already in use" on the 30-minute auto-refresh.
+            if (trendingChart) trendingChart.destroy();
             trendingChart = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -547,12 +568,16 @@
 
         function updateActorsTable(actors) {
             const tbody = document.getElementById('actorsTableBody');
+            if (!Array.isArray(actors) || actors.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="loading">No threat actors available</td></tr>';
+                return;
+            }
             tbody.innerHTML = actors.slice(0, 5).map(actor => `
                 <tr>
                     <td><span class="actor-link">${actor.name}</span></td>
                     <td>${actor.origin}</td>
                     <td>${actor.type}</td>
-                    <td>${actor.sectors.join(', ')}</td>
+                    <td>${Array.isArray(actor.sectors) ? actor.sectors.join(', ') : ''}</td>
                     <td><button class="button" style="width: auto; padding: 4px 8px; font-size: 10px; margin-top: 0;">Run Scenario</button></td>
                 </tr>
             `).join('');
@@ -560,44 +585,56 @@
 
         function updateFeedsTable(sources) {
             const tbody = document.getElementById('feedsTableBody');
-            tbody.innerHTML = sources.map(source => `
+            if (!Array.isArray(sources) || sources.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="loading">No feed sources available</td></tr>';
+                return;
+            }
+            tbody.innerHTML = sources.map(source => {
+                const healthy = (source.status || 'healthy') === 'healthy';
+                return `
                 <tr>
                     <td><strong>${source.name}</strong></td>
-                    <td><span style="color: #00d084;">Healthy</span></td>
+                    <td><span style="color: ${healthy ? '#00d084' : '#ff8c42'};">${healthy ? 'Healthy' : 'Degraded'}</span></td>
                     <td>${source.accuracy}%</td>
-                    <td>${new Date(source.lastUpdate).toLocaleString()}</td>
-                </tr>
-            `).join('');
+                    <td>${source.lastUpdate ? new Date(source.lastUpdate).toLocaleString() : '-'}</td>
+                </tr>`;
+            }).join('');
         }
 
         function updateWidgets(metrics, threats, feeds) {
             // Feed health
-            const feedHealthHTML = feeds.sources.map(source => `
-                <div class="widget-metric">
-                    <span>${source.name}</span>
-                    <span class="widget-status">Healthy</span>
-                </div>
-            `).join('');
-            document.getElementById('feedHealthContainer').innerHTML = feedHealthHTML;
+            if (feeds && Array.isArray(feeds.sources)) {
+                document.getElementById('feedHealthContainer').innerHTML = feeds.sources.map(source => {
+                    const healthy = (source.status || 'healthy') === 'healthy';
+                    return `
+                    <div class="widget-metric">
+                        <span>${source.name}</span>
+                        <span class="widget-status" style="color: ${healthy ? '#00d084' : '#ff8c42'};">${healthy ? 'Healthy' : 'Degraded'}</span>
+                    </div>`;
+                }).join('');
+            }
 
-            // Latest threats
-            const latestThreats = threats.vulnerabilities.slice(0, 3);
-            const threatsHTML = latestThreats.map((v, i) => `
-                <p style="margin-bottom: 6px; font-size: 10px; color: #909090;">${v.cveId}: ${v.description.substring(0, 50)}...</p>
-            `).join('');
-            document.getElementById('latestThreatsContainer').innerHTML = threatsHTML || '<p class="loading">No threats detected</p>';
+            // Latest threats and emerging detail
+            if (threats && Array.isArray(threats.vulnerabilities)) {
+                const latest = threats.vulnerabilities.slice(0, 3);
+                const html = latest.map(v => {
+                    const desc = (v.description || '').substring(0, 50);
+                    return `<p style="margin-bottom: 6px; font-size: 10px; color: #909090;">${v.cveId}: ${desc}...</p>`;
+                }).join('');
+                document.getElementById('latestThreatsContainer').innerHTML = html || '<p class="loading">No threats detected</p>';
 
-            // BAS recommendations based on trending
+                const topCVE = threats.vulnerabilities[0];
+                document.getElementById('emergingDetail').textContent = topCVE?.cveId || 'None';
+            }
+
+            // BAS recommendations (static placeholder, unchanged)
             document.getElementById('basRecs').textContent = 'S1, S3, S5, S7';
-
-            // Emerging
-            const topCVE = threats.vulnerabilities[0];
-            document.getElementById('emergingDetail').textContent = topCVE?.cveId || 'None';
         }
 
         function updateLastUpdate(timestamp) {
-            const date = new Date(timestamp);
-            document.getElementById('lastUpdate').textContent = date.toLocaleString();
+            document.getElementById('lastUpdate').textContent = timestamp
+                ? new Date(timestamp).toLocaleString()
+                : 'Unavailable';
         }
 
         function viewEmergingDetails() {
