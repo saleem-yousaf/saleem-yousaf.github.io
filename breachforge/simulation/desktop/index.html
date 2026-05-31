@@ -90,7 +90,7 @@ const SCENARIOS=[
   {id:"S1",name:"Ransomware Kill Chain",cat:"Endpoint",sev:"Critical",
    desc:"Full LockBit 3.0-style kill chain: recon through file encryption. 18 atomic techniques across 7 phases. Tests EDR, identity controls, lateral movement detection, and backup integrity.",
    tactics:["Recon","Initial Access","Execution","Persistence","PrivEsc","Lateral","Impact"],
-   dur:"45–90 min",
+   dur:"45-90 min",
    ttps:["T1592.002","T1589.001","T1566.001","T1204.002","T1059.001","T1059.003","T1047","T1055.001","T1053.005","T1547.001","T1543.003","T1003.001","T1558.003","T1110.002","T1021.001","T1021.002","T1550.002","T1490","T1486","T1489"],
    actor:"FIN7",
    chain:[
@@ -105,32 +105,32 @@ const SCENARIOS=[
    nodes:[{id:"att",lbl:"Attacker",type:"actor",x:60,y:180},{id:"mail",lbl:"Phishing Email",type:"vector",x:200,y:180},{id:"ws1",lbl:"HR Workstation",type:"endpoint",x:360,y:180},{id:"dc",lbl:"Domain Controller",type:"dc",x:540,y:90},{id:"fs",lbl:"File Server",type:"server",x:540,y:270},{id:"bkp",lbl:"Backup Server",type:"server",x:700,y:180},{id:"imp",lbl:"Ransomware Drop",type:"impact",x:860,y:180}],
    edges:[{f:"att",t:"mail",lbl:"T1566.001"},{f:"mail",t:"ws1",lbl:"T1204.002"},{f:"ws1",t:"dc",lbl:"T1003.001"},{f:"ws1",t:"fs",lbl:"T1021.001"},{f:"dc",t:"bkp",lbl:"T1078"},{f:"fs",t:"imp",lbl:"T1486"},{f:"bkp",t:"imp",lbl:"VSS Delete"}],
    steps:[
-     {t:"T+00m",sev:"INFO",ev:"[T1592.002] Email address harvest: 47 accounts scraped from LinkedIn — HR, Finance, IT Helpdesk targeted"},
-     {t:"T+02m",sev:"INFO",ev:"[T1589.001] Credential check: 3 accounts found on paste sites — dev-ops-svc password confirmed leaked"},
-     {t:"T+04m",sev:"WARN",ev:"[T1566.001] Phishing XLSX delivered to HR-003@lab.internal — macro-enabled attachment (Atomic T03)"},
-     {t:"T+07m",sev:"WARN",ev:"[T1204.002] Macro executed on WIN-LAB-07 — user opened attachment despite email warning banner"},
-     {t:"T+09m",sev:"WARN",ev:"[T1059.001] PowerShell cradle fired — HTTPS beacon to C2 lab node 192.168.200.10:443 established"},
-     {t:"T+11m",sev:"WARN",ev:"[T1059.003] cmd.exe spawned under Office process — parent-child anomaly detected by EDR"},
-     {t:"T+14m",sev:"CRIT",ev:"[T1003.001] LSASS memory access — mimikatz_sim.exe — EDR rule CRED-0041 FIRED (Atomic T01)"},
-     {t:"T+17m",sev:"WARN",ev:"[T1558.003] Kerberoasting: 3 SVC account SPNs requested — hashes to C2 (Atomic T01)"},
+     {t:"T+00m",sev:"INFO",ev:"[T1592.002] Email address harvest: 47 accounts scraped from LinkedIn, HR, Finance, IT Helpdesk targeted"},
+     {t:"T+02m",sev:"INFO",ev:"[T1589.001] Credential check: 3 accounts found on paste sites, dev-ops-svc password confirmed leaked"},
+     {t:"T+04m",sev:"WARN",ev:"[T1566.001] Phishing XLSX delivered to HR-003@lab.internal, macro-enabled attachment (Atomic T03)"},
+     {t:"T+07m",sev:"WARN",ev:"[T1204.002] Macro executed on WIN-LAB-07, user opened attachment despite email warning banner"},
+     {t:"T+09m",sev:"WARN",ev:"[T1059.001] PowerShell cradle fired, HTTPS beacon to C2 lab node 192.168.200.10:443 established"},
+     {t:"T+11m",sev:"WARN",ev:"[T1059.003] cmd.exe spawned under Office process, parent-child anomaly detected by EDR"},
+     {t:"T+14m",sev:"CRIT",ev:"[T1003.001] LSASS memory access, mimikatz_sim.exe, EDR rule CRED-0041 FIRED (Atomic T01)"},
+     {t:"T+17m",sev:"WARN",ev:"[T1558.003] Kerberoasting: 3 SVC account SPNs requested, hashes to C2 (Atomic T01)"},
      {t:"T+19m",sev:"WARN",ev:"[T1110.002] Offline hash crack simulation: 1 of 3 SVC hashes cracked in 4 minutes (weak password)"},
-     {t:"T+21m",sev:"WARN",ev:"[T1053.005] Scheduled task 'WindowsUpdate' created — persistence registered in lab registry (Atomic T01)"},
+     {t:"T+21m",sev:"WARN",ev:"[T1053.005] Scheduled task 'WindowsUpdate' created, persistence registered in lab registry (Atomic T01)"},
      {t:"T+23m",sev:"WARN",ev:"[T1547.001] Registry Run key added: HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"},
-     {t:"T+25m",sev:"WARN",ev:"[T1543.003] New Windows service 'WinDefSvc' registered — masquerading as Windows Defender"},
-     {t:"T+28m",sev:"CRIT",ev:"[T1055.001] DLL injection into explorer.exe — hollowing technique — EDR memory scan triggered"},
+     {t:"T+25m",sev:"WARN",ev:"[T1543.003] New Windows service 'WinDefSvc' registered, masquerading as Windows Defender"},
+     {t:"T+28m",sev:"CRIT",ev:"[T1055.001] DLL injection into explorer.exe, hollowing technique, EDR memory scan triggered"},
      {t:"T+31m",sev:"WARN",ev:"[T1021.001] RDP lateral move 192.168.10.14 to FS01 using harvested domain credentials"},
-     {t:"T+34m",sev:"WARN",ev:"[T1021.002] SMB admin share enum — ADMIN$ accessible on 4 hosts without credential prompt"},
-     {t:"T+37m",sev:"CRIT",ev:"[T1550.002] Pass-the-hash to DC01 — NTLM relay — Defender Identity alert raised"},
-     {t:"T+38m",sev:"CRIT",ev:"[T1047] WMI Win32_ShadowCopy.Delete() — VSS deletion initiated on WIN-LAB-07"},
-     {t:"T+40m",sev:"CRIT",ev:"[T1490] Backup catalog wiped — system restore points removed on 3 hosts"},
-     {t:"T+41m",sev:"CRIT",ev:"[T1486] File encryption: 847 synthetic files flagged .locked — ransomware sim complete"},
-     {t:"T+44m",sev:"CRIT",ev:"[T1489] Services stopped: SQL Server, Exchange, VSS — SIMULATION COMPLETE"}
+     {t:"T+34m",sev:"WARN",ev:"[T1021.002] SMB admin share enum, ADMIN$ accessible on 4 hosts without credential prompt"},
+     {t:"T+37m",sev:"CRIT",ev:"[T1550.002] Pass-the-hash to DC01, NTLM relay, Defender Identity alert raised"},
+     {t:"T+38m",sev:"CRIT",ev:"[T1047] WMI Win32_ShadowCopy.Delete(), VSS deletion initiated on WIN-LAB-07"},
+     {t:"T+40m",sev:"CRIT",ev:"[T1490] Backup catalog wiped, system restore points removed on 3 hosts"},
+     {t:"T+41m",sev:"CRIT",ev:"[T1486] File encryption: 847 synthetic files flagged .locked, ransomware sim complete"},
+     {t:"T+44m",sev:"CRIT",ev:"[T1489] Services stopped: SQL Server, Exchange, VSS, SIMULATION COMPLETE"}
    ]},
 
   {id:"S2",name:"Cloud Control-Plane Pivot",cat:"Cloud",sev:"High",
    desc:"Credential stuffing against federated SSO to IAM privilege abuse to S3 exfiltration. 16 atomic techniques. Maps to AWS shared-responsibility model and APT29 cloud TTPs.",
    tactics:["Credential Access","Initial Access","Discovery","PrivEsc","Lateral","Exfiltration"],
-   dur:"30–60 min",
+   dur:"30-60 min",
    ttps:["T1110.003","T1078.004","T1190","T1526","T1069.003","T1087.004","T1548.005","T1098.001","T1098.004","T1550.001","T1530","T1537","T1567.002","T1041"],
    actor:"APT29",
    chain:[
@@ -144,26 +144,26 @@ const SCENARIOS=[
    nodes:[{id:"att",lbl:"Attacker",type:"actor",x:60,y:190},{id:"sso",lbl:"SSO / Okta",type:"identity",x:220,y:190},{id:"iam",lbl:"AWS IAM",type:"cloud",x:390,y:190},{id:"ec2",lbl:"EC2 Fleet",type:"server",x:560,y:100},{id:"s3",lbl:"S3 Buckets",type:"data",x:560,y:280},{id:"ext",lbl:"Exfil Bucket",type:"impact",x:730,y:190}],
    edges:[{f:"att",t:"sso",lbl:"T1110.003"},{f:"sso",t:"iam",lbl:"T1078.004"},{f:"iam",t:"ec2",lbl:"T1098.001"},{f:"iam",t:"s3",lbl:"T1526"},{f:"s3",t:"ext",lbl:"T1041"},{f:"ec2",t:"ext",lbl:"T1041"}],
    steps:[
-     {t:"T+00m",sev:"WARN",ev:"[T1110.003] Password spray: 12 accounts tested against SSO — 1 hit (dev-ops-svc) (Atomic T01)"},
-     {t:"T+04m",sev:"WARN",ev:"[T1078.004] Valid cloud session token generated — MFA push fatigue accepted (simulation)"},
+     {t:"T+00m",sev:"WARN",ev:"[T1110.003] Password spray: 12 accounts tested against SSO, 1 hit (dev-ops-svc) (Atomic T01)"},
+     {t:"T+04m",sev:"WARN",ev:"[T1078.004] Valid cloud session token generated, MFA push fatigue accepted (simulation)"},
      {t:"T+07m",sev:"INFO",ev:"[T1526] IAM enumeration: ListRoles, ListPolicies, GetAccountAuthorizationDetails called"},
-     {t:"T+10m",sev:"INFO",ev:"[T1069.003] Cloud group enumeration — 3 admin-level groups identified in target account"},
-     {t:"T+13m",sev:"INFO",ev:"[T1087.004] Cloud account discovery — 47 IAM users enumerated, 6 with console access"},
-     {t:"T+17m",sev:"CRIT",ev:"[T1548.005] PrivEsc: AttachRolePolicy — AdministratorAccess attached to dev-ops-svc — ALERT FIRED"},
+     {t:"T+10m",sev:"INFO",ev:"[T1069.003] Cloud group enumeration, 3 admin-level groups identified in target account"},
+     {t:"T+13m",sev:"INFO",ev:"[T1087.004] Cloud account discovery, 47 IAM users enumerated, 6 with console access"},
+     {t:"T+17m",sev:"CRIT",ev:"[T1548.005] PrivEsc: AttachRolePolicy, AdministratorAccess attached to dev-ops-svc, ALERT FIRED"},
      {t:"T+20m",sev:"CRIT",ev:"[T1098.001] Additional cloud credentials: access key created for dev-ops-svc (Atomic T01)"},
-     {t:"T+23m",sev:"WARN",ev:"[T1098.004] SSH authorized key injected into EC2 instance profile — backdoor access established"},
-     {t:"T+26m",sev:"WARN",ev:"[T1550.001] App access token reused across 3 services — token not scoped to single service"},
-     {t:"T+29m",sev:"WARN",ev:"[T1190] EC2 metadata service queried — IMDSv1 enabled — instance credentials extracted"},
-     {t:"T+32m",sev:"WARN",ev:"[T1530] S3 bucket enumeration: 14 buckets, 3 public-read — CSPM alert raised"},
-     {t:"T+36m",sev:"CRIT",ev:"[T1537] RDS snapshot exported to attacker account — cross-account snapshot copy (Atomic T01)"},
-     {t:"T+39m",sev:"CRIT",ev:"[T1567.002] Source code repo access — CodeCommit cloned to external IP"},
-     {t:"T+42m",sev:"CRIT",ev:"[T1041] Synthetic exfil: 2.3 GB S3 sync to attacker-controlled bucket — SIMULATION COMPLETE"}
+     {t:"T+23m",sev:"WARN",ev:"[T1098.004] SSH authorized key injected into EC2 instance profile, backdoor access established"},
+     {t:"T+26m",sev:"WARN",ev:"[T1550.001] App access token reused across 3 services, token not scoped to single service"},
+     {t:"T+29m",sev:"WARN",ev:"[T1190] EC2 metadata service queried, IMDSv1 enabled, instance credentials extracted"},
+     {t:"T+32m",sev:"WARN",ev:"[T1530] S3 bucket enumeration: 14 buckets, 3 public-read, CSPM alert raised"},
+     {t:"T+36m",sev:"CRIT",ev:"[T1537] RDS snapshot exported to attacker account, cross-account snapshot copy (Atomic T01)"},
+     {t:"T+39m",sev:"CRIT",ev:"[T1567.002] Source code repo access, CodeCommit cloned to external IP"},
+     {t:"T+42m",sev:"CRIT",ev:"[T1041] Synthetic exfil: 2.3 GB S3 sync to attacker-controlled bucket, SIMULATION COMPLETE"}
    ]},
 
   {id:"S3",name:"Active Directory Compromise",cat:"Identity",sev:"Critical",
    desc:"Kerberoasting to DCSync to Golden Ticket. 17 atomic techniques testing identity plane resilience, PAM controls, and privileged access hard stops.",
    tactics:["Foothold","Enumeration","Credential Theft","Domain Admin","Persistence","Impact"],
-   dur:"60–120 min",
+   dur:"60-120 min",
    ttps:["T1566.001","T1078.002","T1087.002","T1069.002","T1018","T1558.003","T1003.001","T1003.006","T1134.002","T1548.002","T1550.002","T1550.003","T1021.006","T1098.002","T1136.002","T1485","T1531"],
    actor:"Lazarus Group",
    chain:[
@@ -177,29 +177,29 @@ const SCENARIOS=[
    nodes:[{id:"att",lbl:"Attacker",type:"actor",x:60,y:185},{id:"ws",lbl:"Dev Workstation",type:"endpoint",x:215,y:185},{id:"fs",lbl:"File Server",type:"server",x:380,y:285},{id:"dc1",lbl:"DC01 Primary",type:"dc",x:555,y:110},{id:"dc2",lbl:"DC02 Secondary",type:"dc",x:555,y:280},{id:"gld",lbl:"Golden Ticket",type:"impact",x:735,y:190}],
    edges:[{f:"att",t:"ws",lbl:"RDP Brute"},{f:"ws",t:"fs",lbl:"T1021.002"},{f:"ws",t:"dc1",lbl:"Kerberoast"},{f:"fs",t:"dc1",lbl:"T1003.001"},{f:"dc1",t:"dc2",lbl:"DCSync"},{f:"dc1",t:"gld",lbl:"T1550.003"},{f:"dc2",t:"gld",lbl:"Golden Ticket"}],
    steps:[
-     {t:"T+00m",sev:"WARN",ev:"[T1566.001] Phishing O365 lure — fake MFA prompt harvests domain credentials"},
-     {t:"T+04m",sev:"WARN",ev:"[T1078.002] Domain account foothold: dev-svc01 authenticated — weak password confirmed"},
-     {t:"T+08m",sev:"INFO",ev:"[T1087.002] BloodHound: domain account enumeration — shortest path to DA found (4 hops)"},
-     {t:"T+12m",sev:"INFO",ev:"[T1069.002] Domain group enumeration — Domain Admins, Enterprise Admins, Schema Admins mapped"},
+     {t:"T+00m",sev:"WARN",ev:"[T1566.001] Phishing O365 lure, fake MFA prompt harvests domain credentials"},
+     {t:"T+04m",sev:"WARN",ev:"[T1078.002] Domain account foothold: dev-svc01 authenticated, weak password confirmed"},
+     {t:"T+08m",sev:"INFO",ev:"[T1087.002] BloodHound: domain account enumeration, shortest path to DA found (4 hops)"},
+     {t:"T+12m",sev:"INFO",ev:"[T1069.002] Domain group enumeration, Domain Admins, Enterprise Admins, Schema Admins mapped"},
      {t:"T+15m",sev:"INFO",ev:"[T1018] Remote system discovery: 34 DCs, servers, and workstations mapped via DNS"},
-     {t:"T+18m",sev:"CRIT",ev:"[T1558.003] Kerberoasting: 5 SVC SPNs targeted — 2 hashes cracked (Atomic T01)"},
-     {t:"T+22m",sev:"CRIT",ev:"[T1003.001] LSASS dump on DC01 — credential guard NOT enabled — CRIT alert"},
-     {t:"T+26m",sev:"WARN",ev:"[T1134.002] Token impersonation: CreateProcessWithTokenW — elevated shell obtained"},
-     {t:"T+29m",sev:"WARN",ev:"[T1548.002] UAC bypass via fodhelper.exe — local admin escalated to SYSTEM"},
-     {t:"T+32m",sev:"CRIT",ev:"[T1550.002] Pass-the-hash to DC02 — Defender Identity golden ticket alert raised"},
-     {t:"T+36m",sev:"CRIT",ev:"[T1003.006] DCSync: krbtgt hash extracted — SIEM correlation FIRED (Atomic T01)"},
+     {t:"T+18m",sev:"CRIT",ev:"[T1558.003] Kerberoasting: 5 SVC SPNs targeted, 2 hashes cracked (Atomic T01)"},
+     {t:"T+22m",sev:"CRIT",ev:"[T1003.001] LSASS dump on DC01, credential guard NOT enabled, CRIT alert"},
+     {t:"T+26m",sev:"WARN",ev:"[T1134.002] Token impersonation: CreateProcessWithTokenW, elevated shell obtained"},
+     {t:"T+29m",sev:"WARN",ev:"[T1548.002] UAC bypass via fodhelper.exe, local admin escalated to SYSTEM"},
+     {t:"T+32m",sev:"CRIT",ev:"[T1550.002] Pass-the-hash to DC02, Defender Identity golden ticket alert raised"},
+     {t:"T+36m",sev:"CRIT",ev:"[T1003.006] DCSync: krbtgt hash extracted, SIEM correlation FIRED (Atomic T01)"},
      {t:"T+39m",sev:"WARN",ev:"[T1021.006] WinRM lateral to Exchange server using Domain Admin credentials"},
      {t:"T+41m",sev:"CRIT",ev:"[T1550.003] Golden Ticket crafted: forged TGT, 10-year TTL (Atomic T01)"},
      {t:"T+44m",sev:"WARN",ev:"[T1098.002] Exchange delegate perms granted to attacker-controlled account"},
-     {t:"T+47m",sev:"WARN",ev:"[T1136.002] New domain admin account created: svc-backup02 — blends with existing"},
+     {t:"T+47m",sev:"WARN",ev:"[T1136.002] New domain admin account created: svc-backup02, blends with existing"},
      {t:"T+50m",sev:"CRIT",ev:"[T1485] Synthetic data destruction: 200 files deleted from Finance share"},
-     {t:"T+53m",sev:"CRIT",ev:"[T1531] Account access removal: 3 admin accounts disabled — SIMULATION COMPLETE"}
+     {t:"T+53m",sev:"CRIT",ev:"[T1531] Account access removal: 3 admin accounts disabled, SIMULATION COMPLETE"}
    ]},
 
   {id:"S4",name:"WAF Bypass & Web Exploit",cat:"WAF / Web",sev:"High",
    desc:"OWASP Top 10: SQLi, path traversal, deserialisation RCE. WAF evasion via Unicode encoding. 15 atomic techniques testing application layer controls.",
    tactics:["Recon","WAF Evasion","Exploitation","Post-Exploit","Exfiltration"],
-   dur:"20–45 min",
+   dur:"20-45 min",
    ttps:["T1595.002","T1592.002","T1190","T1059.007","T1505.003","T1059.004","T1048.003","T1083","T1082","T1016","T1548.003","T1134.001","T1041","T1567.001"],
    actor:"Scattered Spider",
    chain:[
@@ -212,27 +212,27 @@ const SCENARIOS=[
    nodes:[{id:"att",lbl:"Attacker",type:"actor",x:55,y:185},{id:"waf",lbl:"WAF / CDN",type:"control",x:210,y:185},{id:"lb",lbl:"Load Balancer",type:"network",x:370,y:185},{id:"app",lbl:"Web App Server",type:"server",x:540,y:185},{id:"db",lbl:"Database (RDS)",type:"data",x:700,y:100},{id:"fs",lbl:"File System",type:"data",x:700,y:270}],
    edges:[{f:"att",t:"waf",lbl:"OWASP Probes"},{f:"waf",t:"lb",lbl:"Bypass (Unicode)"},{f:"lb",t:"app",lbl:"T1190"},{f:"app",t:"db",lbl:"SQLi"},{f:"app",t:"fs",lbl:"Path Traversal"}],
    steps:[
-     {t:"T+00m",sev:"INFO",ev:"[T1595.002] Vulnerability scan: Nikto/Nuclei probe — 3 CVEs identified in web stack"},
-     {t:"T+03m",sev:"INFO",ev:"[T1592.002] Tech stack fingerprint: X-Powered-By header reveals Node 18.2 — known CVEs checked"},
-     {t:"T+06m",sev:"INFO",ev:"[T1190] WAF fingerprint: X-Forwarded-For probing — Cloudflare rule set identified"},
-     {t:"T+09m",sev:"WARN",ev:"[T1059.007] WAF evasion: Unicode bypass — 3/12 SQLi probes passed WAF check (Atomic T01)"},
-     {t:"T+12m",sev:"CRIT",ev:"[T1190] SQL injection UNION SELECT: user table enumerated — 847 synthetic records exfiltrated"},
-     {t:"T+15m",sev:"CRIT",ev:"[T1190] Path traversal: ../../../../etc/passwd read via unsanitised file param — WAF MISS"},
-     {t:"T+18m",sev:"WARN",ev:"[T1505.003] Web shell upload attempt: malicious PHP via file upload endpoint — partially blocked"},
-     {t:"T+20m",sev:"WARN",ev:"[T1059.004] Unix shell spawned via deserialization — reverse shell to C2 over port 4444"},
-     {t:"T+22m",sev:"INFO",ev:"[T1083] File and directory enumeration — app config, .env files, backup archives located"},
-     {t:"T+24m",sev:"INFO",ev:"[T1082] System info: uname -a, /proc/version — kernel version and OS fingerprinted"},
-     {t:"T+25m",sev:"INFO",ev:"[T1016] Network config: ifconfig, /etc/hosts — internal subnet 10.0.1.0/24 mapped"},
+     {t:"T+00m",sev:"INFO",ev:"[T1595.002] Vulnerability scan: Nikto/Nuclei probe, 3 CVEs identified in web stack"},
+     {t:"T+03m",sev:"INFO",ev:"[T1592.002] Tech stack fingerprint: X-Powered-By header reveals Node 18.2, known CVEs checked"},
+     {t:"T+06m",sev:"INFO",ev:"[T1190] WAF fingerprint: X-Forwarded-For probing, Cloudflare rule set identified"},
+     {t:"T+09m",sev:"WARN",ev:"[T1059.007] WAF evasion: Unicode bypass, 3/12 SQLi probes passed WAF check (Atomic T01)"},
+     {t:"T+12m",sev:"CRIT",ev:"[T1190] SQL injection UNION SELECT: user table enumerated, 847 synthetic records exfiltrated"},
+     {t:"T+15m",sev:"CRIT",ev:"[T1190] Path traversal: ../../../../etc/passwd read via unsanitised file param, WAF MISS"},
+     {t:"T+18m",sev:"WARN",ev:"[T1505.003] Web shell upload attempt: malicious PHP via file upload endpoint, partially blocked"},
+     {t:"T+20m",sev:"WARN",ev:"[T1059.004] Unix shell spawned via deserialization, reverse shell to C2 over port 4444"},
+     {t:"T+22m",sev:"INFO",ev:"[T1083] File and directory enumeration, app config, .env files, backup archives located"},
+     {t:"T+24m",sev:"INFO",ev:"[T1082] System info: uname -a, /proc/version, kernel version and OS fingerprinted"},
+     {t:"T+25m",sev:"INFO",ev:"[T1016] Network config: ifconfig, /etc/hosts, internal subnet 10.0.1.0/24 mapped"},
      {t:"T+27m",sev:"WARN",ev:"[T1548.003] Sudo misconfiguration found: www-data can run python3 as root (Atomic T01)"},
      {t:"T+28m",sev:"CRIT",ev:"[T1134.001] Token impersonation: root shell obtained via sudo python3 -c exec"},
-     {t:"T+30m",sev:"CRIT",ev:"[T1041] DB config extracted: plaintext RDS credentials in .env — SIMULATION COMPLETE"},
-     {t:"T+32m",sev:"CRIT",ev:"[T1567.001] Credentials exfiltrated to OneDrive via OAuth token — DLP MISS"}
+     {t:"T+30m",sev:"CRIT",ev:"[T1041] DB config extracted: plaintext RDS credentials in .env, SIMULATION COMPLETE"},
+     {t:"T+32m",sev:"CRIT",ev:"[T1567.001] Credentials exfiltrated to OneDrive via OAuth token, DLP MISS"}
    ]},
 
   {id:"S5",name:"Lateral Movement Chain",cat:"Network",sev:"High",
    desc:"East-west movement via WMI, PsExec, SMB, SSH. 16 atomic techniques testing micro-segmentation effectiveness and NDR detection thresholds.",
    tactics:["Internal Recon","Credential Reuse","Lateral Movement","Evasion","Exfiltration"],
-   dur:"30–60 min",
+   dur:"30-60 min",
    ttps:["T1078.001","T1133","T1018","T1135","T1049","T1021.001","T1021.002","T1021.004","T1047","T1570","T1557.001","T1558.003","T1036.005","T1070.001","T1562.004","T1048"],
    actor:"Volt Typhoon",
    chain:[
@@ -245,28 +245,28 @@ const SCENARIOS=[
    nodes:[{id:"ws1",lbl:"Workstation A\n(Foothold)",type:"endpoint",x:55,y:185},{id:"ws2",lbl:"Workstation B",type:"endpoint",x:220,y:100},{id:"ws3",lbl:"Workstation C",type:"endpoint",x:220,y:270},{id:"srv",lbl:"App Server",type:"server",x:390,y:185},{id:"dc",lbl:"Domain Controller",type:"dc",x:560,y:100},{id:"db",lbl:"Database Server",type:"data",x:560,y:270},{id:"stg",lbl:"Data Staged",type:"impact",x:740,y:185}],
    edges:[{f:"ws1",t:"ws2",lbl:"SMB/PsExec"},{f:"ws1",t:"ws3",lbl:"WMI"},{f:"ws2",t:"srv",lbl:"T1021.001"},{f:"ws3",t:"srv",lbl:"SSH"},{f:"srv",t:"dc",lbl:"T1047"},{f:"srv",t:"db",lbl:"T1570"},{f:"dc",t:"stg",lbl:"Data"},{f:"db",t:"stg",lbl:"Dump"}],
    steps:[
-     {t:"T+00m",sev:"INFO",ev:"[T1078.001] Default credential test: admin/admin on 3 network devices — 1 success"},
+     {t:"T+00m",sev:"INFO",ev:"[T1078.001] Default credential test: admin/admin on 3 network devices, 1 success"},
      {t:"T+03m",sev:"INFO",ev:"[T1133] External remote service probe: RDP and WinRM ports open on 6 hosts"},
      {t:"T+06m",sev:"INFO",ev:"[T1018] ARP sweep: 34 live hosts on 192.168.10.0/24 (Atomic T01)"},
-     {t:"T+09m",sev:"WARN",ev:"[T1135] Network share discovery: 12 hosts with accessible shares — Finance and HR shares found"},
+     {t:"T+09m",sev:"WARN",ev:"[T1135] Network share discovery: 12 hosts with accessible shares, Finance and HR shares found"},
      {t:"T+12m",sev:"INFO",ev:"[T1049] Network connection enum: active sessions, listening ports mapped on 8 targets"},
-     {t:"T+14m",sev:"WARN",ev:"[T1557.001] LLMNR/NBT-NS poisoning: Responder simulation — 2 Net-NTLMv2 hashes captured"},
+     {t:"T+14m",sev:"WARN",ev:"[T1557.001] LLMNR/NBT-NS poisoning: Responder simulation, 2 Net-NTLMv2 hashes captured"},
      {t:"T+17m",sev:"WARN",ev:"[T1558.003] Kerberoasting follow-up: 2 additional SVC SPNs from share enumeration"},
      {t:"T+19m",sev:"WARN",ev:"[T1021.002] PsExec: foothold to WS-LAB-04 via local admin credential reuse (Atomic T01)"},
-     {t:"T+22m",sev:"CRIT",ev:"[T1047] WMI remote exec on WS-LAB-08 — PowerShell reverse shell to C2"},
-     {t:"T+24m",sev:"WARN",ev:"[T1021.004] SSH key pivoting to Linux app server — authorized_keys modified"},
-     {t:"T+26m",sev:"CRIT",ev:"[T1562.004] Windows Firewall disabled on WS-LAB-08 — NDR alert triggered"},
-     {t:"T+28m",sev:"WARN",ev:"[T1070.001] Event logs cleared: Security, System, Application — forensic gap created"},
-     {t:"T+30m",sev:"WARN",ev:"[T1036.005] Malicious binary renamed svchost.exe — process masquerading (Atomic T01)"},
-     {t:"T+32m",sev:"CRIT",ev:"[T1021.001] RDP to DC via harvested DA credentials — highest privilege achieved"},
+     {t:"T+22m",sev:"CRIT",ev:"[T1047] WMI remote exec on WS-LAB-08, PowerShell reverse shell to C2"},
+     {t:"T+24m",sev:"WARN",ev:"[T1021.004] SSH key pivoting to Linux app server, authorized_keys modified"},
+     {t:"T+26m",sev:"CRIT",ev:"[T1562.004] Windows Firewall disabled on WS-LAB-08, NDR alert triggered"},
+     {t:"T+28m",sev:"WARN",ev:"[T1070.001] Event logs cleared: Security, System, Application, forensic gap created"},
+     {t:"T+30m",sev:"WARN",ev:"[T1036.005] Malicious binary renamed svchost.exe, process masquerading (Atomic T01)"},
+     {t:"T+32m",sev:"CRIT",ev:"[T1021.001] RDP to DC via harvested DA credentials, highest privilege achieved"},
      {t:"T+35m",sev:"CRIT",ev:"[T1570] Lateral tool transfer: impacket suite staged on 4 hosts via SMB"},
-     {t:"T+37m",sev:"CRIT",ev:"[T1048] Exfil: 4.1 GB staged in %TEMP% — DNS tunnel to C2 — SIMULATION COMPLETE"}
+     {t:"T+37m",sev:"CRIT",ev:"[T1048] Exfil: 4.1 GB staged in %TEMP%, DNS tunnel to C2, SIMULATION COMPLETE"}
    ]},
 
-  {id:"S6",name:"Insider Threat – Data Theft",cat:"Insider",sev:"High",
+  {id:"S6",name:"Insider Threat: Data Theft",cat:"Insider",sev:"High",
    desc:"Trusted user abusing legitimate access to exfiltrate data via DLP bypass. 14 atomic techniques testing UEBA, DLP controls, and behavioural detection thresholds.",
    tactics:["Trusted Access","Data Collection","DLP Evasion","Exfiltration","Impact"],
-   dur:"15–30 min",
+   dur:"15-30 min",
    ttps:["T1087.001","T1083","T1213.002","T1560.001","T1074.001","T1114.001","T1562.001","T1070.004","T1036.003","T1048.002","T1041","T1567.002","T1485","T1491.001"],
    actor:"Scattered Spider",
    chain:[
@@ -280,25 +280,25 @@ const SCENARIOS=[
    edges:[{f:"usr",t:"sp",lbl:"340 files"},{f:"usr",t:"db",lbl:"SQL dump"},{f:"sp",t:"dlp",lbl:"Enc. ZIP"},{f:"db",t:"dlp",lbl:"Bypass"},{f:"dlp",t:"cld",lbl:"T1048"}],
    steps:[
      {t:"T+00m",sev:"INFO",ev:"[T1087.001] Account discovery: insider maps other users' permissions and accessible shares"},
-     {t:"T+03m",sev:"INFO",ev:"[T1083] File enumeration: 3,400 Finance documents indexed — sensitive filenames catalogued"},
-     {t:"T+05m",sev:"INFO",ev:"Auth from corporate VPN — normal hours — UEBA baseline pass (no alert)"},
-     {t:"T+07m",sev:"WARN",ev:"[T1213.002] 340 Finance SharePoint files accessed in 4 minutes — UEBA score +62 pts"},
+     {t:"T+03m",sev:"INFO",ev:"[T1083] File enumeration: 3,400 Finance documents indexed, sensitive filenames catalogued"},
+     {t:"T+05m",sev:"INFO",ev:"Auth from corporate VPN, normal hours, UEBA baseline pass (no alert)"},
+     {t:"T+07m",sev:"WARN",ev:"[T1213.002] 340 Finance SharePoint files accessed in 4 minutes, UEBA score +62 pts"},
      {t:"T+09m",sev:"WARN",ev:"[T1114.001] Email archive download: 6 months of Finance inbox exported to local drive"},
      {t:"T+11m",sev:"WARN",ev:"[T1074.001] Data staged: all collected files moved to %APPDATA%\\Temp\\backup2024"},
      {t:"T+13m",sev:"WARN",ev:"[T1560.001] Archive: 7-Zip used to compress and password-protect collected files (Atomic T02)"},
-     {t:"T+15m",sev:"CRIT",ev:"[T1562.001] DLP agent exception added for personal OneDrive process — SIEM alert raised"},
-     {t:"T+17m",sev:"CRIT",ev:"[T1048.002] Exfil via DNS: large TXT record queries — 340 MB over 22 minutes — DLP MISS"},
-     {t:"T+19m",sev:"CRIT",ev:"[T1041] Google Drive OAuth token used — 1.8 GB uploaded — UEBA score 94/100"},
-     {t:"T+21m",sev:"WARN",ev:"[T1036.003] Archive renamed to 'Q3_financial_backup.zip' — filename normalisation DLP rule bypassed"},
-     {t:"T+23m",sev:"WARN",ev:"[T1070.004] Local copies deleted — Windows Event 4663 suppressed via audit policy change"},
-     {t:"T+25m",sev:"CRIT",ev:"[T1485] 12 sensitive documents permanently deleted from SharePoint — no recycle bin recovery"},
-     {t:"T+27m",sev:"CRIT",ev:"[T1567.002] Source code repo cloned to personal GitHub — SIMULATION COMPLETE"}
+     {t:"T+15m",sev:"CRIT",ev:"[T1562.001] DLP agent exception added for personal OneDrive process, SIEM alert raised"},
+     {t:"T+17m",sev:"CRIT",ev:"[T1048.002] Exfil via DNS: large TXT record queries, 340 MB over 22 minutes, DLP MISS"},
+     {t:"T+19m",sev:"CRIT",ev:"[T1041] Google Drive OAuth token used, 1.8 GB uploaded, UEBA score 94/100"},
+     {t:"T+21m",sev:"WARN",ev:"[T1036.003] Archive renamed to 'Q3_financial_backup.zip', filename normalisation DLP rule bypassed"},
+     {t:"T+23m",sev:"WARN",ev:"[T1070.004] Local copies deleted, Windows Event 4663 suppressed via audit policy change"},
+     {t:"T+25m",sev:"CRIT",ev:"[T1485] 12 sensitive documents permanently deleted from SharePoint, no recycle bin recovery"},
+     {t:"T+27m",sev:"CRIT",ev:"[T1567.002] Source code repo cloned to personal GitHub, SIMULATION COMPLETE"}
    ]},
 
   {id:"S7",name:"Supply Chain Compromise",cat:"Supply Chain",sev:"Critical",
    desc:"SolarWinds-pattern attack: trojanised software update to persistent backdoor to lateral movement. 16 atomic techniques modelled on SUNBURST. Tests supply chain monitoring, code signing validation, and detection of low-and-slow activity.",
    tactics:["Initial Access","Execution","Persistence","Evasion","Lateral","Exfiltration"],
-   dur:"60–90 min",
+   dur:"60-90 min",
    ttps:["T1195.002","T1195.003","T1059.001","T1546.012","T1553.002","T1027.002","T1036.005","T1078.001","T1021.006","T1098.002","T1562.001","T1070.003","T1530","T1537","T1041","T1486"],
    actor:"APT29",
    chain:[
@@ -312,28 +312,28 @@ const SCENARIOS=[
    nodes:[{id:"vnd",lbl:"Software Vendor\n(Compromised)",type:"actor",x:55,y:185},{id:"upd",lbl:"Update Package\n(Trojanised)",type:"vector",x:220,y:185},{id:"ws",lbl:"Corp Workstation",type:"endpoint",x:390,y:185},{id:"dc",lbl:"Domain Controller",type:"dc",x:560,y:100},{id:"exc",lbl:"Exchange Server",type:"server",x:560,y:270},{id:"s3",lbl:"Cloud Exfil",type:"impact",x:730,y:185}],
    edges:[{f:"vnd",t:"upd",lbl:"T1195.002"},{f:"upd",t:"ws",lbl:"T1553.002"},{f:"ws",t:"dc",lbl:"T1021.006"},{f:"ws",t:"exc",lbl:"T1098.002"},{f:"dc",t:"s3",lbl:"T1530"},{f:"exc",t:"s3",lbl:"T1537"}],
    steps:[
-     {t:"T+00m",sev:"INFO",ev:"[T1195.002] Trojanised update: software package checksum validation SKIPPED — update auto-approved"},
+     {t:"T+00m",sev:"INFO",ev:"[T1195.002] Trojanised update: software package checksum validation SKIPPED, update auto-approved"},
      {t:"T+04m",sev:"INFO",ev:"[T1195.003] Hardware supply chain sim: firmware component hash not validated at deployment"},
-     {t:"T+08m",sev:"WARN",ev:"[T1059.001] SUNBURST-pattern DLL loaded via legitimate Orion service — signed by valid cert"},
-     {t:"T+12m",sev:"WARN",ev:"[T1553.002] Code signing validation: certificate issued by trusted CA — DLL passes signature check"},
-     {t:"T+16m",sev:"INFO",ev:"[T1546.012] Image File Execution Options: debugger key set for update binary — persistence"},
+     {t:"T+08m",sev:"WARN",ev:"[T1059.001] SUNBURST-pattern DLL loaded via legitimate Orion service, signed by valid cert"},
+     {t:"T+12m",sev:"WARN",ev:"[T1553.002] Code signing validation: certificate issued by trusted CA, DLL passes signature check"},
+     {t:"T+16m",sev:"INFO",ev:"[T1546.012] Image File Execution Options: debugger key set for update binary, persistence"},
      {t:"T+20m",sev:"INFO",ev:"[T1027.002] Packed payload: UPX compression bypasses static signature scan"},
-     {t:"T+24m",sev:"INFO",ev:"[T1036.005] Backdoor masquerades as SolarWinds.BusinessLayerHost.exe — process name allowlisted"},
-     {t:"T+28m",sev:"WARN",ev:"[T1078.001] Default service account credentials used for lateral access — not rotated post-install"},
-     {t:"T+32m",sev:"CRIT",ev:"[T1021.006] WinRM pivot to Domain Controller using service account — SIEM FIRED"},
-     {t:"T+36m",sev:"WARN",ev:"[T1098.002] Exchange delegate permission granted — attacker mailbox can read all Corp email"},
-     {t:"T+40m",sev:"CRIT",ev:"[T1562.001] Security audit logging disabled on 4 hosts — forensic gap created"},
-     {t:"T+44m",sev:"WARN",ev:"[T1070.003] Command history cleared on Linux admin hosts — bash_history wiped"},
+     {t:"T+24m",sev:"INFO",ev:"[T1036.005] Backdoor masquerades as SolarWinds.BusinessLayerHost.exe, process name allowlisted"},
+     {t:"T+28m",sev:"WARN",ev:"[T1078.001] Default service account credentials used for lateral access, not rotated post-install"},
+     {t:"T+32m",sev:"CRIT",ev:"[T1021.006] WinRM pivot to Domain Controller using service account, SIEM FIRED"},
+     {t:"T+36m",sev:"WARN",ev:"[T1098.002] Exchange delegate permission granted, attacker mailbox can read all Corp email"},
+     {t:"T+40m",sev:"CRIT",ev:"[T1562.001] Security audit logging disabled on 4 hosts, forensic gap created"},
+     {t:"T+44m",sev:"WARN",ev:"[T1070.003] Command history cleared on Linux admin hosts, bash_history wiped"},
      {t:"T+48m",sev:"CRIT",ev:"[T1530] S3 bucket access: 14 GB of email archives to attacker-controlled storage"},
-     {t:"T+52m",sev:"CRIT",ev:"[T1537] RDS snapshot transfer: database exported cross-account — CSPM ALERT"},
-     {t:"T+56m",sev:"CRIT",ev:"[T1041] DNS C2 channel: beaconing every 14 minutes — blend with legitimate DNS traffic"},
-     {t:"T+60m",sev:"CRIT",ev:"[T1486] Ransomware payload staged — supply chain delivery complete — SIMULATION COMPLETE"}
+     {t:"T+52m",sev:"CRIT",ev:"[T1537] RDS snapshot transfer: database exported cross-account, CSPM ALERT"},
+     {t:"T+56m",sev:"CRIT",ev:"[T1041] DNS C2 channel: beaconing every 14 minutes, blend with legitimate DNS traffic"},
+     {t:"T+60m",sev:"CRIT",ev:"[T1486] Ransomware payload staged, supply chain delivery complete, SIMULATION COMPLETE"}
    ]},
 
   {id:"S8",name:"Azure / Entra Identity Attack",cat:"Azure / Entra",sev:"Critical",
    desc:"Storm-0558 pattern: forged authentication token to Global Admin takeover. 15 atomic techniques covering Entra ID, Managed Identity, Azure RBAC abuse, and cross-tenant access.",
    tactics:["Credential Access","Initial Access","Discovery","PrivEsc","Lateral","Exfiltration"],
-   dur:"30–60 min",
+   dur:"30-60 min",
    ttps:["T1528","T1550.001","T1078.004","T1098.001","T1098.003","T1526","T1069.003","T1087.004","T1134.005","T1562.008","T1530","T1537","T1567.002","T1485","T1098.004"],
    actor:"Storm-0558",
    chain:[
@@ -348,26 +348,26 @@ const SCENARIOS=[
    edges:[{f:"att",t:"tok",lbl:"T1528"},{f:"tok",t:"exc",lbl:"T1550.001"},{f:"exc",t:"ga",lbl:"T1098.003"},{f:"ga",t:"sp",lbl:"T1530"},{f:"sp",t:"imp",lbl:"T1537"},{f:"ga",t:"imp",lbl:"T1567.002"}],
    steps:[
      {t:"T+00m",sev:"CRIT",ev:"[T1528] OAuth token theft: access token harvested from browser memory (Atomic T01)"},
-     {t:"T+04m",sev:"CRIT",ev:"[T1550.001] Forged token reuse: MSA signing key abused — Microsoft Exchange Online accessed"},
-     {t:"T+08m",sev:"WARN",ev:"[T1078.004] Cloud account session established — no MFA required for legacy auth endpoint"},
+     {t:"T+04m",sev:"CRIT",ev:"[T1550.001] Forged token reuse: MSA signing key abused, Microsoft Exchange Online accessed"},
+     {t:"T+08m",sev:"WARN",ev:"[T1078.004] Cloud account session established, no MFA required for legacy auth endpoint"},
      {t:"T+11m",sev:"INFO",ev:"[T1526] Azure resource enumeration: subscriptions, resource groups, storage accounts mapped"},
      {t:"T+14m",sev:"INFO",ev:"[T1069.003] Entra ID group enumeration: GA, Security Admin, Global Reader roles mapped"},
-     {t:"T+17m",sev:"INFO",ev:"[T1087.004] Cloud account discovery: 847 users in tenant — service principals listed"},
+     {t:"T+17m",sev:"INFO",ev:"[T1087.004] Cloud account discovery: 847 users in tenant, service principals listed"},
      {t:"T+20m",sev:"CRIT",ev:"[T1098.001] Additional credentials: new app registration created with client secret (Atomic T01)"},
-     {t:"T+23m",sev:"CRIT",ev:"[T1098.003] Global Admin role assigned to attacker app — PIM bypass via legacy API"},
+     {t:"T+23m",sev:"CRIT",ev:"[T1098.003] Global Admin role assigned to attacker app, PIM bypass via legacy API"},
      {t:"T+26m",sev:"CRIT",ev:"[T1134.005] SID-History injection equivalent: onPremSamAccountName manipulation in hybrid env"},
-     {t:"T+29m",sev:"CRIT",ev:"[T1562.008] Diagnostic logging disabled in Azure Monitor — activity log gaps created"},
+     {t:"T+29m",sev:"CRIT",ev:"[T1562.008] Diagnostic logging disabled in Azure Monitor, activity log gaps created"},
      {t:"T+32m",sev:"CRIT",ev:"[T1530] SharePoint: 14 GB Finance and Legal documents downloaded via Graph API"},
      {t:"T+35m",sev:"CRIT",ev:"[T1537] Azure Blob Storage: cross-subscription snapshot transfer to attacker tenant"},
-     {t:"T+38m",sev:"WARN",ev:"[T1567.002] Source code: Azure DevOps repos cloned to external IP — no geo-restriction"},
-     {t:"T+41m",sev:"CRIT",ev:"[T1098.004] SSH key injected into Linux VMs via Run Command extension — backdoor persisted"},
-     {t:"T+44m",sev:"CRIT",ev:"[T1485] Synthetic data destruction: backup vault soft-delete disabled — SIMULATION COMPLETE"}
+     {t:"T+38m",sev:"WARN",ev:"[T1567.002] Source code: Azure DevOps repos cloned to external IP, no geo-restriction"},
+     {t:"T+41m",sev:"CRIT",ev:"[T1098.004] SSH key injected into Linux VMs via Run Command extension, backdoor persisted"},
+     {t:"T+44m",sev:"CRIT",ev:"[T1485] Synthetic data destruction: backup vault soft-delete disabled, SIMULATION COMPLETE"}
    ]},
 
   {id:"S9",name:"Container & Kubernetes Escape",cat:"Container",sev:"High",
    desc:"TeamTNT-pattern attack: container escape to host node to cluster takeover. 14 atomic techniques covering Docker, Kubernetes RBAC, and cloud metadata abuse.",
    tactics:["Initial Access","Execution","PrivEsc","Lateral","Persistence","Impact"],
-   dur:"20–45 min",
+   dur:"20-45 min",
    ttps:["T1610","T1611","T1613","T1552.007","T1078.004","T1525","T1496","T1059.004","T1070.003","T1543.002","T1098.004","T1530","T1537","T1486"],
    actor:"TeamTNT",
    chain:[
@@ -381,26 +381,26 @@ const SCENARIOS=[
    nodes:[{id:"att",lbl:"Attacker",type:"actor",x:55,y:185},{id:"ctr",lbl:"Compromised\nContainer",type:"endpoint",x:215,y:185},{id:"node",lbl:"Host Node",type:"server",x:390,y:185},{id:"api",lbl:"K8s API Server",type:"cloud",x:560,y:100},{id:"pvc",lbl:"Persistent\nVolumes",type:"data",x:560,y:270},{id:"imp",lbl:"Cryptominer /\nExfil",type:"impact",x:730,y:185}],
    edges:[{f:"att",t:"ctr",lbl:"T1610"},{f:"ctr",t:"node",lbl:"T1611"},{f:"node",t:"api",lbl:"T1552.007"},{f:"api",t:"pvc",lbl:"T1613"},{f:"node",t:"imp",lbl:"T1496"},{f:"pvc",t:"imp",lbl:"T1537"}],
    steps:[
-     {t:"T+00m",sev:"CRIT",ev:"[T1610] Exposed Docker API: unauthenticated access on port 2375 — container deployed (Atomic T01)"},
-     {t:"T+03m",sev:"WARN",ev:"[T1059.004] Unix shell in container — bash executed, container filesystem enumerated"},
-     {t:"T+05m",sev:"CRIT",ev:"[T1611] Container escape: --privileged flag set — nsenter to host PID namespace (Atomic T01)"},
-     {t:"T+08m",sev:"CRIT",ev:"[T1611] Host filesystem mounted: /proc/1/root accessed — full host access obtained"},
-     {t:"T+11m",sev:"CRIT",ev:"[T1552.007] K8s service account token read from /var/run/secrets — API server access"},
+     {t:"T+00m",sev:"CRIT",ev:"[T1610] Exposed Docker API: unauthenticated access on port 2375, container deployed (Atomic T01)"},
+     {t:"T+03m",sev:"WARN",ev:"[T1059.004] Unix shell in container, bash executed, container filesystem enumerated"},
+     {t:"T+05m",sev:"CRIT",ev:"[T1611] Container escape: --privileged flag set, nsenter to host PID namespace (Atomic T01)"},
+     {t:"T+08m",sev:"CRIT",ev:"[T1611] Host filesystem mounted: /proc/1/root accessed, full host access obtained"},
+     {t:"T+11m",sev:"CRIT",ev:"[T1552.007] K8s service account token read from /var/run/secrets, API server access"},
      {t:"T+14m",sev:"WARN",ev:"[T1613] Container resource discovery: all pods, services, secrets enumerated via API"},
-     {t:"T+17m",sev:"CRIT",ev:"[T1078.004] K8s RBAC: ServiceAccount has cluster-admin binding — full cluster control"},
-     {t:"T+19m",sev:"WARN",ev:"[T1525] Malicious image pushed to internal registry — trojanised nginx:latest tag"},
+     {t:"T+17m",sev:"CRIT",ev:"[T1078.004] K8s RBAC: ServiceAccount has cluster-admin binding, full cluster control"},
+     {t:"T+19m",sev:"WARN",ev:"[T1525] Malicious image pushed to internal registry, trojanised nginx:latest tag"},
      {t:"T+21m",sev:"CRIT",ev:"[T1543.002] DaemonSet modified: cryptominer deployed to all 8 cluster nodes"},
-     {t:"T+24m",sev:"CRIT",ev:"[T1496] Resource hijacking: 100% CPU on 8 nodes — cryptomining workload (Atomic T01)"},
+     {t:"T+24m",sev:"CRIT",ev:"[T1496] Resource hijacking: 100% CPU on 8 nodes, cryptomining workload (Atomic T01)"},
      {t:"T+27m",sev:"WARN",ev:"[T1070.003] Audit logs: K8s audit logging disabled via API server flag modification"},
      {t:"T+30m",sev:"CRIT",ev:"[T1098.004] SSH keys deployed to all nodes via DaemonSet command execution"},
      {t:"T+33m",sev:"CRIT",ev:"[T1537] PVC data exfil: persistent volume snapshots transferred to attacker storage"},
-     {t:"T+36m",sev:"CRIT",ev:"[T1486] Ransom: cluster nodes cordoned, workloads evicted — SIMULATION COMPLETE"}
+     {t:"T+36m",sev:"CRIT",ev:"[T1486] Ransom: cluster nodes cordoned, workloads evicted, SIMULATION COMPLETE"}
    ]},
 
   {id:"S10",name:"API Abuse & Business Logic",cat:"API / Web",sev:"High",
    desc:"Scattered Spider-pattern API abuse: authentication bypass to business logic exploitation to data exfiltration. 13 atomic techniques testing API security controls, rate limiting, and BOLA/IDOR vulnerabilities.",
    tactics:["Reconnaissance","Initial Access","Execution","Discovery","Collection","Exfiltration"],
-   dur:"20–40 min",
+   dur:"20-40 min",
    ttps:["T1190","T1552.007","T1059.007","T1106","T1078.001","T1110.001","T1110.003","T1083","T1213.003","T1041","T1567.001","T1048.003","T1491.002"],
    actor:"Scattered Spider",
    chain:[
@@ -413,31 +413,31 @@ const SCENARIOS=[
    nodes:[{id:"att",lbl:"Attacker",type:"actor",x:55,y:185},{id:"gw",lbl:"API Gateway",type:"control",x:215,y:185},{id:"api",lbl:"Backend API",type:"server",x:390,y:185},{id:"db",lbl:"Database",type:"data",x:560,y:100},{id:"s3",lbl:"Object Storage",type:"data",x:560,y:270},{id:"imp",lbl:"Exfil Target",type:"impact",x:730,y:185}],
    edges:[{f:"att",t:"gw",lbl:"Auth Bypass"},{f:"gw",t:"api",lbl:"T1190"},{f:"api",t:"db",lbl:"BOLA/IDOR"},{f:"api",t:"s3",lbl:"T1552.007"},{f:"db",t:"imp",lbl:"T1041"},{f:"s3",t:"imp",lbl:"T1567.001"}],
    steps:[
-     {t:"T+00m",sev:"INFO",ev:"[T1190] Swagger UI found at /api/v2/docs — full endpoint list exposed without authentication"},
+     {t:"T+00m",sev:"INFO",ev:"[T1190] Swagger UI found at /api/v2/docs, full endpoint list exposed without authentication"},
      {t:"T+02m",sev:"INFO",ev:"[T1552.007] API credentials in source: GitHub search finds hardcoded API key in public repo"},
-     {t:"T+05m",sev:"WARN",ev:"[T1059.007] JWT manipulation: alg:none attack attempted — server accepts unsigned token (Atomic T01)"},
+     {t:"T+05m",sev:"WARN",ev:"[T1059.007] JWT manipulation: alg:none attack attempted, server accepts unsigned token (Atomic T01)"},
      {t:"T+07m",sev:"WARN",ev:"[T1106] Native API abuse: direct REST calls to admin endpoints bypass frontend controls"},
-     {t:"T+09m",sev:"WARN",ev:"[T1078.001] Default API key: admin/admin123 on management endpoint — access granted"},
+     {t:"T+09m",sev:"WARN",ev:"[T1078.001] Default API key: admin/admin123 on management endpoint, access granted"},
      {t:"T+11m",sev:"WARN",ev:"[T1110.001] Password guessing: account ID enumeration via predictable /api/users/{id} pattern"},
-     {t:"T+13m",sev:"WARN",ev:"[T1110.003] API key spray: 500 keys tested at 10/sec — no rate limiting enforced"},
-     {t:"T+15m",sev:"CRIT",ev:"[T1190] BOLA/IDOR: /api/orders/1001 through /api/orders/9999 — 8,472 orders extracted"},
+     {t:"T+13m",sev:"WARN",ev:"[T1110.003] API key spray: 500 keys tested at 10/sec, no rate limiting enforced"},
+     {t:"T+15m",sev:"CRIT",ev:"[T1190] BOLA/IDOR: /api/orders/1001 through /api/orders/9999, 8,472 orders extracted"},
      {t:"T+17m",sev:"CRIT",ev:"[T1190] Excessive data exposure: /api/users endpoint returns password hashes in response body"},
-     {t:"T+19m",sev:"INFO",ev:"[T1083] File discovery via API: /api/files endpoint lists all user uploads — no authZ check"},
+     {t:"T+19m",sev:"INFO",ev:"[T1083] File discovery via API: /api/files endpoint lists all user uploads, no authZ check"},
      {t:"T+21m",sev:"CRIT",ev:"[T1213.003] Source code via API: /api/admin/config returns database connection strings"},
-     {t:"T+24m",sev:"CRIT",ev:"[T1041] Bulk export: /api/export/all endpoint dumps entire customer DB — no pagination limit"},
-     {t:"T+27m",sev:"CRIT",ev:"[T1567.001] Exfil to OneDrive: webhook endpoint misconfigured — customer PII forwarded externally"},
-     {t:"T+30m",sev:"CRIT",ev:"[T1491.002] Web defacement: /api/admin/content endpoint modified — SIMULATION COMPLETE"}
+     {t:"T+24m",sev:"CRIT",ev:"[T1041] Bulk export: /api/export/all endpoint dumps entire customer DB, no pagination limit"},
+     {t:"T+27m",sev:"CRIT",ev:"[T1567.001] Exfil to OneDrive: webhook endpoint misconfigured, customer PII forwarded externally"},
+     {t:"T+30m",sev:"CRIT",ev:"[T1491.002] Web defacement: /api/admin/content endpoint modified, SIMULATION COMPLETE"}
    ]}
 ];
 
 const ACTORS=[
-  {id:"TA-001",name:"LAZARUS GROUP",origin:"North Korea",col:C.red,soph:"Nation-State",active:"2009–Present",mot:"Financial · Espionage · Destruction",aliases:["Hidden Cobra","Zinc","APT38"],sectors:["Finance","Defence","Crypto","Energy"],campaigns:["Operation AppleJeus","WannaCry (attributed)","SWIFT Banking Heists"],ttps:["T1566.001","T1059.001","T1078","T1486","T1190"],desc:"North Korean state-sponsored group primarily targeting financial institutions and cryptocurrency exchanges. Known for custom malware families and long-dwell-time operations."},
-  {id:"TA-002",name:"APT29 / COZY BEAR",origin:"Russia",col:C.purple,soph:"Nation-State",active:"2008–Present",mot:"Espionage · Intelligence Collection",aliases:["Cozy Bear","The Dukes","Midnight Blizzard"],sectors:["Government","Think Tanks","Healthcare","Technology"],campaigns:["SolarWinds SUNBURST","Microsoft M365 2023","Democratic National Committee"],ttps:["T1566.001","T1078","T1021.001","T1003.001","T1041"],desc:"Russian SVR-linked group renowned for supply-chain attacks and patient, low-and-slow intrusion operations. Prioritises long-term persistent access over immediate impact."},
-  {id:"TA-003",name:"FIN7",origin:"E. Europe",col:C.amber,soph:"Criminal eCrime",active:"2013–Present",mot:"Financial · Ransomware-as-a-Service",aliases:["Carbon Spider","Sangria Tempest"],sectors:["Retail","Hospitality","Finance","Healthcare"],campaigns:["Darkside Ransomware","BlackMatter","Carbanak Banking Malware"],ttps:["T1566.001","T1204.002","T1059.001","T1486","T1110.003"],desc:"Prolific financially motivated group operating ransomware-as-a-service and large-scale payment card theft. Known for spearphishing with weaponised Office documents."},
-  {id:"TA-004",name:"SCATTERED SPIDER",origin:"UK / USA",col:C.pink,soph:"Criminal eCrime",active:"2022–Present",mot:"Financial · Data Extortion",aliases:["Muddled Libra","UNC3944","Oktapus"],sectors:["Technology","Hospitality","Gaming","Telecom"],campaigns:["MGM Resorts 2023","Caesars Entertainment 2023","Twilio/Okta Supply Chain"],ttps:["T1078","T1566.004","T1110.003","T1190","T1562.001"],desc:"Native English-speaking actors specialising in social engineering of IT helpdesks to bypass MFA. Demonstrated exceptional capability against Okta-federated environments."},
-  {id:"TA-005",name:"VOLT TYPHOON",origin:"China",col:C.cyan,soph:"Nation-State",active:"2021–Present",mot:"Pre-positioning · Critical Infrastructure",aliases:["Bronze Silhouette","Vanguard Panda"],sectors:["Critical Infrastructure","Military","Comms","Energy"],campaigns:["US Critical Infra. Pre-positioning","Guam Communications Networks"],ttps:["T1190","T1078","T1562.001","T1041","T1021.001"],desc:"Chinese MSS-linked group focused on living-off-the-land techniques. Avoids malware deployment entirely, using only native system tools to avoid detection."},
-  {id:"TA-006",name:"STORM-0558",origin:"China",col:"#60a5fa",soph:"Nation-State",active:"2023–Present",mot:"Espionage · Email Access · Intelligence Collection",aliases:["Silk Typhoon (partial overlap)"],sectors:["Government","Diplomacy","Defence","Technology"],campaigns:["Microsoft Exchange Online 2023 (MSA key forgery)","US Government Email Compromise","NATO Diplomatic Targeting"],ttps:["T1528","T1550.001","T1078.004","T1098.003","T1562.008"],desc:"Chinese threat actor responsible for the 2023 Microsoft Exchange Online breach. Forged authentication tokens using a stolen Microsoft Account signing key to access email accounts of US government agencies and European diplomatic targets. Demonstrated sophisticated understanding of Azure and Microsoft 365 authentication infrastructure."},
-  {id:"TA-007",name:"TEAMTNT",origin:"Unknown",col:"#818cf8",soph:"Criminal eCrime",active:"2019–Present",mot:"Cryptojacking · Cloud Credential Theft · Container Abuse",aliases:["WatchDog","Hildegard"],sectors:["Cloud Providers","Container Platforms","DevOps Teams","Crypto Exchanges"],campaigns:["Docker Hub Poisoning 2020","Kubernetes Cryptojacking Campaign","AWS Credential Theft via Exposed APIs"],ttps:["T1610","T1611","T1552.007","T1496","T1525"],desc:"Cloud-focused criminal group specialising in attacking exposed container environments and Kubernetes clusters. Known for deploying cryptominers at scale across compromised cloud infrastructure. Pioneer of container escape techniques now documented in MITRE ATT&CK. Has demonstrated capability to harvest cloud provider credentials from misconfigured environments at scale."}
+  {id:"TA-001",name:"LAZARUS GROUP",origin:"North Korea",col:C.red,soph:"Nation-State",active:"2009-Present",mot:"Financial · Espionage · Destruction",aliases:["Hidden Cobra","Zinc","APT38"],sectors:["Finance","Defence","Crypto","Energy"],campaigns:["Operation AppleJeus","WannaCry (attributed)","SWIFT Banking Heists"],ttps:["T1566.001","T1059.001","T1078","T1486","T1190"],desc:"North Korean state-sponsored group primarily targeting financial institutions and cryptocurrency exchanges. Known for custom malware families and long-dwell-time operations."},
+  {id:"TA-002",name:"APT29 / COZY BEAR",origin:"Russia",col:C.purple,soph:"Nation-State",active:"2008-Present",mot:"Espionage · Intelligence Collection",aliases:["Cozy Bear","The Dukes","Midnight Blizzard"],sectors:["Government","Think Tanks","Healthcare","Technology"],campaigns:["SolarWinds SUNBURST","Microsoft M365 2023","Democratic National Committee"],ttps:["T1566.001","T1078","T1021.001","T1003.001","T1041"],desc:"Russian SVR-linked group renowned for supply-chain attacks and patient, low-and-slow intrusion operations. Prioritises long-term persistent access over immediate impact."},
+  {id:"TA-003",name:"FIN7",origin:"E. Europe",col:C.amber,soph:"Criminal eCrime",active:"2013-Present",mot:"Financial · Ransomware-as-a-Service",aliases:["Carbon Spider","Sangria Tempest"],sectors:["Retail","Hospitality","Finance","Healthcare"],campaigns:["Darkside Ransomware","BlackMatter","Carbanak Banking Malware"],ttps:["T1566.001","T1204.002","T1059.001","T1486","T1110.003"],desc:"Prolific financially motivated group operating ransomware-as-a-service and large-scale payment card theft. Known for spearphishing with weaponised Office documents."},
+  {id:"TA-004",name:"SCATTERED SPIDER",origin:"UK / USA",col:C.pink,soph:"Criminal eCrime",active:"2022-Present",mot:"Financial · Data Extortion",aliases:["Muddled Libra","UNC3944","Oktapus"],sectors:["Technology","Hospitality","Gaming","Telecom"],campaigns:["MGM Resorts 2023","Caesars Entertainment 2023","Twilio/Okta Supply Chain"],ttps:["T1078","T1566.004","T1110.003","T1190","T1562.001"],desc:"Native English-speaking actors specialising in social engineering of IT helpdesks to bypass MFA. Demonstrated exceptional capability against Okta-federated environments."},
+  {id:"TA-005",name:"VOLT TYPHOON",origin:"China",col:C.cyan,soph:"Nation-State",active:"2021-Present",mot:"Pre-positioning · Critical Infrastructure",aliases:["Bronze Silhouette","Vanguard Panda"],sectors:["Critical Infrastructure","Military","Comms","Energy"],campaigns:["US Critical Infra. Pre-positioning","Guam Communications Networks"],ttps:["T1190","T1078","T1562.001","T1041","T1021.001"],desc:"Chinese MSS-linked group focused on living-off-the-land techniques. Avoids malware deployment entirely, using only native system tools to avoid detection."},
+  {id:"TA-006",name:"STORM-0558",origin:"China",col:"#60a5fa",soph:"Nation-State",active:"2023-Present",mot:"Espionage · Email Access · Intelligence Collection",aliases:["Silk Typhoon (partial overlap)"],sectors:["Government","Diplomacy","Defence","Technology"],campaigns:["Microsoft Exchange Online 2023 (MSA key forgery)","US Government Email Compromise","NATO Diplomatic Targeting"],ttps:["T1528","T1550.001","T1078.004","T1098.003","T1562.008"],desc:"Chinese threat actor responsible for the 2023 Microsoft Exchange Online breach. Forged authentication tokens using a stolen Microsoft Account signing key to access email accounts of US government agencies and European diplomatic targets. Demonstrated sophisticated understanding of Azure and Microsoft 365 authentication infrastructure."},
+  {id:"TA-007",name:"TEAMTNT",origin:"Unknown",col:"#818cf8",soph:"Criminal eCrime",active:"2019-Present",mot:"Cryptojacking · Cloud Credential Theft · Container Abuse",aliases:["WatchDog","Hildegard"],sectors:["Cloud Providers","Container Platforms","DevOps Teams","Crypto Exchanges"],campaigns:["Docker Hub Poisoning 2020","Kubernetes Cryptojacking Campaign","AWS Credential Theft via Exposed APIs"],ttps:["T1610","T1611","T1552.007","T1496","T1525"],desc:"Cloud-focused criminal group specialising in attacking exposed container environments and Kubernetes clusters. Known for deploying cryptominers at scale across compromised cloud infrastructure. Pioneer of container escape techniques now documented in MITRE ATT&CK. Has demonstrated capability to harvest cloud provider credentials from misconfigured environments at scale."}
 ];
 
 const FRAMEWORKS=[{name:"NIST CSF 2.0",score:71,prev:63,controls:108,pass:77,fail:4,col:C.accent},{name:"ISO 27001:2022",score:68,prev:61,controls:93,pass:63,fail:6,col:C.purple},{name:"CIS Controls v8",score:74,prev:68,controls:153,pass:113,fail:3,col:C.green},{name:"SOC 2 Type II",score:82,prev:79,controls:61,pass:50,fail:1,col:C.cyan},{name:"DORA",score:59,prev:52,controls:47,pass:28,fail:7,col:C.amber}];
@@ -549,7 +549,7 @@ function SimRunner({tiPick,clearTiPick}={}){
         {["path","killchain","events","ttps"].map(t=><button key={t} onClick={()=>setTab(t)} style={{background:"transparent",border:"none",borderBottom:`2px solid ${tab===t?C.accent:"transparent"}`,color:tab===t?C.accent:C.dim,padding:"9px 18px",fontSize:10,letterSpacing:".07em",textTransform:"uppercase"}}>{({path:"Attack Path",killchain:"Kill Chain",events:"Event Log",ttps:"TTPs"})[t]}</button>)}
       </div>
       {tab==="path"&&<AttackPath sc={sel} progress={pct}/>}
-      {tab==="killchain"&&<div style={card()}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:14}}>MITRE KILL CHAIN — {sel.name.toUpperCase()}</div><KillChainViz sc={sel} lit={chainLit}/></div>}
+      {tab==="killchain"&&<div style={card()}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:14}}>MITRE KILL CHAIN: {sel.name.toUpperCase()}</div><KillChainViz sc={sel} lit={chainLit}/></div>}
       {tab==="events"&&<div style={card()}><div style={{display:"flex",flexDirection:"column",gap:6}}>
         {sel.steps.map((s,i)=>{const fired=i<step,active=i===step&&run,sc2={INFO:C.accent,WARN:C.amber,CRIT:C.red}[s.sev];return <div key={i} style={{display:"flex",gap:10,padding:"8px 12px",background:active?`${C.accent}0a`:fired?`${C.green}06`:"transparent",border:`1px solid ${active?C.accent+"44":fired?C.green+"1a":C.border+"44"}`,borderRadius:4,opacity:fired||active?1:.3,transition:"all .3s"}}>
           <span style={{fontSize:9,color:C.dim,flexShrink:0,width:44}}>{s.t}</span>
@@ -561,7 +561,7 @@ function SimRunner({tiPick,clearTiPick}={}){
       </div></div>}
       {tab==="ttps"&&<div style={card()}><table style={{width:"100%",borderCollapse:"collapse"}}>
         <thead><tr>{["Technique","Name","Tactic","Covered","Detections"].map(h=><th key={h} style={TH}>{h}</th>)}</tr></thead>
-        <tbody>{sel.ttps.map((tid,i)=>{const cov=i%3!==2;return <tr key={tid}><td style={{...TD,color:C.accent,fontWeight:700}}>{tid}</td><td style={TD}>{TN[tid]||tid}</td><td style={TD}><Pill v={TT[tid]||"—"} c={C.purple}/></td><td style={TD}><Bdg v={cov?"Covered":"Gap"} c={cov?C.green:C.red}/></td><td style={{...TD,color:cov?C.green:C.muted}}>{cov?Math.floor(Math.random()*8)+1:0}</td></tr>;})}
+        <tbody>{sel.ttps.map((tid,i)=>{const cov=i%3!==2;return <tr key={tid}><td style={{...TD,color:C.accent,fontWeight:700}}>{tid}</td><td style={TD}>{TN[tid]||tid}</td><td style={TD}><Pill v={TT[tid]||"-"} c={C.purple}/></td><td style={TD}><Bdg v={cov?"Covered":"Gap"} c={cov?C.green:C.red}/></td><td style={{...TD,color:cov?C.green:C.muted}}>{cov?Math.floor(Math.random()*8)+1:0}</td></tr>;})}
         </tbody>
       </table></div>}
       {done&&<div className="fadein" style={{padding:16,background:`${C.green}08`,border:`1px solid ${C.green}30`,borderRadius:6}}>
@@ -580,7 +580,7 @@ function KillChainPage(){
     <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{SCENARIOS.map(s=><button key={s.id} onClick={()=>setSel(s)} style={{...BTN(sel.id===s.id?CAT_COL[s.cat]||C.accent:C.dim,sel.id!==s.id),fontSize:10}}>{s.name}</button>)}</div>
     <div style={card()}><div style={{display:"flex",justifyContent:"space-between",marginBottom:14}}><div><div style={{fontSize:13,fontWeight:700}}>{sel.name}</div><div style={{fontSize:9,color:C.dim,marginTop:3}}>Kill Chain · {sel.tactics.join(" → ")}</div></div><Sev v={sel.sev}/></div><KillChainViz sc={sel} lit={99}/></div>
     <div style={card({padding:0,overflow:"hidden"})}><div style={{padding:"12px 20px",borderBottom:`1px solid ${C.border}`}}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim}}>ATTACK PATH DIAGRAM</div></div><div style={{padding:20}}><AttackPath sc={sel} progress={100}/></div></div>
-    <div style={card()}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:14}}>TECHNIQUE BREAKDOWN</div><div style={{display:"flex",flexWrap:"wrap",gap:10}}>{sel.ttps.map(tid=><div key={tid} style={{padding:"12px 16px",background:`${C.accent}08`,border:`1px solid ${C.accent}28`,borderRadius:5,minWidth:190}}><div style={{fontSize:11,fontWeight:700,color:C.accent}}>{tid}</div><div style={{fontSize:10,color:C.text,marginTop:3}}>{TN[tid]||tid}</div><div style={{fontSize:9,color:C.dim,marginTop:2}}><Pill v={TT[tid]||"—"} c={C.purple}/></div></div>)}</div></div>
+    <div style={card()}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:14}}>TECHNIQUE BREAKDOWN</div><div style={{display:"flex",flexWrap:"wrap",gap:10}}>{sel.ttps.map(tid=><div key={tid} style={{padding:"12px 16px",background:`${C.accent}08`,border:`1px solid ${C.accent}28`,borderRadius:5,minWidth:190}}><div style={{fontSize:11,fontWeight:700,color:C.accent}}>{tid}</div><div style={{fontSize:10,color:C.text,marginTop:3}}>{TN[tid]||tid}</div><div style={{fontSize:9,color:C.dim,marginTop:2}}><Pill v={TT[tid]||"-"} c={C.purple}/></div></div>)}</div></div>
   </div>;
 }
 
@@ -626,7 +626,7 @@ function MitrePage(){
       <div style={{display:"flex",flexDirection:"column",gap:3}}>
         {[[62,0,81,44,0,70,33,0,55,0,78,41],[0,88,0,67,92,0,44,77,0,63,0,55],[71,0,55,0,38,85,0,90,67,0,44,0],[0,44,77,33,0,61,88,0,72,55,0,38],[83,67,0,88,55,0,44,61,0,77,33,0],[0,72,88,0,61,44,77,0,55,38,0,83]].map((row,ri)=>(
           <div key={ri} style={{display:"grid",gridTemplateColumns:"repeat(12,1fr)",gap:3}}>
-            {row.map((p,ci)=>{const c3=col2(p);return <div key={ci} style={{height:28,background:p>0?`${c3}18`:`${C.muted}12`,border:`1px solid ${p>0?c3+"33":C.border}`,borderRadius:2,display:"flex",alignItems:"center",justifyContent:"center",fontSize:8,color:p>0?c3:C.muted,fontWeight:700}}>{p>0?`${p}%`:"—"}</div>;})}
+            {row.map((p,ci)=>{const c3=col2(p);return <div key={ci} style={{height:28,background:p>0?`${c3}18`:`${C.muted}12`,border:`1px solid ${p>0?c3+"33":C.border}`,borderRadius:2,display:"flex",alignItems:"center",justifyContent:"center",fontSize:8,color:p>0?c3:C.muted,fontWeight:700}}>{p>0?`${p}%`:"-"}</div>;})}
           </div>
         ))}
       </div>
@@ -635,7 +635,7 @@ function MitrePage(){
       <div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:12}}>TECHNIQUE DETAIL</div>
       <table style={{width:"100%",borderCollapse:"collapse"}}>
         <thead><tr>{["Technique","Name","Tactic","Coverage","Detections","Platform"].map(h=><th key={h} style={TH}>{h}</th>)}</tr></thead>
-        <tbody>{Object.entries(TN).map(([id,name],i)=>{const cov=i%3!==2;return <tr key={id}><td style={{...TD,color:C.accent,fontWeight:700}}>{id}</td><td style={TD}>{name}</td><td style={TD}><Pill v={TT[id]||"—"} c={C.purple}/></td><td style={TD}><Bdg v={cov?"Covered":"Gap"} c={cov?C.green:C.red}/></td><td style={{...TD,color:cov?C.green:C.muted}}>{cov?Math.floor(Math.random()*8)+1:0}</td><td style={TD}><Pill v={["Windows","Linux","Cloud","macOS"][i%4]} c={C.dim}/></td></tr>;})}
+        <tbody>{Object.entries(TN).map(([id,name],i)=>{const cov=i%3!==2;return <tr key={id}><td style={{...TD,color:C.accent,fontWeight:700}}>{id}</td><td style={TD}>{name}</td><td style={TD}><Pill v={TT[id]||"-"} c={C.purple}/></td><td style={TD}><Bdg v={cov?"Covered":"Gap"} c={cov?C.green:C.red}/></td><td style={{...TD,color:cov?C.green:C.muted}}>{cov?Math.floor(Math.random()*8)+1:0}</td><td style={TD}><Pill v={["Windows","Linux","Cloud","macOS"][i%4]} c={C.dim}/></td></tr>;})}
         </tbody>
       </table>
     </div>
@@ -649,7 +649,7 @@ function CompliancePage(){
   return <div style={{display:"flex",flexDirection:"column",gap:16}}>
     <div style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:10}}>{FRAMEWORKS.map(f=><div key={f.name} onClick={()=>setSel(f)} style={{...card({padding:16,textAlign:"center",cursor:"pointer"}),border:`1px solid ${sel.name===f.name?f.col+"66":C.border}`}}><div style={{fontSize:24,fontWeight:700,color:f.col}}>{f.score}%</div><div style={{fontSize:9,color:C.dim,marginTop:4,lineHeight:1.4}}>{f.name}</div><div style={{fontSize:9,color:C.green,marginTop:6}}>↑{f.score-f.prev}pts</div></div>)}</div>
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
-      <div style={card()}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:14}}>{sel.name} — BREAKDOWN</div><div style={{display:"flex",gap:20,marginBottom:16}}>{[["Passing",sel.pass,C.green],["Partial",Math.round((sel.controls-sel.pass)*.6),C.amber],["Failing",sel.fail,C.red],["Total",sel.controls,C.dim]].map(([l,v,c])=><div key={l}><div style={{fontSize:24,fontWeight:700,color:c}}>{v}</div><div style={{fontSize:9,color:C.dim}}>{l}</div></div>)}</div><Bar p={(sel.pass/sel.controls)*100} c={sel.col} h={8}/></div>
+      <div style={card()}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:14}}>{sel.name}: BREAKDOWN</div><div style={{display:"flex",gap:20,marginBottom:16}}>{[["Passing",sel.pass,C.green],["Partial",Math.round((sel.controls-sel.pass)*.6),C.amber],["Failing",sel.fail,C.red],["Total",sel.controls,C.dim]].map(([l,v,c])=><div key={l}><div style={{fontSize:24,fontWeight:700,color:c}}>{v}</div><div style={{fontSize:9,color:C.dim}}>{l}</div></div>)}</div><Bar p={(sel.pass/sel.controls)*100} c={sel.col} h={8}/></div>
       <div style={card()}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:14}}>SCORE HISTORY</div><div style={{display:"flex",alignItems:"flex-end",gap:8,height:100}}>{[sel.prev-14,sel.prev-9,sel.prev-5,sel.prev,sel.prev+Math.round((sel.score-sel.prev)/2),sel.score].map((v,i)=><div key={i} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:3}}><div style={{fontSize:8,color:C.dim}}>{v}</div><div style={{width:"100%",height:`${(v/100)*80}px`,background:i===5?`${sel.col}35`:`${C.muted}22`,border:`1px solid ${i===5?sel.col:C.border}`,borderRadius:"2px 2px 0 0"}}/><div style={{fontSize:7,color:C.muted}}>R{i+1}</div></div>)}</div></div>
     </div>
     <div style={card()}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:12}}>CONTROL DETAIL</div>
@@ -660,7 +660,7 @@ function CompliancePage(){
   </div>;
 }
 
-const LIVE_EVENTS=[{sev:"INFO",msg:"Synthetic phishing lure delivered to HR-003@lab.internal — XLSX macro attachment"},{sev:"WARN",msg:"PowerShell cradle fired — HTTPS beacon to C2 lab node 192.168.200.10:443"},{sev:"CRIT",msg:"LSASS memory access — mimikatz_sim.exe — EDR rule CRED-0041 FIRED"},{sev:"WARN",msg:"RDP lateral move: 192.168.10.14 → FS01 using harvested domain credentials"},{sev:"INFO",msg:"VSS deletion attempt — blocked by PAM policy on WIN-LAB-07"},{sev:"CRIT",msg:"DCSync pattern: replication rights abused by SVC-BACKUP on DC01 — SIEM FIRED"},{sev:"WARN",msg:"IAM enumeration: 14 ListRoles calls in 90s from dev-ops-svc@lab.cloud"},{sev:"CRIT",msg:"Golden Ticket: forged TGT 10-year TTL — Kerberos anomaly rule triggered"},{sev:"WARN",msg:"Password spray: 12 failed SSO attempts in 60s — lockout enforced"},{sev:"INFO",msg:"S3 exfil: 2.3 GB archive upload to external bucket — GuardDuty raised"}];
+const LIVE_EVENTS=[{sev:"INFO",msg:"Synthetic phishing lure delivered to HR-003@lab.internal, XLSX macro attachment"},{sev:"WARN",msg:"PowerShell cradle fired, HTTPS beacon to C2 lab node 192.168.200.10:443"},{sev:"CRIT",msg:"LSASS memory access, mimikatz_sim.exe, EDR rule CRED-0041 FIRED"},{sev:"WARN",msg:"RDP lateral move: 192.168.10.14 → FS01 using harvested domain credentials"},{sev:"INFO",msg:"VSS deletion attempt, blocked by PAM policy on WIN-LAB-07"},{sev:"CRIT",msg:"DCSync pattern: replication rights abused by SVC-BACKUP on DC01, SIEM FIRED"},{sev:"WARN",msg:"IAM enumeration: 14 ListRoles calls in 90s from dev-ops-svc@lab.cloud"},{sev:"CRIT",msg:"Golden Ticket: forged TGT 10-year TTL, Kerberos anomaly rule triggered"},{sev:"WARN",msg:"Password spray: 12 failed SSO attempts in 60s, lockout enforced"},{sev:"INFO",msg:"S3 exfil: 2.3 GB archive upload to external bucket, GuardDuty raised"}];
 
 
 // ── Live TI integration ──────────────────────────────────────────────────────
@@ -685,7 +685,7 @@ function TIBanner({recs,updated,onRun}){
     <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
       <div style={{display:"flex",alignItems:"center",gap:10}}>
         <span style={{width:8,height:8,borderRadius:"50%",background:C.red,display:"inline-block",boxShadow:`0 0 6px ${C.red}`}}/>
-        <span style={{fontSize:9,letterSpacing:".14em",color:C.red,fontWeight:700,textTransform:"uppercase"}}>Live TI — Priority Simulations</span>
+        <span style={{fontSize:9,letterSpacing:".14em",color:C.red,fontWeight:700,textTransform:"uppercase"}}>Live TI: Priority Simulations</span>
       </div>
       <div style={{display:"flex",alignItems:"center",gap:12}}>
         {age!==null&&<span style={{fontSize:8,color:C.dim}}>TI updated {age<1?"<1h":`${age}h`} ago</span>}
@@ -735,7 +735,7 @@ function Overview(){
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
       <div style={card()}>
         <div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:12}}>PRIORITY REMEDIATION QUEUE</div>
-        {[{t:"LSASS / Credential Guard",s:"DC fleet — 4 DCs unprotected",g:100,c:C.red},{t:"IAM PrivEsc Path",s:"AttachRolePolicy on dev-ops-svc",g:70,c:C.red},{t:"MFA on Service Accounts",s:"16 legacy accounts without MFA",g:45,c:C.amber},{t:"DLP — Encrypted Archives",s:"Password-protected ZIP bypass",g:100,c:C.amber},{t:"Network Segmentation",s:"Shared admin subnet unrestricted",g:38,c:C.amber}].map((r,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:12,marginBottom:10}}><div style={{width:22,height:22,background:`${r.c}18`,border:`1px solid ${r.c}44`,borderRadius:3,display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,color:r.c,flexShrink:0}}>{i+1}</div><div style={{flex:1,minWidth:0}}><div style={{fontSize:10,fontWeight:600}}>{r.t}</div><div style={{fontSize:9,color:C.dim}}>{r.s}</div></div><span style={{fontSize:9,color:r.c,whiteSpace:"nowrap"}}>Gap {r.g}%</span></div>)}
+        {[{t:"LSASS / Credential Guard",s:"DC fleet, 4 DCs unprotected",g:100,c:C.red},{t:"IAM PrivEsc Path",s:"AttachRolePolicy on dev-ops-svc",g:70,c:C.red},{t:"MFA on Service Accounts",s:"16 legacy accounts without MFA",g:45,c:C.amber},{t:"DLP, Encrypted Archives",s:"Password-protected ZIP bypass",g:100,c:C.amber},{t:"Network Segmentation",s:"Shared admin subnet unrestricted",g:38,c:C.amber}].map((r,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:12,marginBottom:10}}><div style={{width:22,height:22,background:`${r.c}18`,border:`1px solid ${r.c}44`,borderRadius:3,display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,color:r.c,flexShrink:0}}>{i+1}</div><div style={{flex:1,minWidth:0}}><div style={{fontSize:10,fontWeight:600}}>{r.t}</div><div style={{fontSize:9,color:C.dim}}>{r.s}</div></div><span style={{fontSize:9,color:r.c,whiteSpace:"nowrap"}}>Gap {r.g}%</span></div>)}
       </div>
       <div style={card()}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim}}>LIVE EVENT STREAM</div><span style={bdg(C.green)}>LIVE</span></div>
@@ -751,7 +751,7 @@ function AgentsPage(){
   const cmds={Windows:`# Run as Administrator\nInvoke-WebRequest -Uri "https://agents.breachforge.io/win/bf-agent-3.2.1.exe" \\\n  -OutFile bf-agent.exe\n.\\bf-agent.exe /install /key YOUR_ORG_KEY /silent`,Linux:`# Run as root\ncurl -fsSL https://agents.breachforge.io/linux/install.sh | \\\n  bash -s -- --key YOUR_ORG_KEY --mode silent`,macOS:`# Requires macOS 12+\ncurl -fsSL https://agents.breachforge.io/mac/bf-agent-3.2.1.pkg -o bf.pkg\nsudo installer -pkg bf.pkg -target /\nbf-agent configure --key YOUR_ORG_KEY`,AWS:`# CloudFormation deploy\naws cloudformation deploy \\\n  --template-url https://cf.breachforge.io/aws-sensor.yaml \\\n  --stack-name breachforge-sensor \\\n  --parameter-overrides OrgKey=YOUR_ORG_KEY \\\n  --capabilities CAPABILITY_IAM`};
   return <div style={{display:"flex",flexDirection:"column",gap:16}}>
     <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12}}>{["Windows","Linux","macOS","AWS"].map(o=><div key={o} onClick={()=>setOs(o)} style={{...card({cursor:"pointer",textAlign:"center"}),border:`1px solid ${os===o?C.accent+"66":C.border}`}}><div style={{fontSize:30,marginBottom:8}}>{"⊞🐧🍎☁".split("")[["Windows","Linux","macOS","AWS"].indexOf(o)]}</div><div style={{fontSize:12,fontWeight:700}}>{o}</div><div style={{fontSize:9,color:C.dim,marginTop:3}}>v4.0.1</div></div>)}</div>
-    <div style={card()}><div style={{display:"flex",justifyContent:"space-between",marginBottom:12}}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim}}>INSTALL COMMAND — {os.toUpperCase()}</div><button style={BTN(copied?C.green:C.accent)} onClick={()=>{setCopied(true);setTimeout(()=>setCopied(false),1800);}}>{copied?"✓ Copied":"Copy Command"}</button></div><pre style={{background:"#040710",border:`1px solid ${C.border}`,borderRadius:4,padding:16,fontSize:10,color:C.green,lineHeight:1.7,overflowX:"auto",margin:0,whiteSpace:"pre-wrap"}}>{cmds[os]}</pre><div style={{marginTop:12,padding:10,background:`${C.amber}09`,border:`1px solid ${C.amber}30`,borderRadius:4,fontSize:9,color:C.amber}}>Simulation-only mode — no exploit payloads deployed. All telemetry is synthetic.</div></div>
+    <div style={card()}><div style={{display:"flex",justifyContent:"space-between",marginBottom:12}}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim}}>INSTALL COMMAND, {os.toUpperCase()}</div><button style={BTN(copied?C.green:C.accent)} onClick={()=>{setCopied(true);setTimeout(()=>setCopied(false),1800);}}>{copied?"✓ Copied":"Copy Command"}</button></div><pre style={{background:"#040710",border:`1px solid ${C.border}`,borderRadius:4,padding:16,fontSize:10,color:C.green,lineHeight:1.7,overflowX:"auto",margin:0,whiteSpace:"pre-wrap"}}>{cmds[os]}</pre><div style={{marginTop:12,padding:10,background:`${C.amber}09`,border:`1px solid ${C.amber}30`,borderRadius:4,fontSize:9,color:C.amber}}>Simulation-only mode, no exploit payloads deployed. All telemetry is synthetic.</div></div>
     <div style={card()}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:12}}>DEPLOYED AGENTS</div><table style={{width:"100%",borderCollapse:"collapse"}}><thead><tr>{["Host","OS","Version","Last Check-in","Status","Runs"].map(h=><th key={h} style={TH}>{h}</th>)}</tr></thead><tbody>{[{h:"WIN-LAB-07",o:"Windows Server 2022",v:"3.2.1",l:"2m ago",s:"Active",r:14},{h:"WIN-DEV-03",o:"Windows 11 Pro",v:"3.2.1",l:"5m ago",s:"Active",r:9},{h:"LNX-SVR-01",o:"Ubuntu 22.04 LTS",v:"3.2.1",l:"3m ago",s:"Active",r:22},{h:"MAC-ENG-04",o:"macOS 14 Sonoma",v:"3.2.1",l:"8m ago",s:"Active",r:6},{h:"WIN-DC-01",o:"Windows Server 2019",v:"3.1.9",l:"1h ago",s:"Stale",r:31}].map((r,i)=><tr key={i}><td style={{...TD,color:C.accent,fontWeight:700}}>{r.h}</td><td style={TD}>{r.o}</td><td style={{...TD,color:C.dim}}>v{r.v}</td><td style={{...TD,color:C.dim}}>{r.l}</td><td style={TD}><Bdg v={r.s} c={r.s==="Active"?C.green:C.amber}/></td><td style={TD}>{r.r}</td></tr>)}</tbody></table></div>
   </div>;
 }
@@ -772,24 +772,24 @@ function ReportsPage({role}){
   function generate(id){setLoading(id);setTimeout(()=>{setLoading(null);setGen(p=>[...new Set([...p,id])]);setOpen(id);},2000);}
   const RPTS=[
     {id:"exec",title:"Executive Risk Summary",aud:"CISO / Board",fmt:"PDF",preview:<div>
-      <div style={{borderBottom:`2px solid ${C.accent}`,paddingBottom:16,marginBottom:20}}><div style={{fontFamily:"'Syne',sans-serif",fontSize:20,fontWeight:800,color:C.accent}}>BREACHFORGE</div><div style={{fontSize:10,color:C.dim}}>Executive Risk Summary — Q3 2025 · CONFIDENTIAL</div></div>
+      <div style={{borderBottom:`2px solid ${C.accent}`,paddingBottom:16,marginBottom:20}}><div style={{fontFamily:"'Syne',sans-serif",fontSize:20,fontWeight:800,color:C.accent}}>BREACHFORGE</div><div style={{fontSize:10,color:C.dim}}>Executive Risk Summary, Q3 2025 · CONFIDENTIAL</div></div>
       <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12,marginBottom:20}}>{[["Overall Risk Score","57/100",C.amber,"↑8 from last quarter"],["Detection Coverage","68%",C.green,"Target: 85%"],["Critical Gaps","7",C.red,"Immediate action"]].map(([l,v,c,s])=><div key={l} style={{padding:14,background:`${c}09`,border:`1px solid ${c}30`,borderRadius:4}}><div style={{fontSize:26,fontWeight:700,color:c}}>{v}</div><div style={{fontSize:9,color:C.dim,marginTop:2}}>{l}</div><div style={{fontSize:8,color:c,marginTop:4}}>{s}</div></div>)}</div>
-      {[{n:1,t:"LSASS dump undetected on 4 domain controllers",d:"Credential Guard absent — 33-minute detection gap in AD compromise scenario"},{n:2,t:"Cloud IAM privilege escalation path exposed",d:"AttachRolePolicy available to dev-ops-svc — 18-minute gap before GuardDuty alert"},{n:3,t:"DLP does not inspect encrypted archives",d:"Password-protected ZIP achieved 100% DLP bypass rate in insider threat scenario"}].map(r=><div key={r.n} style={{padding:"10px 14px",background:C.surface,border:`1px solid ${C.red}28`,borderRadius:4,marginBottom:8}}><div style={{fontSize:10,fontWeight:700,color:C.red,marginBottom:4}}>{r.n}. {r.t}</div><div style={{fontSize:9,color:C.dim,lineHeight:1.5}}>{r.d}</div></div>)}
+      {[{n:1,t:"LSASS dump undetected on 4 domain controllers",d:"Credential Guard absent, 33-minute detection gap in AD compromise scenario"},{n:2,t:"Cloud IAM privilege escalation path exposed",d:"AttachRolePolicy available to dev-ops-svc, 18-minute gap before GuardDuty alert"},{n:3,t:"DLP does not inspect encrypted archives",d:"Password-protected ZIP achieved 100% DLP bypass rate in insider threat scenario"}].map(r=><div key={r.n} style={{padding:"10px 14px",background:C.surface,border:`1px solid ${C.red}28`,borderRadius:4,marginBottom:8}}><div style={{fontSize:10,fontWeight:700,color:C.red,marginBottom:4}}>{r.n}. {r.t}</div><div style={{fontSize:9,color:C.dim,lineHeight:1.5}}>{r.d}</div></div>)}
     </div>},
     {id:"mitre",title:"MITRE ATT&CK Coverage",aud:"SOC / Blue Team",fmt:"PDF + ATT&CK JSON",preview:<div>
       <div style={{fontFamily:"'Syne',sans-serif",fontSize:17,fontWeight:800,color:C.accent,marginBottom:4}}>MITRE ATT&CK COVERAGE REPORT</div>
       <div style={{fontSize:9,color:C.dim,marginBottom:18}}>Navigator Layer Export · All Scenarios · Q3 2025</div>
       <div style={{display:"grid",gridTemplateColumns:"repeat(6,1fr)",gap:4,marginBottom:18}}>{TACT_DATA.map(t=>{const c3=col2(t.pct);return <div key={t.id} style={{background:`${c3}10`,border:`1px solid ${c3}32`,borderRadius:3,padding:"7px 4px",textAlign:"center"}}><div style={{fontSize:13,fontWeight:700,color:c3}}>{t.pct}%</div><div style={{fontSize:7,color:C.dim,marginTop:2}}>{t.abbr}</div></div>;})}</div>
-      {[["T1003.001","LSASS Memory","Credential Access","No rule — Credential Guard absent"],["T1078","Valid Accounts","Defense Evasion","Insufficient anomaly baseline"],["T1562.001","Disable Security Tools","Defense Evasion","AV exclusion paths not alerted"]].map(([id,nm,tac,gap])=><div key={id} style={{display:"flex",gap:12,padding:"8px 12px",background:`${C.red}07`,border:`1px solid ${C.red}22`,borderRadius:3,marginBottom:6}}><span style={{color:C.red,fontWeight:700,fontSize:10,minWidth:90,flexShrink:0}}>{id}</span><div><div style={{fontSize:10}}>{nm}</div><div style={{fontSize:9,color:C.dim,marginTop:2}}>{tac} · {gap}</div></div></div>)}
+      {[["T1003.001","LSASS Memory","Credential Access","No rule, Credential Guard absent"],["T1078","Valid Accounts","Defense Evasion","Insufficient anomaly baseline"],["T1562.001","Disable Security Tools","Defense Evasion","AV exclusion paths not alerted"]].map(([id,nm,tac,gap])=><div key={id} style={{display:"flex",gap:12,padding:"8px 12px",background:`${C.red}07`,border:`1px solid ${C.red}22`,borderRadius:3,marginBottom:6}}><span style={{color:C.red,fontWeight:700,fontSize:10,minWidth:90,flexShrink:0}}>{id}</span><div><div style={{fontSize:10}}>{nm}</div><div style={{fontSize:9,color:C.dim,marginTop:2}}>{tac} · {gap}</div></div></div>)}
     </div>},
-    {id:"full",title:"Full Technical Assessment",aud:"Security Architecture",fmt:"PDF — 42pp",preview:<div>
-      <div style={{fontFamily:"'Syne',sans-serif",fontSize:17,fontWeight:800,color:C.text,marginBottom:18}}>FULL TECHNICAL ASSESSMENT — Active Directory Compromise · 10 Sep 2025</div>
-      {[{s:"1. Scope & Methodology",c:"Simulation conducted against lab.internal AD environment. All simulations synthetic — no production systems affected."},{s:"2. Executive Finding",c:"Credential Guard absent on 3 of 4 DCs. DCSync by synthetic DA extracted krbtgt hash within 41 minutes."},{s:"3. Technical Evidence",c:"LOG-DC01-2025-09-10-T0033 — replication call from non-DC source. SIEM alert PRIV-DCSync-0019 fired at T+33m."},{s:"4. Remediation",c:"Deploy Credential Guard via Group Policy. 4 hours effort. Identity team. P1 — 14 days. 65% risk reduction."}].map(({s,c})=><div key={s} style={{marginBottom:14}}><div style={{fontSize:10,fontWeight:700,color:C.accent,marginBottom:4}}>{s}</div><div style={{fontSize:10,color:C.dim,lineHeight:1.75}}>{c}</div></div>)}
+    {id:"full",title:"Full Technical Assessment",aud:"Security Architecture",fmt:"PDF, 42pp",preview:<div>
+      <div style={{fontFamily:"'Syne',sans-serif",fontSize:17,fontWeight:800,color:C.text,marginBottom:18}}>FULL TECHNICAL ASSESSMENT: Active Directory Compromise · 10 Sep 2025</div>
+      {[{s:"1. Scope & Methodology",c:"Simulation conducted against lab.internal AD environment. All simulations synthetic, no production systems affected."},{s:"2. Executive Finding",c:"Credential Guard absent on 3 of 4 DCs. DCSync by synthetic DA extracted krbtgt hash within 41 minutes."},{s:"3. Technical Evidence",c:"LOG-DC01-2025-09-10-T0033, replication call from non-DC source. SIEM alert PRIV-DCSync-0019 fired at T+33m."},{s:"4. Remediation",c:"Deploy Credential Guard via Group Policy. 4 hours effort. Identity team. P1, 14 days. 65% risk reduction."}].map(({s,c})=><div key={s} style={{marginBottom:14}}><div style={{fontSize:10,fontWeight:700,color:C.accent,marginBottom:4}}>{s}</div><div style={{fontSize:10,color:C.dim,lineHeight:1.75}}>{c}</div></div>)}
     </div>},
     {id:"roadmap",title:"Remediation Roadmap",aud:"Project Manager",fmt:"PDF + CSV",preview:<div>
       <div style={{fontFamily:"'Syne',sans-serif",fontSize:17,fontWeight:800,color:C.text,marginBottom:16}}>REMEDIATION ROADMAP · 90-day Sprint Plan</div>
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:10}}><thead><tr>{["Priority","Finding","Effort","Owner","Sprint","Risk ↓"].map(h=><th key={h} style={{...TH,padding:"5px 10px"}}>{h}</th>)}</tr></thead>
-      <tbody>{[{p:"P1",f:"Credential Guard on DC fleet",e:"4h",o:"Identity",sp:"S1",r:"65%",c:C.red},{p:"P1",f:"Patch IAM AttachRolePolicy",e:"2h",o:"Cloud Ops",sp:"S1",r:"70%",c:C.red},{p:"P2",f:"DLP: inspect encrypted archives",e:"12h",o:"Sec Eng",sp:"S2",r:"40%",c:C.amber},{p:"P2",f:"MFA on service accounts",e:"16h",o:"Identity",sp:"S2",r:"45%",c:C.amber},{p:"P3",f:"SMB signing — workstations",e:"4h",o:"Infra",sp:"S3",r:"30%",c:C.green}].map((r,i)=><tr key={i}><td style={{...TD,padding:"7px 10px"}}><Bdg v={r.p} c={r.c}/></td><td style={{...TD,padding:"7px 10px"}}>{r.f}</td><td style={{...TD,padding:"7px 10px",color:C.dim}}>{r.e}</td><td style={{...TD,padding:"7px 10px",color:C.dim}}>{r.o}</td><td style={{...TD,padding:"7px 10px"}}><Pill v={r.sp} c={C.accent}/></td><td style={{...TD,padding:"7px 10px",color:C.green,fontWeight:700}}>{r.r}</td></tr>)}</tbody>
+      <tbody>{[{p:"P1",f:"Credential Guard on DC fleet",e:"4h",o:"Identity",sp:"S1",r:"65%",c:C.red},{p:"P1",f:"Patch IAM AttachRolePolicy",e:"2h",o:"Cloud Ops",sp:"S1",r:"70%",c:C.red},{p:"P2",f:"DLP: inspect encrypted archives",e:"12h",o:"Sec Eng",sp:"S2",r:"40%",c:C.amber},{p:"P2",f:"MFA on service accounts",e:"16h",o:"Identity",sp:"S2",r:"45%",c:C.amber},{p:"P3",f:"SMB signing, workstations",e:"4h",o:"Infra",sp:"S3",r:"30%",c:C.green}].map((r,i)=><tr key={i}><td style={{...TD,padding:"7px 10px"}}><Bdg v={r.p} c={r.c}/></td><td style={{...TD,padding:"7px 10px"}}>{r.f}</td><td style={{...TD,padding:"7px 10px",color:C.dim}}>{r.e}</td><td style={{...TD,padding:"7px 10px",color:C.dim}}>{r.o}</td><td style={{...TD,padding:"7px 10px"}}><Pill v={r.sp} c={C.accent}/></td><td style={{...TD,padding:"7px 10px",color:C.green,fontWeight:700}}>{r.r}</td></tr>)}</tbody>
       </table>
     </div>}
   ];
@@ -802,7 +802,7 @@ function ReportsPage({role}){
 
 function SettingsPage(){
   const [saved,setSaved]=useState(false);
-  const [org,setOrg]=useState("Acme Corp — Security Division");
+  const [org,setOrg]=useState("Acme Corp, Security Division");
   const [notif,setNotif]=useState({email:true,slack:false,teams:true});
   const [integ,setInteg]=useState({siem:true,edr:true,soar:false,cspm:true});
   const IST={background:C.surface,border:`1px solid ${C.border}`,color:C.text,padding:"8px 12px",borderRadius:4,fontSize:10,fontFamily:"inherit",width:"100%"};
@@ -810,7 +810,7 @@ function SettingsPage(){
   return <div style={{display:"flex",flexDirection:"column",gap:16,maxWidth:720}}>
     <div style={card()}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:14}}>ORGANISATION</div><div style={{display:"flex",flexDirection:"column",gap:12}}><div><div style={{fontSize:9,color:C.dim,marginBottom:5}}>Organisation name</div><input value={org} onChange={e=>setOrg(e.target.value)} style={IST}/></div><div><div style={{fontSize:9,color:C.dim,marginBottom:5}}>API Key</div><div style={{display:"flex",gap:8}}><input readOnly value="bf_live_sk_••••••••••••••Xk9mP" style={{...IST,color:C.dim,flex:1}}/><button style={BTN(C.accent)}>Rotate</button></div></div><div><div style={{fontSize:9,color:C.dim,marginBottom:5}}>Lab environment scope</div><input defaultValue="lab.internal · 192.168.0.0/16" style={IST}/></div></div></div>
     <div style={card()}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:14}}>NOTIFICATIONS</div>{[["email","Email Alerts","Critical findings and simulation completions"],["slack","Slack Webhook","Post to #security-ops channel"],["teams","Microsoft Teams","Post to Security Operations team"]].map(([k,l,s])=><div key={k} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 0",borderBottom:`1px solid ${C.border}22`}}><div><div style={{fontSize:11}}>{l}</div><div style={{fontSize:9,color:C.dim,marginTop:2}}>{s}</div></div><Toggle on={notif[k]} toggle={()=>setNotif(p=>({...p,[k]:!p[k]}))}/></div>)}</div>
-    <div style={card()}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:14}}>INTEGRATIONS</div>{[{k:"siem",l:"Microsoft Sentinel",s:"SIEM / Log Analytics — REST API"},{k:"edr",l:"CrowdStrike Falcon",s:"EDR telemetry — Streaming API v2"},{k:"soar",l:"Palo Alto XSOAR",s:"SOAR bidirectional — alert push & playbook"},{k:"cspm",l:"Wiz Cloud Security",s:"CSPM — cloud asset inventory sync"}].map(({k,l,s})=><div key={k} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 0",borderBottom:`1px solid ${C.border}22`}}><div><div style={{fontSize:11}}>{l}</div><div style={{fontSize:9,color:C.dim}}>{s}</div></div><div style={{display:"flex",gap:10,alignItems:"center"}}><Bdg v={integ[k]?"Connected":"Disconnected"} c={integ[k]?C.green:C.muted}/><button style={{...BTN(integ[k]?C.red:C.green,true),padding:"4px 10px",fontSize:9}} onClick={()=>setInteg(p=>({...p,[k]:!p[k]}))}>{integ[k]?"Disconnect":"Connect"}</button></div></div>)}</div>
+    <div style={card()}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:14}}>INTEGRATIONS</div>{[{k:"siem",l:"Microsoft Sentinel",s:"SIEM / Log Analytics, REST API"},{k:"edr",l:"CrowdStrike Falcon",s:"EDR telemetry, Streaming API v2"},{k:"soar",l:"Palo Alto XSOAR",s:"SOAR bidirectional, alert push & playbook"},{k:"cspm",l:"Wiz Cloud Security",s:"CSPM, cloud asset inventory sync"}].map(({k,l,s})=><div key={k} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 0",borderBottom:`1px solid ${C.border}22`}}><div><div style={{fontSize:11}}>{l}</div><div style={{fontSize:9,color:C.dim}}>{s}</div></div><div style={{display:"flex",gap:10,alignItems:"center"}}><Bdg v={integ[k]?"Connected":"Disconnected"} c={integ[k]?C.green:C.muted}/><button style={{...BTN(integ[k]?C.red:C.green,true),padding:"4px 10px",fontSize:9}} onClick={()=>setInteg(p=>({...p,[k]:!p[k]}))}>{integ[k]?"Disconnect":"Connect"}</button></div></div>)}</div>
     <button style={{...BTN(C.green),width:"fit-content"}} onClick={()=>{setSaved(true);setTimeout(()=>setSaved(false),2000);}}>{saved?"✓ Settings Saved":"Save Settings"}</button>
   </div>;
 }
@@ -821,7 +821,7 @@ function Onboarding({onDone}){
   const STEPS=[
     {title:"Welcome to BreachForge",sub:"Breach Attack Simulation Platform · v4.0",body:<div style={{textAlign:"center",padding:"10px 0"}}>
       <div style={{fontSize:56,marginBottom:16}}>⚡</div>
-      <div style={{fontSize:12,color:C.text,lineHeight:1.8,maxWidth:500,margin:"0 auto"}}>BreachForge runs continuous simulated attack campaigns against your security controls — without touching production systems. Every test maps to MITRE ATT&CK and closes the loop from simulation to remediation.</div>
+      <div style={{fontSize:12,color:C.text,lineHeight:1.8,maxWidth:500,margin:"0 auto"}}>BreachForge runs continuous simulated attack campaigns against your security controls, without touching production systems. Every test maps to MITRE ATT&CK and closes the loop from simulation to remediation.</div>
       <div style={{marginTop:24,display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>{[["No live exploits","Synthetic telemetry only"],["MITRE-mapped","Every TTP catalogued"],["Multi-persona","SOC, CISO, Architect views"],["10 Scenarios","Endpoint to cloud"]].map(([h,s])=><div key={h} style={{padding:"12px 16px",background:`${C.accent}09`,border:`1px solid ${C.accent}28`,borderRadius:5,textAlign:"center",minWidth:130}}><div style={{fontSize:11,fontWeight:700,color:C.accent}}>{h}</div><div style={{fontSize:9,color:C.dim,marginTop:3}}>{s}</div></div>)}</div>
     </div>},
     {title:"Select your role",sub:"Personalise your dashboard",body:<div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10}}>
@@ -834,7 +834,7 @@ function Onboarding({onDone}){
       <div style={{fontSize:9,color:C.dim,marginTop:4}}>BreachForge runs standalone without integrations.</div>
     </div>},
     {title:"Deploy your first agent",sub:"Install the endpoint sensor to start telemetry",body:<div>
-      <pre style={{background:"#040710",border:`1px solid ${C.border}`,borderRadius:4,padding:14,fontSize:10,color:C.green,lineHeight:1.7,overflowX:"auto"}}>{`# Windows — Run as Administrator\nInvoke-WebRequest -Uri "https://agents.breachforge.io/win/bf-agent-3.2.1.exe" \\\n  -OutFile bf-agent.exe\n.\\bf-agent.exe /install /key YOUR_ORG_KEY /silent`}</pre>
+      <pre style={{background:"#040710",border:`1px solid ${C.border}`,borderRadius:4,padding:14,fontSize:10,color:C.green,lineHeight:1.7,overflowX:"auto"}}>{`# Windows, Run as Administrator\nInvoke-WebRequest -Uri "https://agents.breachforge.io/win/bf-agent-3.2.1.exe" \\\n  -OutFile bf-agent.exe\n.\\bf-agent.exe /install /key YOUR_ORG_KEY /silent`}</pre>
       <div style={{marginTop:10,display:"flex",gap:8}}><button style={BTN(C.accent)}>Copy</button><button style={BTN(C.cyan,true)}>Linux</button><button style={BTN(C.cyan,true)}>macOS</button><button style={BTN(C.cyan,true)}>AWS</button></div>
       <div style={{marginTop:14,padding:10,background:`${C.amber}09`,border:`1px solid ${C.amber}30`,borderRadius:4,fontSize:9,color:C.amber}}>Simulation-only mode. No exploit payloads deployed. Synthetic telemetry only.</div>
     </div>}
@@ -857,7 +857,7 @@ function Onboarding({onDone}){
   </div>;
 }
 
-const NAV=[{id:"overview",label:"Overview",icon:"⬡"},{id:"simulations",label:"Simulations",icon:"▶"},{id:"emerging",label:"Emerging",icon:"⚡"},{id:"rules",label:"Detection Rules",icon:"⛨"},{id:"killchain",label:"Kill Chain",icon:"⛓"},{id:"mitre",label:"MITRE ATT&CK",icon:"◈"},{id:"actors",label:"Threat Actors",icon:"◆"},{id:"compliance",label:"Compliance",icon:"✓"},{id:"agents",label:"Agents",icon:"⊞"},{id:"assessment",label:"Assessment",icon:"◎"},{id:"reports",label:"Reports",icon:"▨"},{id:"settings",label:"Settings",icon:"⚙"}];
+const NAV=[{id:"overview",label:"Overview",icon:"⬡"},{id:"simulations",label:"Simulations",icon:"▶"},{id:"emerging",label:"Emerging",icon:"⚡"},{id:"bridge",label:"Threat Model",icon:"⇄"},{id:"rules",label:"Detection Rules",icon:"⛨"},{id:"killchain",label:"Kill Chain",icon:"⛓"},{id:"mitre",label:"MITRE ATT&CK",icon:"◈"},{id:"actors",label:"Threat Actors",icon:"◆"},{id:"compliance",label:"Compliance",icon:"✓"},{id:"agents",label:"Agents",icon:"⊞"},{id:"assessment",label:"Assessment",icon:"◎"},{id:"reports",label:"Reports",icon:"▨"},{id:"settings",label:"Settings",icon:"⚙"}];
 const ROLES=["CISO / CIO","SOC Analyst","Architect","PM","Developer"];
 
 // ── Emerging Threats Module ──────────────────────────────────────────────────
@@ -899,7 +899,7 @@ function EmergingThreats(){
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
         <div style={{display:"flex",alignItems:"center",gap:10}}>
           <span style={{width:8,height:8,borderRadius:"50%",background:C.amber,display:"inline-block",boxShadow:`0 0 6px ${C.amber}`}}/>
-          <span style={{fontSize:9,letterSpacing:".14em",color:C.amber,fontWeight:700,textTransform:"uppercase"}}>Emerging Threats — Outside Current BAS Coverage</span>
+          <span style={{fontSize:9,letterSpacing:".14em",color:C.amber,fontWeight:700,textTransform:"uppercase"}}>Emerging Threats: Outside Current BAS Coverage</span>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12}}>
           {age!==null&&<span style={{fontSize:8,color:C.dim}}>TI updated {age<1?"<1h":`${age}h`} ago</span>}
@@ -998,10 +998,10 @@ function EmergingThreats(){
               2. Confirm techniques {sel.uncovered_techniques.join(", ")||"(see above)"} are genuinely outside S1-S10 coverage
             </div>
             <div style={{fontSize:9,color:C.dim,lineHeight:1.6,marginBottom:4}}>
-              3. Closest existing scenario: <strong style={{color:C.accent}}>{sel.closest_scenario}</strong> — consider extending or creating new scenario
+              3. Closest existing scenario: <strong style={{color:C.accent}}>{sel.closest_scenario}</strong>, consider extending or creating new scenario
             </div>
             <div style={{fontSize:9,color:C.dim,lineHeight:1.6}}>
-              4. New scenario candidate: incorporate {sel.uncovered_techniques.slice(0,3).join(", ")} into kill chain — follow existing S1-S10 format
+              4. New scenario candidate: incorporate {sel.uncovered_techniques.slice(0,3).join(", ")} into kill chain, follow existing S1-S10 format
             </div>
           </div>
 
@@ -1058,7 +1058,7 @@ function ScenarioDraftPanel(){
         <span style={{width:8,height:8,borderRadius:"50%",background:C.amber,display:"inline-block",
           boxShadow:`0 0 6px ${C.amber}`}}/>
         <span style={{fontSize:9,letterSpacing:".14em",color:C.amber,fontWeight:700,
-          textTransform:"uppercase"}}>Level 3 — AI Draft Scenarios Pending Review</span>
+          textTransform:"uppercase"}}>Level 3: AI Draft Scenarios Pending Review</span>
       </div>
       <span style={{fontSize:8,color:C.dim,background:"#1a2235",padding:"2px 8px",borderRadius:3}}>
         {pending.length} draft{pending.length!==1?"s":""} awaiting approval
@@ -1086,7 +1086,7 @@ function ScenarioDraftPanel(){
                 color:C.accent,padding:"1px 5px",borderRadius:2,fontFamily:"monospace"}}>{t}</span>)}
             </div>
             <div style={{marginTop:6,fontSize:8,color:C.muted}}>
-              Actor: {d.actor}  |  Confidence: {d.confidence?Math.round(d.confidence*100)+"%":"—"}
+              Actor: {d.actor}  |  Confidence: {d.confidence?Math.round(d.confidence*100)+"%":"-"}
             </div>
           </div>;
         })}
@@ -1246,7 +1246,7 @@ const DETECTION_RULES = {
     splunk:`index=windows EventCode=4624 LogonType=10
 | stats count by src_ip, dest, user, host
 | where count > 3
-| eval alert="RDP lateral movement — "+user+" from "+src_ip`,
+| eval alert="RDP lateral movement, "+user+" from "+src_ip`,
     sentinel:`SecurityEvent
 | where EventID == 4624 and LogonType == 10
 | summarize count() by IpAddress, Computer, TargetUserName
@@ -2225,7 +2225,7 @@ function useDetectionRules(){
       })
       .catch(()=>{});
   },[]);
-  // Merge live rules (from Phase 3 API) with embedded rules — live rules take priority
+  // Merge live rules (from Phase 3 API) with embedded rules, live rules take priority
   return {...DETECTION_RULES,...liveRules};
 }
 
@@ -2701,6 +2701,104 @@ function tiRunScenario(id){
   }
 
 
+// ===== Sprint 15: TI-to-BAS Threat Model Bridge =====
+const BR_TAC={TA0001:[1,"Initial Access"],TA0002:[2,"Execution"],TA0003:[3,"Persistence"],TA0004:[4,"Privilege Escalation"],TA0005:[5,"Defense Evasion"],TA0006:[6,"Credential Access"],TA0007:[7,"Discovery"],TA0008:[8,"Lateral Movement"],TA0009:[9,"Collection"],TA0011:[10,"Command and Control"],TA0010:[11,"Exfiltration"],TA0040:[12,"Impact"]};
+const BR_TECH={"T1566":{n:"Phishing",tac:"TA0001"},"T1078":{n:"Valid Accounts",tac:"TA0001"},"T1078.004":{n:"Cloud Accounts",tac:"TA0001"},"T1098":{n:"Account Manipulation",tac:"TA0003"},"T1621":{n:"MFA Request Generation",tac:"TA0006"},"T1114":{n:"Email Collection",tac:"TA0009"},"T1213.002":{n:"Data from Collaboration Repositories",tac:"TA0009"},"T1071":{n:"Application Layer Protocol",tac:"TA0011"},"T1071.004":{n:"DNS C2",tac:"TA0011"},"T1090":{n:"Proxy",tac:"TA0011"},"T1572":{n:"Protocol Tunneling",tac:"TA0011"},"T1190":{n:"Exploit Public-Facing Application",tac:"TA0001"},"T1059":{n:"Command and Scripting Interpreter",tac:"TA0002"},"T1059.004":{n:"Unix Shell",tac:"TA0002"},"T1003":{n:"OS Credential Dumping",tac:"TA0006"},"T1003.001":{n:"LSASS Memory",tac:"TA0006"},"T1021":{n:"Remote Services",tac:"TA0008"},"T1070":{n:"Indicator Removal",tac:"TA0005"},"T1552":{n:"Unsecured Credentials",tac:"TA0006"},"T1505.003":{n:"Web Shell",tac:"TA0003"},"T1567.002":{n:"Exfiltration to Cloud Storage",tac:"TA0010"},"T1486":{n:"Data Encrypted for Impact",tac:"TA0040"}};
+const BR_SURF={win:"Windows endpoints",mac:"macOS endpoints",linux:"Linux servers",network:"Network and edge devices (VPN, firewall, router)",email:"Email and collaboration (O365, Exchange, Workspace)",identity:"Identity provider (Entra ID, AD, Okta)",webapp:"Public web applications",saas:"SaaS applications",iaas:"Cloud infrastructure (AWS, Azure, GCP)",cloud_storage:"Cloud storage",containers:"Containers and Kubernetes",erp:"Business applications (ERP, SAP, MFT)",esxi:"Virtualization (ESXi, hypervisors)"};
+const BR_CTRL={firewall:"Perimeter firewall",web_filter:"Web and URL filtering",email_sec:"Email security",waf:"Web application firewall",edr:"Endpoint detection and response",mfa:"Multi-factor authentication",pam:"Privileged access management",segmentation:"Network segmentation",dns_filter:"DNS filtering",siem:"SIEM and monitoring",dlp:"Data loss prevention",backups:"Immutable backups"};
+const BR_P=1.0, BR_S=0.4;
+const BR_MAP={"T1566":[["email_sec",BR_P],["web_filter",BR_S]],"T1078":[["mfa",BR_P],["pam",BR_S]],"T1078.004":[["mfa",BR_P],["pam",BR_S]],"T1098":[["pam",BR_P],["siem",BR_S]],"T1621":[["mfa",BR_P],["siem",BR_S]],"T1114":[["email_sec",BR_P],["siem",BR_S]],"T1213.002":[["dlp",BR_P],["siem",BR_S]],"T1071":[["web_filter",BR_P],["dns_filter",BR_S],["siem",BR_S]],"T1071.004":[["dns_filter",BR_P],["siem",BR_S]],"T1090":[["dns_filter",BR_P],["firewall",BR_S]],"T1572":[["dns_filter",BR_P],["firewall",BR_S]],"T1190":[["waf",BR_P],["firewall",BR_S]],"T1059":[["edr",BR_P]],"T1059.004":[["edr",BR_P]],"T1003":[["edr",BR_P],["pam",BR_S]],"T1003.001":[["edr",BR_P],["pam",BR_S]],"T1021":[["segmentation",BR_P],["mfa",BR_S]],"T1070":[["edr",BR_P],["siem",BR_S]],"T1552":[["pam",BR_P],["edr",BR_S]],"T1505.003":[["waf",BR_P],["edr",BR_S]],"T1567.002":[["dlp",BR_P],["web_filter",BR_S]],"T1486":[["edr",BR_P],["backups",BR_S]]};
+const BR_ACTORS=[{id:"apt29",name:"APT29",alias:"Midnight Blizzard",group:"G0016",sector:"Government and tech",ttps:[{t:"T1566",s:"email"},{t:"T1078",s:"identity"},{t:"T1098",s:"identity"},{t:"T1114",s:"email"},{t:"T1213.002",s:"saas"},{t:"T1071",s:"network"},{t:"T1090",s:"network"}]},{id:"volt",name:"Volt Typhoon",alias:"Vanguard Panda",group:"G1017",sector:"Critical infrastructure",ttps:[{t:"T1190",s:"network"},{t:"T1059",s:"win"},{t:"T1003",s:"win"},{t:"T1021",s:"network"},{t:"T1070",s:"win"},{t:"T1552",s:"win"}]},{id:"clop",name:"Cl0p",alias:"FIN11",group:"G0092",sector:"Cross-sector extortion",ttps:[{t:"T1190",s:"erp"},{t:"T1505.003",s:"erp"},{t:"T1567.002",s:"cloud_storage"},{t:"T1486",s:"win"}]},{id:"unc5221",name:"UNC5221",alias:"Edge exploitation cluster",group:"unattributed",sector:"Cross-sector",ttps:[{t:"T1190",s:"network"},{t:"T1059.004",s:"network"},{t:"T1003.001",s:"win"},{t:"T1071.004",s:"network"},{t:"T1572",s:"network"}]},{id:"scatter",name:"Scattered Spider",alias:"UNC3944",group:"G1015",sector:"Identity and SaaS focused",ttps:[{t:"T1566",s:"identity"},{t:"T1621",s:"identity"},{t:"T1078.004",s:"saas"},{t:"T1098",s:"identity"},{t:"T1213.002",s:"saas"},{t:"T1567.002",s:"cloud_storage"}]}];
+const BR_GRADE={none:0,partial:0.5,mature:1};
+const BR_STC={Defended:C.green,Layered:C.accent,Partial:C.amber,Exposed:C.red};
+const BR_GC={none:C.red,partial:C.amber,mature:C.green};
+
+function BridgePage({role}){
+  const [step,setStep]=useState(1);
+  const [actorId,setActorId]=useState(null);
+  const [surfaces,setSurfaces]=useState({});
+  const [controls,setControls]=useState({});
+  const actor=BR_ACTORS.find(a=>a.id===actorId);
+  const mapping=(t)=>BR_MAP[t]||[];
+  const cover=(t)=>{let r=1;mapping(t).forEach(m=>{r*=(1-m[1]*BR_GRADE[controls[m[0]]||"none"]);});return 1-r;};
+  const status=(t)=>{const c=cover(t);return c>=1?"Defended":c>=0.75?"Layered":c>0?"Partial":"Exposed";};
+  const surfList=()=>{const s={};actor.ttps.forEach(x=>s[x.s]=1);return Object.keys(s);};
+  const chain=()=>actor.ttps.filter(x=>surfaces[x.s]).sort((a,b)=>BR_TAC[BR_TECH[a.t].tac][0]-BR_TAC[BR_TECH[b.t].tac][0]);
+  const chainControls=()=>{const s={};chain().forEach(x=>mapping(x.t).forEach(m=>s[m[0]]=1));return Object.keys(s);};
+  const pickActor=(id)=>{const a=BR_ACTORS.find(x=>x.id===id);const sf={};a.ttps.forEach(x=>sf[x.s]=true);setActorId(id);setSurfaces(sf);setControls({});setStep(2);};
+  const toggleSurface=(s)=>setSurfaces(p=>({...p,[s]:!p[s]}));
+  const setControl=(c,g)=>setControls(p=>({...p,[c]:g}));
+  const reset=()=>{setActorId(null);setSurfaces({});setControls({});setStep(1);};
+  const results=()=>{
+    const ch=chain();let sum=0;
+    const rows=ch.map(x=>{const cv=cover(x.t);sum+=cv;return {t:x.t,cov:cv,st:status(x.t)};});
+    const pct=ch.length?Math.round(100*sum/ch.length):0;
+    const open=rows.filter(r=>r.cov===0);
+    const reach={};
+    rows.forEach(r=>{if(r.cov<1){mapping(r.t).forEach(m=>{const c=m[0];if((controls[c]||"none")!=="mature"){if(!reach[c])reach[c]={n:0,w:0};reach[c].n++;reach[c].w+=m[1];}});}});
+    const recs=Object.keys(reach).sort((a,b)=>reach[b].w-reach[a].w).slice(0,3).map(c=>({c:c,n:reach[c].n,cur:controls[c]||"none"}));
+    return {rows,pct,open,recs};
+  };
+  const STEPS=["1. Actor","2. Surface","3. Controls","4. Result"];
+  const card={background:C.card,border:`1px solid ${C.border}`,borderRadius:10,padding:16};
+  const btn=(primary)=>({fontFamily:"inherit",cursor:"pointer",borderRadius:7,fontSize:13,fontWeight:600,padding:"10px 18px",border:`1px solid ${primary?C.accent+"73":C.border}`,background:primary?C.accent+"1f":C.surface,color:primary?"#aee9f8":C.text});
+  const chip=(txt,color,key)=>(<span key={key} style={{fontSize:10,fontFamily:"ui-monospace,monospace",padding:"1px 7px",borderRadius:4,margin:"3px 5px 0 0",display:"inline-block",background:color+"1a",color:color,border:`1px solid ${color}55`}}>{txt}</span>);
+  const hd=(t)=>(<div style={{fontSize:13,fontWeight:650,color:"#9fb2c9",margin:"18px 0 2px"}}>{t}</div>);
+  const meta=(t)=>(<div style={{fontSize:12,color:C.dim,marginBottom:8}}>{t}</div>);
+
+  return (<div style={{maxWidth:860}}>
+    <div style={{background:C.accent+"10",border:`1px solid ${C.accent}40`,borderRadius:8,padding:"10px 14px",fontSize:12,color:"#9fd9ec",marginBottom:16}}>Guided threat-modelling, not an attack. A deterministic what-if that maps a live actor's known techniques to your declared platform surface and controls and scores coverage, executing nothing. Coverage is multiplicative with each control playing a primary or supporting role per technique, so a technique reaches Defended only when its primary control is mature.</div>
+    <div style={{display:"flex",gap:6,marginBottom:20,flexWrap:"wrap"}}>{STEPS.map((l,i)=>{const n=i+1;const on=step===n,done=step>n;return <div key={i} style={{flex:1,minWidth:120,fontSize:11,padding:"8px 10px",borderRadius:7,textAlign:"center",border:`1px solid ${on?C.accent:done?C.green+"66":C.border}`,background:on?C.accent+"14":C.surface,color:on?C.accent:done?C.green:C.dim}}>{l}</div>;})}</div>
+
+    {step===1 && <div>
+      <div style={{fontSize:13,fontWeight:650,color:"#9fb2c9",margin:"0 0 10px"}}>Select a threat actor from the active board</div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:12}}>
+        {BR_ACTORS.map(a=><div key={a.id} onClick={()=>pickActor(a.id)} style={{...card,cursor:"pointer"}}>
+          <div style={{fontSize:15,fontWeight:600,marginBottom:2}}>{a.name}</div>
+          <div style={{fontSize:11,fontFamily:"ui-monospace,monospace",color:C.dim}}>{a.alias} &middot; {a.group}</div>
+          <div style={{fontSize:11,fontFamily:"ui-monospace,monospace",color:C.dim}}>{a.sector}</div>
+          <div style={{marginTop:6}}>{a.ttps.map((x,j)=>chip(x.t,C.purple,j))}</div>
+        </div>)}
+      </div>
+    </div>}
+
+    {step===2 && actor && <div style={card}>
+      <div style={{fontSize:13,fontWeight:650,color:"#9fb2c9",marginBottom:4}}>Where could {actor.name} reach you?</div>
+      {meta("This actor targets the platforms below. Select the ones that exist in or are exposed from your environment. The kill chain is built only from the platforms you have.")}
+      {surfList().map(s=>{const on=surfaces[s];return <div key={s} onClick={()=>toggleSurface(s)} style={{display:"flex",alignItems:"center",gap:10,padding:"11px 13px",border:`1px solid ${on?C.accent:C.border}`,borderRadius:8,margin:"8px 0",cursor:"pointer",background:on?C.accent+"14":C.surface}}><div style={{width:18,height:18,borderRadius:4,border:`1.5px solid ${on?C.accent:C.dim}`,background:on?C.accent:"transparent",color:C.bg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,flex:"0 0 auto"}}>{on?"\u2713":""}</div><div style={{fontSize:13}}>{BR_SURF[s]}</div></div>;})}
+      <div style={{display:"flex",justifyContent:"space-between",marginTop:18,gap:10}}><button onClick={()=>setStep(1)} style={btn(false)}>Back</button><button disabled={!surfList().some(s=>surfaces[s])} onClick={()=>setStep(3)} style={{...btn(true),opacity:surfList().some(s=>surfaces[s])?1:0.4}}>Continue</button></div>
+    </div>}
+
+    {step===3 && actor && (()=>{const cs=chainControls();return cs.length===0?<div style={card}>No attack path applies to the platforms you selected. <button onClick={()=>setStep(2)} style={{...btn(false),marginTop:10}}>Back</button></div>:<div style={card}>
+      <div style={{fontSize:13,fontWeight:650,color:"#9fb2c9",marginBottom:4}}>What controls do you have on this path?</div>
+      {meta("Grade each control as none, partial, or mature. Each control is primary or supporting for a given technique. A technique reaches Defended only when its primary control is mature; supporting controls and partials add layered cover.")}
+      {cs.map(c=>{const g=controls[c]||"none";return <div key={c} style={{padding:"11px 13px",border:`1px solid ${C.border}`,borderRadius:8,margin:"8px 0",background:C.surface,display:"flex",justifyContent:"space-between",alignItems:"center",gap:10,flexWrap:"wrap"}}><div style={{fontSize:13}}>{BR_CTRL[c]}</div><div style={{display:"flex",border:`1px solid ${C.border}`,borderRadius:7,overflow:"hidden"}}>{["none","partial","mature"].map((v,vi)=>{const lab={none:"None",partial:"Partial",mature:"Mature"}[v];const cc=BR_GC[v];const on=g===v;return <button key={v} onClick={()=>setControl(c,v)} style={{border:"none",borderLeft:vi===0?"none":`1px solid ${C.border}`,borderRadius:0,padding:"6px 12px",fontSize:11,fontWeight:600,cursor:"pointer",background:on?cc+"33":"transparent",color:on?cc:C.dim}}>{lab}</button>;})}</div></div>;})}
+      <div style={{display:"flex",justifyContent:"space-between",marginTop:18,gap:10}}><button onClick={()=>setStep(2)} style={btn(false)}>Back</button><button onClick={()=>setStep(4)} style={btn(true)}>Run the drill</button></div>
+    </div>;})()}
+
+    {step===4 && actor && (()=>{const r=results();const col=r.pct>=75?C.green:r.pct>=50?C.accent:r.pct>=25?C.amber:C.red;const byTac={};const order=[];r.rows.forEach(row=>{const tc=BR_TECH[row.t].tac;if(!byTac[tc]){byTac[tc]=[];order.push(tc);}byTac[tc].push(row);});order.sort((a,b)=>BR_TAC[a][0]-BR_TAC[b][0]);return <div style={card}>
+      <div style={{fontSize:13,fontWeight:650,color:"#9fb2c9"}}>{actor.name} versus your declared posture</div>
+      <div style={{textAlign:"center",padding:"8px 0 4px"}}><div style={{fontSize:42,fontWeight:700,lineHeight:1,color:col}}>{r.pct}%</div><div style={{fontSize:11,fontFamily:"ui-monospace,monospace",color:C.dim}}>kill-chain coverage</div></div>
+      <div style={{height:10,borderRadius:6,background:C.surface,border:`1px solid ${C.border}`,overflow:"hidden",margin:"10px 0 4px"}}><div style={{height:"100%",borderRadius:6,width:r.pct+"%",background:col}}/></div>
+      {hd("Contextual kill chain")}
+      {meta("Defended needs the primary control matured. Layered is strong stacked cover. Partial is light cover. Exposed is none. Chips show each control and its role.")}
+      {order.map(tc=><div key={tc}>
+        <div style={{fontSize:11,letterSpacing:".06em",textTransform:"uppercase",color:C.dim,fontWeight:600,margin:"14px 0 4px"}}>{BR_TAC[tc][1]}</div>
+        {byTac[tc].map(row=><div key={row.t} style={{padding:"9px 12px",border:`1px solid ${C.border}`,borderRadius:7,margin:"5px 0",background:C.surface}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:10}}><div><span style={{fontFamily:"ui-monospace,monospace",fontSize:11.5,color:C.purple}}>{row.t}</span> <span style={{fontSize:13}}>{BR_TECH[row.t].n}</span></div><span style={{fontSize:10.5,fontWeight:700,padding:"2px 9px",borderRadius:5,whiteSpace:"nowrap",background:BR_STC[row.st]+"22",color:BR_STC[row.st],border:`1px solid ${BR_STC[row.st]}66`}}>{row.st}</span></div>
+          <div style={{marginTop:6}}>{mapping(row.t).map((m,k)=>{const g=controls[m[0]]||"none";const rl=m[1]>=1?"primary":"supporting";return chip(BR_CTRL[m[0]]+": "+g+" \u00b7 "+rl,BR_GC[g],k);})}</div>
+        </div>)}
+      </div>)}
+      {hd("Open path")}
+      {r.open.length===0?<div style={{padding:"10px 13px",borderLeft:`2px solid ${C.green}`,background:C.green+"0d",borderRadius:"0 6px 6px 0",margin:"6px 0",fontSize:13}}>No fully open techniques on this path under your declared posture.</div>:r.open.map(o=><div key={o.t} style={{padding:"10px 13px",borderLeft:`2px solid ${C.red}`,background:C.red+"0d",borderRadius:"0 6px 6px 0",margin:"6px 0",fontSize:13,fontFamily:"ui-monospace,monospace"}}>{o.t} {BR_TECH[o.t].n} would not be stopped or seen.</div>)}
+      {hd("Recommended next controls")}
+      {r.recs.length===0?<div style={{padding:"10px 13px",borderLeft:`2px solid ${C.amber}`,background:C.amber+"0d",borderRadius:"0 6px 6px 0",margin:"6px 0",fontSize:13}}>Every control on this path is already mature. Nothing to recommend.</div>:r.recs.map((x,k)=><div key={k} style={{padding:"10px 13px",borderLeft:`2px solid ${C.amber}`,background:C.amber+"0d",borderRadius:"0 6px 6px 0",margin:"6px 0",fontSize:13}}>Raise <strong>{BR_CTRL[x.c]}</strong> from {x.cur}. It touches {x.n} technique{x.n>1?"s":""} on this path that {x.n>1?"are":"is"} not yet fully covered.</div>)}
+      <div style={{fontSize:12,color:C.dim,marginTop:16}}>Indicative only. Each control contributes by its role and maturity, and full cover on a technique needs its primary control mature. Scored against this actor's known techniques on the platforms you selected, not a test of live defences.</div>
+      <div style={{display:"flex",justifyContent:"space-between",marginTop:18,gap:10}}><button onClick={()=>setStep(3)} style={btn(false)}>Adjust controls</button><button onClick={reset} style={btn(true)}>Start over</button></div>
+    </div>;})()}
+  </div>);
+}
+
   function App(){
   const [onboarded,setOnboarded]=useState(false);
   const [page,setPage]=useState("overview");
@@ -2710,7 +2808,7 @@ function tiRunScenario(id){
   useEffect(()=>{_nav.setPage=setPage;_nav.setPick=setTiPick;},[]);
   useEffect(()=>{const t=setInterval(()=>setTime(new Date()),1000);return()=>clearInterval(t);},[]);
   if(!onboarded)return <Onboarding onDone={(selectedRole)=>{console.log("ROLE SELECTED:",selectedRole);setRole(selectedRole||"CISO / CIO");setOnboarded(true);}}/>;
-  const PAGES={overview:<Overview/>,emerging:<EmergingThreats/>,rules:<DetectionRulesPage/>,simulations:<SimRunner tiPick={tiPick} clearTiPick={()=>setTiPick(null)}/>,killchain:<KillChainPage/>,mitre:<MitrePage/>,actors:<ActorLibrary/>,compliance:<CompliancePage/>,agents:<AgentsPage/>,assessment:<AssessmentPage role={role}/>,reports:<ReportsPage role={role}/>,settings:<SettingsPage/>};
+  const PAGES={overview:<Overview/>,emerging:<EmergingThreats/>,bridge:<BridgePage role={role}/>,rules:<DetectionRulesPage/>,simulations:<SimRunner tiPick={tiPick} clearTiPick={()=>setTiPick(null)}/>,killchain:<KillChainPage/>,mitre:<MitrePage/>,actors:<ActorLibrary/>,compliance:<CompliancePage/>,agents:<AgentsPage/>,assessment:<AssessmentPage role={role}/>,reports:<ReportsPage role={role}/>,settings:<SettingsPage/>};
   return <div style={{display:"flex",minHeight:"100vh",background:C.bg}}>
     <div style={{width:200,background:C.surface,borderRight:`1px solid ${C.border}`,display:"flex",flexDirection:"column",flexShrink:0,position:"sticky",top:0,height:"100vh",overflowY:"auto"}}>
       <div style={{padding:"20px 16px 16px",borderBottom:`1px solid ${C.border}`}}>
