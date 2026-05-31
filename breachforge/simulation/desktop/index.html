@@ -863,38 +863,74 @@ const ROLES=["CISO / CIO","SOC Analyst","Architect","PM","Developer"];
 // ── Emerging Threats Module ──────────────────────────────────────────────────
 function useEmergingThreats(){
   const [data,setData]=useState(null);
+  const [history,setHistory]=useState(null);
   const [loading,setLoading]=useState(true);
   useEffect(()=>{
-    fetch('/breachforge/intel/data/emerging_threats.json?v='+Date.now())
-      .then(r=>r.json())
-      .then(d=>{setData(d);setLoading(false);})
-      .catch(()=>{
-        setData({generated:'2026-05-23T00:00:00Z',total:3,emerging:[{"id": "ET-001", "title": "UNC5221 Ivanti Connect Secure exploitation \u2014 techniques outside existing BAS coverage", "source": "CISA KEV", "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog", "published": "2026-05-21T00:00:00Z", "severity": "Critical", "actors": ["UNC5221"], "sectors": ["Government", "Defence", "Technology"], "summary": "UNC5221 actively exploiting Ivanti Connect Secure CVE-2025-22457. Post-exploitation includes novel credential harvesting and C2 techniques not currently mapped to any BreachForge scenario.", "techniques": ["T1190", "T1059.001", "T1003.001", "T1071.004", "T1572"], "uncovered_techniques": ["T1071.004", "T1572"], "new_actors": ["UNC5221"], "reasons": ["Threat actor not currently modelled in BreachForge: UNC5221", "Techniques not covered by any existing BAS scenario and trending: T1071.004, T1572"], "closest_scenario": "S4", "closest_overlap": 1, "priority_score": 9, "status": "new", "review_required": true}, {"id": "ET-002", "title": "Cl0p MOVEit-style file transfer exploitation \u2014 supply chain variant", "source": "DFIR Report RSS", "source_url": "https://thedfirreport.com", "published": "2026-05-20T00:00:00Z", "severity": "High", "actors": ["Cl0p"], "sectors": ["Financial Services", "Healthcare", "Technology"], "summary": "Cl0p group using SQL injection against managed file transfer platforms. Technique TTP combination differs from existing S7 supply chain scenario \u2014 targets MFT appliances rather than CI/CD pipelines.", "techniques": ["T1190", "T1505.003", "T1048.002", "T1567.002"], "uncovered_techniques": ["T1048.002", "T1567.002"], "new_actors": [], "reasons": ["Techniques not covered by any existing BAS scenario: T1048.002 (Exfil over Alt Protocol), T1567.002 (Exfil to Code Repository)"], "closest_scenario": "S7", "closest_overlap": 1, "priority_score": 4, "status": "new", "review_required": true}, {"id": "ET-003", "title": "Midnight Blizzard credential spray against on-premises Exchange \u2014 new actor", "source": "Microsoft Threat Intel RSS", "source_url": "https://www.microsoft.com/security/blog", "published": "2026-05-19T00:00:00Z", "severity": "High", "actors": ["Midnight Blizzard"], "sectors": ["Government", "Defence", "Energy"], "summary": "Midnight Blizzard (NOBELIUM) credential spray campaigns against on-premises Exchange servers. Actor is related to APT29 but operates with distinct TTP fingerprint not yet modelled separately in BreachForge.", "techniques": ["T1110.003", "T1078", "T1114.002", "T1213.002"], "uncovered_techniques": ["T1213.002"], "new_actors": ["Midnight Blizzard"], "reasons": ["Threat actor not currently modelled in BreachForge: Midnight Blizzard", "Techniques not covered by any existing BAS scenario: T1213.002 (Data from Information Repositories: Sharepoint)"], "closest_scenario": "S8", "closest_overlap": 2, "priority_score": 6, "status": "new", "review_required": true}]});
-        setLoading(false);
-      });
+    const seedHistory={generated:"2026-05-23T00:00:00Z",total:3,emerging:[{"id": "ET-001", "title": "UNC5221 Ivanti Connect Secure exploitation, techniques outside existing BAS coverage", "source": "CISA KEV", "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog", "published": "2026-05-21T00:00:00Z", "severity": "Critical", "actors": ["UNC5221"], "sectors": ["Government", "Defence", "Technology"], "summary": "UNC5221 actively exploiting Ivanti Connect Secure CVE-2025-22457. Post-exploitation includes novel credential harvesting and C2 techniques not currently mapped to any BreachForge scenario.", "techniques": ["T1190", "T1059.001", "T1003.001", "T1071.004", "T1572"], "uncovered_techniques": ["T1071.004", "T1572"], "new_actors": ["UNC5221"], "reasons": ["Threat actor not currently modelled in BreachForge: UNC5221", "Techniques not covered by any existing BAS scenario and trending: T1071.004, T1572"], "closest_scenario": "S4", "closest_overlap": 1, "priority_score": 9, "status": "new", "review_required": true}, {"id": "ET-002", "title": "Cl0p MOVEit-style file transfer exploitation, supply chain variant", "source": "DFIR Report RSS", "source_url": "https://thedfirreport.com", "published": "2026-05-20T00:00:00Z", "severity": "High", "actors": ["Cl0p"], "sectors": ["Financial Services", "Healthcare", "Technology"], "summary": "Cl0p group using SQL injection against managed file transfer platforms. Technique TTP combination differs from existing S7 supply chain scenario, targets MFT appliances rather than CI/CD pipelines.", "techniques": ["T1190", "T1505.003", "T1048.002", "T1567.002"], "uncovered_techniques": ["T1048.002", "T1567.002"], "new_actors": [], "reasons": ["Techniques not covered by any existing BAS scenario: T1048.002 (Exfil over Alt Protocol), T1567.002 (Exfil to Code Repository)"], "closest_scenario": "S7", "closest_overlap": 1, "priority_score": 4, "status": "new", "review_required": true}, {"id": "ET-003", "title": "Midnight Blizzard credential spray against on-premises Exchange, new actor", "source": "Microsoft Threat Intel RSS", "source_url": "https://www.microsoft.com/security/blog", "published": "2026-05-19T00:00:00Z", "severity": "High", "actors": ["Midnight Blizzard"], "sectors": ["Government", "Defence", "Energy"], "summary": "Midnight Blizzard (NOBELIUM) credential spray campaigns against on-premises Exchange servers. Actor is related to APT29 but operates with distinct TTP fingerprint not yet modelled separately in BreachForge.", "techniques": ["T1110.003", "T1078", "T1114.002", "T1213.002"], "uncovered_techniques": ["T1213.002"], "new_actors": ["Midnight Blizzard"], "reasons": ["Threat actor not currently modelled in BreachForge: Midnight Blizzard", "Techniques not covered by any existing BAS scenario: T1213.002 (Data from Information Repositories: Sharepoint)"], "closest_scenario": "S8", "closest_overlap": 2, "priority_score": 6, "status": "new", "review_required": true}]};
+    const cur=fetch('/breachforge/intel/data/emerging_threats.json?v='+Date.now()).then(r=>r.json()).catch(()=>({generated:null,total:0,emerging:[]}));
+    const hist=fetch('/breachforge/intel/data/emerging_threats_history.json?v='+Date.now()).then(r=>r.json()).catch(()=>seedHistory);
+    Promise.all([cur,hist]).then(([c,h])=>{setData(c&&c.emerging?c:{generated:null,total:0,emerging:[]});setHistory(h&&h.emerging?h:seedHistory);setLoading(false);}).catch(()=>{setData({generated:null,total:0,emerging:[]});setHistory(seedHistory);setLoading(false);});
   },[]);
-  return {data,loading};
+  return {data,history,loading};
 }
 
 function EmergingThreats(){
-  const {data,loading}=useEmergingThreats();
+  const {data,history,loading}=useEmergingThreats();
   const [sel,setSel]=useState(null);
   const sevCol={Critical:C.red,High:C.amber,Medium:C.accent,Low:C.green};
 
   if(loading)return <div style={{padding:32,color:C.dim,fontSize:11}}>Loading emerging threat intelligence...</div>;
-  if(!data||!data.emerging||data.emerging.length===0){
-    return <div style={{padding:32}}>
-      <div style={{color:C.dim,fontSize:11,marginBottom:8}}>No emerging threats detected outside current BAS scenario coverage.</div>
-      <div style={{color:C.dim,fontSize:10}}>The collector checks every 6 hours. When a threat appears with techniques or actors not covered by S1-S10, it surfaces here for review.</div>
-    </div>;
-  }
 
-  const threats=data.emerging;
-  const age=data.generated?Math.round((Date.now()-new Date(data.generated))/3600000):null;
+  const current=(data&&data.emerging)?data.emerging:[];
+  const past=(history&&history.emerging)?history.emerging:[];
+  const age=data&&data.generated?Math.round((Date.now()-new Date(data.generated))/3600000):null;
+  const fmtDate=(s)=>{try{return new Date(s).toISOString().slice(0,10);}catch(e){return s||"";}};
+
+  const cardCurrent=(t)=>{
+    const sc=sevCol[t.severity]||C.accent;
+    const isNew=t.status==="new";
+    return <div key={t.id} onClick={()=>setSel(sel?.id===t.id?null:t)}
+      style={{...card(),cursor:"pointer",border:`1px solid ${sel?.id===t.id?sc:C.border}`,background:sel?.id===t.id?`${sc}08`:C.card,transition:"border-color .15s"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:6}}>
+        <div style={{display:"flex",alignItems:"center",gap:6}}>
+          <span style={{fontSize:8,fontWeight:700,color:sc,background:`${sc}22`,padding:"1px 6px",borderRadius:3}}>{t.severity}</span>
+          {isNew&&<span style={{fontSize:7,color:C.amber,background:C.amber+"22",padding:"1px 5px",borderRadius:3,fontWeight:700}}>NEW</span>}
+          {t.review_required&&<span style={{fontSize:7,color:C.dim,background:"#1a2235",padding:"1px 5px",borderRadius:3}}>REVIEW</span>}
+        </div>
+        <span style={{fontSize:7,color:C.dim}}>{t.source}</span>
+      </div>
+      <div style={{fontSize:11,fontWeight:700,color:"#dde4ef",marginBottom:5,lineHeight:1.3}}>{t.title}</div>
+      <div style={{fontSize:9,color:C.dim,marginBottom:8,lineHeight:1.4}}>{t.summary.slice(0,140)}...</div>
+      {t.uncovered_techniques.length>0&&<div style={{marginBottom:6}}>
+        <span style={{fontSize:7,color:C.red,letterSpacing:".08em",textTransform:"uppercase",marginRight:6}}>Uncovered techniques</span>
+        {t.uncovered_techniques.map(tp=><span key={tp} style={{fontSize:7,background:C.red+"22",color:C.red,padding:"1px 5px",borderRadius:2,marginRight:3,fontFamily:"monospace"}}>{tp}</span>)}
+      </div>}
+      {t.new_actors.length>0&&<div style={{marginBottom:6}}>
+        <span style={{fontSize:7,color:C.amber,letterSpacing:".08em",textTransform:"uppercase",marginRight:6}}>New actor</span>
+        {t.new_actors.map(a=><span key={a} style={{fontSize:8,background:C.amber+"22",color:C.amber,padding:"1px 6px",borderRadius:2,marginRight:3}}>{a}</span>)}
+      </div>}
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:4}}>
+        <span style={{fontSize:8,color:C.dim}}>Closest: {t.closest_scenario} ({t.closest_overlap} technique overlap)</span>
+        <span style={{fontSize:9,color:sc,fontWeight:700}}>Priority {t.priority_score}</span>
+      </div>
+    </div>;
+  };
+
+  const rowHistory=(t)=>{
+    const sc=sevCol[t.severity]||C.accent;
+    return <div key={t.id} onClick={()=>setSel(sel?.id===t.id?null:t)}
+      style={{display:"flex",alignItems:"center",gap:10,padding:"8px 10px",borderRadius:5,cursor:"pointer",border:`1px solid ${sel?.id===t.id?sc:C.border}`,background:sel?.id===t.id?`${sc}08`:C.card}}>
+      <span style={{width:6,height:6,borderRadius:"50%",background:sc,flex:"0 0 auto"}}/>
+      <div style={{flex:1,minWidth:0}}>
+        <div style={{fontSize:10,fontWeight:700,color:"#dde4ef",lineHeight:1.3,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{t.title}</div>
+        <div style={{fontSize:8,color:C.dim,marginTop:2}}>{fmtDate(t.published)} \u00b7 {t.source} \u00b7 closest {t.closest_scenario}</div>
+      </div>
+      <span style={{fontSize:8,color:sc,fontWeight:700,flex:"0 0 auto"}}>P{t.priority_score}</span>
+    </div>;
+  };
 
   return <div style={{display:"flex",flexDirection:"column",gap:16}}>
 
-    {/* Header */}
     <div style={{background:"#0a0d14",border:`1px solid ${C.amber}40`,borderRadius:8,padding:16}}>
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
         <div style={{display:"flex",alignItems:"center",gap:10}}>
@@ -903,8 +939,8 @@ function EmergingThreats(){
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12}}>
           {age!==null&&<span style={{fontSize:8,color:C.dim}}>TI updated {age<1?"<1h":`${age}h`} ago</span>}
-          <span style={{fontSize:8,color:C.dim,background:"#1a2235",padding:"2px 8px",borderRadius:3}}>{threats.length} emerging</span>
-          <a href="../../intel/" style={{fontSize:8,color:C.accent,textDecoration:"none",border:`1px solid ${C.accent}40`,padding:"2px 8px",borderRadius:3}}>→ TI Portal</a>
+          <span style={{fontSize:8,color:C.dim,background:"#1a2235",padding:"2px 8px",borderRadius:3}}>{current.length} emerging</span>
+          <a href="../../intel/" style={{fontSize:8,color:C.accent,textDecoration:"none",border:`1px solid ${C.accent}40`,padding:"2px 8px",borderRadius:3}}>\u2192 TI Portal</a>
         </div>
       </div>
       <div style={{fontSize:9,color:C.dim,lineHeight:1.5}}>
@@ -912,65 +948,41 @@ function EmergingThreats(){
       </div>
     </div>
 
-    {/* Split layout */}
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
 
-      {/* Left: threat list */}
-      <div style={{display:"flex",flexDirection:"column",gap:8}}>
-        {threats.map(t=>{
-          const sc=sevCol[t.severity]||C.accent;
-          const isNew=t.status==="new";
-          return <div key={t.id}
-            onClick={()=>setSel(sel?.id===t.id?null:t)}
-            style={{...card(),cursor:"pointer",
-              border:`1px solid ${sel?.id===t.id?sc:C.border}`,
-              background:sel?.id===t.id?`${sc}08`:C.card,
-              transition:"border-color .15s"}}>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:6}}>
-              <div style={{display:"flex",alignItems:"center",gap:6}}>
-                <span style={{fontSize:8,fontWeight:700,color:sc,background:`${sc}22`,padding:"1px 6px",borderRadius:3}}>{t.severity}</span>
-                {isNew&&<span style={{fontSize:7,color:C.amber,background:C.amber+"22",padding:"1px 5px",borderRadius:3,fontWeight:700}}>NEW</span>}
-                {t.review_required&&<span style={{fontSize:7,color:C.dim,background:"#1a2235",padding:"1px 5px",borderRadius:3}}>REVIEW</span>}
+      <div style={{display:"flex",flexDirection:"column",gap:16}}>
+
+        <div>
+          <div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:10,textTransform:"uppercase"}}>Current</div>
+          {current.length===0
+            ? <div style={{padding:"18px 14px",border:`1px dashed ${C.border}`,borderRadius:6}}>
+                <div style={{color:C.dim,fontSize:11,marginBottom:6}}>No emerging threats detected outside current BAS scenario coverage.</div>
+                <div style={{color:C.dim,fontSize:10,lineHeight:1.5}}>The collector checks every 6 hours. When a threat appears with techniques or actors not covered by S1-S10, it surfaces here for review.</div>
               </div>
-              <span style={{fontSize:7,color:C.dim}}>{t.source}</span>
-            </div>
-            <div style={{fontSize:11,fontWeight:700,color:"#dde4ef",marginBottom:5,lineHeight:1.3}}>{t.title}</div>
-            <div style={{fontSize:9,color:C.dim,marginBottom:8,lineHeight:1.4}}>{t.summary.slice(0,140)}...</div>
+            : <div style={{display:"flex",flexDirection:"column",gap:8}}>{current.map(cardCurrent)}</div>}
+        </div>
 
-            {/* Gap indicators */}
-            {t.uncovered_techniques.length>0&&<div style={{marginBottom:6}}>
-              <span style={{fontSize:7,color:C.red,letterSpacing:".08em",textTransform:"uppercase",marginRight:6}}>Uncovered techniques</span>
-              {t.uncovered_techniques.map(tp=><span key={tp} style={{fontSize:7,background:C.red+"22",color:C.red,padding:"1px 5px",borderRadius:2,marginRight:3,fontFamily:"monospace"}}>{tp}</span>)}
-            </div>}
-            {t.new_actors.length>0&&<div style={{marginBottom:6}}>
-              <span style={{fontSize:7,color:C.amber,letterSpacing:".08em",textTransform:"uppercase",marginRight:6}}>New actor</span>
-              {t.new_actors.map(a=><span key={a} style={{fontSize:8,background:C.amber+"22",color:C.amber,padding:"1px 6px",borderRadius:2,marginRight:3}}>{a}</span>)}
-            </div>}
+        {past.length>0&&<div>
+          <div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:6,textTransform:"uppercase"}}>Previously Surfaced (Reference Cases)</div>
+          <div style={{fontSize:8,color:C.dim,marginBottom:10,lineHeight:1.5}}>Lab environment, synthetic telemetry. Retained as reference examples of the activity this layer surfaces.</div>
+          <div style={{display:"flex",flexDirection:"column",gap:6}}>{past.map(rowHistory)}</div>
+        </div>}
 
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:4}}>
-              <span style={{fontSize:8,color:C.dim}}>Closest: {t.closest_scenario} ({t.closest_overlap} technique overlap)</span>
-              <span style={{fontSize:9,color:sc,fontWeight:700}}>Priority {t.priority_score}</span>
-            </div>
-          </div>;
-        })}
       </div>
 
-      {/* Right: detail panel */}
       <div style={card()}>
         {!sel?<div style={{padding:24,color:C.dim,fontSize:10,textAlign:"center",marginTop:40}}>
-          Select an emerging threat to see full detail and scenario creation guidance
+          Select an entry to see full detail and scenario creation guidance
         </div>:<div style={{display:"flex",flexDirection:"column",gap:14}}>
           <div>
             <div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:6,textTransform:"uppercase"}}>Threat Detail</div>
             <div style={{fontSize:13,fontWeight:700,color:"#dde4ef",marginBottom:8,lineHeight:1.3}}>{sel.title}</div>
             <div style={{fontSize:9,color:C.dim,lineHeight:1.6}}>{sel.summary}</div>
           </div>
-
           <div>
             <div style={{fontSize:8,letterSpacing:".1em",color:C.dim,marginBottom:6,textTransform:"uppercase"}}>Why this is flagged</div>
             {sel.reasons.map((r,i)=><div key={i} style={{fontSize:9,color:C.amber,marginBottom:4,paddingLeft:8,borderLeft:`2px solid ${C.amber}40`,lineHeight:1.5}}>{r}</div>)}
           </div>
-
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
             <div>
               <div style={{fontSize:8,color:C.dim,letterSpacing:".1em",marginBottom:4,textTransform:"uppercase"}}>All Techniques</div>
@@ -988,29 +1000,14 @@ function EmergingThreats(){
               </div>
             </div>
           </div>
-
           <div style={{background:"#050d10",border:`1px solid ${C.accent}30`,borderRadius:6,padding:12}}>
             <div style={{fontSize:8,color:C.accent,letterSpacing:".1em",marginBottom:6,textTransform:"uppercase",fontWeight:700}}>Next Steps</div>
-            <div style={{fontSize:9,color:C.dim,lineHeight:1.6,marginBottom:4}}>
-              1. Review source intelligence at <a href={sel.source_url} target="_blank" style={{color:C.accent}}>{sel.source}</a>
-            </div>
-            <div style={{fontSize:9,color:C.dim,lineHeight:1.6,marginBottom:4}}>
-              2. Confirm techniques {sel.uncovered_techniques.join(", ")||"(see above)"} are genuinely outside S1-S10 coverage
-            </div>
-            <div style={{fontSize:9,color:C.dim,lineHeight:1.6,marginBottom:4}}>
-              3. Closest existing scenario: <strong style={{color:C.accent}}>{sel.closest_scenario}</strong>, consider extending or creating new scenario
-            </div>
-            <div style={{fontSize:9,color:C.dim,lineHeight:1.6}}>
-              4. New scenario candidate: incorporate {sel.uncovered_techniques.slice(0,3).join(", ")} into kill chain, follow existing S1-S10 format
-            </div>
+            <div style={{fontSize:9,color:C.dim,lineHeight:1.6,marginBottom:4}}>1. Review source intelligence at <a href={sel.source_url} target="_blank" style={{color:C.accent}}>{sel.source}</a></div>
+            <div style={{fontSize:9,color:C.dim,lineHeight:1.6,marginBottom:4}}>2. Confirm techniques {sel.uncovered_techniques.join(", ")||"(see above)"} are genuinely outside S1-S10 coverage</div>
+            <div style={{fontSize:9,color:C.dim,lineHeight:1.6,marginBottom:4}}>3. Closest existing scenario: <strong style={{color:C.accent}}>{sel.closest_scenario}</strong>, consider extending or creating new scenario</div>
+            <div style={{fontSize:9,color:C.dim,lineHeight:1.6}}>4. New scenario candidate: incorporate {sel.uncovered_techniques.slice(0,3).join(", ")} into kill chain, follow existing S1-S10 format</div>
           </div>
-
-          <a href={sel.source_url} target="_blank" rel="noopener"
-            style={{background:`${C.accent}18`,color:C.accent,border:`1px solid ${C.accent}50`,
-              borderRadius:5,padding:"8px 14px",fontSize:9,cursor:"pointer",fontWeight:700,
-              textDecoration:"none",textAlign:"center"}}>
-            → Read Source Intelligence Report
-          </a>
+          <a href={sel.source_url} target="_blank" rel="noopener" style={{background:`${C.accent}18`,color:C.accent,border:`1px solid ${C.accent}50`,borderRadius:5,padding:"8px 14px",fontSize:9,cursor:"pointer",fontWeight:700,textDecoration:"none",textAlign:"center"}}>\u2192 Read Source Intelligence Report</a>
         </div>}
       </div>
     </div>
