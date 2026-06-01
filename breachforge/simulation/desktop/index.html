@@ -762,17 +762,6 @@ function Overview(){
   </div>;
 }
 
-function AgentsPage(){
-  const [os,setOs]=useState("Windows");
-  const [copied,setCopied]=useState(false);
-  const cmds={Windows:`# Run as Administrator\nInvoke-WebRequest -Uri "https://agents.breachforge.io/win/bf-agent-3.2.1.exe" \\\n  -OutFile bf-agent.exe\n.\\bf-agent.exe /install /key YOUR_ORG_KEY /silent`,Linux:`# Run as root\ncurl -fsSL https://agents.breachforge.io/linux/install.sh | \\\n  bash -s -- --key YOUR_ORG_KEY --mode silent`,macOS:`# Requires macOS 12+\ncurl -fsSL https://agents.breachforge.io/mac/bf-agent-3.2.1.pkg -o bf.pkg\nsudo installer -pkg bf.pkg -target /\nbf-agent configure --key YOUR_ORG_KEY`,AWS:`# CloudFormation deploy\naws cloudformation deploy \\\n  --template-url https://cf.breachforge.io/aws-sensor.yaml \\\n  --stack-name breachforge-sensor \\\n  --parameter-overrides OrgKey=YOUR_ORG_KEY \\\n  --capabilities CAPABILITY_IAM`};
-  return <div style={{display:"flex",flexDirection:"column",gap:16}}>
-    <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12}}>{["Windows","Linux","macOS","AWS"].map(o=><div key={o} onClick={()=>setOs(o)} style={{...card({cursor:"pointer",textAlign:"center"}),border:`1px solid ${os===o?C.accent+"66":C.border}`}}><div style={{fontSize:30,marginBottom:8}}>{"⊞🐧🍎☁".split("")[["Windows","Linux","macOS","AWS"].indexOf(o)]}</div><div style={{fontSize:12,fontWeight:700}}>{o}</div><div style={{fontSize:9,color:C.dim,marginTop:3}}>v4.0.1</div></div>)}</div>
-    <div style={card()}><div style={{display:"flex",justifyContent:"space-between",marginBottom:12}}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim}}>INSTALL COMMAND, {os.toUpperCase()}</div><button style={BTN(copied?C.green:C.accent)} onClick={()=>{setCopied(true);setTimeout(()=>setCopied(false),1800);}}>{copied?"✓ Copied":"Copy Command"}</button></div><pre style={{background:"#040710",border:`1px solid ${C.border}`,borderRadius:4,padding:16,fontSize:10,color:C.green,lineHeight:1.7,overflowX:"auto",margin:0,whiteSpace:"pre-wrap"}}>{cmds[os]}</pre><div style={{marginTop:12,padding:10,background:`${C.amber}09`,border:`1px solid ${C.amber}30`,borderRadius:4,fontSize:9,color:C.amber}}>Simulation-only mode, no exploit payloads deployed. All telemetry is synthetic.</div></div>
-    <div style={card()}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:12}}>DEPLOYED AGENTS</div><table style={{width:"100%",borderCollapse:"collapse"}}><thead><tr>{["Host","OS","Version","Last Check-in","Status","Runs"].map(h=><th key={h} style={TH}>{h}</th>)}</tr></thead><tbody>{[{h:"WIN-LAB-07",o:"Windows Server 2022",v:"3.2.1",l:"2m ago",s:"Active",r:14},{h:"WIN-DEV-03",o:"Windows 11 Pro",v:"3.2.1",l:"5m ago",s:"Active",r:9},{h:"LNX-SVR-01",o:"Ubuntu 22.04 LTS",v:"3.2.1",l:"3m ago",s:"Active",r:22},{h:"MAC-ENG-04",o:"macOS 14 Sonoma",v:"3.2.1",l:"8m ago",s:"Active",r:6},{h:"WIN-DC-01",o:"Windows Server 2019",v:"3.1.9",l:"1h ago",s:"Stale",r:31}].map((r,i)=><tr key={i}><td style={{...TD,color:C.accent,fontWeight:700}}>{r.h}</td><td style={TD}>{r.o}</td><td style={{...TD,color:C.dim}}>v{r.v}</td><td style={{...TD,color:C.dim}}>{r.l}</td><td style={TD}><Bdg v={r.s} c={r.s==="Active"?C.green:C.amber}/></td><td style={TD}>{r.r}</td></tr>)}</tbody></table></div>
-  </div>;
-}
-
 function ReportsPage({role}){
   // Role-based report pre-selection
   const ROLE_REPORT={
@@ -820,21 +809,6 @@ function ReportsPage({role}){
     <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:12}}>
       {RPTS.map(r=><div key={r.id} style={card()}><div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}><div style={{fontSize:12,fontWeight:700}}>{r.title}</div><Pill v={r.fmt} c={C.accent}/></div><div style={{fontSize:9,color:C.muted,marginBottom:14}}>Audience: {r.aud}</div><div style={{display:"flex",gap:8}}><button style={BTN(gen.includes(r.id)?C.green:C.accent)} onClick={()=>generate(r.id)}>{loading===r.id?"⟳ Generating…":gen.includes(r.id)?"⬇ Download":"Generate Report"}</button>{gen.includes(r.id)&&<button style={BTN(C.purple,true)} onClick={()=>setOpen(open===r.id?null:r.id)}>{open===r.id?"Hide Preview":"Preview"}</button>}</div>{open===r.id&&<div className="fadein" style={{marginTop:16,padding:18,background:C.surface,border:`1px solid ${C.border}`,borderRadius:5}}>{r.preview}</div>}</div>)}
     </div>
-  </div>;
-}
-
-function SettingsPage(){
-  const [saved,setSaved]=useState(false);
-  const [org,setOrg]=useState("Acme Corp, Security Division");
-  const [notif,setNotif]=useState({email:true,slack:false,teams:true});
-  const [integ,setInteg]=useState({siem:true,edr:true,soar:false,cspm:true});
-  const IST={background:C.surface,border:`1px solid ${C.border}`,color:C.text,padding:"8px 12px",borderRadius:4,fontSize:10,fontFamily:"inherit",width:"100%"};
-  function Toggle({on,toggle}){return <div onClick={toggle} style={{width:40,height:20,borderRadius:10,cursor:"pointer",background:on?C.green:`${C.muted}60`,position:"relative",flexShrink:0,transition:"background .2s"}}><div style={{width:16,height:16,borderRadius:"50%",background:"white",position:"absolute",top:2,left:on?22:2,transition:"left .2s"}}/></div>;}
-  return <div style={{display:"flex",flexDirection:"column",gap:16,maxWidth:720}}>
-    <div style={card()}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:14}}>ORGANISATION</div><div style={{display:"flex",flexDirection:"column",gap:12}}><div><div style={{fontSize:9,color:C.dim,marginBottom:5}}>Organisation name</div><input value={org} onChange={e=>setOrg(e.target.value)} style={IST}/></div><div><div style={{fontSize:9,color:C.dim,marginBottom:5}}>API Key</div><div style={{display:"flex",gap:8}}><input readOnly value="bf_live_sk_••••••••••••••Xk9mP" style={{...IST,color:C.dim,flex:1}}/><button style={BTN(C.accent)}>Rotate</button></div></div><div><div style={{fontSize:9,color:C.dim,marginBottom:5}}>Lab environment scope</div><input defaultValue="lab.internal · 192.168.0.0/16" style={IST}/></div></div></div>
-    <div style={card()}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:14}}>NOTIFICATIONS</div>{[["email","Email Alerts","Critical findings and simulation completions"],["slack","Slack Webhook","Post to #security-ops channel"],["teams","Microsoft Teams","Post to Security Operations team"]].map(([k,l,s])=><div key={k} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 0",borderBottom:`1px solid ${C.border}22`}}><div><div style={{fontSize:11}}>{l}</div><div style={{fontSize:9,color:C.dim,marginTop:2}}>{s}</div></div><Toggle on={notif[k]} toggle={()=>setNotif(p=>({...p,[k]:!p[k]}))}/></div>)}</div>
-    <div style={card()}><div style={{fontSize:9,letterSpacing:".12em",color:C.dim,marginBottom:14}}>INTEGRATIONS</div>{[{k:"siem",l:"Microsoft Sentinel",s:"SIEM / Log Analytics, REST API"},{k:"edr",l:"CrowdStrike Falcon",s:"EDR telemetry, Streaming API v2"},{k:"soar",l:"Palo Alto XSOAR",s:"SOAR bidirectional, alert push & playbook"},{k:"cspm",l:"Wiz Cloud Security",s:"CSPM, cloud asset inventory sync"}].map(({k,l,s})=><div key={k} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 0",borderBottom:`1px solid ${C.border}22`}}><div><div style={{fontSize:11}}>{l}</div><div style={{fontSize:9,color:C.dim}}>{s}</div></div><div style={{display:"flex",gap:10,alignItems:"center"}}><Bdg v={integ[k]?"Connected":"Disconnected"} c={integ[k]?C.green:C.muted}/><button style={{...BTN(integ[k]?C.red:C.green,true),padding:"4px 10px",fontSize:9}} onClick={()=>setInteg(p=>({...p,[k]:!p[k]}))}>{integ[k]?"Disconnect":"Connect"}</button></div></div>)}</div>
-    <button style={{...BTN(C.green),width:"fit-content"}} onClick={()=>{setSaved(true);setTimeout(()=>setSaved(false),2000);}}>{saved?"✓ Settings Saved":"Save Settings"}</button>
   </div>;
 }
 
@@ -2581,6 +2555,11 @@ function tiRunScenario(id){
       });
     }
 
+    function clearHistory() {
+      try { localStorage.removeItem('bf_assessment_history'); } catch (e) {}
+      setReport(null); setAnswers({}); setStep(0); setCompareSector(null);
+    }
+
     if (report) {
       const activeSector = compareSector || report.sector;
       const activeBench = SECTOR_BENCHMARKS[activeSector];
@@ -2595,6 +2574,7 @@ function tiRunScenario(id){
               {Object.keys(SECTOR_BENCHMARKS).map(s => <option key={s} value={s}>{s}</option>)}
             </select>
           </label>
+          <button onClick={clearHistory} title="Removes saved assessment history from this browser" style={{background: 'transparent', color: C.dim, border: '1px solid ' + C.border, borderRadius: 6, padding: '6px 12px', fontSize: 12, cursor: 'pointer'}}>Clear saved results</button>
         </div>
 
         <div style={{marginBottom: 20, padding: 16, background: C.card, border: '1px solid ' + C.border, borderRadius: 8}}>
@@ -2820,8 +2800,9 @@ function BridgePage({role}){
   return <div style={{display:"flex",minHeight:"100vh",background:C.bg}}>
     <div style={{width:200,background:C.surface,borderRight:`1px solid ${C.border}`,display:"flex",flexDirection:"column",flexShrink:0,position:"sticky",top:0,height:"100vh",overflowY:"auto"}}>
       <div style={{padding:"20px 16px 16px",borderBottom:`1px solid ${C.border}`}}>
-        <div style={{fontFamily:"'Syne',sans-serif",fontSize:15,fontWeight:800,color:C.accent,letterSpacing:".1em",display:"flex",alignItems:"center",gap:8}}><span style={{width:8,height:8,background:C.accent,borderRadius:"50%",display:"inline-block",boxShadow:`0 0 8px ${C.accent}`}}/>BREACHFORGE</div>
+        <div style={{fontFamily:"'Syne',sans-serif",fontSize:13,fontWeight:800,color:C.accent,letterSpacing:".02em",display:"flex",alignItems:"center",gap:7,whiteSpace:"nowrap"}}><span style={{width:8,height:8,background:C.accent,borderRadius:"50%",display:"inline-block",flexShrink:0,boxShadow:`0 0 8px ${C.accent}`}}/>BREACHFORGE</div>
         <div style={{fontSize:8,color:C.muted,marginTop:3,letterSpacing:".08em"}}>BAS PLATFORM v5.6</div>
+        <a href="../mobile/" onClick={()=>{try{localStorage.setItem('bf_view','mobile');}catch(e){}}} style={{display:"inline-flex",alignItems:"center",gap:5,marginTop:10,fontSize:9,color:C.accent,textDecoration:"none",border:`1px solid ${C.accent}44`,borderRadius:5,padding:"5px 9px"}}>Mobile view &rarr;</a>
       </div>
       <nav style={{padding:"12px 8px",flex:1}}>
         {NAV.map(n=><button key={n.id} onClick={()=>setPage(n.id)} style={{display:"flex",alignItems:"center",gap:10,width:"100%",textAlign:"left",padding:"9px 10px",borderRadius:5,marginBottom:2,background:page===n.id?`${C.accent}14`:"transparent",border:`1px solid ${page===n.id?C.accent+"44":"transparent"}`,color:page===n.id?C.accent:C.dim,fontSize:11,letterSpacing:".04em"}}><span style={{fontSize:13,width:18,textAlign:"center"}}>{n.icon}</span>{n.label}</button>)}
