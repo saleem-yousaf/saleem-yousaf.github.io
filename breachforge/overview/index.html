@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>BreachForge | Overview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090d;--surface:#0c1018;--card:#101520;--card2:#0e131d;--border:#1c2535;
+  --accent:#00d4ff;--green:#00e87a;--red:#ff3355;--amber:#ffaa00;--purple:#a78bfa;
+  --pink:#f472b6;--cyan:#22d3ee;--orange:#ff7c3a;--text:#dde4ef;--dim:#55677a;--muted:#2a3545;
+  --disp:'Syne',sans-serif;--body:'Sora',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:var(--body);font-weight:300;-webkit-font-smoothing:antialiased}
+body{min-height:100vh;background:radial-gradient(1100px 540px at 78% -8%,rgba(0,212,255,.07),transparent 60%),radial-gradient(900px 520px at 8% 4%,rgba(167,139,250,.055),transparent 55%),var(--bg)}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1320px;margin:0 auto;padding:0 22px 60px}
+.topbar{position:sticky;top:0;z-index:30;backdrop-filter:blur(10px);background:linear-gradient(180deg,rgba(7,9,13,.92),rgba(7,9,13,.78));border-bottom:1px solid var(--border)}
+.topbar-in{max-width:1320px;margin:0 auto;padding:13px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:800;letter-spacing:.02em;font-size:16px}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+.brand b{color:var(--accent)}
+.sep{width:1px;height:22px;background:var(--border)}
+.acct{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--dim)}
+.acct b{color:var(--text);font-weight:500}
+.spacer{flex:1}
+.refresh{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;color:var(--dim)}
+.refresh .live{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2.4s infinite}
+.refresh .live.off{background:var(--muted);box-shadow:none;animation:none}
+.pvtoggle{font-family:var(--mono);font-size:10px;color:var(--dim);border:1px solid var(--border);background:var(--card);border-radius:7px;padding:6px 10px;cursor:pointer}
+.pvtoggle.on{color:var(--amber);border-color:rgba(255,170,0,.4)}
+.pvbanner{background:rgba(255,170,0,.1);border-bottom:1px solid rgba(255,170,0,.3);color:var(--amber);font-family:var(--mono);font-size:11px;text-align:center;padding:7px;letter-spacing:.05em}
+.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;padding:28px 0 16px}
+.hero h1{font-family:var(--disp);font-weight:800;font-size:29px;letter-spacing:-.01em;line-height:1.05}
+.hero .sub{color:var(--dim);font-size:13px;margin-top:8px;max-width:580px;line-height:1.55}
+.hero .sub b{color:var(--text);font-weight:500}
+.threatlevel{display:flex;align-items:center;gap:14px;border:1px solid var(--border);background:linear-gradient(180deg,var(--card),var(--card2));border-radius:14px;padding:14px 18px}
+.threatlevel .ring{position:relative;width:54px;height:54px;flex:0 0 auto}
+.threatlevel .ring svg{transform:rotate(-90deg)}
+.threatlevel .ring .v{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--mono);font-weight:600;font-size:14px}
+.threatlevel .lab{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.threatlevel .big{font-family:var(--disp);font-weight:800;font-size:18px;line-height:1.1}
+.threatlevel small{display:block;color:var(--dim);font-size:11px;margin-top:2px}
+.prov{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;letter-spacing:.04em;padding:3px 8px;border-radius:20px;border:1px solid var(--border);color:var(--dim)}
+.prov .pin{width:5px;height:5px;border-radius:50%}
+.prov.you .pin{background:var(--accent)}.prov.you{border-color:rgba(0,212,255,.3);color:#7fd9ee}
+.prov.feed .pin{background:var(--green)}.prov.feed{border-color:rgba(0,232,122,.26);color:#74d9a6}
+.prov.intel .pin{background:var(--purple)}.prov.intel{border-color:rgba(167,139,250,.28);color:#c3b1f6}
+.grid{display:grid;gap:14px}
+.kpis{grid-template-columns:repeat(4,1fr);margin-bottom:14px}
+.split-3-2{grid-template-columns:1.5fr 1fr}
+.split-1-1{grid-template-columns:1fr 1fr}
+@media(max-width:980px){.kpis{grid-template-columns:repeat(2,1fr)}.split-3-2,.split-1-1{grid-template-columns:1fr}}
+@media(max-width:560px){.kpis{grid-template-columns:1fr}}
+.card{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:14px;padding:16px 17px;position:relative}
+.card .head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}
+.card .title{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.card .cap{font-size:10.5px;color:var(--dim);margin-top:11px;line-height:1.5;border-top:1px dashed var(--border);padding-top:10px}
+.kpi .lab{font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim)}
+.kpi .num{font-family:var(--disp);font-weight:800;font-size:33px;line-height:1.05;margin-top:9px}
+.kpi .delta{font-family:var(--mono);font-size:11px;margin-top:7px;color:var(--dim)}
+.kpi .src{margin-top:12px}
+.kpi .cta{font-family:var(--mono);font-size:10px;color:var(--accent);margin-top:9px;display:inline-block}
+.mapwrap{position:relative;border-radius:11px;overflow:hidden;border:1px solid var(--border);background:radial-gradient(120% 120% at 50% 0%,#0b1320,#080b11);min-height:120px}
+.mapwrap svg{display:block;width:100%;height:auto}
+.marker-pulse{animation:ring 2.6s ease-out infinite}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:11px}
+.legend span{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--dim)}
+.legend i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.origin{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid rgba(28,37,53,.6)}
+.origin:last-child{border-bottom:0}
+.origin .flag{font-size:17px;width:22px;text-align:center}
+.origin .co{width:40px;font-family:var(--mono);font-size:11px;color:var(--text)}
+.origin .meta{flex:1;min-width:0}
+.origin .meta .nm{font-size:11px;color:var(--text)}
+.origin .meta .ds{font-size:9.5px;color:var(--dim);margin-top:1px}
+.bar{height:6px;border-radius:4px;background:rgba(255,255,255,.05);overflow:hidden;width:84px;flex:0 0 auto}
+.bar i{display:block;height:100%;border-radius:4px}
+.drill{display:flex;gap:12px;align-items:flex-start;padding:12px;border:1px solid var(--border);border-radius:10px;background:rgba(0,212,255,.03);margin-bottom:9px}
+.drill:last-child{margin-bottom:0}
+.drill .ico{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-size:13px;background:rgba(255,51,85,.12);border:1px solid rgba(255,51,85,.3);color:var(--red);flex:0 0 auto}
+.drill .body{flex:1;min-width:0}
+.drill .why{font-size:12px;color:var(--text);line-height:1.5}
+.drill .why b{color:var(--accent);font-weight:600}
+.drill .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+.tag{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:5px;border:1px solid var(--border);color:var(--dim)}
+.tag.tech{color:#c3b1f6;border-color:rgba(167,139,250,.3)}
+.tag.gap{color:var(--red);border-color:rgba(255,51,85,.3)}
+.tag.ok{color:var(--green);border-color:rgba(0,232,122,.3)}
+.runbtn{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:#021016;background:var(--accent);border:0;border-radius:7px;padding:8px 12px;cursor:pointer;align-self:center;white-space:nowrap;font-weight:600}
+.runbtn:hover{filter:brightness(1.08)}
+.ioc{display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:center;padding:8px 10px;border-radius:8px;border-left:2px solid var(--muted);background:rgba(255,255,255,.012);margin-bottom:6px}
+.ioc .fam{font-family:var(--mono);font-size:10px;color:var(--text)}
+.ioc .ip{font-family:var(--mono);font-size:10px;color:var(--dim)}
+.ioc .co,.ioc .ago{font-family:var(--mono);font-size:9.5px;color:var(--dim);white-space:nowrap}
+.et{padding:11px 0;border-bottom:1px solid rgba(28,37,53,.6)}
+.et:last-child{border-bottom:0}
+.et .r1{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.et .sev{font-family:var(--mono);font-size:8.5px;padding:2px 7px;border-radius:5px;letter-spacing:.06em}
+.et .ti{font-size:12px;color:var(--text);margin-top:6px;line-height:1.45}
+.et .me{font-size:10px;color:var(--dim);margin-top:5px}
+.res{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(28,37,53,.6)}
+.res:last-child{border-bottom:0}
+.res .ki{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;font-size:12px;flex:0 0 auto;border:1px solid var(--border)}
+.res .nm{flex:1;min-width:0;font-size:11.5px;color:var(--text)}
+.res .nm small{display:block;color:var(--dim);font-size:9.5px;margin-top:2px}
+.res .when{font-family:var(--mono);font-size:9.5px;color:var(--dim);white-space:nowrap}
+.empty{text-align:center;padding:22px 12px;color:var(--dim)}
+.empty .ic{font-size:24px;opacity:.5}
+.empty .t{font-size:13px;color:var(--text);margin-top:10px}
+.empty .d{font-size:11px;margin-top:6px;line-height:1.5;max-width:320px;margin:6px auto 0}
+.empty .runbtn{margin-top:13px;display:inline-block}
+.tacgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+@media(max-width:680px){.tacgrid{grid-template-columns:repeat(3,1fr)}}
+.tac{text-align:center}
+.tac .pc{font-family:var(--mono);font-weight:600;font-size:13px}
+.tac .frac{font-family:var(--mono);font-size:8px;color:var(--dim);margin-top:1px}
+.tac .nm{font-size:8px;color:var(--dim);margin-top:4px;line-height:1.3}
+.tac .tb{height:4px;border-radius:3px;background:rgba(255,255,255,.05);margin-top:6px;overflow:hidden}
+.tac .tb i{display:block;height:100%}
+.lineage{margin-top:22px;border:1px solid var(--border);border-radius:14px;padding:16px 18px;background:linear-gradient(180deg,var(--card),var(--card2))}
+.lineage h4{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:12px}
+.lineage .rows{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:780px){.lineage .rows{grid-template-columns:1fr}}
+.lineage .ln{display:flex;gap:10px;align-items:flex-start;font-size:11px;color:var(--dim);line-height:1.5}
+.lineage .ln .pin{width:6px;height:6px;border-radius:50%;margin-top:5px;flex:0 0 auto}
+.lineage .ln b{color:var(--text);font-weight:500}
+.note{font-size:10.5px;color:var(--dim);text-align:center;margin-top:18px;line-height:1.6}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes ring{0%{transform:scale(1);opacity:.7}70%{opacity:0}100%{transform:scale(2.6);opacity:0}}
+.fade{animation:fade .5s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<div id="pvbanner" class="pvbanner" style="display:none">PREVIEW MODE &middot; figures below are sample data, not live</div>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand"><span class="dot"></span><span>BREACH<b>FORGE</b></span></div>
+    <div class="sep"></div>
+    <div class="acct" id="acct">Loading account&hellip;</div>
+    <div class="spacer"></div>
+    <button class="pvtoggle" id="pvBtn">Preview sample</button>
+    <div class="refresh"><span class="live off" id="liveDot"></span><span id="syncedTxt">Connecting to intel feed&hellip;</span></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <div>
+      <h1>Threat-informed readiness</h1>
+      <div class="sub">Live adversary intelligence mapped to the drills you have and have not run. <b>The intel feeds are real on day one.</b> Your readiness builds from your maturity assessment and the techniques your drills exercise.</div>
+    </div>
+    <div class="threatlevel">
+      <div class="ring">
+        <svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="23" fill="none" stroke="#1c2535" stroke-width="5"/><circle id="ringArc" cx="27" cy="27" r="23" fill="none" stroke="#2a3545" stroke-width="5" stroke-linecap="round" stroke-dasharray="144.5" stroke-dashoffset="144.5"/></svg>
+        <div class="v" id="ringVal" style="color:var(--muted)">&middot;</div>
+      </div>
+      <div>
+        <div class="lab">Readiness index</div>
+        <div class="big" id="tlBig" style="color:var(--dim)">No baseline</div>
+        <small id="tlSmall">Run a maturity assessment to begin</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid kpis" id="kpis"></div>
+
+  <div class="grid split-3-2" style="margin-bottom:14px">
+    <div class="card fade">
+      <div class="head"><span class="title">Active threat-actor origins</span><span class="prov intel"><span class="pin"></span>Curated TI</span></div>
+      <div class="mapwrap" id="mapwrap"></div>
+      <div class="legend"><span><i style="background:var(--red)"></i>High activity</span><span><i style="background:var(--amber)"></i>Elevated</span><span><i style="background:var(--accent)"></i>Tracked</span></div>
+      <div class="cap" id="mapcap">Geographic origin of tracked threat groups. Marker size reflects how many active groups operate from each country. This shows where actors operate, not attacks against your environment.</div>
+    </div>
+    <div class="card fade">
+      <div class="head"><span class="title">Origins by activity</span><span class="prov intel"><span class="pin"></span>Curated TI</span></div>
+      <div id="origins"></div>
+      <div class="cap">Ranked by number of active tracked groups per origin. Sourced from your threat-actor library.</div>
+    </div>
+  </div>
+
+  <div class="grid split-3-2" style="margin-bottom:14px">
+    <div class="card fade">
+      <div class="head"><span class="title">Priority drills, matched to live intel</span><span class="prov you"><span class="pin"></span>Your coverage x TI</span></div>
+      <div id="drills"></div>
+      <div class="cap">Recommendations from the intel feed, with each technique marked validated or gap against your own drill history. This is the link from intel to action.</div>
+    </div>
+    <div class="card fade">
+      <div class="head"><span class="title">Live C2 infrastructure</span><span class="prov feed"><span class="pin"></span>abuse.ch</span></div>
+      <div id="iocs"></div>
+      <div class="cap">Source: abuse.ch ThreatFox and Feodo Tracker. Open-source. Infrastructure locations, not victims and not telemetry from your network. Refreshed every 2h.</div>
+    </div>
+  </div>
+
+  <div class="grid split-1-1" style="margin-bottom:14px">
+    <div class="card fade">
+      <div class="head"><span class="title">Emerging threats for your sector</span><span class="prov feed"><span class="pin"></span>KEV + RSS</span></div>
+      <div id="emerging"></div>
+      <div class="cap" id="emcap">Source: CISA KEV, vendor and DFIR RSS, filtered to your sector. Gap means no current scenario exercises those techniques.</div>
+    </div>
+    <div class="card fade">
+      <div class="head"><span class="title">Your recent drills</span><span class="prov you"><span class="pin"></span>Your results</span></div>
+      <div id="results"></div>
+      <div class="cap">Drills your team has actually run, newest first. Shows the techniques each drill exercised. No performance score is shown, because the simulator does not measure detection.</div>
+    </div>
+  </div>
+
+  <div class="card fade" style="margin-bottom:6px">
+    <div class="head"><span class="title">ATT&amp;CK coverage by tactic</span><span class="prov you"><span class="pin"></span>Your drills</span></div>
+    <div class="tacgrid" id="tactics"></div>
+    <div class="cap">Of the techniques our scenarios can exercise in each tactic, the share at least one of your completed drills has covered. Coverage means exercised in a drill, not protected against.</div>
+  </div>
+
+  <div class="lineage">
+    <h4>Where this page gets its data</h4>
+    <div class="rows">
+      <div class="ln"><span class="pin" style="background:var(--accent)"></span><div><b>Your results</b> &middot; readiness, coverage, recent drills and gap matching come from your own assessment answers and the drills your team runs, stored in this browser today and per account after migration.</div></div>
+      <div class="ln"><span class="pin" style="background:var(--green)"></span><div><b>Open-source feeds</b> &middot; live C2 from abuse.ch, emerging threats from CISA KEV and vendor RSS, refreshed every 2h by the collector.</div></div>
+      <div class="ln"><span class="pin" style="background:var(--purple)"></span><div><b>Curated intel</b> &middot; the threat-actor library and origin data, version-dated so the picture stays current.</div></div>
+    </div>
+  </div>
+  <div class="note">Readiness and maturity are computed from your honest input: your assessment answers and the techniques your drills exercise. Threat intelligence is open-source and refreshed on cadence. No live telemetry is taken from a customer environment.</div>
+</div>
+
+<script>
+const TT={"T1566.001":"Initial Access","T1059.001":"Execution","T1078":"Defense Evasion","T1055.001":"Defense Evasion","T1003.001":"Credential Access","T1021.001":"Lateral Movement","T1021.002":"Lateral Movement","T1047":"Execution","T1486":"Impact","T1190":"Initial Access","T1110.003":"Credential Access","T1204.002":"Execution","T1562.001":"Defense Evasion","T1041":"Exfiltration","T1558.003":"Credential Access","T1550.003":"Lateral Movement","T1048":"Exfiltration","T1526":"Discovery","T1098":"Persistence","T1570":"Lateral Movement","T1566.004":"Initial Access","T1592.002":"Reconnaissance","T1589.001":"Reconnaissance","T1596.005":"Reconnaissance","T1059.003":"Execution","T1053.005":"Persistence","T1547.001":"Persistence","T1543.003":"Persistence","T1546.003":"Persistence","T1110.002":"Credential Access","T1021.004":"Lateral Movement","T1550.002":"Lateral Movement","T1490":"Impact","T1489":"Impact","T1078.004":"Defense Evasion","T1548.005":"Privilege Escalation","T1098.001":"Persistence","T1098.004":"Persistence","T1550.001":"Lateral Movement","T1530":"Collection","T1537":"Exfiltration","T1567.002":"Exfiltration","T1566.002":"Initial Access","T1078.002":"Defense Evasion","T1087.002":"Discovery","T1069.002":"Discovery","T1018":"Discovery","T1003.006":"Credential Access","T1134.002":"Privilege Escalation","T1548.002":"Privilege Escalation","T1021.006":"Lateral Movement","T1098.002":"Persistence","T1136.002":"Persistence","T1485":"Impact","T1531":"Impact","T1595.002":"Reconnaissance","T1059.007":"Execution","T1505.003":"Persistence","T1059.004":"Execution","T1048.003":"Exfiltration","T1083":"Discovery","T1082":"Discovery","T1016":"Discovery","T1548.003":"Privilege Escalation","T1134.001":"Privilege Escalation","T1567.001":"Exfiltration","T1078.001":"Defense Evasion","T1133":"Initial Access","T1135":"Discovery","T1049":"Discovery","T1557.001":"Credential Access","T1036.005":"Defense Evasion","T1070.001":"Defense Evasion","T1562.004":"Defense Evasion","T1087.001":"Discovery","T1213.002":"Collection","T1560.001":"Collection","T1074.001":"Collection","T1114.001":"Collection","T1070.004":"Defense Evasion","T1036.003":"Defense Evasion","T1048.002":"Exfiltration","T1491.001":"Impact","T1195.002":"Initial Access","T1195.003":"Initial Access","T1546.012":"Persistence","T1553.002":"Defense Evasion","T1027.002":"Defense Evasion","T1070.003":"Defense Evasion","T1528":"Credential Access","T1098.003":"Persistence","T1069.003":"Discovery","T1087.004":"Discovery","T1134.005":"Privilege Escalation","T1562.008":"Defense Evasion","T1610":"Execution","T1611":"Privilege Escalation","T1613":"Discovery","T1552.007":"Credential Access","T1525":"Persistence","T1496":"Impact","T1543.002":"Persistence","T1106":"Execution","T1110.001":"Credential Access","T1213.003":"Collection","T1491.002":"Impact"};
+const UNIVERSE=["T1003.001","T1003.006","T1016","T1018","T1021.001","T1021.002","T1021.004","T1021.006","T1027.002","T1036.003","T1036.005","T1041","T1047","T1048","T1048.002","T1048.003","T1049","T1053.005","T1055.001","T1059.001","T1059.003","T1059.004","T1059.007","T1069.002","T1069.003","T1070.001","T1070.003","T1070.004","T1074.001","T1078.001","T1078.002","T1078.004","T1082","T1083","T1087.001","T1087.002","T1087.004","T1098.001","T1098.002","T1098.003","T1098.004","T1106","T1110.001","T1110.002","T1110.003","T1114.001","T1133","T1134.001","T1134.002","T1134.005","T1135","T1136.002","T1190","T1195.002","T1195.003","T1204.002","T1213.002","T1213.003","T1485","T1486","T1489","T1490","T1491.001","T1491.002","T1496","T1505.003","T1525","T1526","T1528","T1530","T1531","T1537","T1543.002","T1543.003","T1546.012","T1547.001","T1548.002","T1548.003","T1548.005","T1550.001","T1550.002","T1550.003","T1552.007","T1553.002","T1557.001","T1558.003","T1560.001","T1562.001","T1562.004","T1562.008","T1566.001","T1567.001","T1567.002","T1570","T1589.001","T1592.002","T1595.002","T1610","T1611","T1613"];
+const TACTIC_ORDER=["Reconnaissance","Initial Access","Execution","Persistence","Privilege Escalation","Defense Evasion","Credential Access","Discovery","Lateral Movement","Collection","Exfiltration","Impact"];
+const TACTIC_ABBR={"Reconnaissance":"RECON","Initial Access":"INIT","Execution":"EXEC","Persistence":"PERS","Privilege Escalation":"PRIVESC","Defense Evasion":"EVASION","Credential Access":"CRED","Discovery":"DISCOVERY","Lateral Movement":"LATERAL","Collection":"COLLECT","Exfiltration":"EXFIL","Impact":"IMPACT"};
+const PATHS={actors:"/breachforge/intel/data/threat_actors.json",emerging:"/breachforge/intel/data/emerging_threats.json",recs:"/breachforge/intel/data/recommendations.json",c2:"/breachforge/intel/data/c2_infrastructure.json"};
+const FLAG={CN:"\u{1F1E8}\u{1F1F3}",RU:"\u{1F1F7}\u{1F1FA}",KP:"\u{1F1F0}\u{1F1F5}",IR:"\u{1F1EE}\u{1F1F7}",GB:"\u{1F1EC}\u{1F1E7}",US:"\u{1F1FA}\u{1F1F8}",IN:"\u{1F1EE}\u{1F1F3}",NL:"\u{1F1F3}\u{1F1F1}",DE:"\u{1F1E9}\u{1F1EA}",FR:"\u{1F1EB}\u{1F1F7}",BR:"\u{1F1E7}\u{1F1F7}",VN:"\u{1F1FB}\u{1F1F3}"};
+const COORD={CN:[116.4,39.9],RU:[37.6,55.75],KP:[125.7,39],IR:[51.4,35.7],GB:[-0.13,51.5],US:[-95,39],IN:[78,22],NL:[5.3,52.1],DE:[10.4,51.2],FR:[2.3,46.6],BR:[-51,-12],VN:[106,16]};
+
+let S={actors:[],emerging:[],recs:[],c2:[],synced:null,assess:[],drills:[],sector:null,preview:false,connected:false};
+
+const SAMPLE={
+  actors:[
+    {id:"TA-005",name:"VOLT TYPHOON",origin_iso2:"CN",sectors:["Critical Infrastructure","Military"],active:"2021-Present"},
+    {id:"TA-006",name:"STORM-0558",origin_iso2:"CN",sectors:["Government","Diplomacy"],active:"2023-Present"},
+    {id:"TA-009",name:"UNC5221",origin_iso2:"CN",sectors:["Cross-sector","Government"],active:"2023-Present"},
+    {id:"TA-002",name:"APT29 / COZY BEAR",origin_iso2:"RU",sectors:["Government","Think Tanks"],active:"2008-Present"},
+    {id:"TA-008",name:"CL0P",origin_iso2:"RU",sectors:["Cross-sector","Financial Services"],active:"2019-Present"},
+    {id:"TA-001",name:"LAZARUS GROUP",origin_iso2:"KP",sectors:["Finance","Defence"],active:"2009-Present"},
+    {id:"TA-004",name:"SCATTERED SPIDER",origin_iso2:"GB",sectors:["Technology","Hospitality"],active:"2022-Present"}
+  ],
+  emerging:[
+    {id:"ET-001",title:"UNC5221 exploiting Ivanti Connect Secure, techniques outside current coverage",source:"CISA KEV",severity:"Critical",actors:["UNC5221"],sectors:["Healthcare","Government"],techniques:["T1190","T1059.001"],uncovered_techniques:["T1071.004","T1572"]},
+    {id:"ET-002",title:"Cl0p managed-file-transfer exploitation, supply-chain variant",source:"DFIR RSS",severity:"High",actors:["Cl0p"],sectors:["Financial Services","Healthcare"],techniques:["T1190","T1567.002"],uncovered_techniques:["T1567.002"]},
+    {id:"ET-003",title:"Midnight Blizzard credential spray against on-prem Exchange",source:"Microsoft RSS",severity:"High",actors:["Midnight Blizzard"],sectors:["Government"],techniques:["T1110.003","T1078"],uncovered_techniques:[]}
+  ],
+  recs:[
+    {priority:1,scenario_id:"S1",scenario_name:"Ransomware Kill Chain",reason:"FIN7 ransomware activity targeting healthcare. T1486, T1490 trending up.",techniques_matched:["T1486","T1490","T1003.001","T1133"],urgency:"Critical",simulation_url:"../simulation/desktop/#S1"},
+    {priority:2,scenario_id:"S8",scenario_name:"Azure / Entra Identity Attack",reason:"APT29 OAuth token theft campaign active. European organisations targeted.",techniques_matched:["T1528","T1550.001","T1537"],urgency:"Critical",simulation_url:"../simulation/desktop/#S8"},
+    {priority:3,scenario_id:"S2",scenario_name:"Cloud Control-Plane Pivot",reason:"Scattered Spider MFA fatigue and cloud exfil active. Financial sector targeted.",techniques_matched:["T1078","T1528","T1530"],urgency:"High",simulation_url:"../simulation/desktop/#S2"}
+  ],
+  c2:[
+    {family:"Cobalt Strike",ip:"45.137.21.88",country:"NL",first_seen:"2026-06-01T12:00:00Z"},
+    {family:"QakBot",ip:"91.215.85.142",country:"RU",first_seen:"2026-06-01T10:00:00Z"},
+    {family:"IcedID",ip:"193.42.36.59",country:"DE",first_seen:"2026-06-01T08:00:00Z"},
+    {family:"Pikabot",ip:"23.95.182.7",country:"US",first_seen:"2026-06-01T06:00:00Z"}
+  ],
+  synced:new Date(Date.now()-2*3600*1000).toISOString(),
+  assess:[{timestamp:new Date(Date.now()-5*86400000).toISOString(),sector:"Financial Services + Healthcare",scores:{detection:3.4,response:3.0,coverage:2.8,process:3.2,tooling:2.6},overallScore:3.0}],
+  drills:[
+    {ts:new Date(Date.now()-4*86400000).toISOString(),id:"S1",name:"Ransomware Kill Chain",cat:"Endpoint",kind:"simulation",techniques:["T1566.001","T1204.002","T1059.001","T1003.001","T1021.001","T1486","T1490"],tactics:["Initial Access","Execution","Credential Access","Lateral Movement","Impact"]},
+    {ts:new Date(Date.now()-6*86400000).toISOString(),id:"S2",name:"Cloud Control-Plane Pivot",cat:"Cloud",kind:"simulation",techniques:["T1078","T1528","T1530","T1526"],tactics:["Initial Access","Credential Access","Collection"]},
+    {ts:new Date(Date.now()-9*86400000).toISOString(),id:"S6",name:"Active Directory Compromise",cat:"Identity",kind:"killchain",techniques:["T1558.003","T1550.003","T1003.001","T1021.002"],tactics:["Credential Access","Lateral Movement"]}
+  ]
+};
+
+function relTime(iso){
+  if(!iso)return null;
+  const d=(Date.now()-new Date(iso).getTime())/1000;
+  if(isNaN(d))return null;
+  if(d<3600)return Math.max(1,Math.round(d/60))+"m";
+  if(d<86400)return Math.round(d/3600)+"h";
+  return Math.round(d/86400)+"d";
+}
+function validatedSet(){const s=new Set();S.drills.forEach(d=>(d.techniques||[]).forEach(t=>s.add(t)));return s;}
+function universeByTactic(){const m={};TACTIC_ORDER.forEach(t=>m[t]=[]);UNIVERSE.forEach(t=>{const tac=TT[t];if(m[tac])m[tac].push(t);});return m;}
+function maturity(){if(!S.assess.length)return null;const a=S.assess[S.assess.length-1];return a.overallScore!=null?+a.overallScore:null;}
+function coverageCount(){const v=validatedSet();let n=0;UNIVERSE.forEach(t=>{if(v.has(t))n++;});return n;}
+function readiness(){
+  const m=maturity(),covN=coverageCount(),cov=covN/UNIVERSE.length*100;
+  const hasM=m!=null,hasD=S.drills.length>0;
+  if(!hasM&&!hasD)return {val:null};
+  let v;
+  if(hasM&&hasD)v=Math.round(0.6*(m/5*100)+0.4*cov);
+  else if(hasM)v=Math.round(m/5*100);
+  else v=Math.round(cov);
+  return {val:v,m:hasM?m:null,cov:cov,hasM:hasM,hasD:hasD};
+}
+function band(v){if(v>=75)return["Strong","var(--green)"];if(v>=55)return["Developing","var(--amber)"];return["Early","var(--red)"];}
+
+/* ---------- renderers ---------- */
+function setHeader(){
+  S.sector=S.assess.length?(S.assess[S.assess.length-1].sector||null):null;
+  document.getElementById("acct").innerHTML = S.sector
+    ? `Account <b>this browser</b> <span style="color:var(--muted)">/</span> <span style="font-family:var(--mono);font-size:11px">${S.sector}</span>`
+    : `Account <b>this browser</b> <span style="color:var(--muted)">/</span> <span style="font-family:var(--mono);font-size:11px;color:var(--amber)">sector not set</span>`;
+  const dot=document.getElementById("liveDot"),txt=document.getElementById("syncedTxt");
+  const ago=relTime(S.synced);
+  if(S.connected&&ago){dot.classList.remove("off");txt.innerHTML=`Intel synced <b style="color:var(--text)">${ago}</b> ago`;}
+  else if(S.preview){dot.classList.add("off");txt.textContent="Preview sample data";}
+  else{dot.classList.add("off");txt.textContent="Not connected to live feed";}
+}
+
+function setReadiness(){
+  const r=readiness(),arc=document.getElementById("ringArc"),val=document.getElementById("ringVal"),big=document.getElementById("tlBig"),small=document.getElementById("tlSmall");
+  const Ccirc=2*Math.PI*23;
+  if(r.val==null){
+    arc.setAttribute("stroke","#2a3545");arc.setAttribute("stroke-dashoffset",Ccirc);
+    val.textContent="\u00b7";val.style.color="var(--muted)";big.textContent="No baseline";big.style.color="var(--dim)";
+    small.textContent="Run a maturity assessment to begin";return;
+  }
+  const [bnd,col]=band(r.val);
+  arc.setAttribute("stroke",col);arc.setAttribute("stroke-dasharray",Ccirc);arc.setAttribute("stroke-dashoffset",Ccirc*(1-r.val/100));
+  val.textContent=r.val;val.style.color=col;big.textContent=bnd;big.style.color=col;
+  const parts=[];if(r.hasM)parts.push("maturity "+r.m.toFixed(1)+"/5");if(r.hasD)parts.push(Math.round(r.cov)+"% coverage");
+  small.innerHTML=`${r.val} / 100 &middot; ${parts.join(" + ")}`;
+}
+
+function renderKpis(){
+  const r=readiness(),covN=coverageCount(),cov=Math.round(covN/UNIVERSE.length*100);
+  const cutoff=Date.now()-30*86400000;
+  const d30=S.drills.filter(d=>new Date(d.ts).getTime()>=cutoff).length;
+  const v=validatedSet();
+  const active=new Set();
+  S.recs.forEach(x=>(x.techniques_matched||[]).forEach(t=>active.add(t)));
+  S.emerging.forEach(x=>(x.techniques||[]).forEach(t=>active.add(t)));
+  let gaps=0;active.forEach(t=>{if(!v.has(t))gaps++;});
+  const tiles=[
+    r.val==null
+      ? {lab:"Readiness index",num:"\u00b7",col:"var(--muted)",cta:"Run an assessment"}
+      : {lab:"Readiness index",num:String(r.val),col:band(r.val)[1],delta:band(r.val)[0]+" \u00b7 0 to 100"},
+    S.drills.length
+      ? {lab:"ATT&CK coverage",num:cov+"%",col:"var(--accent)",delta:covN+" of "+UNIVERSE.length+" techniques exercised"}
+      : {lab:"ATT&CK coverage",num:"0%",col:"var(--muted)",cta:"Nothing exercised yet"},
+    {lab:"Drills run \u00b7 30 days",num:String(d30),col:d30?"var(--green)":"var(--muted)",delta:S.drills.length+" all time"},
+    {lab:"Unvalidated active techniques",num:String(active.size?gaps:0),col:gaps?"var(--red)":"var(--dim)",delta:active.size?"seen in live intel, never drilled":"awaiting intel feed"}
+  ];
+  document.getElementById("kpis").innerHTML=tiles.map(k=>`
+    <div class="card kpi">
+      <div class="lab">${k.lab}</div>
+      <div class="num" style="color:${k.col}">${k.num}</div>
+      ${k.delta?`<div class="delta">${k.delta}</div>`:""}
+      ${k.cta?`<div class="cta">${k.cta} \u2192</div>`:""}
+      <div class="src"><span class="prov you"><span class="pin"></span>Your results</span></div>
+    </div>`).join("");
+}
+
+function originAgg(){
+  const m={};
+  S.actors.forEach(a=>{const c=a.origin_iso2;if(!c)return;(m[c]=m[c]||{iso:c,groups:0,names:[]});m[c].groups++;m[c].names.push((a.name||"").replace(/\s*\/.*$/,""));});
+  const arr=Object.values(m).sort((x,y)=>y.groups-x.groups);
+  const max=arr.length?arr[0].groups:1;
+  arr.forEach(o=>{o.act=Math.round(o.groups/max*100);o.col=o.groups>=3?"var(--red)":o.groups>=2?"var(--amber)":"var(--accent)";});
+  return arr;
+}
+
+function renderMap(){
+  const W=1000,H=460,cw=W/60,ch=H/26;
+  const LAND={0:[[9,14],[22,26],[40,58]],1:[[3,18],[22,27],[31,36],[38,58]],2:[[2,19],[23,27],[30,37],[38,59]],3:[[3,20],[24,25],[30,37],[38,59]],4:[[3,21],[29,37],[38,59]],5:[[5,21],[29,38],[39,59]],6:[[6,21],[28,38],[40,59]],7:[[8,20],[27,38],[41,59]],8:[[11,19],[26,38],[41,58]],9:[[13,19],[26,38],[41,57]],10:[[15,19],[26,39],[42,56]],11:[[17,21],[27,39],[47,55]],12:[[17,23],[28,39],[46,54]],13:[[17,24],[29,39],[47,53]],14:[[17,24],[29,39],[48,54]],15:[[18,24],[30,38],[49,55]],16:[[18,24],[31,37],[49,56]],17:[[18,23],[32,36],[49,56]],18:[[18,22],[33,35],[50,55]],19:[[18,21],[51,53]],20:[[18,20]],21:[[18,19]]};
+  let dots="";
+  for(const r in LAND){for(const seg of LAND[r]){for(let c=seg[0];c<=seg[1];c++){dots+=`<circle cx="${((c+0.5)*cw).toFixed(1)}" cy="${((+r+0.5)*ch).toFixed(1)}" r="1.4" fill="#4f7197"/>`;}}}
+  const proj=(lon,lat)=>[(((lon+177)/6)+0.5)*cw,(((78-lat)/6)+0.5)*ch];
+  const agg=originAgg();
+  let mk="",unattributed=0;
+  agg.forEach(o=>{
+    const c=COORD[o.iso];if(!c){unattributed+=o.groups;return;}
+    const p=proj(c[0],c[1]),x=p[0].toFixed(1),y=p[1].toFixed(1),rr=(5+o.act/14).toFixed(1);
+    mk+=`<circle cx="${x}" cy="${y}" r="${rr}" fill="none" stroke="${o.col}" stroke-width="1.4" class="marker-pulse"/>`
+      +`<circle cx="${x}" cy="${y}" r="3.4" fill="${o.col}" opacity="0.4" style="filter:blur(3px)"/>`
+      +`<circle cx="${x}" cy="${y}" r="3.4" fill="${o.col}"/>`
+      +`<text x="${(p[0]+9).toFixed(1)}" y="${(p[1]+3.5).toFixed(1)}" fill="#9fb0c4" font-family="JetBrains Mono, monospace" font-size="10.5">${o.iso}</text>`;
+  });
+  const wrap=document.getElementById("mapwrap");
+  if(!agg.length){wrap.innerHTML=`<div class="empty"><div class="ic">\u{1F30D}</div><div class="t">No actor data loaded</div><div class="d">Connect to the live site to load the threat-actor library.</div></div>`;return;}
+  wrap.innerHTML=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${dots}${mk}</svg>`;
+  if(unattributed)document.getElementById("mapcap").innerHTML=`Geographic origin of tracked threat groups. Marker size reflects active groups per country. ${unattributed} group(s) are unattributed and not plotted. This shows where actors operate, not attacks against you.`;
+}
+
+function renderOrigins(){
+  const agg=originAgg(),el=document.getElementById("origins");
+  if(!agg.length){el.innerHTML=`<div class="empty"><div class="ic">\u{1F4E1}</div><div class="t">No origin data</div><div class="d">Loads from your threat-actor library on the live site.</div></div>`;return;}
+  el.innerHTML=agg.map(o=>`
+    <div class="origin">
+      <span class="flag">${FLAG[o.iso]||"\u{1F3F3}"}</span>
+      <span class="co">${o.iso}</span>
+      <div class="meta"><div class="nm">${o.groups} active group${o.groups>1?"s":""}</div><div class="ds">${o.names.slice(0,3).join(", ")}</div></div>
+      <div class="bar"><i style="width:${o.act}%;background:${o.col}"></i></div>
+    </div>`).join("");
+}
+
+function renderDrills(){
+  const el=document.getElementById("drills");
+  if(!S.recs.length){el.innerHTML=`<div class="empty"><div class="ic">\u{1F3AF}</div><div class="t">No recommendations loaded</div><div class="d">The intel feed produces these. They appear once the collector has synced.</div></div>`;return;}
+  const v=validatedSet();
+  el.innerHTML=S.recs.slice(0,4).map(d=>{
+    const tm=d.techniques_matched||[];
+    const tags=tm.slice(0,4).map(t=>{const ok=v.has(t);return `<span class="tag ${ok?'ok':'gap'}">${t} ${ok?"\u2713":"gap"}</span>`;}).join("");
+    const gapN=tm.filter(t=>!v.has(t)).length;
+    const ucol=(d.urgency==="Critical")?"var(--red)":"var(--amber)";
+    return `<div class="drill">
+      <div class="ico" style="background:${ucol}1f;border-color:${ucol}55;color:${ucol}">\u26A1</div>
+      <div class="body">
+        <div class="why">${d.reason||d.scenario_name}</div>
+        <div class="tags"><span class="tag">${d.urgency||""}</span><span class="tag">${gapN} of ${tm.length} not validated</span>${tags}</div>
+      </div>
+      <a class="runbtn" href="${d.simulation_url||"#"}">Run \u2192</a>
+    </div>`;
+  }).join("");
+}
+
+function renderIocs(){
+  const el=document.getElementById("iocs");
+  if(!S.c2.length){
+    el.innerHTML=`<div class="empty"><div class="ic">\u{1F6F0}</div><div class="t">Awaiting first sync</div><div class="d">The abuse.ch collector writes c2_infrastructure.json every 2h. Until it runs, this stays empty rather than showing fake data.</div></div>`;return;}
+  el.innerHTML=S.c2.slice(0,6).map(i=>{
+    const ago=relTime(i.first_seen)||"";
+    const col=i.country==="RU"?"var(--amber)":"var(--accent)";
+    return `<div class="ioc" style="border-left-color:${col}"><span class="fam">${i.family||i.malware||"unknown"}</span><span class="ip">${i.ip||i.ioc||""}</span><span class="co">${i.country||""}</span><span class="ago">${ago} ago</span></div>`;
+  }).join("");
+}
+
+function renderEmerging(){
+  const el=document.getElementById("emerging");
+  let items=S.emerging;
+  if(S.sector){const sl=S.sector.toLowerCase();items=S.emerging.filter(e=>(e.sectors||[]).some(s=>sl.indexOf(s.toLowerCase())>=0||s.toLowerCase().indexOf(sl.split(" + ")[0].toLowerCase())>=0));if(!items.length)items=S.emerging;}
+  if(!items.length){el.innerHTML=`<div class="empty"><div class="ic">\u26A0</div><div class="t">No emerging items loaded</div><div class="d">Sourced from CISA KEV and vendor RSS by the collector.</div></div>`;
+    if(!S.sector)document.getElementById("emcap").innerHTML="Set your sector by running an assessment to filter these to your industry. Showing all items until then.";return;}
+  if(!S.sector)document.getElementById("emcap").innerHTML="Sector not set, showing all items. Run an assessment to filter to your industry.";
+  el.innerHTML=items.slice(0,4).map(e=>{
+    const sev=(e.severity||"").toUpperCase(),col=sev==="CRITICAL"?"var(--red)":sev==="HIGH"?"var(--amber)":"var(--accent)";
+    const covered=!(e.uncovered_techniques&&e.uncovered_techniques.length);
+    return `<div class="et"><div class="r1"><span class="sev" style="color:${col};border:1px solid ${col}">${sev||"INFO"}</span><span class="tag ${covered?'ok':'gap'}">${covered?"Covered":"Gap"}</span></div><div class="ti">${e.title||""}</div><div class="me">${e.source||""}${e.actors&&e.actors.length?" \u00b7 "+e.actors[0]:""}${e.published?" \u00b7 "+(relTime(e.published)||"")+" ago":""}</div></div>`;
+  }).join("");
+}
+
+function renderResults(){
+  const el=document.getElementById("results");
+  if(!S.drills.length){el.innerHTML=`<div class="empty"><div class="ic">\u{1F4CA}</div><div class="t">No drills run yet</div><div class="d">Run a Simulation or Kill Chain drill in the app and it will be logged here, building your coverage baseline.</div><a class="runbtn" href="../simulation/desktop/">Run a drill \u2192</a></div>`;return;}
+  const list=S.drills.slice(-6).reverse();
+  el.innerHTML=list.map(d=>{
+    const techN=(d.techniques||[]).length,tacN=new Set((d.techniques||[]).map(t=>TT[t]).filter(Boolean)).size;
+    const ki=d.kind==="killchain"?"\u26D3":"\u25B6";
+    return `<div class="res"><div class="ki">${ki}</div><div class="nm">${d.name||d.id}<small>${d.cat||d.kind} \u00b7 ${techN} techniques \u00b7 ${tacN} tactics</small></div><div class="when">${relTime(d.ts)||""} ago</div></div>`;
+  }).join("");
+}
+
+function renderTactics(){
+  const ubt=universeByTactic(),v=validatedSet();
+  document.getElementById("tactics").innerHTML=TACTIC_ORDER.map(t=>{
+    const uni=ubt[t]||[],tot=uni.length,done=uni.filter(x=>v.has(x)).length;
+    const pc=tot?Math.round(done/tot*100):0,col=!S.drills.length?"var(--muted)":pc>=70?"var(--green)":pc>=40?"var(--amber)":pc>0?"var(--red)":"var(--muted)";
+    return `<div class="tac"><div class="pc" style="color:${col}">${pc}%</div><div class="frac">${done}/${tot}</div><div class="tb"><i style="width:${pc}%;background:${col}"></i></div><div class="nm">${TACTIC_ABBR[t]||t}</div></div>`;
+  }).join("");
+}
+
+function render(){setHeader();setReadiness();renderKpis();renderMap();renderOrigins();renderDrills();renderIocs();renderEmerging();renderResults();renderTactics();}
+
+/* ---------- load real data ---------- */
+async function loadJSON(url){try{const r=await fetch(url+"?v="+Date.now());if(!r.ok)return null;return await r.json();}catch(e){return null;}}
+function getLS(k){try{return JSON.parse(localStorage.getItem(k)||"null");}catch(e){return null;}}
+
+async function boot(){
+  const [a,e,rc,c2]=await Promise.all([loadJSON(PATHS.actors),loadJSON(PATHS.emerging),loadJSON(PATHS.recs),loadJSON(PATHS.c2)]);
+  S.connected=!!(a||e||rc);
+  S.actors=(a&&(a.actors||(Array.isArray(a)?a:null)))||[];
+  S.emerging=(e&&(e.emerging||(Array.isArray(e)?e:null)))||[];
+  S.recs=(rc&&(rc.recommendations||(Array.isArray(rc)?rc:null)))||[];
+  S.c2=(c2&&(c2.iocs||c2.data||(Array.isArray(c2)?c2:null)))||[];
+  S.synced=(rc&&rc.generated)||(e&&e.generated)||(a&&a.generated)||null;
+  S.assess=getLS("bf_assessment_history")||[];
+  S.drills=getLS("bf_drill_history")||[];
+  render();
+}
+
+function applyPreview(on){
+  S.preview=on;
+  document.getElementById("pvbanner").style.display=on?"block":"none";
+  document.getElementById("pvBtn").classList.toggle("on",on);
+  document.getElementById("pvBtn").textContent=on?"Exit preview":"Preview sample";
+  if(on){S.connected=false;S.actors=SAMPLE.actors;S.emerging=SAMPLE.emerging;S.recs=SAMPLE.recs;S.c2=SAMPLE.c2;S.synced=SAMPLE.synced;S.assess=SAMPLE.assess;S.drills=SAMPLE.drills;render();}
+  else boot();
+}
+document.getElementById("pvBtn").addEventListener("click",()=>applyPreview(!S.preview));
+
+boot();
+</script>
+</body>
+</html>
