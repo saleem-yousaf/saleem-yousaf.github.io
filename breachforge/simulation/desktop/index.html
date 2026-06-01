@@ -2802,26 +2802,28 @@ function BridgePage({role}){
   const [role,setRole]=useState(()=>{try{return localStorage.getItem("bf_role")||"CISO / CIO";}catch(e){return "CISO / CIO";}});
   const [time,setTime]=useState(new Date());
   const [tiPick,setTiPick]=useState(null);
+  const [navOpen,setNavOpen]=useState(()=>{try{return localStorage.getItem("bf_nav")!=="0";}catch(e){return true;}});
+  function toggleNav(){setNavOpen(o=>{const v=!o;try{localStorage.setItem("bf_nav",v?"1":"0");}catch(e){}return v;});}
   useEffect(()=>{_nav.setPage=setPage;_nav.setPick=setTiPick;},[]);
   useEffect(()=>{const t=setInterval(()=>setTime(new Date()),1000);return()=>clearInterval(t);},[]);
   if(!onboarded)return <Onboarding onDone={(selectedRole)=>{var r=selectedRole||"CISO / CIO";setRole(r);setOnboarded(true);try{localStorage.setItem("bf_role",r);localStorage.setItem("bf_onboarded","1");}catch(e){}}}/>;
   const PAGES={overview:<Overview/>,emerging:<EmergingThreats/>,bridge:<BridgePage role={role}/>,rules:<DetectionRulesPage/>,simulations:<SimRunner tiPick={tiPick} clearTiPick={()=>setTiPick(null)}/>,killchain:<KillChainPage/>,mitre:<MitrePage/>,actors:<ActorLibrary/>,compliance:<CompliancePage/>,assessment:<AssessmentPage role={role}/>,reports:<ReportsPage role={role}/>};
   return <div style={{display:"flex",minHeight:"100vh",background:C.bg}}>
-    <div style={{width:200,background:C.surface,borderRight:`1px solid ${C.border}`,display:"flex",flexDirection:"column",flexShrink:0,position:"sticky",top:0,height:"100vh",overflowY:"auto"}}>
-      <div style={{padding:"20px 16px 16px",borderBottom:`1px solid ${C.border}`}}>
-        <div style={{fontFamily:"'Syne',sans-serif",fontSize:13,fontWeight:800,color:C.accent,letterSpacing:".02em",display:"flex",alignItems:"center",gap:7,whiteSpace:"nowrap"}}><span style={{width:8,height:8,background:C.accent,borderRadius:"50%",display:"inline-block",flexShrink:0,boxShadow:`0 0 8px ${C.accent}`}}/>BREACHFORGE</div>
-        <div style={{fontSize:8,color:C.muted,marginTop:3,letterSpacing:".08em"}}>BAS PLATFORM v5.6</div>
+    <div style={{width:navOpen?220:60,transition:"width .15s ease",background:C.surface,borderRight:`1px solid ${C.border}`,display:"flex",flexDirection:"column",flexShrink:0,position:"sticky",top:0,height:"100vh",overflowY:"auto",overflowX:"hidden"}}>
+      {navOpen?<div style={{padding:"18px 16px 14px",borderBottom:`1px solid ${C.border}`}}>
+        <div style={{fontFamily:"'Syne',sans-serif",fontSize:13,fontWeight:800,color:C.accent,letterSpacing:".01em",display:"flex",alignItems:"center",gap:7,whiteSpace:"nowrap",overflow:"hidden"}}><span style={{width:8,height:8,background:C.accent,borderRadius:"50%",display:"inline-block",flexShrink:0,boxShadow:`0 0 8px ${C.accent}`}}/>BREACHFORGE</div>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:6}}><span style={{fontSize:8,color:C.muted,letterSpacing:".08em"}}>BAS PLATFORM v5.6</span><button onClick={toggleNav} title="Collapse menu" style={{background:"transparent",border:`1px solid ${C.border}`,color:C.dim,borderRadius:5,width:24,height:24,flexShrink:0,cursor:"pointer",fontSize:13,lineHeight:1,padding:0}}>‹</button></div>
         <a href="../mobile/" onClick={()=>{try{localStorage.setItem('bf_view','mobile');}catch(e){}}} style={{display:"inline-flex",alignItems:"center",gap:5,marginTop:10,fontSize:9,color:C.accent,textDecoration:"none",border:`1px solid ${C.accent}44`,borderRadius:5,padding:"5px 9px"}}>Mobile view &rarr;</a>
-      </div>
-      <nav style={{padding:"12px 8px",flex:1}}>
-        {NAV.map(n=><button key={n.id} onClick={()=>setPage(n.id)} style={{display:"flex",alignItems:"center",gap:10,width:"100%",textAlign:"left",padding:"9px 10px",borderRadius:5,marginBottom:2,background:page===n.id?`${C.accent}14`:"transparent",border:`1px solid ${page===n.id?C.accent+"44":"transparent"}`,color:page===n.id?C.accent:C.dim,fontSize:11,letterSpacing:".04em"}}><span style={{fontSize:13,width:18,textAlign:"center"}}>{n.icon}</span>{n.label}</button>)}
+      </div>:<div style={{padding:"18px 8px 14px",borderBottom:`1px solid ${C.border}`,display:"flex",justifyContent:"center"}}><button onClick={toggleNav} title="Expand menu" style={{background:"transparent",border:`1px solid ${C.border}`,color:C.accent,borderRadius:5,width:30,height:30,cursor:"pointer",fontSize:15,lineHeight:1,padding:0}}>›</button></div>}
+      <nav style={{padding:navOpen?"12px 8px":"12px 6px",flex:1}}>
+        {NAV.map(n=><button key={n.id} onClick={()=>setPage(n.id)} title={n.label} style={{display:"flex",alignItems:"center",justifyContent:navOpen?"flex-start":"center",gap:navOpen?10:0,width:"100%",textAlign:"left",padding:navOpen?"9px 10px":"9px 0",borderRadius:5,marginBottom:2,background:page===n.id?`${C.accent}14`:"transparent",border:`1px solid ${page===n.id?C.accent+"44":"transparent"}`,color:page===n.id?C.accent:C.dim,fontSize:11,letterSpacing:".04em"}}><span style={{fontSize:13,width:18,textAlign:"center",flexShrink:0}}>{n.icon}</span>{navOpen&&n.label}</button>)}
       </nav>
-      <div style={{padding:"12px 16px",borderTop:`1px solid ${C.border}`}}>
+      {navOpen?<div style={{padding:"12px 16px",borderTop:`1px solid ${C.border}`}}>
         <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:6}}><span style={{width:6,height:6,background:C.green,borderRadius:"50%",animation:"pulse 2s infinite",display:"inline-block"}}/><span style={{fontSize:9,color:C.green}}>LIVE</span></div>
         <div style={{fontSize:9,color:C.dim,fontVariantNumeric:"tabular-nums"}}>{time.toLocaleTimeString("en-GB")}</div>
         <div style={{fontSize:8,color:C.muted,marginTop:2}}>Lab env · synthetic only</div>
         <div style={{marginTop:10,paddingTop:10,borderTop:`1px solid ${C.border}`,display:"flex",justifyContent:"space-between",alignItems:"center",gap:8}}><a href="../" style={{fontSize:9,color:C.dim,textDecoration:"none"}}>← Back</a><a href="../mobile/" onClick={()=>{try{localStorage.setItem('bf_view','mobile');}catch(e){}}} style={{fontSize:9,color:C.accent,textDecoration:"none"}}>Mobile view →</a></div>
-      </div>
+      </div>:<div style={{padding:"14px 0",borderTop:`1px solid ${C.border}`,display:"flex",justifyContent:"center"}}><span style={{width:6,height:6,background:C.green,borderRadius:"50%",animation:"pulse 2s infinite",display:"inline-block"}}/></div>}
     </div>
     <div style={{flex:1,display:"flex",flexDirection:"column",minWidth:0}}>
       <div style={{background:C.surface,borderBottom:`1px solid ${C.border}`,padding:"10px 20px",display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0}}>
