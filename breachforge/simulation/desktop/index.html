@@ -841,7 +841,7 @@ function Onboarding({onDone}){
   </div>;
 }
 
-const NAV=[{id:"overview",label:"Overview",icon:"⬡"},{id:"simulations",label:"Simulations",icon:"▶"},{id:"emerging",label:"Emerging",icon:"⚡"},{id:"bridge",label:"Threat Model",icon:"⇄"},{id:"rules",label:"Detection Rules",icon:"⛨"},{id:"killchain",label:"Kill Chain",icon:"⛓"},{id:"mitre",label:"MITRE ATT&CK",icon:"◈"},{id:"actors",label:"Threat Actors",icon:"◆"},{id:"compliance",label:"Compliance",icon:"✓"},{id:"assessment",label:"Assessment",icon:"◎"},{id:"reports",label:"Reports",icon:"▨"}];
+const NAV=[{id:"overview",label:"Overview",icon:"⬡",href:"../../overview/"},{id:"simulations",label:"Simulations",icon:"▶"},{id:"emerging",label:"Emerging",icon:"⚡"},{id:"bridge",label:"Threat Model",icon:"⇄"},{id:"rules",label:"Detection Rules",icon:"⛨"},{id:"killchain",label:"Kill Chain",icon:"⛓"},{id:"mitre",label:"MITRE ATT&CK",icon:"◈"},{id:"actors",label:"Threat Actors",icon:"◆"},{id:"compliance",label:"Compliance",icon:"✓"},{id:"assessment",label:"Assessment",icon:"◎"},{id:"reports",label:"Reports",icon:"▨"}];
 const ROLES=["CISO / CIO","SOC Analyst","Architect","PM","Developer"];
 
 // ── Emerging Threats Module ──────────────────────────────────────────────────
@@ -2799,7 +2799,7 @@ function BridgePage({role}){
 
   function App(){
   const [onboarded,setOnboarded]=useState(()=>{try{return localStorage.getItem("bf_onboarded")==="1";}catch(e){return false;}});
-  const [page,setPage]=useState("overview");
+  const [page,setPage]=useState("simulations");
   const [role,setRole]=useState(()=>{try{return localStorage.getItem("bf_role")||"CISO / CIO";}catch(e){return "CISO / CIO";}});
   const [time,setTime]=useState(new Date());
   const [tiPick,setTiPick]=useState(null);
@@ -2808,7 +2808,7 @@ function BridgePage({role}){
   useEffect(()=>{_nav.setPage=setPage;_nav.setPick=setTiPick;},[]);
   useEffect(()=>{const t=setInterval(()=>setTime(new Date()),1000);return()=>clearInterval(t);},[]);
   if(!onboarded)return <Onboarding onDone={(selectedRole)=>{var r=selectedRole||"CISO / CIO";setRole(r);setOnboarded(true);try{localStorage.setItem("bf_role",r);localStorage.setItem("bf_onboarded","1");}catch(e){}}}/>;
-  const PAGES={overview:<Overview/>,emerging:<EmergingThreats/>,bridge:<BridgePage role={role}/>,rules:<DetectionRulesPage/>,simulations:<SimRunner tiPick={tiPick} clearTiPick={()=>setTiPick(null)}/>,killchain:<KillChainPage/>,mitre:<MitrePage/>,actors:<ActorLibrary/>,compliance:<CompliancePage/>,assessment:<AssessmentPage role={role}/>,reports:<ReportsPage role={role}/>};
+  const PAGES={emerging:<EmergingThreats/>,bridge:<BridgePage role={role}/>,rules:<DetectionRulesPage/>,simulations:<SimRunner tiPick={tiPick} clearTiPick={()=>setTiPick(null)}/>,killchain:<KillChainPage/>,mitre:<MitrePage/>,actors:<ActorLibrary/>,compliance:<CompliancePage/>,assessment:<AssessmentPage role={role}/>,reports:<ReportsPage role={role}/>};
   return <div style={{display:"flex",minHeight:"100vh",background:C.bg}}>
     <div style={{width:navOpen?220:60,transition:"width .15s ease",background:C.surface,borderRight:`1px solid ${C.border}`,display:"flex",flexDirection:"column",flexShrink:0,position:"sticky",top:0,height:"100vh",overflowY:"auto",overflowX:"hidden"}}>
       {navOpen?<div style={{padding:"18px 16px 14px",borderBottom:`1px solid ${C.border}`}}>
@@ -2817,7 +2817,7 @@ function BridgePage({role}){
         <a href="../mobile/" onClick={()=>{try{localStorage.setItem('bf_view','mobile');}catch(e){}}} style={{display:"inline-flex",alignItems:"center",gap:5,marginTop:10,fontSize:9,color:C.accent,textDecoration:"none",border:`1px solid ${C.accent}44`,borderRadius:5,padding:"5px 9px"}}>Mobile view &rarr;</a>
       </div>:<div style={{padding:"18px 8px 14px",borderBottom:`1px solid ${C.border}`,display:"flex",justifyContent:"center"}}><button onClick={toggleNav} title="Expand menu" style={{background:"transparent",border:`1px solid ${C.border}`,color:C.accent,borderRadius:5,width:30,height:30,cursor:"pointer",fontSize:15,lineHeight:1,padding:0}}>›</button></div>}
       <nav style={{padding:navOpen?"12px 8px":"12px 6px",flex:1}}>
-        {NAV.map(n=><button key={n.id} onClick={()=>setPage(n.id)} title={n.label} style={{display:"flex",alignItems:"center",justifyContent:navOpen?"flex-start":"center",gap:navOpen?10:0,width:"100%",textAlign:"left",padding:navOpen?"9px 10px":"9px 0",borderRadius:5,marginBottom:2,background:page===n.id?`${C.accent}14`:"transparent",border:`1px solid ${page===n.id?C.accent+"44":"transparent"}`,color:page===n.id?C.accent:C.dim,fontSize:11,letterSpacing:".04em"}}><span style={{fontSize:13,width:18,textAlign:"center",flexShrink:0}}>{n.icon}</span>{navOpen&&n.label}</button>)}
+        {NAV.map(n=>{const NS={display:"flex",alignItems:"center",justifyContent:navOpen?"flex-start":"center",gap:navOpen?10:0,width:"100%",textAlign:"left",padding:navOpen?"9px 10px":"9px 0",borderRadius:5,marginBottom:2,background:page===n.id?`${C.accent}14`:"transparent",border:`1px solid ${page===n.id?C.accent+"44":"transparent"}`,color:page===n.id?C.accent:C.dim,fontSize:11,letterSpacing:".04em"};const IN=<React.Fragment><span style={{fontSize:13,width:18,textAlign:"center",flexShrink:0}}>{n.icon}</span>{navOpen&&n.label}</React.Fragment>;return n.href?<a key={n.id} href={n.href} title={n.label} style={{...NS,textDecoration:"none"}}>{IN}</a>:<button key={n.id} onClick={()=>setPage(n.id)} title={n.label} style={NS}>{IN}</button>;})}
       </nav>
       {navOpen?<div style={{padding:"12px 16px",borderTop:`1px solid ${C.border}`}}>
         <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:6}}><span style={{width:6,height:6,background:C.green,borderRadius:"50%",animation:"pulse 2s infinite",display:"inline-block"}}/><span style={{fontSize:9,color:C.green}}>INTEL</span></div>
@@ -2831,7 +2831,7 @@ function BridgePage({role}){
         <div><div style={{fontFamily:"'Syne',sans-serif",fontSize:16,fontWeight:800}}>{NAV.find(n=>n.id===page)?.label}</div><div style={{fontSize:9,color:C.dim,marginTop:1}}>{role} · BreachForge v5.6 · Simulation + assessment · open-source threat intel</div></div>
         <div style={{display:"flex",gap:4,alignItems:"center"}}><span style={{fontSize:8,color:C.muted,marginRight:4,letterSpacing:".1em"}}>ROLE:</span>{ROLES.map(r=><button key={r} onClick={()=>{setRole(r);try{localStorage.setItem("bf_role",r);}catch(e){}}} style={{background:role===r?"#1c2a3a":"transparent",border:`1px solid ${role===r?C.accent+"55":C.border}`,color:role===r?C.text:C.dim,padding:"4px 10px",borderRadius:3,fontSize:9}}>{r}</button>)}</div>
       </div>
-      <div style={{flex:1,overflowY:"auto",padding:20}}><div className="fadein">{PAGES[page]||<Overview/>}</div></div>
+      <div style={{flex:1,overflowY:"auto",padding:20}}><div className="fadein">{PAGES[page]||PAGES.simulations}</div></div>
     </div>
   </div>;
 }
