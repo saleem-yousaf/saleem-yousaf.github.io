@@ -1,0 +1,170 @@
+{
+  "generated": "2026-06-01T00:00:00Z",
+  "version": 1,
+  "note": "Canonical BreachForge threat actor dataset. Serves the Threat Actors library and the Threat Model bridge. On Cloudflare this imports into D1 actors plus actor_techniques (techniques[].surface needs a surface column on actor_techniques). Field mapping to D1: name->name, actor_type->actor_type, origin_country->origin_country, origin_iso2->origin_iso2, status->status, first_seen->first_seen, motivation->motivation, summary->summary, aliases->aliases. UI-only fields: color, soph, active, sectors, campaigns, group, sector, bridge.",
+  "total": 9,
+  "actors": [
+    {
+      "id": "TA-001", "slug": "lazarus", "name": "LAZARUS GROUP",
+      "actor_type": "nation-state", "soph": "Nation-State",
+      "origin_country": "North Korea", "origin_iso2": "KP",
+      "status": "active", "first_seen": "2009", "active": "2009-Present",
+      "motivation": "Financial · Espionage · Destruction",
+      "aliases": ["Hidden Cobra", "Zinc", "APT38"],
+      "sectors": ["Finance", "Defence", "Crypto", "Energy"],
+      "campaigns": ["Operation AppleJeus", "WannaCry (attributed)", "SWIFT Banking Heists"],
+      "color": "#ff3355", "group": "G0032", "sector": "Finance and defence",
+      "bridge": false,
+      "summary": "North Korean state-sponsored group primarily targeting financial institutions and cryptocurrency exchanges. Known for custom malware families and long-dwell-time operations.",
+      "techniques": [
+        {"id": "T1566.001", "surface": null}, {"id": "T1059.001", "surface": null},
+        {"id": "T1078", "surface": null}, {"id": "T1486", "surface": null},
+        {"id": "T1190", "surface": null}
+      ]
+    },
+    {
+      "id": "TA-002", "slug": "apt29", "name": "APT29 / COZY BEAR",
+      "actor_type": "nation-state", "soph": "Nation-State",
+      "origin_country": "Russia", "origin_iso2": "RU",
+      "status": "active", "first_seen": "2008", "active": "2008-Present",
+      "motivation": "Espionage · Intelligence Collection",
+      "aliases": ["Cozy Bear", "The Dukes", "Midnight Blizzard"],
+      "sectors": ["Government", "Think Tanks", "Healthcare", "Technology"],
+      "campaigns": ["SolarWinds SUNBURST", "Microsoft M365 2023", "Democratic National Committee"],
+      "color": "#a78bfa", "group": "G0016", "sector": "Government and tech",
+      "bridge": true,
+      "summary": "Russian SVR-linked group renowned for supply-chain attacks and patient, low-and-slow intrusion operations. Prioritises long-term persistent access over immediate impact.",
+      "techniques": [
+        {"id": "T1566", "surface": "email"}, {"id": "T1078", "surface": "identity"},
+        {"id": "T1098", "surface": "identity"}, {"id": "T1114", "surface": "email"},
+        {"id": "T1213.002", "surface": "saas"}, {"id": "T1071", "surface": "network"},
+        {"id": "T1090", "surface": "network"}
+      ]
+    },
+    {
+      "id": "TA-003", "slug": "fin7", "name": "FIN7",
+      "actor_type": "ecrime", "soph": "Criminal eCrime",
+      "origin_country": "E. Europe", "origin_iso2": null,
+      "status": "active", "first_seen": "2013", "active": "2013-Present",
+      "motivation": "Financial · Ransomware-as-a-Service",
+      "aliases": ["Carbon Spider", "Sangria Tempest"],
+      "sectors": ["Retail", "Hospitality", "Finance", "Healthcare"],
+      "campaigns": ["Darkside Ransomware", "BlackMatter", "Carbanak Banking Malware"],
+      "color": "#ffaa00", "group": "G0046", "sector": "Retail and finance",
+      "bridge": false,
+      "summary": "Prolific financially motivated group operating ransomware-as-a-service and large-scale payment card theft. Known for spearphishing with weaponised Office documents.",
+      "techniques": [
+        {"id": "T1566.001", "surface": null}, {"id": "T1204.002", "surface": null},
+        {"id": "T1059.001", "surface": null}, {"id": "T1486", "surface": null},
+        {"id": "T1110.003", "surface": null}
+      ]
+    },
+    {
+      "id": "TA-004", "slug": "scatter", "name": "SCATTERED SPIDER",
+      "actor_type": "ecrime", "soph": "Criminal eCrime",
+      "origin_country": "UK / USA", "origin_iso2": "GB",
+      "status": "active", "first_seen": "2022", "active": "2022-Present",
+      "motivation": "Financial · Data Extortion",
+      "aliases": ["Muddled Libra", "UNC3944", "Oktapus"],
+      "sectors": ["Technology", "Hospitality", "Gaming", "Telecom"],
+      "campaigns": ["MGM Resorts 2023", "Caesars Entertainment 2023", "Twilio/Okta Supply Chain"],
+      "color": "#f472b6", "group": "G1015", "sector": "Identity and SaaS focused",
+      "bridge": true,
+      "summary": "Native English-speaking actors specialising in social engineering of IT helpdesks to bypass MFA. Demonstrated exceptional capability against Okta-federated environments.",
+      "techniques": [
+        {"id": "T1566", "surface": "identity"}, {"id": "T1621", "surface": "identity"},
+        {"id": "T1078.004", "surface": "saas"}, {"id": "T1098", "surface": "identity"},
+        {"id": "T1213.002", "surface": "saas"}, {"id": "T1567.002", "surface": "cloud_storage"}
+      ]
+    },
+    {
+      "id": "TA-005", "slug": "volt", "name": "VOLT TYPHOON",
+      "actor_type": "nation-state", "soph": "Nation-State",
+      "origin_country": "China", "origin_iso2": "CN",
+      "status": "active", "first_seen": "2021", "active": "2021-Present",
+      "motivation": "Pre-positioning · Critical Infrastructure",
+      "aliases": ["Bronze Silhouette", "Vanguard Panda"],
+      "sectors": ["Critical Infrastructure", "Military", "Comms", "Energy"],
+      "campaigns": ["US Critical Infra. Pre-positioning", "Guam Communications Networks"],
+      "color": "#22d3ee", "group": "G1017", "sector": "Critical infrastructure",
+      "bridge": true,
+      "summary": "Chinese MSS-linked group focused on living-off-the-land techniques. Avoids malware deployment entirely, using only native system tools to avoid detection.",
+      "techniques": [
+        {"id": "T1190", "surface": "network"}, {"id": "T1059", "surface": "win"},
+        {"id": "T1003", "surface": "win"}, {"id": "T1021", "surface": "network"},
+        {"id": "T1070", "surface": "win"}, {"id": "T1552", "surface": "win"}
+      ]
+    },
+    {
+      "id": "TA-006", "slug": "storm0558", "name": "STORM-0558",
+      "actor_type": "nation-state", "soph": "Nation-State",
+      "origin_country": "China", "origin_iso2": "CN",
+      "status": "active", "first_seen": "2023", "active": "2023-Present",
+      "motivation": "Espionage · Email Access · Intelligence Collection",
+      "aliases": ["Silk Typhoon (partial overlap)"],
+      "sectors": ["Government", "Diplomacy", "Defence", "Technology"],
+      "campaigns": ["Microsoft Exchange Online 2023 (MSA key forgery)", "US Government Email Compromise", "NATO Diplomatic Targeting"],
+      "color": "#60a5fa", "group": "unattributed", "sector": "Government and diplomacy",
+      "bridge": false,
+      "summary": "Chinese threat actor responsible for the 2023 Microsoft Exchange Online breach. Forged authentication tokens using a stolen Microsoft Account signing key to access email accounts of US government agencies and European diplomatic targets. Demonstrated sophisticated understanding of Azure and Microsoft 365 authentication infrastructure.",
+      "techniques": [
+        {"id": "T1528", "surface": null}, {"id": "T1550.001", "surface": null},
+        {"id": "T1078.004", "surface": null}, {"id": "T1098.003", "surface": null},
+        {"id": "T1562.008", "surface": null}
+      ]
+    },
+    {
+      "id": "TA-007", "slug": "teamtnt", "name": "TEAMTNT",
+      "actor_type": "ecrime", "soph": "Criminal eCrime",
+      "origin_country": "Unknown", "origin_iso2": null,
+      "status": "active", "first_seen": "2019", "active": "2019-Present",
+      "motivation": "Cryptojacking · Cloud Credential Theft · Container Abuse",
+      "aliases": ["WatchDog", "Hildegard"],
+      "sectors": ["Cloud Providers", "Container Platforms", "DevOps Teams", "Crypto Exchanges"],
+      "campaigns": ["Docker Hub Poisoning 2020", "Kubernetes Cryptojacking Campaign", "AWS Credential Theft via Exposed APIs"],
+      "color": "#818cf8", "group": "G0139", "sector": "Cloud and containers",
+      "bridge": false,
+      "summary": "Cloud-focused criminal group specialising in attacking exposed container environments and Kubernetes clusters. Known for deploying cryptominers at scale across compromised cloud infrastructure. Pioneer of container escape techniques now documented in MITRE ATT&CK. Has demonstrated capability to harvest cloud provider credentials from misconfigured environments at scale.",
+      "techniques": [
+        {"id": "T1610", "surface": null}, {"id": "T1611", "surface": null},
+        {"id": "T1552.007", "surface": null}, {"id": "T1496", "surface": null},
+        {"id": "T1525", "surface": null}
+      ]
+    },
+    {
+      "id": "TA-008", "slug": "clop", "name": "CL0P",
+      "actor_type": "ecrime", "soph": "Criminal eCrime",
+      "origin_country": "Russia", "origin_iso2": "RU",
+      "status": "active", "first_seen": "2019", "active": "2019-Present",
+      "motivation": "Financial · Mass Data Extortion",
+      "aliases": ["FIN11", "TA505 (overlap)"],
+      "sectors": ["Cross-sector", "Financial Services", "Healthcare", "Technology"],
+      "campaigns": ["MOVEit Transfer 2023", "GoAnywhere MFT 2023", "Accellion FTA 2021"],
+      "color": "#ff7c3a", "group": "G0092", "sector": "Cross-sector extortion",
+      "bridge": true,
+      "summary": "Financially motivated group known for mass exploitation of managed file transfer platforms, stealing data at scale and extorting victims through a data-leak-site model rather than encryption-first ransomware.",
+      "techniques": [
+        {"id": "T1190", "surface": "erp"}, {"id": "T1505.003", "surface": "erp"},
+        {"id": "T1567.002", "surface": "cloud_storage"}, {"id": "T1486", "surface": "win"}
+      ]
+    },
+    {
+      "id": "TA-009", "slug": "unc5221", "name": "UNC5221",
+      "actor_type": "nation-state", "soph": "Nation-State",
+      "origin_country": "China", "origin_iso2": "CN",
+      "status": "active", "first_seen": "2023", "active": "2023-Present",
+      "motivation": "Espionage · Edge Device Exploitation",
+      "aliases": ["Edge exploitation cluster"],
+      "sectors": ["Cross-sector", "Government", "Defence", "Technology"],
+      "campaigns": ["Ivanti Connect Secure 2024", "Ivanti CVE-2025-22457"],
+      "color": "#2dd4bf", "group": "unattributed", "sector": "Cross-sector",
+      "bridge": true,
+      "summary": "China-nexus cluster focused on exploiting internet-facing edge appliances, particularly VPN and gateway products, for initial access and persistent espionage. Known for rapid weaponisation of edge device vulnerabilities and novel post-exploitation tradecraft.",
+      "techniques": [
+        {"id": "T1190", "surface": "network"}, {"id": "T1059.004", "surface": "network"},
+        {"id": "T1003.001", "surface": "win"}, {"id": "T1071.004", "surface": "network"},
+        {"id": "T1572", "surface": "network"}
+      ]
+    }
+  ]
+}
