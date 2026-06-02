@@ -1,7 +1,21 @@
 {
-  "generated": "2026-06-02T04:17:17.552684+00:00",
+  "generated": "2026-06-02T10:42:37.466518+00:00",
   "source": "BreachForge TI Feed Collector v1.0",
   "threats": [
+    {
+      "id": "TI-F15F0EE1",
+      "title": "Operation FlutterBridge: macOS Malvertising Campaign Spreads New FlutterShell Backdoor",
+      "source": "Palo Alto Unit42 RSS",
+      "source_url": "https://unit42.paloaltonetworks.com",
+      "published": "2026-06-02T10:00:31+00:00",
+      "severity": "High",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Operation FlutterBridge is a malvertising campaign targeting macOS users. It distributed the new backdoor FlutterShell, built using the Flutter framework. The post Operation FlutterBridge: macOS Malvertising Campaign Spreads New FlutterShell Backdoor appeared first on Unit 42 ."
+    },
     {
       "id": "TI-E8758F2B",
       "title": "CISA KEV: Oracle WebLogic Server — Oracle WebLogic Server Unspecified Vulnerability",
@@ -225,20 +239,6 @@
         "Defence"
       ],
       "summary": "Unit 42 details Screening Serpens' use of AppDomainManager hijacking and new RAT variants to target tech and defense sectors in recent campaigns. The post Tracking Iranian APT Screening Serpens’ 2026 Espionage Campaigns appeared first on Unit 42 ."
-    },
-    {
-      "id": "TI-23E5A5A8",
-      "title": "Paved With Intent: ROADtools and Nation-State Tactics in the Cloud",
-      "source": "Palo Alto Unit42 RSS",
-      "source_url": "https://unit42.paloaltonetworks.com",
-      "published": "2026-05-22T10:00:24+00:00",
-      "severity": "Critical",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Technology"
-      ],
-      "summary": "Open-source framework ROADtools is being misused by threat actors for cloud intrusions. Learn how to identify its malicious use. The post Paved With Intent: ROADtools and Nation-State Tactics in the Cloud appeared first on Unit 42 ."
     },
     {
       "id": "TI-784E2A1D",
