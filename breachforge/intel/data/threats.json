@@ -1,7 +1,35 @@
 {
-  "generated": "2026-06-02T16:39:13.768995+00:00",
+  "generated": "2026-06-02T20:53:36.945516+00:00",
   "source": "BreachForge TI Feed Collector v1.0",
   "threats": [
+    {
+      "id": "TI-606A5BE0",
+      "title": "The npm Threat Landscape: Attack Surface and Mitigations (Updated June 2)",
+      "source": "Palo Alto Unit42 RSS",
+      "source_url": "https://unit42.paloaltonetworks.com",
+      "published": "2026-06-02T17:30:33+00:00",
+      "severity": "High",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Unit 42 analyzes npm supply chain evolution post-Shai Hulud. Discover wormable malware, CI/CD persistence, multi-stage attacks and more. The post The npm Threat Landscape: Attack Surface and Mitigations (Updated June 2) appeared first on Unit 42 ."
+    },
+    {
+      "id": "TI-C0DDFF9A",
+      "title": "Microsoft Build 2026: Securing code, agents, and models across the development lifecycle",
+      "source": "Microsoft Threat Intel RSS",
+      "source_url": "https://www.microsoft.com/security/blog",
+      "published": "2026-06-02T17:15:18+00:00",
+      "severity": "Medium",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Discover how Microsoft enables fast, secure AI development with MDASH and new security capabilities. The post Microsoft Build 2026: Securing code, agents, and models across the development lifecycle appeared first on Microsoft Security Blog ."
+    },
     {
       "id": "TI-F15F0EE1",
       "title": "Operation FlutterBridge: macOS Malvertising Campaign Spreads New FlutterShell Backdoor",
@@ -15,6 +43,34 @@
         "Technology"
       ],
       "summary": "Operation FlutterBridge is a malvertising campaign targeting macOS users. It distributed the new backdoor FlutterShell, built using the Flutter framework. The post Operation FlutterBridge: macOS Malvertising Campaign Spreads New FlutterShell Backdoor appeared first on Unit 42 ."
+    },
+    {
+      "id": "TI-3D16EDA3",
+      "title": "CISA KEV: Linux Kernel — Linux Kernel Improper Authentication Vulnerability",
+      "source": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "published": "2026-06-02T00:00:00Z",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Linux Kernel contains an improper authentication vulnerability which could allow for privilege escalation via the cgroups v1 release_agent feature. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
+    },
+    {
+      "id": "TI-444DC1CA",
+      "title": "CISA KEV: Android Framework — Android Framework Integer Overflow Vulnerability",
+      "source": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "published": "2026-06-02T00:00:00Z",
+      "severity": "Critical",
+      "techniques": [],
+      "actors": [],
+      "sectors": [
+        "Technology"
+      ],
+      "summary": "Android Framework contains an integer overflow vulnerability that allows for code execution that could allow for local privilege escalation. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
     },
     {
       "id": "TI-E8758F2B",
@@ -101,20 +157,6 @@
       "summary": "In this newsletter, Thor breaks down why you should stop relying solely on CVSS and start using EPSS and GCVE to focus your patching efforts on the threats that actually matter."
     },
     {
-      "id": "TI-B19FF986",
-      "title": "The Gentlemen ransomware: Dissecting a self-propagating Go encryptor",
-      "source": "Microsoft Threat Intel RSS",
-      "source_url": "https://www.microsoft.com/security/blog",
-      "published": "2026-05-28T15:00:00+00:00",
-      "severity": "High",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Technology"
-      ],
-      "summary": "Microsoft Threat Intelligence presents a comprehensive analysis of The Gentlemen, a Go-based ransomware deployed by affiliates of Storm-2697 that combines per-file ephemeral key encryption with an aggressive self-propagation module to deploy itself across an entire network using series of simultaneous lateral movement techniques per target. The post The Gentlemen ransomware: Dissecting a self-prop"
-    },
-    {
       "id": "TI-D01C86E4",
       "title": "2026 World Cup: Discussing The World’s Biggest Game’s Attack Surface",
       "source": "Palo Alto Unit42 RSS",
@@ -197,48 +239,6 @@
         "Technology"
       ],
       "summary": "Nx Console contains an embedded malicious code vulnerability that allowed a malicious version of Nx Console to be published. The compromised extension fetched an obfuscated payload that could harvested credentials from multiple sources on disk and in memory. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if miti"
-    },
-    {
-      "id": "TI-2AFB6987",
-      "title": "CISA KEV: TanStack TanStack — TanStack Unspecified Vulnerability",
-      "source": "CISA KEV",
-      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
-      "published": "2026-05-27T00:00:00Z",
-      "severity": "Critical",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Technology"
-      ],
-      "summary": "TanStack contains an unspecified vulnerability that allowed malicious versions of the product to be published to the npm registry to publish credential-stealing malware under a trusted identity. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
-    },
-    {
-      "id": "TI-BDDC621E",
-      "title": "CISA KEV: Daemon Daemon Tools Lite — Daemon Tools Lite Embedded Malicious Code Vulnerability",
-      "source": "CISA KEV",
-      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
-      "published": "2026-05-27T00:00:00Z",
-      "severity": "Critical",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Technology"
-      ],
-      "summary": "Daemon Tools contains an unspecified vulnerability that has a high impact on confidentiality, integrity, and availability. Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable."
-    },
-    {
-      "id": "TI-D9654958",
-      "title": "Tracking Iranian APT Screening Serpens’ 2026 Espionage Campaigns",
-      "source": "Palo Alto Unit42 RSS",
-      "source_url": "https://unit42.paloaltonetworks.com",
-      "published": "2026-05-22T13:00:42+00:00",
-      "severity": "High",
-      "techniques": [],
-      "actors": [],
-      "sectors": [
-        "Defence"
-      ],
-      "summary": "Unit 42 details Screening Serpens' use of AppDomainManager hijacking and new RAT variants to target tech and defense sectors in recent campaigns. The post Tracking Iranian APT Screening Serpens’ 2026 Espionage Campaigns appeared first on Unit 42 ."
     },
     {
       "id": "TI-784E2A1D",
