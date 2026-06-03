@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Security &amp; Governance | Enterprise AI Architecture &amp; Risk Management | Saleem Yousaf</title>
+<meta name="description" content="Enterprise AI security and governance framework by Saleem Yousaf. Covering LLM security architecture, RAG pipeline security, AI governance frameworks, model risk, and secure AI adoption across AWS and Azure.">
+<meta name="author" content="Saleem Yousaf">
+<link rel="canonical" href="https://saleemyousaf.co.uk/ai-security-governance/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:         #090c10;
+  --bg2:        #0f1318;
+  --bg3:        #161b22;
+  --border:     rgba(255,255,255,0.07);
+  --border2:    rgba(255,255,255,0.12);
+  --text:       #e6eaf0;
+  --muted:      #7a8694;
+  --muted2:     #4a5568;
+  --teal:       #2dd4bf;
+  --teal-dim:   rgba(45,212,191,0.12);
+  --amber:      #f59e0b;
+  --amber-dim:  rgba(245,158,11,0.10);
+  --purple:     #a78bfa;
+  --purple-dim: rgba(167,139,250,0.10);
+  --green:      #4ade80;
+  --green-dim:  rgba(74,222,128,0.10);
+  --mono:       'DM Mono', monospace;
+  --display:    'Syne', sans-serif;
+  --body:       'Inter', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text); font-family: var(--body);
+  font-size: 16px; line-height: 1.7; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image: linear-gradient(rgba(45,212,191,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(45,212,191,0.015) 1px, transparent 1px);
+  background-size: 40px 40px; pointer-events: none; z-index: 0;
+}
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+.wrap-narrow { max-width: 780px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+section { position: relative; z-index: 1; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(9,12,16,0.88); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+}
+.nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+.nav-logo { font-family: var(--display); font-size: 15px; font-weight: 700; color: var(--text); text-decoration: none; letter-spacing: 0.02em; }
+.nav-logo span { color: var(--teal); }
+.nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+.nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; letter-spacing: 0.03em; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+.nav-links a.active { color: var(--teal); }
+.nav-dropdown { position: relative; }
+.nav-dropdown-toggle { font-size: 13px; color: var(--muted); background: none; border: none; cursor: pointer; letter-spacing: 0.03em; display: flex; align-items: center; gap: 5px; font-family: var(--body); padding: 0; transition: color 0.2s; }
+.nav-dropdown-toggle:hover { color: var(--teal); }
+.nav-dropdown-toggle svg { transition: transform 0.2s; }
+.nav-dropdown:hover .nav-dropdown-toggle svg { transform: rotate(180deg); }
+.nav-dropdown:hover .nav-dropdown-toggle { color: var(--teal); }
+.nav-dropdown-menu { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); padding-top: 12px; opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 200; }
+.nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: all; }
+.nav-dropdown-menu-inner { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 8px; min-width: 220px; }
+.nav-dropdown-menu a { display: block; padding: 9px 14px; font-size: 13px; color: var(--muted); text-decoration: none; border-radius: 5px; transition: background 0.15s, color 0.15s; white-space: nowrap; }
+.nav-dropdown-menu a:hover { background: var(--bg3); color: var(--text); }
+.nav-dropdown-menu a.active { color: var(--teal); }
+.nav-cta { font-size: 13px; font-weight: 500; color: var(--teal) !important; border: 1px solid rgba(45,212,191,0.3); padding: 6px 16px; border-radius: 4px; transition: background 0.2s, border-color 0.2s !important; }
+.nav-cta:hover { background: var(--teal-dim); border-color: var(--teal) !important; }
+
+/* HERO */
+.hero { min-height: 88vh; display: flex; align-items: center; padding-top: 60px; position: relative; overflow: hidden; }
+.hero-glow { position: absolute; top: -180px; right: -160px; width: 680px; height: 680px; background: radial-gradient(circle, rgba(167,139,250,0.08) 0%, transparent 65%); pointer-events: none; }
+.hero-glow-2 { position: absolute; bottom: -100px; left: -100px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(245,158,11,0.05) 0%, transparent 65%); pointer-events: none; }
+.hero-inner { padding: 80px 0; display: grid; grid-template-columns: 1fr 340px; gap: 72px; align-items: center; }
+.eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+.eyebrow-line { width: 32px; height: 1px; background: var(--amber); }
+.eyebrow-text { font-family: var(--mono); font-size: 12px; color: var(--amber); letter-spacing: 0.12em; text-transform: uppercase; }
+h1 { font-family: var(--display); font-size: clamp(34px, 4.2vw, 54px); font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; color: #fff; margin-bottom: 22px; }
+h1 em { font-style: normal; color: var(--amber); }
+.hero-sub { font-size: 17px; line-height: 1.75; color: var(--muted); margin-bottom: 36px; max-width: 520px; }
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #090c10; font-size: 14px; font-weight: 600; padding: 12px 24px; border-radius: 4px; text-decoration: none; letter-spacing: 0.02em; transition: opacity 0.2s, transform 0.15s; }
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-outline { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border2); color: var(--muted); font-size: 14px; padding: 11px 24px; border-radius: 4px; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+.btn-outline:hover { border-color: var(--teal); color: var(--teal); }
+
+.hero-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 28px; position: relative; overflow: hidden; }
+.hero-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--amber), transparent); }
+.hc-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); margin-bottom: 16px; }
+.hc-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--muted); }
+.hc-item:last-child { border-bottom: none; }
+.hc-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.hc-dot.amber  { background: var(--amber);  box-shadow: 0 0 6px rgba(245,158,11,0.5); }
+.hc-dot.teal   { background: var(--teal);   box-shadow: 0 0 6px rgba(45,212,191,0.5); }
+.hc-dot.purple { background: var(--purple); box-shadow: 0 0 6px rgba(167,139,250,0.5); }
+.hc-dot.green  { background: var(--green);  box-shadow: 0 0 6px rgba(74,222,128,0.5); }
+
+/* SHARED SECTION */
+.section-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.section-eyebrow-line { width: 24px; height: 1px; background: var(--teal); }
+.section-eyebrow-line.amber { background: var(--amber); }
+.section-eyebrow-text { font-family: var(--mono); font-size: 11px; color: var(--teal); letter-spacing: 0.12em; text-transform: uppercase; }
+.section-eyebrow-text.amber { color: var(--amber); }
+h2 { font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color: #fff; margin-bottom: 14px; }
+.section-sub { font-size: 16px; color: var(--muted); max-width: 600px; line-height: 1.7; margin-bottom: 48px; }
+
+/* RISK LANDSCAPE */
+.risks { padding: 88px 0 0; }
+.risk-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.risk-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 22px; transition: border-color 0.2s; }
+.risk-card:hover { border-color: var(--border2); }
+.risk-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+.risk-icon svg { width: 16px; height: 16px; }
+.risk-icon.amber  { background: var(--amber-dim);  color: var(--amber); }
+.risk-icon.purple { background: var(--purple-dim); color: var(--purple); }
+.risk-icon.teal   { background: var(--teal-dim);   color: var(--teal); }
+.risk-icon.green  { background: var(--green-dim);  color: var(--green); }
+.risk-title { font-family: var(--display); font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.risk-body { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+/* MODEL COMPARISON */
+.comparison { padding: 64px 0; }
+.model-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.model-table th { background: var(--bg3); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted2); padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--border); }
+.model-table td { padding: 14px 18px; font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; background: var(--bg2); }
+.model-table tr:last-child td { border-bottom: none; }
+.model-table tr:hover td { background: var(--bg3); }
+.model-name { font-family: var(--display); font-size: 14px; font-weight: 700; color: #fff; }
+.risk-badge { font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 3px; }
+.risk-badge.high   { background: rgba(248,113,113,0.12); color: #f87171; }
+.risk-badge.medium { background: var(--amber-dim); color: var(--amber); }
+.risk-badge.low    { background: var(--green-dim);  color: var(--green); }
+
+/* GOVERNANCE FRAMEWORK */
+.governance { padding: 0 0 64px; }
+.gov-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.gov-card { background: var(--bg2); padding: 32px 28px; transition: background 0.2s; }
+.gov-card:hover { background: var(--bg3); }
+.gov-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+.gov-icon svg { width: 17px; height: 17px; }
+.gov-icon.amber  { background: var(--amber-dim);  color: var(--amber); }
+.gov-icon.teal   { background: var(--teal-dim);   color: var(--teal); }
+.gov-icon.purple { background: var(--purple-dim); color: var(--purple); }
+.gov-icon.green  { background: var(--green-dim);  color: var(--green); }
+.gov-title { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+.gov-body { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* LLM ARCHITECTURE */
+.llm-section { padding: 0 0 64px; }
+.llm-layers { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.llm-layer { background: var(--bg2); padding: 24px 32px; display: grid; grid-template-columns: 180px 1fr auto; gap: 32px; align-items: center; transition: background 0.15s; }
+.llm-layer:hover { background: var(--bg3); }
+.ll-name { font-family: var(--display); font-size: 14px; font-weight: 700; color: #fff; }
+.ll-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.ll-controls { display: flex; flex-wrap: wrap; gap: 5px; justify-content: flex-end; }
+.ll-control { font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
+.ll-control.amber  { background: var(--amber-dim);  color: var(--amber); }
+.ll-control.teal   { background: var(--teal-dim);   color: var(--teal); }
+.ll-control.purple { background: var(--purple-dim); color: var(--purple); }
+.ll-control.green  { background: var(--green-dim);  color: var(--green); }
+
+/* RAG PIPELINE */
+.rag-section { padding: 0 0 64px; }
+.rag-pipeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+.rag-step { background: var(--bg2); padding: 24px 20px; }
+.rag-step-num { font-family: var(--mono); font-size: 10px; color: var(--muted2); letter-spacing: 0.1em; margin-bottom: 8px; }
+.rag-step-title { font-family: var(--display); font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.rag-step-risk { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 10px; }
+.rag-control { font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 3px; display: inline-block; }
+.rag-control.teal   { background: var(--teal-dim);   color: var(--teal); }
+.rag-control.amber  { background: var(--amber-dim);  color: var(--amber); }
+.rag-control.purple { background: var(--purple-dim); color: var(--purple); }
+
+/* ADOPTION MATURITY */
+.maturity-section { padding: 0 0 64px; }
+.maturity-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.mat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 24px; position: relative; overflow: hidden; transition: border-color 0.2s; }
+.mat-card:hover { border-color: var(--border2); }
+.mat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+.mat-card.l1::before { background: linear-gradient(90deg, #4a5568, transparent); }
+.mat-card.l2::before { background: linear-gradient(90deg, var(--amber), transparent); }
+.mat-card.l3::before { background: linear-gradient(90deg, var(--teal), transparent); }
+.mat-card.l4::before { background: linear-gradient(90deg, var(--purple), transparent); }
+.mat-level { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+.mat-level.l1 { color: var(--muted2); }
+.mat-level.l2 { color: var(--amber); }
+.mat-level.l3 { color: var(--teal); }
+.mat-level.l4 { color: var(--purple); }
+.mat-title { font-family: var(--display); font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+.mat-items { display: flex; flex-direction: column; gap: 6px; }
+.mat-item { font-size: 12px; color: var(--muted); display: flex; gap: 7px; align-items: flex-start; line-height: 1.4; }
+.mat-item-dot { width: 4px; height: 4px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+
+/* RELATED + CTA + FOOTER reuse from other pages */
+.related { padding: 0 0 88px; }
+.related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.rel-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 24px; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 10px; transition: border-color 0.2s; }
+.rel-card:hover { border-color: var(--border2); }
+.rel-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.rel-tag { font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 3px; }
+.rel-tag.amber  { background: var(--amber-dim);  color: var(--amber); }
+.rel-tag.teal   { background: var(--teal-dim);   color: var(--teal); }
+.rel-tag.purple { background: var(--purple-dim); color: var(--purple); }
+.rel-title { font-family: var(--display); font-size: 15px; font-weight: 700; color: #fff; line-height: 1.3; }
+.rel-meta { font-family: var(--mono); font-size: 11px; color: var(--muted2); margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border); }
+
+.cta-strip { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 80px 0; }
+.cta-inner { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
+.cta-heading { font-family: var(--display); font-size: clamp(20px, 2.2vw, 28px); font-weight: 700; color: #fff; margin-bottom: 10px; }
+.cta-sub { font-size: 15px; color: var(--muted); line-height: 1.6; }
+.cta-actions { display: flex; gap: 12px; flex-shrink: 0; align-items: center; }
+
+footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
+.footer-inner { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
+.footer-logo { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.footer-logo span { color: var(--teal); }
+.footer-desc { font-size: 13px; color: var(--muted); max-width: 380px; line-height: 1.6; }
+.footer-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--teal); }
+.footer-bottom { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.footer-copy { font-size: 12px; color: var(--muted2); }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+.hero-inner > * { animation: fadeUp 0.6s ease both; }
+.hero-inner > *:nth-child(1) { animation-delay: 0.1s; }
+.hero-inner > *:nth-child(2) { animation-delay: 0.25s; }
+
+@media (max-width: 960px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+  .risk-grid { grid-template-columns: repeat(2, 1fr); }
+  .gov-grid { grid-template-columns: repeat(2, 1fr); }
+  .llm-layer { grid-template-columns: 1fr; gap: 12px; }
+  .ll-controls { justify-content: flex-start; }
+  .rag-pipeline { grid-template-columns: repeat(3, 1fr); }
+  .maturity-grid { grid-template-columns: repeat(2, 1fr); }
+  .related-grid { grid-template-columns: repeat(2, 1fr); }
+  .cta-inner { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .wrap { padding: 0 20px; } .wrap-narrow { padding: 0 20px; }
+  .nav-links { display: none; }
+  .risk-grid { grid-template-columns: 1fr; }
+  .gov-grid { grid-template-columns: 1fr; }
+  .rag-pipeline { grid-template-columns: 1fr; }
+  .maturity-grid { grid-template-columns: 1fr; }
+  .related-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<!-- Shared nav: rendered by /nav.js. Edit NAV_CONFIG in nav.js to change site-wide. -->
+<div id="site-nav"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+  <div class="wrap">
+    <div class="hero-inner">
+      <div>
+        <div class="eyebrow">
+          <div class="eyebrow-line"></div>
+          <span class="eyebrow-text">Enterprise AI Security Framework</span>
+        </div>
+        <h1>AI adoption without<br><em>governance is a risk.</em></h1>
+        <p class="hero-sub">Organisations are adopting AI faster than they are governing it. Security architecture for AI is not an afterthought. It is a foundational requirement covering LLM security, RAG pipeline design, data governance, and model risk from the point of adoption.</p>
+        <div class="hero-actions">
+          <a href="#governance-framework" class="btn-primary">Explore the framework</a>
+          <a href="https://github.com/saleem-yousaf/LLM-Security-Architecture-Framework" target="_blank" rel="noopener" class="btn-outline">GitHub framework</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hc-label">// framework coverage</div>
+        <div class="hc-item"><div class="hc-dot amber"></div>AI governance frameworks</div>
+        <div class="hc-item"><div class="hc-dot purple"></div>LLM security architecture</div>
+        <div class="hc-item"><div class="hc-dot teal"></div>RAG pipeline security</div>
+        <div class="hc-item"><div class="hc-dot amber"></div>Prompt injection and jailbreak risks</div>
+        <div class="hc-item"><div class="hc-dot green"></div>Data governance and privacy</div>
+        <div class="hc-item"><div class="hc-dot purple"></div>Model risk management</div>
+        <div class="hc-item"><div class="hc-dot teal"></div>Shadow AI detection</div>
+        <div class="hc-item"><div class="hc-dot amber"></div>Public vs private LLM security</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RISK LANDSCAPE -->
+<section class="risks">
+  <div class="wrap">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line amber"></div>
+      <span class="section-eyebrow-text amber">The AI risk landscape</span>
+    </div>
+    <h2>What makes AI different from other technology risk.</h2>
+    <p class="section-sub">AI introduces risk categories that traditional security frameworks were not designed to address. Understanding these is the starting point for effective governance.</p>
+
+    <div class="risk-grid">
+      <div class="risk-card">
+        <div class="risk-icon amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="risk-title">Prompt Injection</div>
+        <div class="risk-body">Attackers manipulate model behaviour through crafted inputs, bypassing guardrails, extracting system prompts, or causing unintended actions in agentic systems.</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-icon purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="risk-title">Data Leakage via LLM</div>
+        <div class="risk-body">Sensitive data ingested during fine-tuning or RAG retrieval can be inadvertently surfaced through model outputs, exposing PII, IP, or confidential business data.</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-icon teal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div class="risk-title">Shadow AI</div>
+        <div class="risk-body">Employees using unapproved AI tools without organisational knowledge, creating uncontrolled data flows, compliance exposure, and undocumented processing of sensitive information.</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-icon green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="risk-title">Supply Chain and Model Risk</div>
+        <div class="risk-body">Third-party models, plugins, and APIs introduce risk that organisations may not be able to assess or audit, including poisoned training data and undisclosed model behaviours.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODEL COMPARISON -->
+<section class="comparison">
+  <div class="wrap">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line"></div>
+      <span class="section-eyebrow-text">AI model comparison</span>
+    </div>
+    <h2>Major platforms: features, cost, and enterprise risk.</h2>
+    <p class="section-sub">A practical comparison of the major AI platforms from a security and governance perspective, to inform enterprise adoption decisions.</p>
+
+    <table class="model-table">
+      <thead>
+        <tr>
+          <th>Platform</th>
+          <th>Provider</th>
+          <th>Data handling</th>
+          <th>Enterprise controls</th>
+          <th>Risk level</th>
+          <th>Best suited for</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="model-name">GPT-4o / ChatGPT Enterprise</div></td>
+          <td>OpenAI</td>
+          <td>Enterprise tier: no training on input data, data retention controls, SOC 2 Type II</td>
+          <td>SSO, audit logs, admin controls, DLP integrations</td>
+          <td><span class="risk-badge medium">Medium</span></td>
+          <td>General enterprise productivity, coding, content generation</td>
+        </tr>
+        <tr>
+          <td><div class="model-name">Claude (Anthropic)</div></td>
+          <td>Anthropic</td>
+          <td>API and enterprise tiers with no training on customer data, strong constitutional AI guardrails</td>
+          <td>API access, AWS Bedrock integration, enterprise agreements</td>
+          <td><span class="risk-badge low">Low-Medium</span></td>
+          <td>Regulated environments, document analysis, nuanced reasoning</td>
+        </tr>
+        <tr>
+          <td><div class="model-name">Gemini for Workspace</div></td>
+          <td>Google</td>
+          <td>Workspace data separation, no training on Workspace data in enterprise tier</td>
+          <td>Google Admin controls, DLP, Workspace security policies</td>
+          <td><span class="risk-badge medium">Medium</span></td>
+          <td>Google Workspace integration, productivity, search augmentation</td>
+        </tr>
+        <tr>
+          <td><div class="model-name">Microsoft Copilot for M365</div></td>
+          <td>Microsoft</td>
+          <td>Grounded in tenant data, inherits M365 sensitivity labels and permissions</td>
+          <td>Purview integration, sensitivity labels, conditional access</td>
+          <td><span class="risk-badge medium">Medium</span></td>
+          <td>Organisations with mature M365 DLP and information protection</td>
+        </tr>
+        <tr>
+          <td><div class="model-name">Private / Self-Hosted LLM</div></td>
+          <td>Various</td>
+          <td>Full data residency control, no third-party data exposure, air-gapped options</td>
+          <td>Full control of access, logging, monitoring, and deployment</td>
+          <td><span class="risk-badge low">Low</span></td>
+          <td>Classified, highly regulated, or sensitive data environments</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- GOVERNANCE FRAMEWORK -->
+<section class="governance" id="governance-framework">
+  <div class="wrap">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line amber"></div>
+      <span class="section-eyebrow-text amber">Enterprise governance</span>
+    </div>
+    <h2>An AI governance framework for enterprise.</h2>
+    <p class="section-sub">Governance without security architecture is policy without enforcement. These six pillars need to work together.</p>
+
+    <div class="gov-grid">
+      <div class="gov-card">
+        <div class="gov-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="gov-title">AI Risk Register</div>
+        <div class="gov-body">Maintain a living register of AI tools in use, approved or otherwise. Record the data they process, the risks they introduce, and the controls applied. Update it when tools change.</div>
+      </div>
+      <div class="gov-card">
+        <div class="gov-icon teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div class="gov-title">Acceptable Use Policy</div>
+        <div class="gov-body">Define clearly what AI tools are approved, what data classifications can be used with them, and what use cases are prohibited. Make it operational, not just policy on paper.</div>
+      </div>
+      <div class="gov-card">
+        <div class="gov-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div class="gov-title">Data Classification Enforcement</div>
+        <div class="gov-body">Apply data classification controls before AI interaction. Prevent sensitive or classified data from being submitted to external models. Enforce through DLP tooling, not just policy.</div>
+      </div>
+      <div class="gov-card">
+        <div class="gov-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div class="gov-title">Monitoring and Observability</div>
+        <div class="gov-body">Log AI interactions at the API and platform level where possible. Monitor for anomalous usage patterns, unexpected data volumes, and policy violations in near real time.</div>
+      </div>
+      <div class="gov-card">
+        <div class="gov-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <div class="gov-title">AI Procurement Assessment</div>
+        <div class="gov-body">Before approving any AI tool, assess data residency, third-party processing agreements, model transparency, security certifications, and the vendor's incident response capability.</div>
+      </div>
+      <div class="gov-card">
+        <div class="gov-icon teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+        <div class="gov-title">Ongoing Review Cycle</div>
+        <div class="gov-body">AI capabilities, risks, and the regulatory landscape change rapidly. Governance frameworks must include a scheduled review cycle, not just a point-in-time assessment.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LLM ARCHITECTURE LAYERS -->
+<section class="llm-section">
+  <div class="wrap">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line"></div>
+      <span class="section-eyebrow-text">LLM security architecture</span>
+    </div>
+    <h2>Securing every layer of the LLM stack.</h2>
+    <p class="section-sub">LLM security is not a single control. It requires security architecture across every layer from the network boundary to the model interface.</p>
+
+    <div class="llm-layers">
+      <div class="llm-layer">
+        <div class="ll-name">Network and Perimeter</div>
+        <div class="ll-desc">Control network paths to AI APIs and self-hosted models. Apply private endpoints, egress filtering, and TLS inspection where appropriate.</div>
+        <div class="ll-controls">
+          <span class="ll-control teal">Private endpoints</span>
+          <span class="ll-control teal">Egress filtering</span>
+          <span class="ll-control teal">TLS inspection</span>
+        </div>
+      </div>
+      <div class="llm-layer">
+        <div class="ll-name">Identity and Access</div>
+        <div class="ll-desc">Apply least-privilege access to AI services. Use service identities rather than user credentials. Audit and rotate API keys. Restrict access by role and data classification.</div>
+        <div class="ll-controls">
+          <span class="ll-control amber">Least privilege</span>
+          <span class="ll-control amber">Service identity</span>
+          <span class="ll-control amber">Key rotation</span>
+        </div>
+      </div>
+      <div class="llm-layer">
+        <div class="ll-name">Data and Input Controls</div>
+        <div class="ll-desc">Sanitise and classify data before it enters any model. Apply input validation, sensitive data detection, and output filtering to prevent leakage in both directions.</div>
+        <div class="ll-controls">
+          <span class="ll-control purple">Input validation</span>
+          <span class="ll-control purple">DLP controls</span>
+          <span class="ll-control purple">Output filtering</span>
+        </div>
+      </div>
+      <div class="llm-layer">
+        <div class="ll-name">Prompt and System Design</div>
+        <div class="ll-desc">Design system prompts defensively. Separate user input from trusted instructions. Test for prompt injection, jailbreak techniques, and indirect injection through retrieved content.</div>
+        <div class="ll-controls">
+          <span class="ll-control amber">Prompt hardening</span>
+          <span class="ll-control amber">Injection testing</span>
+          <span class="ll-control amber">Instruction separation</span>
+        </div>
+      </div>
+      <div class="llm-layer">
+        <div class="ll-name">Monitoring and Audit</div>
+        <div class="ll-desc">Log all AI interactions at the platform and API level. Monitor for anomalous usage, policy violations, unexpected data volumes, and automated misuse patterns.</div>
+        <div class="ll-controls">
+          <span class="ll-control green">Interaction logging</span>
+          <span class="ll-control green">Anomaly detection</span>
+          <span class="ll-control green">Audit trail</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RAG PIPELINE SECURITY -->
+<section class="rag-section">
+  <div class="wrap">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line amber"></div>
+      <span class="section-eyebrow-text amber">RAG pipeline security</span>
+    </div>
+    <h2>Securing retrieval-augmented generation.</h2>
+    <p class="section-sub">RAG pipelines introduce security risks at every stage. Governing them well requires controls at ingestion, retrieval, augmentation, generation, and output.</p>
+
+    <div class="rag-pipeline">
+      <div class="rag-step">
+        <div class="rag-step-num">01</div>
+        <div class="rag-step-title">Data Ingestion</div>
+        <div class="rag-step-risk">Unclassified or over-privileged data enters the knowledge base, creating retrieval risk for sensitive content.</div>
+        <span class="rag-control amber">Classification gates</span>
+      </div>
+      <div class="rag-step">
+        <div class="rag-step-num">02</div>
+        <div class="rag-step-title">Vector Storage</div>
+        <div class="rag-step-risk">Embeddings in vector databases can leak semantic content if the database is compromised or over-shared between users.</div>
+        <span class="rag-control purple">Access controls</span>
+      </div>
+      <div class="rag-step">
+        <div class="rag-step-num">03</div>
+        <div class="rag-step-title">Retrieval</div>
+        <div class="rag-step-risk">Retrieval queries can be manipulated to surface privileged documents, or indirect injection can be embedded in retrieved content.</div>
+        <span class="rag-control teal">Query filtering</span>
+      </div>
+      <div class="rag-step">
+        <div class="rag-step-num">04</div>
+        <div class="rag-step-title">Augmentation</div>
+        <div class="rag-step-risk">Retrieved context is combined with the user prompt. Malicious content in retrieved docs can influence model behaviour via indirect injection.</div>
+        <span class="rag-control amber">Content sanitisation</span>
+      </div>
+      <div class="rag-step">
+        <div class="rag-step-num">05</div>
+        <div class="rag-step-title">Output and Response</div>
+        <div class="rag-step-risk">Model responses may contain sensitive retrieved data or be manipulated by injected instructions. Output filtering and logging are essential.</div>
+        <span class="rag-control purple">Output filtering</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MATURITY MODEL -->
+<section class="maturity-section">
+  <div class="wrap">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line"></div>
+      <span class="section-eyebrow-text">AI security maturity</span>
+    </div>
+    <h2>Where does your organisation sit?</h2>
+    <p class="section-sub">A practical maturity model for enterprise AI security and governance adoption.</p>
+
+    <div class="maturity-grid">
+      <div class="mat-card l1">
+        <div class="mat-level l1">Level 1 · Initial</div>
+        <div class="mat-title">Ad Hoc Adoption</div>
+        <div class="mat-items">
+          <div class="mat-item"><div class="mat-item-dot" style="background:var(--muted2)"></div>No formal AI policy exists</div>
+          <div class="mat-item"><div class="mat-item-dot" style="background:var(--muted2)"></div>Shadow AI use is widespread</div>
+          <div class="mat-item"><div class="mat-item-dot" style="background:var(--muted2)"></div>No data classification enforcement</div>
+          <div class="mat-item"><div class="mat-item-dot" style="background:var(--muted2)"></div>No visibility of AI tool usage</div>
+        </div>
+      </div>
+      <div class="mat-card l2">
+        <div class="mat-level l2">Level 2 · Developing</div>
+        <div class="mat-title">Policy Foundations</div>
+        <div class="mat-items">
+          <div class="mat-item"><div class="mat-item-dot" style="background:var(--amber)"></div>Acceptable use policy defined</div>
+          <div class="mat-item"><div class="mat-item-dot" style="background:var(--amber)"></div>Approved tool list published</div>
+          <div class="mat-item"><div class="mat-item-dot" style="background:var(--amber)"></div>Basic procurement assessment</div>
+          <div class="mat-item"><div class="mat-item-dot" style="background:var(--amber)"></div>Limited monitoring in place</div>
+        </div>
+      </div>
+      <div class="mat-card l3">
+        <div class="mat-level l3">Level 3 · Defined</div>
+        <div class="mat-title">Governed Adoption</div>
+        <div class="mat-items">
+          <div class="mat-item"><div class="mat-item-dot" style="background:var(--teal)"></div>AI risk register maintained</div>
+          <div class="mat-item"><div class="mat-item-dot" style="background:var(--teal)"></div>DLP controls enforced</div>
+          <div class="mat-item"><div class="mat-item-dot" style="background:var(--teal)"></div>LLM security architecture defined</div>
+          <div class="mat-item"><div class="mat-item-dot" style="background:var(--teal)"></div>Audit and logging active</div>
+        </div>
+      </div>
+      <div class="mat-card l4">
+        <div class="mat-level l4">Level 4 · Optimised</div>
+        <div class="mat-title">Continuous Assurance</div>
+        <div class="mat-items">
+          <div class="mat-item"><div class="mat-item-dot" style="background:var(--purple)"></div>Ongoing adversarial AI testing</div>
+          <div class="mat-item"><div class="mat-item-dot" style="background:var(--purple)"></div>RAG pipelines security-reviewed</div>
+          <div class="mat-item"><div class="mat-item-dot" style="background:var(--purple)"></div>AI embedded in SIEM monitoring</div>
+          <div class="mat-item"><div class="mat-item-dot" style="background:var(--purple)"></div>Governance reviewed quarterly</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RELATED -->
+<section class="related">
+  <div class="wrap">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line"></div>
+      <span class="section-eyebrow-text">Related reading</span>
+    </div>
+    <h2>Go deeper.</h2>
+    <p class="section-sub">Articles covering the topics and frameworks on this page in more detail.</p>
+    <div class="related-grid">
+      <a href="https://saleemyousaf.co.uk/articles/broken-rag-vs-governed-rag/" class="rel-card">
+        <div class="rel-tags"><span class="rel-tag amber">AI Security</span><span class="rel-tag amber">RAG</span></div>
+        <div class="rel-title">Broken RAG vs Governed RAG Pipelines</div>
+        <div class="rel-meta">12 May 2026 · ~8 min read</div>
+      </a>
+      <a href="https://saleemyousaf.co.uk/articles/ai-security-blueprint-sabsa/" class="rel-card">
+        <div class="rel-tags"><span class="rel-tag amber">SABSA</span><span class="rel-tag amber">AI Security</span></div>
+        <div class="rel-title">AI Security Assessment Blueprint (SABSA-Aligned for AWS)</div>
+        <div class="rel-meta">5 May 2026 · ~11 min read</div>
+      </a>
+      <a href="https://saleemyousaf.co.uk/articles/public-vs-private-llms/" class="rel-card">
+        <div class="rel-tags"><span class="rel-tag purple">LLM</span><span class="rel-tag amber">Governance</span></div>
+        <div class="rel-title">Public vs Private LLMs: Security, Governance and Architecture Considerations</div>
+        <div class="rel-meta">28 Apr 2026 · ~9 min read</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-strip">
+  <div class="wrap">
+    <div class="cta-inner">
+      <div>
+        <div class="cta-heading">Working on an AI governance or security programme?</div>
+        <div class="cta-sub">Connect to discuss AI security architecture, LLM governance frameworks, or secure AI adoption strategy.</div>
+      </div>
+      <div class="cta-actions">
+        <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener" class="btn-primary">Connect on LinkedIn</a>
+        <a href="https://github.com/saleem-yousaf/LLM-Security-Architecture-Framework" target="_blank" rel="noopener" class="btn-outline">GitHub framework</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Saleem <span>Yousaf</span></div>
+        <div class="footer-desc">Cloud &amp; Cyber Security Architect · AWS · Azure · Zero Trust · AI Governance · OT Security · Enterprise Architecture</div>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+        <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+        <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
+        <a href="https://saleem-yousaf.blogspot.com/" target="_blank" rel="noopener">Blogger</a>
+        <a href="https://codepen.io/Saleem-Yousaf" target="_blank" rel="noopener">CodePen</a>
+        <a href="https://www.cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
+      <a href="https://www.saleemyousaf.co.uk/privacy-policy/" style="font-size:12px;color:var(--muted2);text-decoration:none;">Privacy Policy</a>
+    </div>
+  </div>
+
+<!-- Cross-property links (static HTML, mirrors nav for crawlers and no-JS visitors) -->
+<div style="max-width:1100px;margin:0 auto;padding:24px 32px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;border-top:1px solid rgba(255,255,255,0.07);">
+  <a href="https://breachforge.co.uk" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:4px;text-decoration:none;letter-spacing:0.04em;font-weight:500;background:rgba(230,57,70,0.12);color:#e63946;border:1px solid rgba(230,57,70,0.25);">
+    ⦡ breachforge.co.uk
+  </a>
+  <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:4px;text-decoration:none;letter-spacing:0.04em;font-weight:500;background:rgba(0,217,255,0.12);color:#00d9ff;border:1px solid rgba(0,217,255,0.25);">
+    ⬢ cyberspartans.co.uk
+  </a>
+</div>
+
+</footer>
+
+
+<script src="/nav.js" defer></script>
+</body>
+</html>
