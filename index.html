@@ -3,16 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Saleem Yousaf | AWS &amp; Azure Security Architect | Cloud Security, Zero Trust &amp; AI Governance</title>
-<meta name="description" content="Saleem Yousaf is a senior Cloud & Security Architect specialising in AWS, Azure, Zero Trust, AI Governance and enterprise security architecture across UK government, CNI and enterprise environments.">
+
+<!-- SEO title with full name -->
+<title>Saleem Yousaf | Cloud & Cyber Security Architect | AWS, Azure, Zero Trust</title>
+
+<!-- Meta description with full name and core positioning -->
+<meta name="description" content="Saleem Yousaf is a UK-based Cloud and Cyber Security Architect with 20+ years designing AWS, Azure, and Zero Trust security for UK government, Critical National Infrastructure, and enterprise. Founder of BreachForge and Director at Cyber Spartans.">
 <meta name="author" content="Saleem Yousaf">
 <link rel="canonical" href="https://saleemyousaf.co.uk/">
-<meta property="og:title" content="Saleem Yousaf | Cloud &amp; Cyber Security Architect">
-<meta property="og:description" content="20+ years designing secure AWS, Azure, and Zero Trust architectures for UK government, Critical National Infrastructure, and enterprise.">
+
+<!-- Open Graph with full name -->
+<meta property="og:title" content="Saleem Yousaf | Cloud & Cyber Security Architect">
+<meta property="og:description" content="20+ years designing secure AWS, Azure, and Zero Trust architectures for UK government, CNI, and enterprise. Founder of BreachForge. Director at Cyber Spartans.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://saleemyousaf.co.uk/">
 
-<!-- Person schema for SEO: helps Google disambiguate Saleem Yousaf the cybersecurity architect from other people of the same name -->
+<!-- Person schema with cross-links to both properties -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -20,7 +26,7 @@
   "name": "Saleem Yousaf",
   "url": "https://saleemyousaf.co.uk/",
   "jobTitle": "Cloud & Cyber Security Architect",
-  "description": "Cloud and Cyber Security Architect with 20+ years designing enterprise-scale security across AWS, Azure, and Zero Trust environments for UK government, Critical National Infrastructure, and global enterprise. Director at Cyber Spartans Ltd.",
+  "description": "Cloud and Cyber Security Architect with 20+ years designing enterprise-scale security across AWS, Azure, and Zero Trust environments for UK government, Critical National Infrastructure, and global enterprise. Founder of BreachForge. Director at Cyber Spartans Ltd.",
   "knowsAbout": [
     "Cloud Security",
     "Security Architecture",
@@ -44,8 +50,17 @@
   "worksFor": {
     "@type": "Organization",
     "name": "Cyber Spartans Ltd",
-    "url": "https://www.cyberspartans.co.uk"
+    "url": "https://cyberspartans.co.uk"
   },
+  "owns": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "BreachForge",
+      "url": "https://breachforge.co.uk",
+      "applicationCategory": "SecurityApplication",
+      "description": "Breach and Attack Simulation platform mapped to MITRE ATT&CK."
+    }
+  ],
   "address": {
     "@type": "PostalAddress",
     "addressCountry": "GB"
@@ -58,7 +73,8 @@
     "https://dev.to/saleem_yousaf",
     "https://saleem-yousaf.blogspot.com/",
     "https://codepen.io/Saleem-Yousaf",
-    "https://www.cyberspartans.co.uk"
+    "https://cyberspartans.co.uk",
+    "https://breachforge.co.uk"
   ]
 }
 </script>
@@ -68,29 +84,30 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
-/* ── TOKENS ─────────────────────────────────────────── */
 :root {
-  --bg:         #090c10;
-  --bg2:        #0f1318;
-  --bg3:        #161b22;
-  --border:     rgba(255,255,255,0.07);
-  --border2:    rgba(255,255,255,0.12);
-  --text:       #e6eaf0;
-  --muted:      #7a8694;
-  --muted2:     #4a5568;
-  --teal:       #2dd4bf;
-  --teal-dim:   rgba(45,212,191,0.12);
-  --teal-glow:  rgba(45,212,191,0.06);
-  --amber:      #f59e0b;
-  --amber-dim:  rgba(245,158,11,0.1);
-  --mono:       'DM Mono', monospace;
-  --display:    'Syne', sans-serif;
-  --body:       'Inter', sans-serif;
+  --bg: #090c10;
+  --bg2: #0f1318;
+  --bg3: #161b22;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e6eaf0;
+  --muted: #7a8694;
+  --muted2: #4a5568;
+  --teal: #2dd4bf;
+  --teal-dim: rgba(45,212,191,0.12);
+  --amber: #f59e0b;
+  --amber-dim: rgba(245,158,11,0.1);
+  --red: #e63946;
+  --red-dim: rgba(230,57,70,0.12);
+  --cyan: #00d9ff;
+  --cyan-dim: rgba(0,217,255,0.12);
+  --mono: 'DM Mono', monospace;
+  --display: 'Syne', sans-serif;
+  --body: 'Inter', sans-serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-
 body {
   background: var(--bg);
   color: var(--text);
@@ -101,69 +118,43 @@ body {
   overflow-x: hidden;
 }
 
-/* ── GRID NOISE TEXTURE ─────────────────────────────── */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image:
-    linear-gradient(rgba(45,212,191,0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(45,212,191,0.015) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(45,212,191,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(45,212,191,0.015) 1px, transparent 1px);
   background-size: 40px 40px;
   pointer-events: none;
   z-index: 0;
 }
 
-/* ── LAYOUT ─────────────────────────────────────────── */
 .wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
 
-/* ── NAV ─────────────────────────────────────────────── */
 nav {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 100;
   background: rgba(9,12,16,0.85);
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
 }
-.nav-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 32px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.nav-logo {
-  font-family: var(--display);
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text);
-  text-decoration: none;
-  letter-spacing: 0.02em;
-}
+.nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+.nav-logo { font-family: var(--display); font-size: 15px; font-weight: 700; color: var(--text); text-decoration: none; letter-spacing: 0.02em; }
 .nav-logo span { color: var(--teal); }
 .nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
-.nav-links a {
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--muted);
-  text-decoration: none;
-  letter-spacing: 0.03em;
-  transition: color 0.2s;
-}
+.nav-links a { font-size: 13px; font-weight: 400; color: var(--muted); text-decoration: none; letter-spacing: 0.03em; transition: color 0.2s; }
 .nav-links a:hover { color: var(--text); }
-.nav-links a.active { color: var(--teal); }
+.nav-cta { font-size: 13px; font-weight: 500; color: var(--teal) !important; border: 1px solid rgba(45,212,191,0.3); padding: 6px 16px; border-radius: 4px; }
+.nav-cta:hover { background: var(--teal-dim); border-color: var(--teal) !important; }
+
+/* Nav dropdown - uses the documented pattern: padding-top bridge, opacity/pointer-events toggle, .nav-dropdown-menu-inner wrapper */
 .nav-dropdown { position: relative; }
 .nav-dropdown-toggle {
   font-size: 13px; color: var(--muted); background: none; border: none;
   cursor: pointer; letter-spacing: 0.03em; display: flex; align-items: center; gap: 5px;
   font-family: var(--body); padding: 0; transition: color 0.2s;
 }
-.nav-dropdown-toggle:hover { color: var(--teal); }
-.nav-dropdown:hover .nav-dropdown-toggle { color: var(--teal); }
+.nav-dropdown-toggle:hover, .nav-dropdown:hover .nav-dropdown-toggle { color: var(--text); }
 .nav-dropdown-toggle svg { transition: transform 0.2s; }
 .nav-dropdown:hover .nav-dropdown-toggle svg { transform: rotate(180deg); }
 .nav-dropdown-menu {
@@ -178,73 +169,28 @@ nav {
 }
 .nav-dropdown-menu a {
   display: block; padding: 9px 14px; font-size: 13px; color: var(--muted);
-  text-decoration: none; border-radius: 5px; transition: background 0.15s, color 0.15s; white-space: nowrap;
+  text-decoration: none; border-radius: 5px;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
 }
 .nav-dropdown-menu a:hover { background: var(--bg3); color: var(--text); }
-.nav-dropdown-menu a.active { color: var(--teal); }
-.nav-cta {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--teal) !important;
-  border: 1px solid rgba(45,212,191,0.3);
-  padding: 6px 16px;
-  border-radius: 4px;
-  transition: background 0.2s, border-color 0.2s !important;
-}
-.nav-cta:hover { background: var(--teal-dim); border-color: var(--teal) !important; }
 
-/* ── HERO ────────────────────────────────────────────── */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  padding-top: 60px;
-  position: relative;
-  z-index: 0;
-}
+/* External property links in nav - colour-coded to match their property */
+.nav-divider { width: 1px; height: 16px; background: var(--border); margin: 0 4px; }
+.nav-ext { display: inline-flex; align-items: center; gap: 4px; font-size: 12px !important; padding: 4px 10px; border-radius: 3px; transition: background 0.2s, color 0.2s !important; }
+.nav-ext.bf { color: var(--red) !important; }
+.nav-ext.bf:hover { background: var(--red-dim); }
+.nav-ext.cs { color: var(--cyan) !important; }
+.nav-ext.cs:hover { background: var(--cyan-dim); }
+.nav-ext-arrow { font-size: 10px; opacity: 0.7; }
 
-.hero-glow {
-  position: absolute;
-  top: -200px; right: -200px;
-  width: 700px; height: 700px;
-  background: radial-gradient(circle, rgba(45,212,191,0.07) 0%, transparent 65%);
-  pointer-events: none;
-}
-.hero-glow-2 {
-  position: absolute;
-  bottom: -100px; left: -100px;
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(245,158,11,0.04) 0%, transparent 65%);
-  pointer-events: none;
-}
+.hero { min-height: 88vh; display: flex; align-items: center; padding-top: 60px; position: relative; z-index: 0; }
+.hero-glow { position: absolute; top: -200px; right: -200px; width: 700px; height: 700px; background: radial-gradient(circle, rgba(45,212,191,0.07) 0%, transparent 65%); pointer-events: none; }
+.hero-content { display: grid; grid-template-columns: 1fr 380px; gap: 80px; align-items: center; padding: 60px 0; position: relative; z-index: 1; }
 
-.hero-content {
-  display: grid;
-  grid-template-columns: 1fr 380px;
-  position: relative;
-  z-index: 0;
-  gap: 80px;
-  align-items: center;
-  padding: 80px 0;
-}
-
-.hero-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 28px;
-}
-.hero-eyebrow-line {
-  width: 32px; height: 1px;
-  background: var(--teal);
-}
-.hero-eyebrow-text {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--teal);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
+.hero-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+.hero-eyebrow-line { width: 32px; height: 1px; background: var(--teal); }
+.hero-eyebrow-text { font-family: var(--mono); font-size: 12px; color: var(--teal); letter-spacing: 0.12em; text-transform: uppercase; }
 
 h1 {
   font-family: var(--display);
@@ -253,480 +199,223 @@ h1 {
   line-height: 1.08;
   letter-spacing: -0.02em;
   color: #fff;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
-h1 em {
-  font-style: normal;
-  color: var(--teal);
-}
+h1 em { font-style: normal; color: var(--teal); }
 
-.hero-sub {
-  font-size: 17px;
-  line-height: 1.7;
-  color: var(--muted);
-  max-width: 540px;
-  margin-bottom: 40px;
-}
-
-.hero-actions {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--teal);
-  color: #090c10;
-  font-family: var(--body);
-  font-size: 14px;
-  font-weight: 600;
-  padding: 12px 24px;
-  border-radius: 4px;
-  text-decoration: none;
-  letter-spacing: 0.02em;
-  transition: opacity 0.2s, transform 0.15s;
-}
-.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--muted);
-  font-size: 14px;
-  text-decoration: none;
-  letter-spacing: 0.02em;
-  transition: color 0.2s;
-}
-.btn-secondary:hover { color: var(--text); }
-.btn-secondary svg { transition: transform 0.2s; }
-.btn-secondary:hover svg { transform: translateX(3px); }
-
-/* ── HERO CARD ─────────────────────────────────────── */
-.hero-card {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 32px;
-  position: relative;
-  overflow: hidden;
-}
-.hero-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--teal), transparent);
-}
-.hcard-label {
+.hero-name {
   font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--teal);
-  margin-bottom: 20px;
-}
-.hcard-stat {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border);
-}
-.hcard-stat:last-of-type { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-.hcard-num {
-  font-family: var(--display);
-  font-size: 36px;
-  font-weight: 800;
-  color: #fff;
-  line-height: 1;
-  margin-bottom: 4px;
-}
-.hcard-num span { color: var(--teal); font-size: 22px; }
-.hcard-desc {
   font-size: 13px;
   color: var(--muted);
-  line-height: 1.5;
-}
-.hcard-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 24px; }
-.hcard-tag {
-  font-family: var(--mono);
-  font-size: 10px;
-  padding: 4px 10px;
-  background: var(--teal-dim);
-  color: var(--teal);
-  border-radius: 3px;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
+  margin-bottom: 12px;
 }
+.hero-name strong { color: var(--text); font-weight: 500; }
 
-/* ── STATS BAR ─────────────────────────────────────── */
-.stats-bar {
+.hero-sub { font-size: 17px; line-height: 1.7; color: var(--muted); max-width: 540px; margin-bottom: 36px; }
+
+.hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #090c10; font-size: 14px; font-weight: 600; padding: 12px 22px; border-radius: 4px; text-decoration: none; letter-spacing: 0.02em; transition: opacity 0.2s; }
+.btn-primary:hover { opacity: 0.9; }
+.btn-secondary { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 14px; text-decoration: none; }
+.btn-secondary:hover { color: var(--text); }
+
+/* HERO CARD - simplified, focused on identity */
+.hero-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 32px; position: relative; overflow: hidden; }
+.hero-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--teal), transparent); }
+.hcard-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); margin-bottom: 18px; }
+.hcard-stat { display: flex; flex-direction: column; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
+.hcard-stat:last-of-type { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.hcard-num { font-family: var(--display); font-size: 32px; font-weight: 800; color: #fff; line-height: 1; margin-bottom: 4px; }
+.hcard-num span { color: var(--teal); font-size: 20px; }
+.hcard-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+/* =========================================
+   NEW: PROPERTIES STRIP (the cross-links)
+   ========================================= */
+.properties-strip {
+  background: var(--bg2);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   padding: 0;
-  background: var(--bg2);
 }
-.stats-grid {
+.props-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1fr 1fr;
 }
-.stat-item {
-  padding: 32px 24px;
+.prop-card {
+  padding: 36px 32px;
   border-right: 1px solid var(--border);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   position: relative;
 }
-.stat-item:last-child { border-right: none; }
-.stat-num {
-  font-family: var(--display);
-  font-size: 38px;
-  font-weight: 800;
-  color: #fff;
-  line-height: 1;
-  margin-bottom: 6px;
-}
-.stat-num em { font-style: normal; color: var(--teal); font-size: 22px; }
-.stat-label {
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.4;
-}
+.prop-card:last-child { border-right: none; }
+.prop-card:hover { background: var(--bg3); }
 
-/* ── SECTION BASE ───────────────────────────────────── */
-section { position: relative; z-index: 1; }
-.section-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-.section-eyebrow-line { width: 24px; height: 1px; background: var(--teal); }
-.section-eyebrow-text {
+.prop-card-eyebrow {
   font-family: var(--mono);
-  font-size: 11px;
-  color: var(--teal);
+  font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
-h2 {
-  font-family: var(--display);
-  font-size: clamp(26px, 3vw, 38px);
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  color: #fff;
-  margin-bottom: 16px;
-}
-.section-sub {
-  font-size: 16px;
-  color: var(--muted);
-  max-width: 560px;
-  line-height: 1.7;
-  margin-bottom: 56px;
-}
+.prop-card.bf .prop-card-eyebrow { color: var(--red); }
+.prop-card.cs .prop-card-eyebrow { color: var(--cyan); }
 
-/* ── EXPERTISE SECTION ──────────────────────────────── */
-.expertise { padding: 100px 0; }
-.expertise-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  overflow: hidden;
-}
-.exp-card {
-  background: var(--bg2);
-  padding: 32px 28px;
-  transition: background 0.2s;
-}
-.exp-card:hover { background: var(--bg3); }
-.exp-icon {
-  width: 40px; height: 40px;
-  background: var(--teal-dim);
-  border-radius: 8px;
+.prop-card-title {
+  font-family: var(--display);
+  font-size: 24px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.5px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
+  gap: 12px;
 }
+.prop-card-domain {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+.prop-card-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+  flex: 1;
+}
+.prop-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+.prop-card.bf .prop-card-cta { color: var(--red); }
+.prop-card.cs .prop-card-cta { color: var(--cyan); }
+
+.prop-card-tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  letter-spacing: 0.06em;
+  margin-left: 8px;
+}
+.prop-card.bf .prop-card-tag { background: var(--red-dim); color: var(--red); }
+.prop-card.cs .prop-card-tag { background: var(--cyan-dim); color: var(--cyan); }
+
+/* SECTION BASE */
+section { position: relative; z-index: 1; }
+.section-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.section-eyebrow-line { width: 24px; height: 1px; background: var(--teal); }
+.section-eyebrow-text { font-family: var(--mono); font-size: 11px; color: var(--teal); letter-spacing: 0.12em; text-transform: uppercase; }
+h2 { font-family: var(--display); font-size: clamp(26px, 3vw, 38px); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color: #fff; margin-bottom: 16px; }
+.section-sub { font-size: 16px; color: var(--muted); max-width: 560px; line-height: 1.7; margin-bottom: 48px; }
+
+/* EXPERTISE */
+.expertise { padding: 100px 0; }
+.expertise-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.exp-card { background: var(--bg2); padding: 32px 28px; transition: background 0.2s; }
+.exp-card:hover { background: var(--bg3); }
+.exp-icon { width: 40px; height: 40px; background: var(--teal-dim); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
 .exp-icon svg { color: var(--teal); }
-.exp-title {
-  font-family: var(--display);
-  font-size: 16px;
-  font-weight: 600;
-  color: #fff;
-  margin-bottom: 10px;
-}
+.exp-title { font-family: var(--display); font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 10px; }
 .exp-body { font-size: 14px; color: var(--muted); line-height: 1.65; }
 
-/* ── EXPERIENCE / CLIENTS ───────────────────────────── */
+/* CLIENTS */
 .clients { padding: 0 0 100px; }
-.clients-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-}
-.client-card {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 28px 32px;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 0 20px;
-  align-items: start;
-  transition: border-color 0.2s;
-  text-decoration: none;
-  color: inherit;
-}
+.clients-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.client-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 28px 32px; display: grid; grid-template-columns: auto 1fr; gap: 0 20px; transition: border-color 0.2s; }
 .client-card:hover { border-color: var(--border2); }
-.client-num {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--teal);
-  padding-top: 3px;
-  letter-spacing: 0.06em;
-}
-.client-sector {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted2);
-  margin-bottom: 6px;
-}
-.client-name {
-  font-family: var(--display);
-  font-size: 18px;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 10px;
-}
+.client-num { font-family: var(--mono); font-size: 11px; color: var(--teal); padding-top: 3px; letter-spacing: 0.06em; }
+.client-sector { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted2); margin-bottom: 6px; }
+.client-name { font-family: var(--display); font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 10px; }
 .client-body { font-size: 14px; color: var(--muted); line-height: 1.6; }
 
-/* ── FEATURED PROJECTS ──────────────────────────────── */
-.projects { padding: 0 0 100px; }
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-.project-card {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 28px;
+/* CTA STRIP */
+.cta-strip { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 72px 0; }
+.cta-inner { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
+.cta-heading { font-family: var(--display); font-size: clamp(22px, 2.5vw, 30px); font-weight: 700; color: #fff; margin-bottom: 10px; }
+.cta-sub { font-size: 15px; color: var(--muted); line-height: 1.6; }
+.cta-actions { display: flex; gap: 12px; flex-shrink: 0; }
+
+/* FOOTER */
+footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
+.footer-inner { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
+.footer-logo { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.footer-logo span { color: var(--teal); }
+.footer-desc { font-size: 13px; color: var(--muted); max-width: 380px; line-height: 1.6; }
+
+/* FOOTER - reorganised with property links prominent */
+.footer-links-group {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  text-decoration: none;
-  color: inherit;
-  transition: border-color 0.2s, background 0.2s;
+  gap: 20px;
 }
-.project-card:hover { border-color: var(--border2); background: var(--bg3); }
-.project-eyebrow {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--amber);
-}
-.project-title {
-  font-family: var(--display);
-  font-size: 17px;
-  font-weight: 700;
-  color: #fff;
-  line-height: 1.25;
-}
-.project-body { font-size: 13px; color: var(--muted); line-height: 1.6; flex: 1; }
-.project-link {
+.footer-properties {
   display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.footer-prop-link {
+  display: inline-flex;
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  font-family: var(--mono);
-  color: var(--teal);
-  letter-spacing: 0.05em;
-}
-.project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.project-tag {
-  font-family: var(--mono);
-  font-size: 10px;
-  padding: 3px 8px;
-  background: rgba(245,158,11,0.08);
-  color: var(--amber);
-  border-radius: 3px;
-}
-
-/* ── ARTICLES ───────────────────────────────────────── */
-.articles { padding: 0 0 100px; }
-.articles-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 32px;
-}
-.article-card {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  text-decoration: none;
-  color: inherit;
-  transition: border-color 0.2s;
-}
-.article-card:hover { border-color: var(--border2); }
-.article-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.article-tag {
-  font-family: var(--mono);
-  font-size: 10px;
-  padding: 3px 8px;
-  background: var(--teal-dim);
-  color: var(--teal);
-  border-radius: 3px;
-}
-.article-title {
-  font-family: var(--display);
-  font-size: 15px;
-  font-weight: 600;
-  color: #fff;
-  line-height: 1.35;
-}
-.article-excerpt { font-size: 13px; color: var(--muted); line-height: 1.6; flex: 1; }
-.article-meta {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--muted2);
-  padding-top: 8px;
-  border-top: 1px solid var(--border);
-}
-.articles-more {
-  text-align: center;
-}
-.btn-outline {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid var(--border2);
-  color: var(--muted);
-  font-size: 14px;
-  padding: 11px 24px;
+  padding: 6px 12px;
   border-radius: 4px;
   text-decoration: none;
-  transition: border-color 0.2s, color 0.2s;
+  letter-spacing: 0.04em;
+  font-weight: 500;
 }
-.btn-outline:hover { border-color: var(--teal); color: var(--teal); }
-
-/* ── CTA STRIP ──────────────────────────────────────── */
-.cta-strip {
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  padding: 80px 0;
-  margin-bottom: 0;
+.footer-prop-link.bf {
+  background: var(--red-dim);
+  color: var(--red);
+  border: 1px solid rgba(230,57,70,0.25);
 }
-.cta-inner {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 40px;
-  align-items: center;
+.footer-prop-link.cs {
+  background: var(--cyan-dim);
+  color: var(--cyan);
+  border: 1px solid rgba(0,217,255,0.25);
 }
-.cta-heading {
-  font-family: var(--display);
-  font-size: clamp(22px, 2.5vw, 30px);
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 10px;
-}
-.cta-sub { font-size: 15px; color: var(--muted); line-height: 1.6; }
-.cta-actions { display: flex; gap: 12px; flex-shrink: 0; align-items: center; }
-
-/* ── FOOTER ─────────────────────────────────────────── */
-footer {
-  padding: 48px 0 40px;
-  border-top: 1px solid var(--border);
-}
-.footer-inner {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 32px;
-  align-items: start;
-}
-.footer-logo {
-  font-family: var(--display);
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 8px;
-}
-.footer-logo span { color: var(--teal); }
-.footer-desc { font-size: 13px; color: var(--muted); max-width: 380px; line-height: 1.6; }
-.footer-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
-.footer-links a {
-  font-size: 13px;
-  color: var(--muted);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.footer-links a:hover { color: var(--teal); }
-.footer-bottom {
-  margin-top: 32px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+.footer-social { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.footer-social a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-social a:hover { color: var(--teal); }
+.footer-bottom { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
 .footer-copy { font-size: 12px; color: var(--muted2); }
 
-/* ── ANIMATIONS ─────────────────────────────────────── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.hero-content > * { animation: fadeUp 0.6s ease both; }
-.hero-content > *:nth-child(1) { animation-delay: 0.1s; }
-.hero-content > *:nth-child(2) { animation-delay: 0.25s; }
-
-/* ── RESPONSIVE ─────────────────────────────────────── */
 @media (max-width: 900px) {
-  .hero-content { grid-template-columns: 1fr; gap: 48px; }
-  .hero-card { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .hcard-label { grid-column: 1/-1; margin-bottom: 0; }
-  .hcard-stat { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-  .hcard-tags { grid-column: 1/-1; }
+  .hero-content { grid-template-columns: 1fr; gap: 40px; }
+  .props-grid { grid-template-columns: 1fr; }
+  .prop-card { border-right: none; border-bottom: 1px solid var(--border); }
+  .prop-card:last-child { border-bottom: none; }
   .expertise-grid { grid-template-columns: 1fr 1fr; }
   .clients-grid { grid-template-columns: 1fr; }
-  .projects-grid { grid-template-columns: 1fr 1fr; }
-  .articles-grid { grid-template-columns: 1fr 1fr; }
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .stat-item:nth-child(2) { border-right: none; }
-  .stat-item:nth-child(3) { border-top: 1px solid var(--border); }
-  .stat-item:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
   .cta-inner { grid-template-columns: 1fr; }
   .footer-inner { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
   .wrap { padding: 0 20px; }
   .nav-links { display: none; }
-  .expertise-grid,
-  .projects-grid,
-  .articles-grid { grid-template-columns: 1fr; }
-  .hero-card { grid-template-columns: 1fr; }
-  h1 { font-size: 34px; }
+  .expertise-grid { grid-template-columns: 1fr; }
+  h1 { font-size: 32px; }
 }
 </style>
 </head>
 <body>
 
-<!-- ═══ NAV ═══════════════════════════════════════════ -->
+
+
+<!-- NAV: removed /breachforge mirror link. Added external links to BreachForge and Cyber Spartans for persistent cross-property navigation. -->
 <nav>
   <div class="nav-inner">
     <a href="https://saleemyousaf.co.uk/" class="nav-logo">Saleem <span>Yousaf</span></a>
@@ -743,18 +432,19 @@ footer {
           <a href="https://saleemyousaf.co.uk/articles/">All Articles</a>
           <a href="https://saleemyousaf.co.uk/assume-breach/">Assume Breach</a>
           <a href="https://saleemyousaf.co.uk/ai-security-governance/">AI Security &amp; Governance</a>
-          <a href="https://saleemyousaf.co.uk/breachforge/" style="color:#00d4ff;border-top:1px solid rgba(255,255,255,0.07);margin-top:4px;padding-top:12px;">⬡ BreachForge BAS</a>
         </div></div>
       </li>
+      <li><span class="nav-divider"></span></li>
+      <li><a href="https://breachforge.co.uk" target="_blank" rel="noopener" class="nav-ext bf">BreachForge<span class="nav-ext-arrow">↗</span></a></li>
+      <li><a href="https://cyberspartans.co.uk" target="_blank" rel="noopener" class="nav-ext cs">Cyber Spartans<span class="nav-ext-arrow">↗</span></a></li>
       <li><a href="https://saleemyousaf.co.uk/connect/" class="nav-cta">Connect</a></li>
     </ul>
   </div>
 </nav>
 
-<!-- ═══ HERO ═══════════════════════════════════════════ -->
+<!-- HERO with name above the fold for SEO -->
 <section class="hero">
   <div class="hero-glow"></div>
-  <div class="hero-glow-2"></div>
   <div class="wrap">
     <div class="hero-content">
       <div>
@@ -762,9 +452,10 @@ footer {
           <div class="hero-eyebrow-line"></div>
           <span class="hero-eyebrow-text">Cloud &amp; Cyber Security Architect · UK</span>
         </div>
+        <div class="hero-name"><strong>Saleem Yousaf</strong> · saleemyousaf.co.uk</div>
         <h1>Secure by design.<br><em>Resilient by architecture.</em></h1>
         <p class="hero-sub">
-          20+ years designing enterprise-scale security across AWS, Azure, and Zero Trust environments, for UK government, Critical National Infrastructure, and global enterprise.
+          I'm Saleem Yousaf, a Cloud and Cyber Security Architect with 20+ years designing enterprise security across AWS, Azure, and Zero Trust environments for UK government, Critical National Infrastructure, and global enterprise. Founder of BreachForge. Director at Cyber Spartans.
         </p>
         <div class="hero-actions">
           <a href="https://saleemyousaf.co.uk/experience/" class="btn-primary">
@@ -772,279 +463,88 @@ footer {
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
           <a href="https://saleemyousaf.co.uk/articles/" class="btn-secondary">
-            Read my articles
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            Read articles →
           </a>
         </div>
       </div>
-
       <div class="hero-card">
-        <div class="hcard-label">// expertise snapshot</div>
-        <div class="hcard-stat">
-          <div class="hcard-num">20<span>+</span></div>
-          <div class="hcard-desc">Years of architecture &amp; security experience</div>
-        </div>
-        <div class="hcard-stat">
-          <div class="hcard-num">10<span>+</span></div>
-          <div class="hcard-desc">Cloud migration programmes delivered</div>
-        </div>
-        <div class="hcard-stat">
-          <div class="hcard-num">15<span>+</span></div>
-          <div class="hcard-desc">Enterprise cloud &amp; security programmes</div>
-        </div>
-        <div class="hcard-tags">
-          <span class="hcard-tag">AWS</span>
-          <span class="hcard-tag">Azure</span>
-          <span class="hcard-tag">Zero Trust</span>
-          <span class="hcard-tag">SABSA</span>
-          <span class="hcard-tag">MITRE ATT&amp;CK</span>
-          <span class="hcard-tag">AI Governance</span>
-          <span class="hcard-tag">OT Security</span>
-        </div>
+        <div class="hcard-label">// snapshot</div>
+        <div class="hcard-stat"><div class="hcard-num">20<span>+</span></div><div class="hcard-desc">Years of architecture &amp; security experience</div></div>
+        <div class="hcard-stat"><div class="hcard-num">2</div><div class="hcard-desc">Active properties: BreachForge &amp; Cyber Spartans</div></div>
+        <div class="hcard-stat"><div class="hcard-num">19<span>+</span></div><div class="hcard-desc">Published technical articles</div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ STATS BAR ═══════════════════════════════════════ -->
-<div class="stats-bar">
-  <div class="wrap">
-    <div class="stats-grid">
-      <div class="stat-item">
-        <div class="stat-num">Gov<em>·</em>CNI</div>
-        <div class="stat-label">UK Government &amp; Critical National Infrastructure delivery</div>
+<!-- =========================================
+     NEW: PROPERTIES STRIP (the cross-link)
+     ========================================= -->
+<div class="properties-strip">
+  <div class="props-grid">
+    <a href="https://breachforge.co.uk" class="prop-card bf" target="_blank" rel="noopener">
+      <span class="prop-card-eyebrow">// My platform</span>
+      <div class="prop-card-title">
+        BreachForge
+        <span class="prop-card-tag">LIVE</span>
       </div>
-      <div class="stat-item">
-        <div class="stat-num">SABSA<em>·</em></div>
-        <div class="stat-label">Enterprise security architecture frameworks &amp; threat modelling</div>
+      <div class="prop-card-domain">breachforge.co.uk</div>
+      <p class="prop-card-desc">
+        Breach and Attack Simulation platform I built and maintain. Maps adversary techniques to MITRE ATT&amp;CK, tests your defences continuously, and shows you what works and what doesn't. Live at breachforge.co.uk.
+      </p>
+      <span class="prop-card-cta">Visit BreachForge →</span>
+    </a>
+
+    <a href="https://cyberspartans.co.uk" class="prop-card cs" target="_blank" rel="noopener">
+      <span class="prop-card-eyebrow">// My consultancy</span>
+      <div class="prop-card-title">
+        Cyber Spartans
+        <span class="prop-card-tag">CONSULTANCY</span>
       </div>
-      <div class="stat-item">
-        <div class="stat-num">BAS<em>·</em></div>
-        <div class="stat-label">Breach Attack Simulation &amp; continuous security validation</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">AI<em>·</em></div>
-        <div class="stat-label">Secure AI adoption, LLM security &amp; governance frameworks</div>
-      </div>
-    </div>
+      <div class="prop-card-domain">cyberspartans.co.uk</div>
+      <p class="prop-card-desc">
+        My cybersecurity and cloud consultancy. Security validation, vulnerability management, cloud audits, and FinOps for organisations that want measurable assurance. Director and lead architect.
+      </p>
+      <span class="prop-card-cta">Visit Cyber Spartans →</span>
+    </a>
   </div>
 </div>
 
-<!-- ═══ EXPERTISE ═══════════════════════════════════════ -->
+<!-- EXPERTISE -->
 <section class="expertise">
   <div class="wrap">
-    <div class="section-eyebrow">
-      <div class="section-eyebrow-line"></div>
-      <span class="section-eyebrow-text">Core expertise</span>
-    </div>
+    <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span class="section-eyebrow-text">Core expertise</span></div>
     <h2>Architecture that holds<br>under pressure.</h2>
     <p class="section-sub">Security-by-design across cloud, identity, OT, and AI, built for complex enterprise and regulated environments.</p>
 
     <div class="expertise-grid">
-      <div class="exp-card">
-        <div class="exp-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 15a4 4 0 0 0 4 4h9a5 5 0 1 0-.1-9.999 5.002 5.002 0 0 0-9.78 2.096A4.001 4.001 0 0 0 3 15z"/></svg>
-        </div>
-        <div class="exp-title">Secure AWS &amp; Azure Architecture</div>
-        <div class="exp-body">Designing secure, scalable cloud architectures including landing zones, enterprise platforms, hybrid connectivity, and cloud-native security controls.</div>
-      </div>
-      <div class="exp-card">
-        <div class="exp-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
-        </div>
-        <div class="exp-title">Zero Trust &amp; Identity Security</div>
-        <div class="exp-body">Applying Zero Trust principles through identity-driven access control, API security, and layered security architecture across enterprise environments.</div>
-      </div>
-      <div class="exp-card">
-        <div class="exp-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <div class="exp-title">Threat Modelling &amp; BAS</div>
-        <div class="exp-body">STRIDE-based threat modelling, Breach Attack Simulation in CI/CD pipelines, and continuous security validation mapped to MITRE ATT&amp;CK and SABSA.</div>
-      </div>
-      <div class="exp-card">
-        <div class="exp-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-        </div>
-        <div class="exp-title">AI Security &amp; Governance</div>
-        <div class="exp-body">Helping organisations adopt AI securely through governance frameworks, LLM security architecture, RAG pipeline security, prompt injection risk, and data protection.</div>
-      </div>
-      <div class="exp-card">
-        <div class="exp-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        </div>
-        <div class="exp-title">OT Security &amp; Segmentation</div>
-        <div class="exp-body">Designing secure OT and industrial network architectures using IDMZ patterns, segmentation, and controlled access models for Critical National Infrastructure.</div>
-      </div>
-      <div class="exp-card">
-        <div class="exp-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-        </div>
-        <div class="exp-title">Cloud Migration &amp; Assurance</div>
-        <div class="exp-body">Supporting secure cloud migrations from on-premise to AWS and Azure, covering governance, compliance assurance, resilience, and reduced operational risk at scale.</div>
-      </div>
+      <div class="exp-card"><div class="exp-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 15a4 4 0 0 0 4 4h9a5 5 0 1 0-.1-9.999 5.002 5.002 0 0 0-9.78 2.096A4.001 4.001 0 0 0 3 15z"/></svg></div><div class="exp-title">Secure AWS &amp; Azure Architecture</div><div class="exp-body">Designing secure, scalable cloud architectures including landing zones, enterprise platforms, hybrid connectivity, and cloud-native security controls.</div></div>
+      <div class="exp-card"><div class="exp-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/></svg></div><div class="exp-title">Zero Trust &amp; Identity Security</div><div class="exp-body">Applying Zero Trust principles through identity-driven access control, API security, and layered security architecture across enterprise environments.</div></div>
+      <div class="exp-card"><div class="exp-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="exp-title">Threat Modelling &amp; BAS</div><div class="exp-body">STRIDE-based threat modelling, Breach Attack Simulation in CI/CD pipelines, and continuous validation mapped to MITRE ATT&amp;CK. The thinking behind BreachForge.</div></div>
+      <div class="exp-card"><div class="exp-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/></svg></div><div class="exp-title">AI Security &amp; Governance</div><div class="exp-body">Helping organisations adopt AI securely through governance frameworks, LLM security architecture, RAG pipeline security, prompt injection risk, and data protection.</div></div>
+      <div class="exp-card"><div class="exp-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div class="exp-title">OT Security &amp; Segmentation</div><div class="exp-body">Designing secure OT and industrial network architectures using IDMZ patterns, segmentation, and controlled access models for Critical National Infrastructure.</div></div>
+      <div class="exp-card"><div class="exp-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div class="exp-title">Cloud Migration &amp; Assurance</div><div class="exp-body">Supporting secure cloud migrations from on-premise to AWS and Azure, covering governance, compliance assurance, resilience, and reduced operational risk at scale.</div></div>
     </div>
   </div>
 </section>
 
-<!-- ═══ CLIENTS ═══════════════════════════════════════════ -->
+<!-- CLIENTS -->
 <section class="clients">
   <div class="wrap">
-    <div class="section-eyebrow">
-      <div class="section-eyebrow-line"></div>
-      <span class="section-eyebrow-text">Enterprise experience</span>
-    </div>
+    <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span class="section-eyebrow-text">Enterprise experience</span></div>
     <h2>Sectors &amp; organisations.</h2>
     <p class="section-sub">Delivering secure architecture across government, CNI, manufacturing, and enterprise, where the stakes and governance requirements are highest.</p>
 
     <div class="clients-grid">
-      <div class="client-card">
-        <div class="client-num">01</div>
-        <div>
-          <div class="client-sector">Government · AWS</div>
-          <div class="client-name">HM Land Registry</div>
-          <div class="client-body">Delivered security architecture across APIs and middleware within a fully AWS-based enterprise platform. Strengthened API security and implemented structured STRIDE threat modelling across cloud services and integrations.</div>
-        </div>
-      </div>
-      <div class="client-card">
-        <div class="client-num">02</div>
-        <div>
-          <div class="client-sector">Government · Cloud Security</div>
-          <div class="client-name">Ministry of Justice</div>
-          <div class="client-body">Lead Cloud Security Architect within MOJ Digital &amp; Technology, supporting secure-by-design principles, cloud assurance, threat modelling, Breach Attack Simulation, and API security across enterprise cloud platforms.</div>
-        </div>
-      </div>
-      <div class="client-card">
-        <div class="client-num">03</div>
-        <div>
-          <div class="client-sector">Critical National Infrastructure</div>
-          <div class="client-name">Smart DCC</div>
-          <div class="client-body">Enterprise security architecture across CNI systems, defining AWS-based PKI cloud architecture, strengthening threat detection capabilities, and improving security governance across enterprise platforms.</div>
-        </div>
-      </div>
-      <div class="client-card">
-        <div class="client-num">04</div>
-        <div>
-          <div class="client-sector">Manufacturing · Enterprise</div>
-          <div class="client-name">Jaguar Land Rover</div>
-          <div class="client-body">Enterprise architecture and governance across manufacturing environments, covering third-party access controls, Shadow IT reduction, and improved security posture across complex enterprise systems.</div>
-        </div>
-      </div>
+      <div class="client-card"><div class="client-num">01</div><div><div class="client-sector">Government · AWS</div><div class="client-name">HM Land Registry</div><div class="client-body">Security architecture across APIs and middleware within a fully AWS-based enterprise platform. Strengthened API security and implemented structured STRIDE threat modelling.</div></div></div>
+      <div class="client-card"><div class="client-num">02</div><div><div class="client-sector">Government · Cloud Security</div><div class="client-name">Ministry of Justice</div><div class="client-body">Lead Cloud Security Architect within MOJ Digital &amp; Technology. Secure-by-design, cloud assurance, threat modelling, Breach Attack Simulation, API security.</div></div></div>
+      <div class="client-card"><div class="client-num">03</div><div><div class="client-sector">Critical National Infrastructure</div><div class="client-name">Smart DCC</div><div class="client-body">Enterprise security architecture across CNI systems. AWS-based PKI cloud architecture, threat detection, security governance.</div></div></div>
+      <div class="client-card"><div class="client-num">04</div><div><div class="client-sector">Manufacturing · Enterprise</div><div class="client-name">Jaguar Land Rover</div><div class="client-body">Enterprise architecture and governance across manufacturing environments. Third-party access controls, Shadow IT reduction, security posture improvements.</div></div></div>
     </div>
   </div>
 </section>
 
-<!-- ═══ FEATURED PROJECTS ════════════════════════════════ -->
-<section class="projects">
-  <div class="wrap">
-    <div class="section-eyebrow">
-      <div class="section-eyebrow-line"></div>
-      <span class="section-eyebrow-text">Featured projects</span>
-    </div>
-    <h2>Frameworks &amp; open source.</h2>
-    <p class="section-sub">Technical frameworks, GitHub repositories, and security design patterns built in the open for the security community.</p>
-
-    <div class="projects-grid">
-      <a href="https://github.com/saleem-yousaf/secure-landing-zone-reference-architecture" target="_blank" rel="noopener" class="project-card">
-        <div class="project-eyebrow">// GitHub Repository</div>
-        <div class="project-title">Secure Cloud Landing Zone</div>
-        <div class="project-body">Secure-by-design landing zone framework for AWS and Azure, covering private APIs, identity governance, network segmentation, compliance controls, and enterprise cloud architecture patterns.</div>
-        <div class="project-tags">
-          <span class="project-tag">AWS</span>
-          <span class="project-tag">Azure</span>
-          <span class="project-tag">IAM</span>
-          <span class="project-tag">Zero Trust</span>
-        </div>
-        <div class="project-link">
-          View on GitHub
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </div>
-      </a>
-      <a href="https://github.com/saleem-yousaf/LLM-Security-Architecture-Framework/tree/main" target="_blank" rel="noopener" class="project-card">
-        <div class="project-eyebrow">// GitHub Repository</div>
-        <div class="project-title">LLM Security Architecture Framework</div>
-        <div class="project-body">Enterprise AI security framework covering LLM architecture, prompt injection risks, governance controls, penetration testing approaches, and secure AI integration patterns.</div>
-        <div class="project-tags">
-          <span class="project-tag">AI Security</span>
-          <span class="project-tag">LLM</span>
-          <span class="project-tag">Governance</span>
-        </div>
-        <div class="project-link">
-          View on GitHub
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </div>
-      </a>
-      <a href="https://github.com/saleem-yousaf/OT-Security-Network-Segmentation-Framework" target="_blank" rel="noopener" class="project-card">
-        <div class="project-eyebrow">// GitHub Repository</div>
-        <div class="project-title">OT Security &amp; Network Segmentation</div>
-        <div class="project-body">Practical OT security architecture covering industrial network segmentation, IDMZ design, controlled access models, and protecting critical systems from lateral movement.</div>
-        <div class="project-tags">
-          <span class="project-tag">OT Security</span>
-          <span class="project-tag">ICS</span>
-          <span class="project-tag">IDMZ</span>
-        </div>
-        <div class="project-link">
-          View on GitHub
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </div>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ ARTICLES ══════════════════════════════════════════ -->
-<section class="articles">
-  <div class="wrap">
-    <div class="section-eyebrow">
-      <div class="section-eyebrow-line"></div>
-      <span class="section-eyebrow-text">Latest articles</span>
-    </div>
-    <h2>Insights &amp; architecture thinking.</h2>
-    <p class="section-sub">Technical articles, security frameworks, and architecture insights covering AWS, Azure, AI security, OT, and Zero Trust.</p>
-
-    <div class="articles-grid">
-      <a href="https://saleemyousaf.co.uk/articles/zero-trust-landing-zone/" class="article-card">
-        <div class="article-tags">
-          <span class="article-tag">Zero Trust</span>
-          <span class="article-tag">AWS</span>
-          <span class="article-tag">Azure</span>
-        </div>
-        <div class="article-title">Enterprise Zero Trust Secure Landing Zone Reference Architecture</div>
-        <div class="article-excerpt">Technical deep dive covering firewall engineering, Zero Trust, SIEM, and XSOAR for AWS and Azure using Palo Alto, Fortinet, and Zscaler SSE.</div>
-        <div class="article-meta">14 May 2026 · ~12 min read</div>
-      </a>
-      <a href="https://saleemyousaf.co.uk/articles/broken-rag-vs-governed-rag/" class="article-card">
-        <div class="article-tags">
-          <span class="article-tag">AI Security</span>
-          <span class="article-tag">RAG</span>
-          <span class="article-tag">Governance</span>
-        </div>
-        <div class="article-title">Broken RAG vs Governed RAG Pipelines</div>
-        <div class="article-excerpt">Why AI security starts before the prompt. Comparing ungoverned and well-governed retrieval-augmented generation architectures.</div>
-        <div class="article-meta">12 May 2026 · ~8 min read</div>
-      </a>
-      <a href="https://saleemyousaf.co.uk/articles/mitre-attck-vs-atlas/" class="article-card">
-        <div class="article-tags">
-          <span class="article-tag">MITRE ATT&amp;CK</span>
-          <span class="article-tag">ATLAS</span>
-          <span class="article-tag">Threat Intel</span>
-        </div>
-        <div class="article-title">MITRE ATT&amp;CK vs MITRE ATLAS: Threat-Informed Defence</div>
-        <div class="article-excerpt">A structured breakdown of both frameworks, covering how to map detection capabilities, improve security controls, and understand adversary behaviour.</div>
-        <div class="article-meta">12 May 2026 · ~10 min read</div>
-      </a>
-    </div>
-
-    <div class="articles-more">
-      <a href="https://saleemyousaf.co.uk/articles/" class="btn-outline">
-        View all articles
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ CTA STRIP ═════════════════════════════════════════ -->
+<!-- CTA STRIP -->
 <div class="cta-strip">
   <div class="wrap">
     <div class="cta-inner">
@@ -1053,33 +553,36 @@ footer {
         <div class="cta-sub">Reach out to discuss cloud security, enterprise architecture, AI governance, or Zero Trust strategy.</div>
       </div>
       <div class="cta-actions">
-        <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener" class="btn-primary">
-          Connect on LinkedIn
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </a>
-        <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener" class="btn-outline">GitHub</a>
+        <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener" class="btn-primary">Connect on LinkedIn</a>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══ FOOTER ════════════════════════════════════════════ -->
+<!-- FOOTER - properties prominent, then social -->
 <footer>
   <div class="wrap">
     <div class="footer-inner">
       <div>
         <div class="footer-logo">Saleem <span>Yousaf</span></div>
-        <div class="footer-desc">Cloud &amp; Cyber Security Architect · AWS · Azure · Zero Trust · AI Governance · OT Security · Enterprise Architecture</div>
+        <div class="footer-desc">Cloud &amp; Cyber Security Architect · Founder of BreachForge · Director at Cyber Spartans. AWS, Azure, Zero Trust, AI Governance, OT Security.</div>
       </div>
-      <div class="footer-links">
-        <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
-        <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
-        <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
-        <a href="https://saleem-yousaf.blogspot.com/" target="_blank" rel="noopener">Blogger</a>
-        <a href="https://codepen.io/Saleem-Yousaf" target="_blank" rel="noopener">CodePen</a>
-        <a href="https://www.cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+      <div class="footer-links-group">
+        <div class="footer-properties">
+          <a href="https://breachforge.co.uk" target="_blank" rel="noopener" class="footer-prop-link bf">
+            ⬡ breachforge.co.uk
+          </a>
+          <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener" class="footer-prop-link cs">
+            ⬢ cyberspartans.co.uk
+          </a>
+        </div>
+        <div class="footer-social">
+          <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+          <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+          <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
+        </div>
       </div>
     </div>
     <div class="footer-bottom">
@@ -1089,7 +592,5 @@ footer {
   </div>
 </footer>
 
-
-<script src="/nav.js" defer></script>
 </body>
 </html>
