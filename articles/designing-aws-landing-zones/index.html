@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Designing Secure AWS Landing Zones for Enterprise | Saleem Yousaf</title>
+<meta name="description" content="Designing a secure AWS landing zone is one of the most important steps in building scalable and resilient cloud environments. For enterprise organisations,">
+<meta name="author" content="Saleem Yousaf">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#090c10;--bg2:#0f1318;--bg3:#161b22;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#e6eaf0;--muted:#7a8694;--muted2:#4a5568;--teal:#2dd4bf;--teal-dim:rgba(45,212,191,0.12);--amber:#f59e0b;--amber-dim:rgba(245,158,11,0.10);--purple:#a78bfa;--purple-dim:rgba(167,139,250,0.10);--red:#f87171;--red-dim:rgba(248,113,113,0.10);--mono:'DM Mono',monospace;--display:'Syne',sans-serif;--body:'Inter',sans-serif;--prose-max:680px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(45,212,191,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(45,212,191,0.015) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(9,12,16,0.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{font-family:var(--display);font-size:15px;font-weight:700;color:var(--text);text-decoration:none;}
+.nav-logo span{color:var(--teal);}
+.nav-links{display:flex;gap:32px;list-style:none;align-items:center;}
+.nav-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--teal);}
+.nav-dropdown{position:relative;}
+.nav-dropdown-toggle{font-size:13px;color:var(--muted);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;font-family:var(--body);padding:0;transition:color 0.2s;}
+.nav-dropdown-toggle:hover{color:var(--teal);}
+.nav-dropdown-toggle svg{transition:transform 0.2s;}
+.nav-dropdown:hover .nav-dropdown-toggle svg{transform:rotate(180deg);}
+.nav-dropdown:hover .nav-dropdown-toggle{color:var(--teal);}
+.nav-dropdown-menu{position:absolute;top:100%;left:50%;transform:translateX(-50%);padding-top:12px;opacity:0;pointer-events:none;transition:opacity 0.15s;z-index:200;}
+.nav-dropdown:hover .nav-dropdown-menu{opacity:1;pointer-events:all;}
+.nav-dropdown-menu-inner{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px;min-width:220px;}
+.nav-dropdown-menu a{display:block;padding:9px 14px;font-size:13px;color:var(--muted);text-decoration:none;border-radius:5px;transition:background 0.15s,color 0.15s;white-space:nowrap;}
+.nav-dropdown-menu a:hover{background:var(--bg3);color:var(--text);}
+.nav-dropdown-menu a.active{color:var(--teal);}
+.nav-cta{font-size:13px;font-weight:500;color:var(--teal)!important;border:1px solid rgba(45,212,191,0.3);padding:6px 16px;border-radius:4px;}
+.article-hero{padding:120px 0 64px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.article-hero-glow{position:absolute;top:-120px;right:-120px;width:560px;height:560px;background:radial-gradient(circle,rgba(45,212,191,0.06) 0%,transparent 65%);pointer-events:none;}
+.hero-wrap{max-width:860px;margin:0 auto;padding:0 32px;position:relative;z-index:1;}
+.article-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:24px;flex-wrap:wrap;}
+.article-eyebrow-line{width:24px;height:1px;background:var(--teal);}
+.article-tag{font-family:var(--mono);font-size:10px;padding:4px 10px;border-radius:3px;letter-spacing:0.06em;text-transform:uppercase;}
+.article-tag.teal{background:var(--teal-dim);color:var(--teal);}
+.article-tag.amber{background:var(--amber-dim);color:var(--amber);}
+.article-tag.purple{background:var(--purple-dim);color:var(--purple);}
+.article-tag.red{background:var(--red-dim);color:var(--red);}
+.article-title{font-family:var(--display);font-size:clamp(26px,3.2vw,44px);font-weight:800;line-height:1.1;letter-spacing:-0.02em;color:#fff;margin-bottom:20px;}
+.article-intro{font-size:17px;line-height:1.75;color:var(--muted);margin-bottom:32px;}
+.article-meta-bar{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding-top:24px;border-top:1px solid var(--border);}
+.meta-item{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;color:var(--muted2);}
+.meta-item svg{color:var(--teal);}
+.meta-divider{width:1px;height:14px;background:var(--border2);}
+.article-body{max-width:780px;margin:0 auto;padding:56px 32px 80px;position:relative;z-index:1;}
+.prose h2{font-family:var(--display);font-size:24px;font-weight:700;color:#fff;line-height:1.2;margin:48px 0 14px;padding-top:8px;border-top:1px solid var(--border);}
+.prose h2:first-child{margin-top:0;border-top:none;}
+.prose h3{font-family:var(--display);font-size:18px;font-weight:700;color:#fff;line-height:1.3;margin:28px 0 10px;}
+.prose h4{font-family:var(--mono);font-size:11px;color:var(--teal);letter-spacing:0.1em;text-transform:uppercase;margin:20px 0 8px;}
+.prose p{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:16px;max-width:var(--prose-max);}
+.prose ul,.prose ol{margin:0 0 18px;padding-left:0;list-style:none;max-width:var(--prose-max);}
+.prose li{font-size:14px;color:var(--muted);line-height:1.7;padding:4px 0 4px 20px;position:relative;}
+.prose li::before{content:'';position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--teal);opacity:0.6;}
+.section-intro{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:16px 20px;margin:0 0 24px;font-size:15px;color:var(--text);line-height:1.7;max-width:var(--prose-max);}
+.pull-quote{border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:16px 20px;margin:24px 0;font-size:16px;color:var(--text);font-style:italic;line-height:1.7;background:var(--amber-dim);max-width:var(--prose-max);}
+.arch-image{margin:28px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--bg2);}
+.arch-image img{width:100%;display:block;}
+.arch-image-caption{padding:10px 16px;font-family:var(--mono);font-size:11px;color:var(--muted2);letter-spacing:0.04em;border-top:1px solid var(--border);background:var(--bg2);}
+.key-points{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:20px 0 28px;}
+.key-point{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);line-height:1.5;}
+.key-point-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:5px;}
+.github-callout{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:22px 26px;margin:28px 0;display:flex;align-items:center;gap:18px;}
+.github-callout-icon{color:var(--teal);flex-shrink:0;}
+.github-callout-title{font-family:var(--display);font-size:15px;font-weight:700;color:#fff;margin-bottom:5px;}
+.github-callout-body{font-size:13px;color:var(--muted);line-height:1.6;}
+.github-callout-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;color:var(--teal);text-decoration:none;margin-top:8px;}
+.article-nav-bar{display:flex;justify-content:space-between;align-items:center;padding:28px 0;margin-top:40px;border-top:1px solid var(--border);}
+.article-nav-bar a{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.article-nav-bar a:hover{color:var(--teal);}
+.related-section{border-top:1px solid var(--border);padding:56px 0;position:relative;z-index:1;}
+.related-wrap{max-width:1100px;margin:0 auto;padding:0 32px;}
+.related-label{font-family:var(--mono);font-size:11px;color:var(--teal);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.related-label::before{content:'';display:block;width:24px;height:1px;background:var(--teal);}
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.rel-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:22px;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:9px;transition:border-color 0.2s;}
+.rel-card:hover{border-color:var(--border2);}
+.rel-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.rel-tag{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:3px;}
+.rel-tag.teal{background:var(--teal-dim);color:var(--teal);}
+.rel-tag.amber{background:var(--amber-dim);color:var(--amber);}
+.rel-tag.purple{background:var(--purple-dim);color:var(--purple);}
+.rel-tag.red{background:var(--red-dim);color:var(--red);}
+.rel-title{font-family:var(--display);font-size:14px;font-weight:700;color:#fff;line-height:1.3;}
+.rel-meta{font-family:var(--mono);font-size:11px;color:var(--muted2);margin-top:auto;padding-top:8px;border-top:1px solid var(--border);}
+.cta-strip{background:var(--bg2);border-top:1px solid var(--border);padding:56px 0;position:relative;z-index:1;}
+.cta-wrap{max-width:1100px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;}
+.cta-heading{font-family:var(--display);font-size:clamp(18px,2vw,24px);font-weight:700;color:#fff;margin-bottom:8px;}
+.cta-sub{font-size:14px;color:var(--muted);}
+.cta-actions{display:flex;gap:12px;flex-shrink:0;}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--teal);color:#090c10;font-size:14px;font-weight:600;padding:11px 22px;border-radius:4px;text-decoration:none;transition:opacity 0.2s;}
+.btn-primary:hover{opacity:0.9;}
+.btn-outline{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border2);color:var(--muted);font-size:14px;padding:10px 22px;border-radius:4px;text-decoration:none;transition:border-color 0.2s,color 0.2s;}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal);}
+footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-index:1;}
+.footer-inner{max-width:1100px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:start;}
+.footer-logo{font-family:var(--display);font-size:16px;font-weight:700;color:#fff;margin-bottom:8px;}
+.footer-logo span{color:var(--teal);}
+.footer-desc{font-size:13px;color:var(--muted);max-width:380px;line-height:1.6;}
+.footer-links{display:flex;gap:20px;align-items:center;flex-wrap:wrap;}
+.footer-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--teal);}
+.footer-bottom{max-width:1100px;margin:28px auto 0;padding:20px 32px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:12px;color:var(--muted2);}
+@media(max-width:960px){.related-grid{grid-template-columns:repeat(2,1fr);}.cta-wrap{grid-template-columns:1fr;}.footer-inner{grid-template-columns:1fr;}.key-points{grid-template-columns:1fr;}}
+@media(max-width:600px){.hero-wrap,.article-body,.related-wrap,.cta-wrap{padding:0 20px;}.nav-links{display:none;}.related-grid{grid-template-columns:1fr;}.footer-inner,.footer-bottom{padding:0 20px;}}
+    .arch-image{cursor:zoom-in;position:relative;}
+    .arch-image::after{content:"\2922";position:absolute;top:10px;right:12px;font-size:18px;color:rgba(0,212,255,0.5);pointer-events:none;opacity:0;transition:opacity 0.2s;}
+    .arch-image:hover::after{opacity:1;}
+    .lbx-overlay{display:none;position:fixed;inset:0;background:rgba(7,9,13,0.95);z-index:9999;align-items:center;justify-content:center;padding:12px;cursor:zoom-out;}
+    .lbx-overlay.open{display:flex;}
+    .lbx-inner{width:96vw;max-width:1600px;max-height:94vh;overflow:auto;border-radius:8px;border:1px solid rgba(0,212,255,0.2);background:#07090d;padding:0;cursor:default;}
+    .lbx-inner svg,.lbx-inner img{display:block;width:100%;height:auto;max-height:88vh;object-fit:contain;}
+    .lbx-caption{padding:10px 16px;font-family:var(--mono,monospace);font-size:11px;color:#55677a;border-top:1px solid #1a2235;background:#0c1018;display:flex;justify-content:space-between;align-items:center;}
+    .lbx-close{font-size:20px;color:rgba(0,212,255,0.6);cursor:pointer;line-height:1;padding:0 4px;}
+    .lbx-close:hover{color:#00d4ff;}
+    </style>
+  <link rel="canonical" href="https://saleemyousaf.co.uk/articles/designing-aws-landing-zones/">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Designing Secure AWS Landing Zones for Enterprise",
+  "url": "https://saleemyousaf.co.uk/articles/designing-aws-landing-zones/",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://saleemyousaf.co.uk/articles/designing-aws-landing-zones/"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Saleem Yousaf",
+    "url": "https://saleemyousaf.co.uk/",
+    "jobTitle": "Cloud & Cyber Security Architect"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Saleem Yousaf",
+    "url": "https://saleemyousaf.co.uk/"
+  },
+  "description": "Designing a secure AWS landing zone is one of the most important steps in building scalable and resilient cloud environments. For enterprise organisations,"
+}
+</script>
+</head>
+<body>
+<!-- Shared nav: rendered by /nav.js. Edit NAV_CONFIG in nav.js to change site-wide. -->
+<div id="site-nav"></div>
+<div class="article-hero">
+  <div class="article-hero-glow"></div>
+  <div class="hero-wrap">
+    <div class="article-eyebrow"><div class="article-eyebrow-line"></div><span class="article-tag teal">AWS</span><span class="article-tag teal">Landing Zone</span><span class="article-tag teal">Enterprise</span></div>
+    <h1 class="article-title">Designing Secure AWS Landing Zones for Enterprise</h1>
+    <p class="article-intro">Designing a secure AWS landing zone is one of the most important steps in building scalable and resilient cloud environments. For enterprise organisations, getting the foundation right early can significantly reduce risk and complexity as systems grow.</p>
+    <div class="article-meta-bar">
+      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>12 Apr 2026</div>
+      <div class="meta-divider"></div>
+      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>~9 min read</div>
+      <div class="meta-divider"></div>
+      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Saleem Yousaf</div>
+    </div>
+  </div>
+</div>
+<div class="article-body">
+  <article class="prose">
+    
+<h2 id="overview">Why the Foundation Matters</h2>
+<div class="section-intro">A well-designed landing zone establishes governance, security, and structure across multiple AWS accounts. This is particularly important in large organisations where different teams and workloads need to operate independently while maintaining consistent security controls across the estate.</div>
+
+<h2 id="components">Key Components of a Secure AWS Landing Zone</h2>
+<h3>Multi-Account Structure</h3>
+<p>A multi-account structure aligned to environments such as production, non-production, and shared services provides clear separation of blast radius. If one account is compromised, the scope of damage is limited. Shared services accounts centralise logging, security tooling, and networking resources that serve the whole estate.</p>
+    <div class="arch-image" style="margin:28px 0;border:1px solid var(--border,#1a2235);border-radius:10px;overflow:hidden;background:var(--bg2,#0f1318);">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" style="width:100%;max-width:900px;display:block;">
+  <rect width="900" height="420" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Designing Secure AWS Landing Zones — Key Components</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Foundation before workloads · Governance · Identity · Network · Security · IaC</text>
+  <!-- 6 component cards in 2 rows of 3 -->
+  <rect x="20" y="58" width="270" height="110" rx="5" fill="#1a0d00" stroke="#f97316" stroke-width="1.5"/>
+  <rect x="20" y="58" width="270" height="24" rx="5" fill="#f97316"/>
+  <text x="155" y="75" font-family="Arial" font-size="10" font-weight="bold" fill="#07090d" text-anchor="middle">1. Account Structure</text>
+  <text x="30" y="100" font-family="Arial" font-size="9" fill="#f97316">AWS Organizations + Control Tower</text>
+  <text x="30" y="114" font-family="Arial" font-size="9" fill="#f97316">Sandbox → Dev → Staging → Prod</text>
+  <text x="30" y="132" font-family="Arial" font-size="8" fill="#884400">SCPs enforce guardrails across all accounts</text>
+  <text x="30" y="146" font-family="Arial" font-size="8" fill="#884400">Account vending automation via Service Catalog</text>
+  <rect x="315" y="58" width="270" height="110" rx="5" fill="#0a0518" stroke="#a78bfa" stroke-width="1.5"/>
+  <rect x="315" y="58" width="270" height="24" rx="5" fill="#a78bfa"/>
+  <text x="450" y="75" font-family="Arial" font-size="10" font-weight="bold" fill="#07090d" text-anchor="middle">2. Identity Foundation</text>
+  <text x="325" y="100" font-family="Arial" font-size="9" fill="#a78bfa">IAM Identity Center — SSO for all accounts</text>
+  <text x="325" y="114" font-family="Arial" font-size="9" fill="#a78bfa">Permission sets · Least privilege RBAC</text>
+  <text x="325" y="132" font-family="Arial" font-size="8" fill="#7755aa">Break-glass accounts — MFA enforced, monitored</text>
+  <text x="325" y="146" font-family="Arial" font-size="8" fill="#7755aa">No long-lived keys · Roles only · SCIM sync</text>
+  <rect x="610" y="58" width="270" height="110" rx="5" fill="#080d14" stroke="#00d4ff" stroke-width="1.5"/>
+  <rect x="610" y="58" width="270" height="24" rx="5" fill="#00d4ff"/>
+  <text x="745" y="75" font-family="Arial" font-size="10" font-weight="bold" fill="#07090d" text-anchor="middle">3. Network Baseline</text>
+  <text x="620" y="100" font-family="Arial" font-size="9" fill="#00d4ff">Transit Gateway — hub-spoke routing</text>
+  <text x="620" y="114" font-family="Arial" font-size="9" fill="#00d4ff">AWS Network Firewall · WAF · Shield</text>
+  <text x="620" y="132" font-family="Arial" font-size="8" fill="#007799">Private subnets only · No public endpoints</text>
+  <text x="620" y="146" font-family="Arial" font-size="8" fill="#007799">VPC Flow Logs enabled from day one</text>
+  <rect x="20" y="186" width="270" height="110" rx="5" fill="#150808" stroke="#ff3355" stroke-width="1.5"/>
+  <rect x="20" y="186" width="270" height="24" rx="5" fill="#ff3355"/>
+  <text x="155" y="203" font-family="Arial" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">4. Security Baseline</text>
+  <text x="30" y="228" font-family="Arial" font-size="9" fill="#ff3355">GuardDuty · Security Hub · CloudTrail</text>
+  <text x="30" y="242" font-family="Arial" font-size="9" fill="#ff3355">Config Rules · Inspector · Macie</text>
+  <text x="30" y="260" font-family="Arial" font-size="8" fill="#aa4455">All enabled at org level from account creation</text>
+  <text x="30" y="274" font-family="Arial" font-size="8" fill="#aa4455">SIEM export to Splunk / Sentinel day one</text>
+  <rect x="315" y="186" width="270" height="110" rx="5" fill="#001a0a" stroke="#00e87a" stroke-width="1.5"/>
+  <rect x="315" y="186" width="270" height="24" rx="5" fill="#00e87a"/>
+  <text x="450" y="203" font-family="Arial" font-size="10" font-weight="bold" fill="#07090d" text-anchor="middle">5. IaC Pipeline</text>
+  <text x="325" y="228" font-family="Arial" font-size="9" fill="#00e87a">Terraform · GitHub Actions · tfsec</text>
+  <text x="325" y="242" font-family="Arial" font-size="9" fill="#00e87a">OPA policy gate · Approval workflow</text>
+  <text x="325" y="260" font-family="Arial" font-size="8" fill="#008844">No manual AWS console changes permitted</text>
+  <text x="325" y="274" font-family="Arial" font-size="8" fill="#008844">Drift detection alerts to SIEM</text>
+  <rect x="610" y="186" width="270" height="110" rx="5" fill="#0a0f18" stroke="#FFAA00" stroke-width="1.5"/>
+  <rect x="610" y="186" width="270" height="24" rx="5" fill="#FFAA00"/>
+  <text x="745" y="203" font-family="Arial" font-size="10" font-weight="bold" fill="#07090d" text-anchor="middle">6. Compliance Baseline</text>
+  <text x="620" y="228" font-family="Arial" font-size="9" fill="#FFAA00">CIS AWS Foundations benchmark</text>
+  <text x="620" y="242" font-family="Arial" font-size="9" fill="#FFAA00">NIST CSF · ISO 27001 · PCI DSS</text>
+  <text x="620" y="260" font-family="Arial" font-size="8" fill="#aa8800">AWS Security Hub standards enforced</text>
+  <text x="620" y="274" font-family="Arial" font-size="8" fill="#aa8800">Evidence auto-generated for audit</text>
+  <rect x="20" y="310" width="860" height="40" rx="4" fill="#0a1018" stroke="#1a2235" stroke-width="1"/>
+  <text x="450" y="328" font-family="Arial" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">Sequence: Account structure → Identity → Network → Security → IaC → Compliance</text>
+  <text x="450" y="342" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">Build in this order — workloads come after the foundation is validated · Full Lucidchart: lucid.app/lucidchart/396d639a-5d9d-4dbe-abb7-a076f71f93a0/edit</text>
+  <text x="450" y="400" font-family="Arial" font-size="9" fill="#55677a" text-anchor="middle">saleemyousaf.co.uk · Enterprise AWS Landing Zone Design</text>
+</svg>
+      <div class="arch-image-caption" style="padding:10px 16px;font-family:var(--mono,monospace);font-size:11px;color:var(--muted2,#55677a);letter-spacing:0.04em;border-top:1px solid var(--border,#1a2235);background:var(--bg2,#0f1318);">// Secure AWS Landing Zone key components — account structure, identity, network, security, IaC, compliance</div>
+    </div>
+
+<h3>Identity and Access Management</h3>
+<p>IAM designed on least privilege principles ensures users and roles can only perform the actions they need. Service Control Policies at the organisation level provide guardrails that prevent even account administrators from overriding baseline security requirements. Permission boundaries and IAM roles with narrow scopes are the building blocks of a trustworthy access model.</p>
+<h3>Centralised Logging and Monitoring</h3>
+<p>Centralised logging across all accounts using CloudTrail and VPC Flow Logs, forwarded to a dedicated logging account that workload accounts cannot modify, ensures visibility across the estate. GuardDuty and Security Hub provide centralised threat detection and security posture visibility. Without this, incidents in one account may go undetected.</p>
+<h3>Network Segmentation</h3>
+<p>Hub-and-spoke network models with Transit Gateway provide controlled traffic flows between workload VPCs and shared services. Network inspection can be centralised in a dedicated inspection VPC. Private subnets for all workloads, with explicit and minimal egress paths, reduces the attack surface significantly.</p>
+
+<h2 id="tooling">Supporting Tooling and Services</h2>
+<p>AWS Control Tower provides guardrails and account vending for new landing zone accounts. IAM Identity Centre provides centralised single sign-on across accounts. Transit Gateway provides scalable inter-VPC routing. AWS Config provides continuous compliance monitoring. Security Hub aggregates findings from GuardDuty, Inspector, and Macie into a single pane of glass.</p>
+
+<div class="github-callout">
+  <div class="github-callout-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></div>
+  <div>
+    <div class="github-callout-title">AWS Security Architecture Repository</div>
+    <div class="github-callout-body">Reference architecture, Terraform modules, and security design patterns for secure AWS landing zones.</div>
+    <a href="https://github.com/saleem-yousaf/AWS-Security-Architecture" target="_blank" rel="noopener" class="github-callout-link">github.com/saleem-yousaf/AWS-Security-Architecture <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+  </div>
+</div>
+<div class="pull-quote">A well-architected landing zone provides a strong foundation that enables organisations to scale confidently, maintain control, and reduce operational risk. Security should be embedded from the start rather than introduced later as an afterthought.</div>
+    
+    <div class="article-nav-bar"><a href="https://saleemyousaf.co.uk/articles/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back to all articles</a></div>
+  </article>
+</div>
+<div class="related-section">
+  <div class="related-wrap">
+    <div class="related-label">Related articles</div>
+    <div class="related-grid"><a href="https://saleemyousaf.co.uk/articles/secure-landing-zone-private-apis/" class="rel-card"><div class="rel-tags"><span class="rel-tag teal">AWS</span><span class="rel-tag teal">Landing Zone</span></div><div class="rel-title">Secure Cloud Landing Zone Architecture: Private APIs, ECS, and Compliance Controls</div><div class="rel-meta">4 May 2026 · ~10 min read</div></a><a href="https://saleemyousaf.co.uk/articles/cloud-landing-zone-accelerators/" class="rel-card"><div class="rel-tags"><span class="rel-tag teal">Landing Zone</span></div><div class="rel-title">Cloud Landing Zone Accelerators: Secure-by-Design for AWS, Azure and GCP</div><div class="rel-meta">21 Apr 2026 · ~10 min read</div></a><a href="https://saleemyousaf.co.uk/articles/secure-by-design-aws/" class="rel-card"><div class="rel-tags"><span class="rel-tag teal">Secure by Design</span></div><div class="rel-title">Secure by Design for Consultancy-Led AWS Architecture</div><div class="rel-meta">21 Apr 2026 · ~8 min read</div></a></div>
+  </div>
+</div>
+<div class="cta-strip">
+  <div class="cta-wrap">
+    <div><div class="cta-heading">Designing an enterprise AWS landing zone?</div><div class="cta-sub">Connect to discuss multi-account architecture, AWS Control Tower, or landing zone security patterns.</div></div>
+    <div class="cta-actions">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener" class="btn-primary">Connect on LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf/AWS-Security-Architecture" target="_blank" rel="noopener" class="btn-outline">GitHub</a>
+    </div>
+  </div>
+</div>
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Saleem <span>Yousaf</span></div>
+      <div class="footer-desc">Cloud &amp; Cyber Security Architect · AWS · Azure · Zero Trust · AI Governance · OT Security · Enterprise Architecture</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
+      <a href="https://saleem-yousaf.blogspot.com/" target="_blank" rel="noopener">Blogger</a>
+      <a href="https://codepen.io/Saleem-Yousaf" target="_blank" rel="noopener">CodePen</a>
+      <a href="https://www.cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
+    <a href="https://www.saleemyousaf.co.uk/privacy-policy/" style="font-size:12px;color:var(--muted2);text-decoration:none;">Privacy Policy</a>
+  </div>
+
+<!-- Cross-property links (static HTML, mirrors nav for crawlers and no-JS visitors) -->
+<div style="max-width:1100px;margin:0 auto;padding:24px 32px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;border-top:1px solid rgba(255,255,255,0.07);">
+  <a href="https://breachforge.co.uk" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:4px;text-decoration:none;letter-spacing:0.04em;font-weight:500;background:rgba(230,57,70,0.12);color:#e63946;border:1px solid rgba(230,57,70,0.25);">
+    ⦡ breachforge.co.uk
+  </a>
+  <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:4px;text-decoration:none;letter-spacing:0.04em;font-weight:500;background:rgba(0,217,255,0.12);color:#00d9ff;border:1px solid rgba(0,217,255,0.25);">
+    ⬢ cyberspartans.co.uk
+  </a>
+</div>
+
+</footer>
+
+<div class="lbx-overlay" id="lbx" onclick="lbxClose(event)"><div class="lbx-inner" id="lbx-inner" onclick="event.stopPropagation()"><div id="lbx-content"></div><div class="lbx-caption"><span id="lbx-cap"></span><span class="lbx-close" onclick="lbxClose()">&#x2715;</span></div></div></div>
+<script>(function(){function openLbx(el){var c=el.querySelector('svg,img');var cap=el.querySelector('.arch-image-caption');if(!c)return;document.getElementById('lbx-content').innerHTML=c.outerHTML;document.getElementById('lbx-cap').textContent=cap?cap.textContent:'';document.getElementById('lbx').classList.add('open');document.body.style.overflow='hidden';}window.lbxClose=function(e){if(e&&e.target===document.getElementById('lbx-inner'))return;document.getElementById('lbx').classList.remove('open');document.body.style.overflow='';document.getElementById('lbx-content').innerHTML='';};document.addEventListener('keydown',function(e){if(e.key==='Escape')window.lbxClose();});document.querySelectorAll('.arch-image').forEach(function(el){el.addEventListener('click',function(){openLbx(el);});});})();</script>
+<!-- Shared nav loader: edit NAV_CONFIG in /nav.js to change nav site-wide -->
+<script src="/nav.js" defer></script>
+
+</body>
+</html>

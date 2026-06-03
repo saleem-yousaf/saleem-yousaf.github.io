@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security Operations Centres Are Evolving | Saleem Yousaf</title>
+<meta name="description" content="The volume and complexity of modern threats mean traditional SOC approaches are no longer enough. AI is now playing a key role in enhancing how organisatio">
+<meta name="author" content="Saleem Yousaf">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#090c10;--bg2:#0f1318;--bg3:#161b22;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#e6eaf0;--muted:#7a8694;--muted2:#4a5568;--teal:#2dd4bf;--teal-dim:rgba(45,212,191,0.12);--amber:#f59e0b;--amber-dim:rgba(245,158,11,0.10);--purple:#a78bfa;--purple-dim:rgba(167,139,250,0.10);--red:#f87171;--red-dim:rgba(248,113,113,0.10);--mono:'DM Mono',monospace;--display:'Syne',sans-serif;--body:'Inter',sans-serif;--prose-max:680px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(45,212,191,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(45,212,191,0.015) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(9,12,16,0.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{font-family:var(--display);font-size:15px;font-weight:700;color:var(--text);text-decoration:none;}
+.nav-logo span{color:var(--teal);}
+.nav-links{display:flex;gap:32px;list-style:none;align-items:center;}
+.nav-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--teal);}
+.nav-dropdown{position:relative;}
+.nav-dropdown-toggle{font-size:13px;color:var(--muted);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;font-family:var(--body);padding:0;transition:color 0.2s;}
+.nav-dropdown-toggle:hover{color:var(--teal);}
+.nav-dropdown-toggle svg{transition:transform 0.2s;}
+.nav-dropdown:hover .nav-dropdown-toggle svg{transform:rotate(180deg);}
+.nav-dropdown:hover .nav-dropdown-toggle{color:var(--teal);}
+.nav-dropdown-menu{position:absolute;top:100%;left:50%;transform:translateX(-50%);padding-top:12px;opacity:0;pointer-events:none;transition:opacity 0.15s;z-index:200;}
+.nav-dropdown:hover .nav-dropdown-menu{opacity:1;pointer-events:all;}
+.nav-dropdown-menu-inner{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px;min-width:220px;}
+.nav-dropdown-menu a{display:block;padding:9px 14px;font-size:13px;color:var(--muted);text-decoration:none;border-radius:5px;transition:background 0.15s,color 0.15s;white-space:nowrap;}
+.nav-dropdown-menu a:hover{background:var(--bg3);color:var(--text);}
+.nav-dropdown-menu a.active{color:var(--teal);}
+.nav-cta{font-size:13px;font-weight:500;color:var(--teal)!important;border:1px solid rgba(45,212,191,0.3);padding:6px 16px;border-radius:4px;}
+.article-hero{padding:120px 0 64px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.article-hero-glow{position:absolute;top:-120px;right:-120px;width:560px;height:560px;background:radial-gradient(circle,rgba(45,212,191,0.06) 0%,transparent 65%);pointer-events:none;}
+.hero-wrap{max-width:860px;margin:0 auto;padding:0 32px;position:relative;z-index:1;}
+.article-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:24px;flex-wrap:wrap;}
+.article-eyebrow-line{width:24px;height:1px;background:var(--teal);}
+.article-tag{font-family:var(--mono);font-size:10px;padding:4px 10px;border-radius:3px;letter-spacing:0.06em;text-transform:uppercase;}
+.article-tag.teal{background:var(--teal-dim);color:var(--teal);}
+.article-tag.amber{background:var(--amber-dim);color:var(--amber);}
+.article-tag.purple{background:var(--purple-dim);color:var(--purple);}
+.article-tag.red{background:var(--red-dim);color:var(--red);}
+.article-title{font-family:var(--display);font-size:clamp(26px,3.2vw,44px);font-weight:800;line-height:1.1;letter-spacing:-0.02em;color:#fff;margin-bottom:20px;}
+.article-intro{font-size:17px;line-height:1.75;color:var(--muted);margin-bottom:32px;}
+.article-meta-bar{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding-top:24px;border-top:1px solid var(--border);}
+.meta-item{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;color:var(--muted2);}
+.meta-item svg{color:var(--teal);}
+.meta-divider{width:1px;height:14px;background:var(--border2);}
+.article-body{max-width:780px;margin:0 auto;padding:56px 32px 80px;position:relative;z-index:1;}
+.prose h2{font-family:var(--display);font-size:24px;font-weight:700;color:#fff;line-height:1.2;margin:48px 0 14px;padding-top:8px;border-top:1px solid var(--border);}
+.prose h2:first-child{margin-top:0;border-top:none;}
+.prose h3{font-family:var(--display);font-size:18px;font-weight:700;color:#fff;line-height:1.3;margin:28px 0 10px;}
+.prose h4{font-family:var(--mono);font-size:11px;color:var(--teal);letter-spacing:0.1em;text-transform:uppercase;margin:20px 0 8px;}
+.prose p{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:16px;max-width:var(--prose-max);}
+.prose ul,.prose ol{margin:0 0 18px;padding-left:0;list-style:none;max-width:var(--prose-max);}
+.prose li{font-size:14px;color:var(--muted);line-height:1.7;padding:4px 0 4px 20px;position:relative;}
+.prose li::before{content:'';position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--teal);opacity:0.6;}
+.section-intro{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:16px 20px;margin:0 0 24px;font-size:15px;color:var(--text);line-height:1.7;max-width:var(--prose-max);}
+.pull-quote{border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:16px 20px;margin:24px 0;font-size:16px;color:var(--text);font-style:italic;line-height:1.7;background:var(--amber-dim);max-width:var(--prose-max);}
+.arch-image{margin:28px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--bg2);}
+.arch-image img{width:100%;display:block;}
+.arch-image-caption{padding:10px 16px;font-family:var(--mono);font-size:11px;color:var(--muted2);letter-spacing:0.04em;border-top:1px solid var(--border);background:var(--bg2);}
+.key-points{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:20px 0 28px;}
+.key-point{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);line-height:1.5;}
+.key-point-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:5px;}
+.github-callout{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:22px 26px;margin:28px 0;display:flex;align-items:center;gap:18px;}
+.github-callout-icon{color:var(--teal);flex-shrink:0;}
+.github-callout-title{font-family:var(--display);font-size:15px;font-weight:700;color:#fff;margin-bottom:5px;}
+.github-callout-body{font-size:13px;color:var(--muted);line-height:1.6;}
+.github-callout-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;color:var(--teal);text-decoration:none;margin-top:8px;}
+.article-nav-bar{display:flex;justify-content:space-between;align-items:center;padding:28px 0;margin-top:40px;border-top:1px solid var(--border);}
+.article-nav-bar a{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.article-nav-bar a:hover{color:var(--teal);}
+.related-section{border-top:1px solid var(--border);padding:56px 0;position:relative;z-index:1;}
+.related-wrap{max-width:1100px;margin:0 auto;padding:0 32px;}
+.related-label{font-family:var(--mono);font-size:11px;color:var(--teal);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.related-label::before{content:'';display:block;width:24px;height:1px;background:var(--teal);}
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.rel-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:22px;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:9px;transition:border-color 0.2s;}
+.rel-card:hover{border-color:var(--border2);}
+.rel-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.rel-tag{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:3px;}
+.rel-tag.teal{background:var(--teal-dim);color:var(--teal);}
+.rel-tag.amber{background:var(--amber-dim);color:var(--amber);}
+.rel-tag.purple{background:var(--purple-dim);color:var(--purple);}
+.rel-tag.red{background:var(--red-dim);color:var(--red);}
+.rel-title{font-family:var(--display);font-size:14px;font-weight:700;color:#fff;line-height:1.3;}
+.rel-meta{font-family:var(--mono);font-size:11px;color:var(--muted2);margin-top:auto;padding-top:8px;border-top:1px solid var(--border);}
+.cta-strip{background:var(--bg2);border-top:1px solid var(--border);padding:56px 0;position:relative;z-index:1;}
+.cta-wrap{max-width:1100px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;}
+.cta-heading{font-family:var(--display);font-size:clamp(18px,2vw,24px);font-weight:700;color:#fff;margin-bottom:8px;}
+.cta-sub{font-size:14px;color:var(--muted);}
+.cta-actions{display:flex;gap:12px;flex-shrink:0;}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--teal);color:#090c10;font-size:14px;font-weight:600;padding:11px 22px;border-radius:4px;text-decoration:none;transition:opacity 0.2s;}
+.btn-primary:hover{opacity:0.9;}
+.btn-outline{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border2);color:var(--muted);font-size:14px;padding:10px 22px;border-radius:4px;text-decoration:none;transition:border-color 0.2s,color 0.2s;}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal);}
+footer{padding:40px 0;border-top:1px solid var(--border);position:relative;z-index:1;}
+.footer-inner{max-width:1100px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:start;}
+.footer-logo{font-family:var(--display);font-size:16px;font-weight:700;color:#fff;margin-bottom:8px;}
+.footer-logo span{color:var(--teal);}
+.footer-desc{font-size:13px;color:var(--muted);max-width:380px;line-height:1.6;}
+.footer-links{display:flex;gap:20px;align-items:center;flex-wrap:wrap;}
+.footer-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--teal);}
+.footer-bottom{max-width:1100px;margin:28px auto 0;padding:20px 32px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:12px;color:var(--muted2);}
+@media(max-width:960px){.related-grid{grid-template-columns:repeat(2,1fr);}.cta-wrap{grid-template-columns:1fr;}.footer-inner{grid-template-columns:1fr;}.key-points{grid-template-columns:1fr;}}
+@media(max-width:600px){.hero-wrap,.article-body,.related-wrap,.cta-wrap{padding:0 20px;}.nav-links{display:none;}.related-grid{grid-template-columns:1fr;}.footer-inner,.footer-bottom{padding:0 20px;}}
+    .arch-image{cursor:zoom-in;position:relative;}
+    .arch-image::after{content:"\2922";position:absolute;top:10px;right:12px;font-size:18px;color:rgba(0,212,255,0.5);pointer-events:none;opacity:0;transition:opacity 0.2s;}
+    .arch-image:hover::after{opacity:1;}
+    .lbx-overlay{display:none;position:fixed;inset:0;background:rgba(7,9,13,0.95);z-index:9999;align-items:center;justify-content:center;padding:12px;cursor:zoom-out;}
+    .lbx-overlay.open{display:flex;}
+    .lbx-inner{width:96vw;max-width:1600px;max-height:94vh;overflow:auto;border-radius:8px;border:1px solid rgba(0,212,255,0.2);background:#07090d;padding:0;cursor:default;}
+    .lbx-inner svg,.lbx-inner img{display:block;width:100%;height:auto;max-height:88vh;object-fit:contain;}
+    .lbx-caption{padding:10px 16px;font-family:var(--mono,monospace);font-size:11px;color:#55677a;border-top:1px solid #1a2235;background:#0c1018;display:flex;justify-content:space-between;align-items:center;}
+    .lbx-close{font-size:20px;color:rgba(0,212,255,0.6);cursor:pointer;line-height:1;padding:0 4px;}
+    .lbx-close:hover{color:#00d4ff;}
+    </style>
+  <link rel="canonical" href="https://saleemyousaf.co.uk/articles/socs-evolving/">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Security Operations Centres Are Evolving",
+  "url": "https://saleemyousaf.co.uk/articles/socs-evolving/",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://saleemyousaf.co.uk/articles/socs-evolving/"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Saleem Yousaf",
+    "url": "https://saleemyousaf.co.uk/",
+    "jobTitle": "Cloud & Cyber Security Architect"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Saleem Yousaf",
+    "url": "https://saleemyousaf.co.uk/"
+  },
+  "description": "The volume and complexity of modern threats mean traditional SOC approaches are no longer enough. AI is now playing a key role in enhancing how organisatio"
+}
+</script>
+</head>
+<body>
+<!-- Shared nav: rendered by /nav.js. Edit NAV_CONFIG in nav.js to change site-wide. -->
+<div id="site-nav"></div>
+<div class="article-hero">
+  <div class="article-hero-glow"></div>
+  <div class="hero-wrap">
+    <div class="article-eyebrow"><div class="article-eyebrow-line"></div><span class="article-tag teal">SOC</span><span class="article-tag amber">AI</span><span class="article-tag teal">Detection</span></div>
+    <h1 class="article-title">Security Operations Centres Are Evolving</h1>
+    <p class="article-intro">The volume and complexity of modern threats mean traditional SOC approaches are no longer enough. AI is now playing a key role in enhancing how organisations detect threats, analyse large volumes of data, and respond more effectively. The objective is to build a SOC that is intelligent, governed, and human-led.</p>
+    <div class="article-meta-bar">
+      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>24 Apr 2026</div>
+      <div class="meta-divider"></div>
+      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>~8 min read</div>
+      <div class="meta-divider"></div>
+      <div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Saleem Yousaf</div>
+    </div>
+  </div>
+</div>
+<div class="article-body">
+  <article class="prose">
+    
+<h2 id="challenge">The Modern SOC Challenge</h2>
+<div class="section-intro">Traditional Security Operations Centre approaches were designed for a more predictable threat landscape. Alert volumes have grown exponentially. Attack techniques have become more sophisticated. Environments now span cloud, hybrid, SaaS, and OT. Manual triage at scale is no longer feasible without AI augmentation.</div>
+
+<h2 id="roles">Core SOC Roles and How AI Supports Them</h2>
+<h3>SOC Analyst</h3>
+<p>AI supports analysts by automating initial triage, enriching alerts with threat intelligence context, reducing alert fatigue through intelligent correlation, and surfacing high-confidence incidents from the noise. Analysts remain the decision makers. AI accelerates the path to that decision.</p>
+<h3>SOC Engineer</h3>
+<p>Engineers benefit from AI-assisted detection rule tuning, automated playbook execution, and SOAR integration that handles repetitive containment actions. This frees engineers to focus on improving detection quality and coverage rather than executing routine tasks.</p>
+<h3>Security Architect</h3>
+<p>Architects can leverage AI for continuous posture assessment, anomaly detection across configuration changes, and validation of detection coverage against threat frameworks such as MITRE ATT&CK. This moves the architecture function closer to real-time operational security.</p>
+
+<h2 id="governance">Where Governance and Control Are Critical</h2>
+<p>AI within the SOC must be governed carefully. Automated response actions require human-in-the-loop validation for high-impact decisions. AI models used for detection must be explainable and auditable. False positive rates must be monitored and managed. Data used to train or inform AI detection systems must be appropriately classified and protected.</p>
+<div class="key-points">
+  <div class="key-point"><div class="key-point-dot"></div>Faster and more accurate threat detection at scale</div>
+  <div class="key-point"><div class="key-point-dot"></div>Improved prioritisation and reduced alert fatigue</div>
+  <div class="key-point"><div class="key-point-dot"></div>Strong governance and accountability for automated actions</div>
+  <div class="key-point"><div class="key-point-dot"></div>Secure and controlled use of AI within security operations</div>
+</div>
+<div class="pull-quote">The goal is not to automate the SOC. The goal is to build a SOC that is intelligent, governed, and human-led.</div>
+    <div class="arch-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" style="width:100%;max-width:900px;display:block;">
+  <rect width="900" height="420" rx="8" fill="#07090d"/>
+  <text x="450" y="26" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">How AI is Transforming Modern Security Operations Centres</text>
+  <text x="450" y="42" font-family="Arial" font-size="10" fill="#55677a" text-anchor="middle">Traditional SOC vs AI-Augmented SOC · Analyst capacity · MTTD · MTTR · Alert fatigue reduction</text>
+  <!-- Traditional SOC -->
+  <rect x="20" y="58" width="410" height="300" rx="6" fill="#0f0a0a" stroke="#55677a" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="225" y="76" font-family="Arial" font-size="11" font-weight="bold" fill="#55677a" text-anchor="middle">TRADITIONAL SOC</text>
+  <rect x="30" y="85" width="390" height="30" rx="3" fill="#1a0808" stroke="#55677a" stroke-width="0.5"/>
+  <text x="225" y="104" font-family="Arial" font-size="9" fill="#888" text-anchor="middle">100,000+ alerts/day · Analyst reviews manually · MTTD: 4-8 hours</text>
+  <rect x="30" y="122" width="185" height="50" rx="3" fill="#0c1018" stroke="#55677a" stroke-width="0.5"/>
+  <text x="122" y="142" font-family="Arial" font-size="9" font-weight="bold" fill="#888" text-anchor="middle">Tier 1 Analyst</text>
+  <text x="122" y="156" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">Manual triage · 200 alerts/day</text>
+  <rect x="225" y="122" width="185" height="50" rx="3" fill="#0c1018" stroke="#55677a" stroke-width="0.5"/>
+  <text x="317" y="142" font-family="Arial" font-size="9" font-weight="bold" fill="#888" text-anchor="middle">Tier 2 Analyst</text>
+  <text x="317" y="156" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">Investigation · 8hr MTTR average</text>
+  <rect x="30" y="180" width="185" height="50" rx="3" fill="#0c1018" stroke="#55677a" stroke-width="0.5"/>
+  <text x="122" y="200" font-family="Arial" font-size="9" font-weight="bold" fill="#888" text-anchor="middle">Alert Fatigue</text>
+  <text x="122" y="214" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">70% false positives · Burnout</text>
+  <rect x="225" y="180" width="185" height="50" rx="3" fill="#0c1018" stroke="#55677a" stroke-width="0.5"/>
+  <text x="317" y="200" font-family="Arial" font-size="9" font-weight="bold" fill="#888" text-anchor="middle">Manual Runbooks</text>
+  <text x="317" y="214" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">Inconsistent · Human error</text>
+  <rect x="30" y="240" width="390" height="36" rx="3" fill="#150808" stroke="#ff3355" stroke-width="0.5"/>
+  <text x="225" y="255" font-family="Arial" font-size="8" fill="#ff3355" text-anchor="middle">Challenges: Skill shortage · 24/7 coverage cost · Dwell time 200+ days</text>
+  <text x="225" y="269" font-family="Arial" font-size="8" fill="#aa4455" text-anchor="middle">Reactive not proactive · Siloed tools · No threat hunting capacity</text>
+  <text x="225" y="340" font-family="Arial" font-size="22" font-weight="bold" fill="#55677a" text-anchor="middle">MTTD: 4-8 hrs</text>
+  <text x="225" y="360" font-family="Arial" font-size="12" fill="#55677a" text-anchor="middle">MTTR: 24-72 hrs</text>
+
+  <!-- AI SOC -->
+  <rect x="470" y="58" width="410" height="300" rx="6" fill="#050d10" stroke="#00d4ff" stroke-width="2"/>
+  <text x="675" y="76" font-family="Arial" font-size="11" font-weight="bold" fill="#00d4ff" text-anchor="middle">AI-AUGMENTED SOC</text>
+  <rect x="480" y="85" width="390" height="30" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="0.5"/>
+  <text x="675" y="104" font-family="Arial" font-size="9" fill="#00d4ff" text-anchor="middle">AI pre-filters to 5,000 actionable alerts · MTTD: under 15 minutes</text>
+  <rect x="480" y="122" width="185" height="50" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="1"/>
+  <text x="572" y="142" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">AI Triage Layer</text>
+  <text x="572" y="156" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">ML classifies · Auto-enriches</text>
+  <rect x="675" y="122" width="185" height="50" rx="3" fill="#001520" stroke="#00d4ff" stroke-width="1"/>
+  <text x="767" y="142" font-family="Arial" font-size="9" font-weight="bold" fill="#00d4ff" text-anchor="middle">SOAR Automation</text>
+  <text x="767" y="156" font-family="Arial" font-size="8" fill="#007799" text-anchor="middle">60% auto-resolved · XSOAR</text>
+  <rect x="480" y="180" width="185" height="50" rx="3" fill="#001a10" stroke="#00e87a" stroke-width="1"/>
+  <text x="572" y="200" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a" text-anchor="middle">Threat Hunting AI</text>
+  <text x="572" y="214" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">Proactive · UEBA · Dark web</text>
+  <rect x="675" y="180" width="185" height="50" rx="3" fill="#001a10" stroke="#00e87a" stroke-width="1"/>
+  <text x="767" y="200" font-family="Arial" font-size="9" font-weight="bold" fill="#00e87a" text-anchor="middle">AI Analyst Copilot</text>
+  <text x="767" y="214" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">Natural language · Case summary</text>
+  <rect x="480" y="240" width="390" height="36" rx="3" fill="#002a10" stroke="#00e87a" stroke-width="0.5"/>
+  <text x="675" y="255" font-family="Arial" font-size="8" fill="#00e87a" text-anchor="middle">Benefits: 80% alert reduction · Analyst focuses on complex threats only</text>
+  <text x="675" y="269" font-family="Arial" font-size="8" fill="#008844" text-anchor="middle">24/7 AI coverage · Consistent playbooks · Continuous threat hunting</text>
+  <text x="675" y="340" font-family="Arial" font-size="22" font-weight="bold" fill="#00d4ff" text-anchor="middle">MTTD: &lt;15 min</text>
+  <text x="675" y="360" font-family="Arial" font-size="12" fill="#00e87a" text-anchor="middle">MTTR: &lt;2 hrs</text>
+
+  <rect x="20" y="372" width="860" height="36" rx="4" fill="#0a1018" stroke="#1a2235" stroke-width="1"/>
+  <text x="450" y="390" font-family="Arial" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">AI tools: Microsoft Security Copilot · Splunk AI · CrowdStrike Charlotte AI · Darktrace · Google SecOps</text>
+  <text x="450" y="404" font-family="Arial" font-size="8" fill="#55677a" text-anchor="middle">AI does not replace analysts — it removes tier-1 toil so analysts focus on complex hunting and response · saleemyousaf.co.uk</text>
+</svg>
+      <div class="arch-image-caption">// How AI is transforming modern Security Operations Centres</div></div>
+    <div class="article-nav-bar"><a href="https://saleemyousaf.co.uk/articles/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back to all articles</a><a href="https://saleemyousaf.co.uk/articles/stride-cloud-detection/">STRIDE in Cloud Environments <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+  </article>
+</div>
+<div class="related-section">
+  <div class="related-wrap">
+    <div class="related-label">Related articles</div>
+    <div class="related-grid"><a href="https://saleemyousaf.co.uk/articles/assume-breach-continuous-validation/" class="rel-card"><div class="rel-tags"><span class="rel-tag red">BAS</span><span class="rel-tag red">Validation</span></div><div class="rel-title">Assume Breach and Continuous Security Validation</div><div class="rel-meta">30 Apr 2026 · ~11 min read</div></a><a href="https://saleemyousaf.co.uk/articles/mitre-attck-vs-atlas/" class="rel-card"><div class="rel-tags"><span class="rel-tag red">MITRE ATT&CK</span></div><div class="rel-title">MITRE ATT&CK vs MITRE ATLAS: Threat-Informed Defence</div><div class="rel-meta">12 May 2026 · ~10 min read</div></a><a href="https://saleemyousaf.co.uk/articles/stride-cloud-detection/" class="rel-card"><div class="rel-tags"><span class="rel-tag teal">STRIDE</span></div><div class="rel-title">From Threat Modelling to Threat Detection</div><div class="rel-meta">22 Apr 2026 · ~10 min read</div></a></div>
+  </div>
+</div>
+<div class="cta-strip">
+  <div class="cta-wrap">
+    <div><div class="cta-heading">Evolving your SOC or detection capability?</div><div class="cta-sub">Connect to discuss SOC architecture, AI-augmented detection, or security operations strategy.</div></div>
+    <div class="cta-actions">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener" class="btn-primary">Connect on LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener" class="btn-outline">GitHub</a>
+    </div>
+  </div>
+</div>
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Saleem <span>Yousaf</span></div>
+      <div class="footer-desc">Cloud &amp; Cyber Security Architect · AWS · Azure · Zero Trust · AI Governance · OT Security · Enterprise Architecture</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
+      <a href="https://saleem-yousaf.blogspot.com/" target="_blank" rel="noopener">Blogger</a>
+      <a href="https://codepen.io/Saleem-Yousaf" target="_blank" rel="noopener">CodePen</a>
+      <a href="https://www.cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
+    <a href="https://www.saleemyousaf.co.uk/privacy-policy/" style="font-size:12px;color:var(--muted2);text-decoration:none;">Privacy Policy</a>
+  </div>
+
+<!-- Cross-property links (static HTML, mirrors nav for crawlers and no-JS visitors) -->
+<div style="max-width:1100px;margin:0 auto;padding:24px 32px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;border-top:1px solid rgba(255,255,255,0.07);">
+  <a href="https://breachforge.co.uk" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:4px;text-decoration:none;letter-spacing:0.04em;font-weight:500;background:rgba(230,57,70,0.12);color:#e63946;border:1px solid rgba(230,57,70,0.25);">
+    ⦡ breachforge.co.uk
+  </a>
+  <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:4px;text-decoration:none;letter-spacing:0.04em;font-weight:500;background:rgba(0,217,255,0.12);color:#00d9ff;border:1px solid rgba(0,217,255,0.25);">
+    ⬢ cyberspartans.co.uk
+  </a>
+</div>
+
+</footer>
+
+<div class="lbx-overlay" id="lbx" onclick="lbxClose(event)"><div class="lbx-inner" id="lbx-inner" onclick="event.stopPropagation()"><div id="lbx-content"></div><div class="lbx-caption"><span id="lbx-cap"></span><span class="lbx-close" onclick="lbxClose()">&#x2715;</span></div></div></div>
+<script>(function(){function openLbx(el){var c=el.querySelector('svg,img');var cap=el.querySelector('.arch-image-caption');if(!c)return;document.getElementById('lbx-content').innerHTML=c.outerHTML;document.getElementById('lbx-cap').textContent=cap?cap.textContent:'';document.getElementById('lbx').classList.add('open');document.body.style.overflow='hidden';}window.lbxClose=function(e){if(e&&e.target===document.getElementById('lbx-inner'))return;document.getElementById('lbx').classList.remove('open');document.body.style.overflow='';document.getElementById('lbx-content').innerHTML='';};document.addEventListener('keydown',function(e){if(e.key==='Escape')window.lbxClose();});document.querySelectorAll('.arch-image').forEach(function(el){el.addEventListener('click',function(){openLbx(el);});});})();</script>
+<!-- Shared nav loader: edit NAV_CONFIG in /nav.js to change nav site-wide -->
+<script src="/nav.js" defer></script>
+
+</body>
+</html>
