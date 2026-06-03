@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Assume Breach   MITRE ATT&CK + SABSA Infographic | Saleem Yousaf</title>
+<meta name="description" content="Full Assume Breach infographic by Saleem Yousaf. MITRE ATT&CK v14 kill chain, SABSA SC-1 to SC-6 controls matrix, AWS and Azure multi-cloud threat coverage, lateral movement techniques, and BAS outputs.">
+<meta name="author" content="Saleem Yousaf">
+<link rel="canonical" href="https://saleemyousaf.co.uk/assume-breach/bas-infographic/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500&family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ── SITE SHELL ── */
+:root {
+  --bg:#090c10;--bg2:#0f1318;--bg3:#161b22;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --text:#e6eaf0;--muted:#7a8694;--muted2:#4a5568;
+  --teal:#2dd4bf;--teal-dim:rgba(45,212,191,0.12);
+  --amber:#f59e0b;--red:#f87171;
+  --mono:'DM Mono',monospace;--display:'Syne',sans-serif;--body:'Inter',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);-webkit-font-smoothing:antialiased;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(9,12,16,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{font-family:var(--display);font-size:15px;font-weight:700;color:var(--text);text-decoration:none;}
+.nav-logo span{color:var(--teal);}
+.nav-links{display:flex;gap:32px;list-style:none;align-items:center;}
+.nav-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover{color:var(--teal);}
+.nav-dropdown{position:relative;}
+.nav-dropdown-toggle{font-size:13px;color:var(--muted);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;font-family:var(--body);padding:0;transition:color 0.2s;}
+.nav-dropdown-toggle:hover{color:var(--teal);}
+.nav-dropdown-toggle svg{transition:transform 0.2s;}
+.nav-dropdown:hover .nav-dropdown-toggle svg{transform:rotate(180deg);}
+.nav-dropdown:hover .nav-dropdown-toggle{color:var(--teal);}
+.nav-dropdown-menu{position:absolute;top:100%;left:50%;transform:translateX(-50%);padding-top:12px;opacity:0;pointer-events:none;transition:opacity 0.15s;z-index:200;}
+.nav-dropdown:hover .nav-dropdown-menu{opacity:1;pointer-events:all;}
+.nav-dropdown-menu-inner{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px;min-width:220px;}
+.nav-dropdown-menu a{display:block;padding:9px 14px;font-size:13px;color:var(--muted);text-decoration:none;border-radius:5px;transition:background 0.15s,color 0.15s;white-space:nowrap;}
+.nav-dropdown-menu a:hover{background:var(--bg3);color:var(--text);}
+.nav-dropdown-menu a.active{color:var(--teal);}
+.nav-cta{font-size:13px;font-weight:500;color:var(--teal)!important;border:1px solid rgba(45,212,191,0.3);padding:6px 16px;border-radius:4px;}
+.nav-cta:hover{background:var(--teal-dim);}
+
+/* PAGE HEADER */
+.page-header{padding:80px 0 32px;border-bottom:1px solid var(--border);background:var(--bg);}
+.header-inner{max-width:1440px;margin:0 auto;padding:0 32px;}
+.breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:20px;font-family:var(--mono);font-size:11px;color:var(--muted2);}
+.breadcrumb a{color:var(--muted2);text-decoration:none;transition:color 0.2s;}
+.breadcrumb a:hover{color:var(--teal);}
+.page-title{font-family:var(--display);font-size:clamp(22px,3vw,36px);font-weight:800;color:#fff;margin-bottom:10px;letter-spacing:-0.02em;}
+.page-title em{font-style:normal;color:var(--red);}
+.page-desc{font-size:14px;color:var(--muted);line-height:1.6;max-width:720px;margin-bottom:20px;}
+.page-meta{display:flex;gap:16px;flex-wrap:wrap;}
+.page-meta-item{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--muted2);}
+.save-hint{display:inline-flex;align-items:center;gap:8px;background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);border-radius:4px;padding:6px 14px;font-family:var(--mono);font-size:11px;color:var(--red);letter-spacing:0.04em;}
+
+/* INFOGRAPHIC WRAPPER */
+.infographic-wrapper{width:100%;overflow-x:auto;background:#060912;}
+.infographic-wrapper > *{min-width:900px;}
+
+/* BACK BAR */
+.back-bar{background:var(--bg2);border-top:1px solid var(--border);padding:24px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.back-bar a{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.back-bar a:hover{color:var(--teal);}
+
+/* FOOTER */
+footer{padding:40px 0;border-top:1px solid var(--border);}
+.footer-inner{max-width:1100px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:start;}
+.footer-logo{font-family:var(--display);font-size:16px;font-weight:700;color:#fff;margin-bottom:8px;}
+.footer-logo span{color:var(--teal);}
+.footer-desc{font-size:13px;color:var(--muted);max-width:380px;line-height:1.6;}
+.footer-links{display:flex;gap:20px;align-items:center;flex-wrap:wrap;}
+.footer-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--teal);}
+.footer-bottom{max-width:1100px;margin:28px auto 0;padding:20px 32px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:12px;color:var(--muted2);}
+
+@media(max-width:600px){
+  .nav-links{display:none;}
+  .footer-inner{grid-template-columns:1fr;}
+  .back-bar{padding:16px 20px;}
+  .header-inner{padding:0 20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<!-- Shared nav: rendered by /nav.js. Edit NAV_CONFIG in nav.js to change site-wide. -->
+<div id="site-nav"></div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="header-inner">
+    <div class="breadcrumb">
+      <a href="https://saleemyousaf.co.uk/">Home</a>
+      <span>/</span>
+      <a href="https://saleemyousaf.co.uk/assume-breach/">Assume Breach</a>
+      <span>/</span>
+      <span>Infographic</span>
+    </div>
+    <div class="page-title">Assume <em>Breach</em>   MITRE ATT&amp;CK × SABSA Infographic</div>
+    <div class="page-desc">Full kill chain infographic mapping MITRE ATT&CK v14 tactics and techniques across AWS and Azure multi-cloud environments, SABSA SC-1 to SC-6 controls matrix, lateral movement techniques, and BAS simulation outputs. Use the Save as PNG button to download.</div>
+    <div class="page-meta">
+      <div class="page-meta-item">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Saleem Yousaf
+      </div>
+      <div class="page-meta-item">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        MITRE ATT&CK v14 · SABSA SC-1–6 · MoST/NIST CSF
+      </div>
+      <span class="save-hint">⬇ Use the red Save as PNG button at the bottom right of the infographic to download</span>
+    </div>
+  </div>
+</div>
+
+<!-- INFOGRAPHIC -->
+<div class="infographic-wrapper">
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap');
+  .ig-root { --bg:#060912; --panel:#0b1120; --border:#1a2a4a; --red:#ff3b3b; --orange:#ff7b1a; --cyan:#00e5ff; --green:#00ff88; --purple:#9b5de5; --gold:#d4a017; --aws:#FF9900; --azure:#0078D4; --text:#c8d8f0; --dim:#5a7090; }
+  .ig-root *{margin:0;padding:0;box-sizing:border-box;}
+  .ig-root{background:var(--bg);font-family:'Barlow',sans-serif;color:var(--text);padding:0;background-image:linear-gradient(rgba(0,229,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.03) 1px,transparent 1px);background-size:40px 40px;}
+  .page{max-width:1440px;margin:0 auto;padding:24px 18px 60px}
+  .hdr{text-align:center;margin-bottom:18px}
+  .hdr::after{content:'';display:block;height:2px;margin-top:14px;background:linear-gradient(90deg,transparent,var(--red),var(--orange),var(--cyan),var(--gold),transparent)}
+  .badge{display:inline-block;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--red);border:1px solid var(--red);padding:3px 12px;margin-bottom:10px;animation:pb 2s infinite}
+  @keyframes pb{0%,100%{box-shadow:0 0 0 0 rgba(255,59,59,.4)}50%{box-shadow:0 0 0 6px rgba(255,59,59,0)}}
+  .hdr h1{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(22px,3.2vw,44px);letter-spacing:-1px;color:#fff}
+  .hdr h1 s1{color:var(--red)} .hdr h1 s2{color:var(--gold);font-style:normal}
+  .hdr p{font-size:10px;color:var(--dim);margin-top:5px;letter-spacing:1px;font-family:'Share Tech Mono',monospace}
+  .mq{overflow:hidden;background:rgba(255,59,59,.05);border:1px solid rgba(255,59,59,.2);border-radius:4px;padding:4px 10px;margin-bottom:8px;font-family:'Share Tech Mono',monospace;font-size:9.5px;color:var(--red);white-space:nowrap}
+  .mq-i{display:inline-block;animation:mq 40s linear infinite}
+  @keyframes mq{from{transform:translateX(100vw)}to{transform:translateX(-100%)}}
+  .leg{display:flex;flex-wrap:wrap;gap:7px 18px;justify-content:center;margin-bottom:12px;font-family:'Share Tech Mono',monospace;font-size:9.5px}
+  .li{display:flex;align-items:center;gap:5px}
+  .ld{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+  .ribbon{display:flex;gap:0;margin-bottom:10px;border:1px solid rgba(255,59,59,.4);border-radius:6px;overflow:hidden}
+  .tac{flex:1;text-align:center;padding:5px 3px 4px;font-family:'Share Tech Mono',monospace;font-size:8.5px;line-height:1.3;border-right:1px solid rgba(255,59,59,.2);cursor:default;transition:filter .2s}
+  .tac:last-child{border-right:none}
+  .tac:hover{filter:brightness(1.35)}
+  .tac .tid{font-size:7.5px;opacity:.7;display:block}
+  .t1{background:rgba(120,0,0,.5);color:#ff9999}.t2{background:rgba(130,40,0,.5);color:#ffb380}.t3{background:rgba(130,70,0,.5);color:#ffc880}.t4{background:rgba(100,80,0,.5);color:#ffe080}.t5{background:rgba(60,80,0,.5);color:#d4ff80}.t6{background:rgba(0,80,40,.5);color:#80ffb3}.t7{background:rgba(0,70,80,.5);color:#80f0ff}.t8{background:rgba(0,40,100,.5);color:#80c8ff}.t9{background:rgba(40,0,100,.5);color:#c080ff}.t10{background:rgba(80,0,80,.5);color:#ff80e8}.t11{background:rgba(100,0,40,.5);color:#ff80a8}.t12{background:rgba(80,20,20,.5);color:#ff9090}.t13{background:rgba(60,0,60,.5);color:#e880ff}.t14{background:rgba(0,60,80,.5);color:#80d8ff}
+  .st{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9.5px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);padding:4px 10px;border-left:3px solid var(--cyan);margin-bottom:6px;background:rgba(0,229,255,.03);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .mp{font-family:'Share Tech Mono',monospace;font-size:8.5px;color:var(--red);opacity:.85}
+  .sp{font-family:'Share Tech Mono',monospace;font-size:8.5px;color:var(--gold);opacity:.85}
+  .zone{border:1px solid var(--border);border-radius:7px;background:var(--panel);padding:10px;position:relative}
+  .zl{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9.5px;letter-spacing:3px;text-transform:uppercase;margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid var(--border)}
+  .zl-r{color:var(--red);border-color:rgba(255,59,59,.3)}.zl-c{color:var(--cyan);border-color:rgba(0,229,255,.3)}.zl-g{color:var(--green);border-color:rgba(0,255,136,.3)}.zl-o{color:var(--orange);border-color:rgba(255,123,26,.3)}.zl-p{color:var(--purple);border-color:rgba(155,93,229,.3)}.zl-aw{color:var(--aws);border-color:rgba(255,153,0,.3)}.zl-az{color:var(--azure);border-color:rgba(0,120,212,.3)}.zl-gold{color:var(--gold);border-color:rgba(212,160,23,.3)}
+  .node{border-radius:5px;padding:5px 7px;margin-bottom:4px;display:flex;align-items:flex-start;gap:6px;border:1px solid transparent;transition:transform .2s;cursor:default}
+  .node:hover{transform:translateX(2px)}
+  .ni{font-size:13px;flex-shrink:0;margin-top:1px}
+  .nb{flex:1;min-width:0}
+  .nn{font-weight:600;font-size:10px;line-height:1.2}
+  .nd{font-size:8.5px;color:var(--dim);margin-top:1px}
+  .ntags{display:flex;flex-wrap:wrap;gap:2px;margin-top:2px}
+  .nr{background:rgba(255,59,59,.08);border-color:rgba(255,59,59,.35)}.no{background:rgba(255,123,26,.08);border-color:rgba(255,123,26,.35)}.nc{background:rgba(0,229,255,.07);border-color:rgba(0,229,255,.3)}.ng{background:rgba(0,255,136,.07);border-color:rgba(0,255,136,.3)}.np{background:rgba(155,93,229,.08);border-color:rgba(155,93,229,.35)}.naw{background:rgba(255,153,0,.08);border-color:rgba(255,153,0,.4)}.naz{background:rgba(0,120,212,.1);border-color:rgba(0,120,212,.45)}.ngold{background:rgba(212,160,23,.08);border-color:rgba(212,160,23,.35)}
+  .tag{display:inline-block;font-family:'Share Tech Mono',monospace;font-size:7.5px;padding:1px 4px;border-radius:2px;line-height:1.4;white-space:nowrap}
+  .ttp{background:rgba(255,59,59,.15);color:#ff9090;border:1px solid rgba(255,59,59,.35)}.sc{background:rgba(212,160,23,.13);color:#d4b040;border:1px solid rgba(212,160,23,.4)}.mo{background:rgba(0,229,255,.12);color:#80eeff;border:1px solid rgba(0,229,255,.4)}.taw{background:rgba(255,153,0,.15);color:#ffa030;border:1px solid rgba(255,153,0,.4)}.taz{background:rgba(0,120,212,.18);color:#60aaff;border:1px solid rgba(0,120,212,.5)}.tg{background:rgba(0,255,136,.12);color:#80ffb3;border:1px solid rgba(0,255,136,.4)}
+  .td{width:7px;height:7px;border-radius:50%;background:var(--red);display:inline-block;animation:bk 1s infinite;flex-shrink:0}
+  @keyframes bk{0%,100%{opacity:1}50%{opacity:.2}}
+  .cb{display:inline-flex;align-items:center;gap:4px;font-family:'Share Tech Mono',monospace;font-size:9px;padding:2px 7px;border-radius:3px;margin-bottom:6px;font-weight:700;letter-spacing:1px}
+  .caw{background:rgba(255,153,0,.15);color:var(--aws);border:1px solid var(--aws)}.caz{background:rgba(0,120,212,.15);color:var(--azure);border:1px solid var(--azure)}
+  .r5{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:8px}
+  .r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
+  .r2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+  .r4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px}
+  .rew{display:grid;grid-template-columns:1fr 2fr 1fr;gap:8px;margin-bottom:8px}
+  .chain{background:rgba(255,59,59,.06);border:1px solid rgba(255,59,59,.3);border-radius:7px;padding:10px 12px;margin-bottom:8px}
+  .ch-t{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:10px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:7px}
+  .ch-s{display:flex;align-items:center;flex-wrap:wrap;gap:0}
+  .cs{display:flex;align-items:center;gap:4px;background:rgba(255,59,59,.1);border:1px solid rgba(255,59,59,.25);border-radius:4px;padding:4px 7px;font-size:9px;font-weight:600;white-space:nowrap}
+  .cs-id{font-family:'Share Tech Mono',monospace;font-size:7.5px;color:#ff9090;display:block}
+  .ca{color:var(--red);font-size:15px;padding:0 2px;flex-shrink:0}
+  .lz{background:rgba(0,255,136,.04);border:2px solid rgba(0,255,136,.3);border-radius:9px;padding:10px 14px;margin-bottom:8px}
+  .lz-h{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+  .lz-t{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:15px;letter-spacing:2px;color:var(--green);text-transform:uppercase}
+  .lz-s{font-size:8.5px;color:var(--dim);font-family:'Share Tech Mono',monospace}
+  .lz-g{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+  .lat{background:rgba(255,123,26,.05);border:1px solid rgba(255,123,26,.3);border-radius:7px;padding:9px}
+  .lat-t{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9.5px;letter-spacing:3px;color:var(--orange);text-transform:uppercase;margin-bottom:7px;border-bottom:1px solid rgba(255,123,26,.2);padding-bottom:5px}
+  .lat-g{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+  .lat-i{background:rgba(255,123,26,.08);border:1px solid rgba(255,123,26,.2);border-radius:4px;padding:4px 6px;font-size:9px;display:flex;flex-direction:column;gap:2px}
+  .lat-top{display:flex;align-items:center;gap:4px;font-weight:600}
+  .sabsa{background:rgba(212,160,23,.04);border:2px solid rgba(212,160,23,.3);border-radius:9px;padding:12px 14px;margin-bottom:8px}
+  .sabsa-t{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:13px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:9px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(212,160,23,.2);padding-bottom:7px}
+  .sabsa-sub{font-size:9px;font-family:'Share Tech Mono',monospace;color:#a08030;font-weight:400}
+  .sg{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+  .sc-cell{background:rgba(212,160,23,.06);border:1px solid rgba(212,160,23,.22);border-radius:5px;padding:8px 9px}
+  .sc-t{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9.5px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:5px;border-bottom:1px solid rgba(212,160,23,.18);padding-bottom:3px}
+  .sc-s{font-size:8px;color:#a08030;font-family:'Share Tech Mono',monospace;margin-bottom:4px}
+  .sc-i{font-size:8.5px;color:#c8a840;padding:2px 0;border-bottom:1px solid rgba(212,160,23,.08);line-height:1.3;display:flex;align-items:flex-start;gap:4px}
+  .sc-i:last-child{border-bottom:none}
+  .sc-ref{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--gold);opacity:.75;flex-shrink:0;margin-top:1px}
+  .fp{display:inline-flex;align-items:center;gap:3px;font-family:'Share Tech Mono',monospace;font-size:8px;padding:1px 6px;border-radius:10px}
+  .fm{background:rgba(255,59,59,.15);color:#ff9090;border:1px solid rgba(255,59,59,.4)}.fs{background:rgba(212,160,23,.15);color:var(--gold);border:1px solid rgba(212,160,23,.4)}.fn{background:rgba(0,229,255,.12);color:#80eeff;border:1px solid rgba(0,229,255,.4)}
+  .foot{margin-top:20px;border-top:1px solid var(--border);padding-top:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+  .foot-l{font-family:'Share Tech Mono',monospace;font-size:8.5px;color:var(--dim)}
+  .sev-bar{display:flex;gap:4px;align-items:center;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--dim)}
+  .sv{width:22px;height:9px;border-radius:2px}
+</style>
+
+<div class="ig-root">
+<div class="page">
+
+<div class="hdr">
+  <div class="badge">⚠ Breach Attack Simulation · MITRE ATT&CK v14 · SABSA · MoST/NIST CSF</div>
+  <h1>ASSUME <s1>BREACH</s1>   <s2>SABSA</s2> × MITRE ATT&CK × MoST</h1>
+  <p>Multi-Cloud Kill Chain · Lateral Movement · WAF · NGFW · Endpoint · Supply Chain · Hybrid · SABSA SC-1–6 · MoST Functions</p>
+</div>
+
+<div class="mq"><span class="mq-i">
+  🔴 SIM ACTIVE &nbsp;|&nbsp; T1566 Phishing · T1190 Public App · T1078 Valid Accts · T1021 Remote Svc · T1550 Alt Auth · T1484 Domain Policy · T1059 Scripting · T1071 App Layer · T1486 Ransomware · T1003 Cred Dump · T1558 Kerberoasting · T1210 Remote Exploit · T1530 Cloud Storage · T1611 Container Escape &nbsp;|&nbsp;
+  SABSA: SC-1 Contextual Risk · SC-2 Conceptual/Policy · SC-3 Logical/Design · SC-4 Physical/Tech · SC-5 Component · SC-6 Operational &nbsp;|&nbsp;
+  MoST/NIST CSF: Identify · Protect · Detect · Respond · Recover &nbsp;|&nbsp; 🔴 SIM ACTIVE
+</span></div>
+
+<div class="leg">
+  <div class="li"><div class="ld" style="background:var(--red)"></div>Attack/Threat</div>
+  <div class="li"><div class="ld" style="background:var(--orange)"></div>Lateral Movement</div>
+  <div class="li"><div class="ld" style="background:var(--cyan)"></div>Defence Control</div>
+  <div class="li"><div class="ld" style="background:var(--green)"></div>Landing/Pivot Zone</div>
+  <div class="li"><div class="ld" style="background:var(--aws)"></div>AWS</div>
+  <div class="li"><div class="ld" style="background:var(--azure)"></div>Azure</div>
+  <div class="li"><div class="ld" style="background:var(--purple)"></div>Endpoint/Identity</div>
+  <div class="li"><div class="ld" style="background:var(--gold)"></div>SABSA Control</div>
+  <div class="li"><span class="tag ttp">T1xxx</span>&nbsp;MITRE TTP</div>
+  <div class="li"><span class="tag sc">SC-x.x</span>&nbsp;SABSA</div>
+  <div class="li"><span class="tag mo">MoST</span>&nbsp;NIST CSF</div>
+</div>
+
+<div style="margin-bottom:4px;font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;color:var(--red);text-transform:uppercase">MITRE ATT&amp;CK v14   14 Tactic Timeline</div>
+<div class="ribbon">
+  <div class="tac t1">Recon<span class="tid">TA0043</span></div>
+  <div class="tac t2">Rsrc Dev<span class="tid">TA0042</span></div>
+  <div class="tac t3">Init. Access<span class="tid">TA0001</span></div>
+  <div class="tac t4">Execution<span class="tid">TA0002</span></div>
+  <div class="tac t5">Persistence<span class="tid">TA0003</span></div>
+  <div class="tac t6">Priv. Esc.<span class="tid">TA0004</span></div>
+  <div class="tac t7">Def. Evasion<span class="tid">TA0005</span></div>
+  <div class="tac t8">Cred. Access<span class="tid">TA0006</span></div>
+  <div class="tac t9">Discovery<span class="tid">TA0007</span></div>
+  <div class="tac t10">Lateral Mvmt<span class="tid">TA0008</span></div>
+  <div class="tac t11">Collection<span class="tid">TA0009</span></div>
+  <div class="tac t12">C2<span class="tid">TA0011</span></div>
+  <div class="tac t13">Exfiltration<span class="tid">TA0010</span></div>
+  <div class="tac t14">Impact<span class="tid">TA0040</span></div>
+</div>
+
+<div class="st">① ENTRY VECTORS   INITIAL ACCESS<span class="mp">TA0001 · TA0043</span><span class="sp">SABSA: SC-1 Contextual · SC-6 Operational</span><span class="tag mo">MoST: IDENTIFY</span></div>
+<div class="r5">
+  <div class="zone"><div class="zl zl-r">End Users</div><div class="node nr"><div class="td"></div><div class="nb"><div class="nn">Corporate Workstation</div><div class="nd">Drive-by / phishing</div><div class="ntags"><span class="tag ttp">T1566</span><span class="tag ttp">T1204</span><span class="tag sc">SC-6.1</span></div></div></div><div class="node nr"><div class="ni">📧</div><div class="nb"><div class="nn">Email Spear-Phishing</div><div class="nd">Attachment / link</div><div class="ntags"><span class="tag ttp">T1566.001</span><span class="tag ttp">T1566.002</span></div></div></div><div class="node np"><div class="ni">🪪</div><div class="nb"><div class="nn">Identity / SSO</div><div class="nd">Credential stuffing</div><div class="ntags"><span class="tag ttp">T1078</span><span class="tag sc">SC-5.3</span></div></div></div></div>
+  <div class="zone"><div class="zl zl-r">VPN / Remote Access</div><div class="node nr"><div class="ni">🔓</div><div class="nb"><div class="nn">SSL-VPN Gateway</div><div class="nd">CVE exploit / auth bypass</div><div class="ntags"><span class="tag ttp">T1133</span><span class="tag ttp">T1190</span><span class="tag sc">SC-4.2</span></div></div></div><div class="node nc"><div class="ni">🛡</div><div class="nb"><div class="nn">MFA / ZTNA Control</div><div class="nd">FIDO2 phish-resistant</div><div class="ntags"><span class="tag sc">SC-5.3</span><span class="tag mo">PROTECT</span></div></div></div><div class="node no"><div class="ni">👤</div><div class="nb"><div class="nn">Split Tunnel Abuse</div><div class="nd">Bypass inspection</div><div class="ntags"><span class="tag ttp">T1572</span></div></div></div></div>
+  <div class="zone"><div class="zl zl-r">Supply Chain</div><div class="node nr"><div class="ni">📦</div><div class="nb"><div class="nn">3rd-Party Software</div><div class="nd">Trojanised update</div><div class="ntags"><span class="tag ttp">T1195.002</span><span class="tag sc">SC-6.5</span></div></div></div><div class="node nr"><div class="ni">🔗</div><div class="nb"><div class="nn">Managed Svc Provider</div><div class="nd">Trusted access pivot</div><div class="ntags"><span class="tag ttp">T1199</span><span class="tag ttp">T1195</span></div></div></div><div class="node no"><div class="ni">📜</div><div class="nb"><div class="nn">OSS Dependency</div><div class="nd">Dependency confusion</div><div class="ntags"><span class="tag ttp">T1195.001</span><span class="tag sc">SC-6.5</span></div></div></div></div>
+  <div class="zone"><div class="zl zl-r">Internet Exposure</div><div class="node nr"><div class="ni">🌐</div><div class="nb"><div class="nn">Public Web App</div><div class="nd">SQLi / RCE / SSRF</div><div class="ntags"><span class="tag ttp">T1190</span><span class="tag ttp">T1059</span><span class="tag sc">SC-4.1</span></div></div></div><div class="node nr"><div class="ni">🔌</div><div class="nb"><div class="nn">Exposed API</div><div class="nd">Auth bypass / BOLA</div><div class="ntags"><span class="tag ttp">T1190</span><span class="tag ttp">T1552.007</span></div></div></div><div class="node nr"><div class="ni">📡</div><div class="nb"><div class="nn">Shadow IT / IoT</div><div class="nd">Unmanaged endpoint</div><div class="ntags"><span class="tag ttp">T1078.001</span><span class="tag sc">SC-2.1</span></div></div></div></div>
+  <div class="zone"><div class="zl zl-r">Insider / Physical</div><div class="node nr"><div class="ni">🕵</div><div class="nb"><div class="nn">Malicious Insider</div><div class="nd">Privilege abuse</div><div class="ntags"><span class="tag ttp">T1078.002</span><span class="tag sc">SC-6.2</span></div></div></div><div class="node no"><div class="ni">🔑</div><div class="nb"><div class="nn">Leaked Credentials</div><div class="nd">Paste site / dark web</div><div class="ntags"><span class="tag ttp">T1589.001</span></div></div></div><div class="node no"><div class="ni">💾</div><div class="nb"><div class="nn">USB Drop</div><div class="nd">Physical delivery</div><div class="ntags"><span class="tag ttp">T1091</span><span class="tag sc">SC-4.3</span></div></div></div></div>
+</div>
+
+<div class="chain">
+  <div class="ch-t">🔴 Kill Chain   MITRE ATT&amp;CK × SABSA Operational (SC-6) × MoST</div>
+  <div class="ch-s">
+    <div class="cs">🎯 Recon<span class="cs-id">TA0043</span></div><div class="ca">→</div>
+    <div class="cs">⚡ Init. Access<span class="cs-id">TA0001·T1190</span></div><div class="ca">→</div>
+    <div class="cs">💻 Execution<span class="cs-id">TA0002·T1059</span></div><div class="ca">→</div>
+    <div class="cs">🔒 Persistence<span class="cs-id">TA0003·T1547</span></div><div class="ca">→</div>
+    <div class="cs">📈 Priv. Esc.<span class="cs-id">TA0004·T1548</span></div><div class="ca">→</div>
+    <div class="cs">🕶 Def. Evasion<span class="cs-id">TA0005·T1562</span></div><div class="ca">→</div>
+    <div class="cs">🔐 Cred. Access<span class="cs-id">TA0006·T1003</span></div><div class="ca">→</div>
+    <div class="cs">🗺 Discovery<span class="cs-id">TA0007·T1018</span></div><div class="ca">→</div>
+    <div class="cs">↔️ Lateral Mvmt<span class="cs-id">TA0008·T1021</span></div><div class="ca">→</div>
+    <div class="cs">📤 Exfil/Impact<span class="cs-id">TA0010/40·T1486</span></div>
+  </div>
+</div>
+
+<div class="st">② PERIMETER CONTROLS   PREVENTION / DETECTION<span class="mp">TA0001·TA0005</span><span class="sp">SABSA: SC-4 Physical · SC-5 Component</span><span class="tag mo">MoST: PROTECT·DETECT</span></div>
+<div class="r3">
+  <div class="zone"><div class="zl zl-c">Next-Gen Firewall (NGFW)</div><div class="node nc"><div class="ni">🔥</div><div class="nb"><div class="nn">Deep Packet Inspection</div><div class="nd">L7 app awareness, IPS</div><div class="ntags"><span class="tag sc">SC-4.1</span><span class="tag sc">SC-5.1</span><span class="tag mo">PROTECT</span></div></div></div><div class="node nc"><div class="ni">🧠</div><div class="nb"><div class="nn">TLS Inspection</div><div class="nd">Decrypt &amp; re-encrypt</div><div class="ntags"><span class="tag sc">SC-5.2</span><span class="tag ttp">T1573</span></div></div></div><div class="node nc"><div class="ni">📋</div><div class="nb"><div class="nn">URL / DNS Filtering</div><div class="nd">C2 sinkhole</div><div class="ntags"><span class="tag ttp">T1071.004</span><span class="tag sc">SC-5.1</span></div></div></div><div class="node no"><div class="ni">⚠️</div><div class="nb"><div class="nn">Evasion: Fragmented Pkts</div><div class="nd">Encoded / chunked bypass</div><div class="ntags"><span class="tag ttp">T1001.003</span><span class="tag ttp">T1562.004</span></div></div></div></div>
+  <div class="zone"><div class="zl zl-c">WAF   Web Application Firewall</div><div class="node naz"><div class="ni">🔵</div><div class="nb"><div class="nn">Azure Front Door WAF</div><div class="nd">DRS ruleset · Bot manager</div><div class="ntags"><span class="tag taz">AZURE</span><span class="tag sc">SC-4.1</span><span class="tag ttp">T1190</span></div></div></div><div class="node naw"><div class="ni">🟠</div><div class="nb"><div class="nn">AWS WAF + Shield Adv.</div><div class="nd">Managed rules · DDoS</div><div class="ntags"><span class="tag taw">AWS</span><span class="tag sc">SC-4.1</span><span class="tag ttp">T1498</span></div></div></div><div class="node nc"><div class="ni">🛡</div><div class="nb"><div class="nn">OWASP Top-10 Rules</div><div class="nd">SQLi, XSS, CSRF, SSRF</div><div class="ntags"><span class="tag sc">SC-5.1</span><span class="tag mo">PROTECT</span></div></div></div><div class="node no"><div class="ni">🎭</div><div class="nb"><div class="nn">WAF Bypass Technique</div><div class="nd">Encoding / chunked req.</div><div class="ntags"><span class="tag ttp">T1027</span><span class="tag ttp">T1190</span></div></div></div></div>
+  <div class="zone"><div class="zl zl-c">Cloud Firewall / SDN</div><div class="node naz"><div class="ni">🔵</div><div class="nb"><div class="nn">Azure Firewall Premium</div><div class="nd">IDPS · TLS · FQDN rules</div><div class="ntags"><span class="tag taz">AZURE</span><span class="tag sc">SC-4.2</span></div></div></div><div class="node naw"><div class="ni">🟠</div><div class="nb"><div class="nn">AWS Network Firewall</div><div class="nd">Suricata IPS engine</div><div class="ntags"><span class="tag taw">AWS</span><span class="tag sc">SC-4.2</span></div></div></div><div class="node nc"><div class="ni">🗂</div><div class="nb"><div class="nn">NSG / Security Groups</div><div class="nd">Micro-segment enforcement</div><div class="ntags"><span class="tag sc">SC-5.4</span><span class="tag mo">PROTECT</span></div></div></div><div class="node no"><div class="ni">🌀</div><div class="nb"><div class="nn">IMDS / Metadata Abuse</div><div class="nd">Cloud cred theft via SSRF</div><div class="ntags"><span class="tag ttp">T1552.005</span><span class="tag ttp">T1078.004</span></div></div></div></div>
+</div>
+
+<div class="st">③ HYBRID CONNECTIVITY<span class="mp">T1021·T1572·T1599</span><span class="sp">SABSA: SC-3 Logical · SC-4 Physical</span><span class="tag mo">MoST: PROTECT</span></div>
+<div class="r3">
+  <div class="zone"><div class="cb caz">🔵 Azure Hybrid</div><div class="zl zl-az">Azure Connectivity</div><div class="node naz"><div class="ni">🔵</div><div class="nb"><div class="nn">ExpressRoute</div><div class="nd">Private dedicated circuit</div><div class="ntags"><span class="tag sc">SC-4.2</span></div></div></div><div class="node naz"><div class="ni">🔵</div><div class="nb"><div class="nn">Azure VPN Gateway</div><div class="nd">S2S / P2S IPSec</div><div class="ntags"><span class="tag ttp">T1133</span><span class="tag sc">SC-4.2</span></div></div></div><div class="node naz"><div class="ni">🔵</div><div class="nb"><div class="nn">Azure Arc</div><div class="nd">On-prem to cloud bridge</div><div class="ntags"><span class="tag sc">SC-3.1</span></div></div></div><div class="node no"><div class="ni">↔️</div><div class="nb"><div class="nn">Trusted Link Pivot</div><div class="nd">Lateral to on-prem</div><div class="ntags"><span class="tag ttp">T1021.006</span><span class="tag ttp">T1563</span></div></div></div></div>
+  <div class="zone"><div class="zl" style="color:#aaa;border-color:rgba(255,255,255,.1)">On-Premises Datacenter</div><div class="node np"><div class="ni">🏢</div><div class="nb"><div class="nn">Active Directory / LDAP</div><div class="nd">Kerberoasting / DCSync</div><div class="ntags"><span class="tag ttp">T1558.003</span><span class="tag ttp">T1003.006</span><span class="tag sc">SC-5.3</span></div></div></div><div class="node nc"><div class="ni">🛡</div><div class="nb"><div class="nn">PAM / Privileged Access</div><div class="nd">CyberArk / BeyondTrust</div><div class="ntags"><span class="tag sc">SC-6.2</span><span class="tag mo">PROTECT</span></div></div></div><div class="node np"><div class="ni">💻</div><div class="nb"><div class="nn">Jump Server / Bastion</div><div class="nd">Session recording</div><div class="ntags"><span class="tag sc">SC-4.3</span><span class="tag ttp">T1021.004</span></div></div></div><div class="node no"><div class="ni">🔑</div><div class="nb"><div class="nn">Pass-the-Hash / Ticket</div><div class="nd">Credential relay attack</div><div class="ntags"><span class="tag ttp">T1550.002</span><span class="tag ttp">T1550.003</span></div></div></div></div>
+  <div class="zone"><div class="cb caw">🟠 AWS Hybrid</div><div class="zl zl-aw">AWS Connectivity</div><div class="node naw"><div class="ni">🟠</div><div class="nb"><div class="nn">AWS Direct Connect</div><div class="nd">Dedicated private link</div><div class="ntags"><span class="tag sc">SC-4.2</span></div></div></div><div class="node naw"><div class="ni">🟠</div><div class="nb"><div class="nn">Transit Gateway</div><div class="nd">Hub-and-spoke routing</div><div class="ntags"><span class="tag sc">SC-4.2</span><span class="tag ttp">T1599</span></div></div></div><div class="node naw"><div class="ni">🟠</div><div class="nb"><div class="nn">AWS Site-to-Site VPN</div><div class="nd">IPSec / BGP failover</div><div class="ntags"><span class="tag ttp">T1133</span><span class="tag sc">SC-4.2</span></div></div></div><div class="node no"><div class="ni">📡</div><div class="nb"><div class="nn">Route Table Hijack</div><div class="nd">BGP poisoning</div><div class="ntags"><span class="tag ttp">T1599.001</span></div></div></div></div>
+</div>
+
+<div class="st">④ LANDING ZONE   INITIAL FOOTHOLD<span class="mp">TA0002·TA0003·TA0004·TA0005·TA0006</span><span class="sp">SABSA: SC-6 Operational</span><span class="tag mo">MoST: DETECT·RESPOND</span></div>
+<div class="lz">
+  <div class="lz-h"><div style="font-size:22px">🎯</div><div><div class="lz-t">Landing Zone <span class="tag ttp">COMPROMISED</span></div><div class="lz-s">C2 established · Beaconing · Persistence · Recon begins · SABSA SC-6 Operational controls applied</div></div></div>
+  <div class="lz-g">
+    <div class="node nr"><div class="ni">🐚</div><div class="nb"><div class="nn">Reverse Shell / Beacon</div><div class="nd">C2 channel established</div><div class="ntags"><span class="tag ttp">T1071</span><span class="tag ttp">T1105</span></div></div></div>
+    <div class="node no"><div class="ni">🕸</div><div class="nb"><div class="nn">C2 Framework</div><div class="nd">Cobalt Strike / Sliver</div><div class="ntags"><span class="tag ttp">T1219</span><span class="tag ttp">T1571</span></div></div></div>
+    <div class="node no"><div class="ni">🔏</div><div class="nb"><div class="nn">LSASS Dump</div><div class="nd">Mimikatz / ProcDump</div><div class="ntags"><span class="tag ttp">T1003.001</span><span class="tag sc">SC-6.3</span></div></div></div>
+    <div class="node np"><div class="ni">🪝</div><div class="nb"><div class="nn">Persistence</div><div class="nd">Sched task / WMI sub.</div><div class="ntags"><span class="tag ttp">T1053</span><span class="tag ttp">T1547</span></div></div></div>
+    <div class="node no"><div class="ni">🌐</div><div class="nb"><div class="nn">Internal Recon</div><div class="nd">BloodHound / LDAP</div><div class="ntags"><span class="tag ttp">T1018</span><span class="tag ttp">T1069</span><span class="tag ttp">T1087</span></div></div></div>
+    <div class="node nc"><div class="ni">📊</div><div class="nb"><div class="nn">EDR Telemetry</div><div class="nd">SOC triage triggered</div><div class="ntags"><span class="tag sc">SC-6.4</span><span class="tag mo">DETECT</span></div></div></div>
+    <div class="node nc"><div class="ni">🔍</div><div class="nb"><div class="nn">SIEM / XDR Correlation</div><div class="nd">Behavioural anomaly</div><div class="ntags"><span class="tag sc">SC-6.4</span><span class="tag mo">DETECT</span></div></div></div>
+    <div class="node no"><div class="ni">🥷</div><div class="nb"><div class="nn">Living off the Land</div><div class="nd">LOLBins · Fileless</div><div class="ntags"><span class="tag ttp">T1218</span><span class="tag ttp">T1562.001</span></div></div></div>
+  </div>
+</div>
+
+<div class="st">⑤ EAST-WEST TRAFFIC   LATERAL MOVEMENT<span class="mp">TA0008·T1021·T1550·T1563</span><span class="sp">SABSA: SC-5 Component · SC-6 Operational</span><span class="tag mo">MoST: DETECT·PROTECT</span></div>
+<div class="rew">
+  <div class="zone"><div class="zl zl-p">Endpoint Protection</div><div class="node np"><div class="ni">🛡</div><div class="nb"><div class="nn">EDR / XDR Agent</div><div class="nd">CrowdStrike / Defender</div><div class="ntags"><span class="tag sc">SC-5.5</span><span class="tag mo">DETECT</span></div></div></div><div class="node np"><div class="ni">🔬</div><div class="nb"><div class="nn">Memory Scanning</div><div class="nd">Injection detection</div><div class="ntags"><span class="tag ttp">T1055</span><span class="tag sc">SC-5.5</span></div></div></div><div class="node np"><div class="ni">🔒</div><div class="nb"><div class="nn">Application Control</div><div class="nd">Allow-list enforcement</div><div class="ntags"><span class="tag sc">SC-5.6</span><span class="tag ttp">T1059</span></div></div></div><div class="node np"><div class="ni">🩺</div><div class="nb"><div class="nn">Device Compliance</div><div class="nd">Patch posture / risk score</div><div class="ntags"><span class="tag sc">SC-6.1</span></div></div></div><div class="node no"><div class="ni">💉</div><div class="nb"><div class="nn">Process Injection</div><div class="nd">Bypass EDR hooks</div><div class="ntags"><span class="tag ttp">T1055.001</span><span class="tag ttp">T1055.012</span></div></div></div><div class="node no"><div class="ni">🎭</div><div class="nb"><div class="nn">Token Impersonation</div><div class="nd">RunAs / token theft</div><div class="ntags"><span class="tag ttp">T1134.001</span><span class="tag ttp">T1134.002</span></div></div></div></div>
+  <div class="lat"><div class="lat-t">↔ East-West / Lateral Movement Techniques   TA0008</div><div class="lat-g">
+    <div class="lat-i"><div class="lat-top"><span>🔑</span> Pass-the-Hash</div><div class="ntags"><span class="tag ttp">T1550.002</span><span class="tag sc">SC-5.3</span></div></div>
+    <div class="lat-i"><div class="lat-top"><span>🎫</span> Pass-the-Ticket</div><div class="ntags"><span class="tag ttp">T1550.003</span><span class="tag ttp">T1558</span></div></div>
+    <div class="lat-i"><div class="lat-top"><span>🖥</span> RDP / WMI / PsExec</div><div class="ntags"><span class="tag ttp">T1021.001</span><span class="tag ttp">T1047</span></div></div>
+    <div class="lat-i"><div class="lat-top"><span>📂</span> SMB Share Traversal</div><div class="ntags"><span class="tag ttp">T1021.002</span><span class="tag sc">SC-5.4</span></div></div>
+    <div class="lat-i"><div class="lat-top"><span>🔒</span> SSH / SCP Hop</div><div class="ntags"><span class="tag ttp">T1021.004</span></div></div>
+    <div class="lat-i"><div class="lat-top"><span>🕸</span> WMI Subscription</div><div class="ntags"><span class="tag ttp">T1047</span><span class="tag ttp">T1546.003</span></div></div>
+    <div class="lat-i"><div class="lat-top"><span>📡</span> DCOM Movement</div><div class="ntags"><span class="tag ttp">T1021.003</span></div></div>
+    <div class="lat-i"><div class="lat-top"><span>🧬</span> BloodHound AD Paths</div><div class="ntags"><span class="tag ttp">T1069</span><span class="tag ttp">T1087</span></div></div>
+    <div class="lat-i"><div class="lat-top"><span>📦</span> Container Escape</div><div class="ntags"><span class="tag ttp">T1611</span><span class="tag sc">SC-5.4</span></div></div>
+    <div class="lat-i"><div class="lat-top"><span>☁️</span> Cloud Metadata Pivot</div><div class="ntags"><span class="tag ttp">T1552.005</span></div></div>
+    <div class="lat-i"><div class="lat-top"><span>🎯</span> VPC Peering Abuse</div><div class="ntags"><span class="tag ttp">T1599</span></div></div>
+    <div class="lat-i"><div class="lat-top"><span>🔄</span> AWS AssumeRole</div><div class="ntags"><span class="tag ttp">T1078.004</span><span class="tag taw">AWS</span></div></div>
+    <div class="lat-i"><div class="lat-top"><span>🔵</span> Managed Identity Abuse</div><div class="ntags"><span class="tag ttp">T1078.004</span><span class="tag taz">AZ</span></div></div>
+    <div class="lat-i"><div class="lat-top"><span>🔗</span> Svc Principal Hijack</div><div class="ntags"><span class="tag ttp">T1098.001</span></div></div>
+    <div class="lat-i"><div class="lat-top"><span>🌐</span> DNS/LLMNR Poisoning</div><div class="ntags"><span class="tag ttp">T1557.001</span><span class="tag sc">SC-5.1</span></div></div>
+    <div class="lat-i"><div class="lat-top"><span>🪝</span> Sched Task Abuse</div><div class="ntags"><span class="tag ttp">T1053.005</span></div></div>
+  </div>
+  <div style="margin-top:7px;padding-top:6px;border-top:1px solid rgba(255,123,26,.2);font-size:8.5px;color:var(--dim);font-family:'Share Tech Mono',monospace;text-align:center;">🔄 MICRO-SEGMENTATION CONTROL POINT   NSG · Calico · GuardDuty · Defender for Cloud &nbsp;|&nbsp; <span class="tag sc">SC-5.4</span> <span class="tag mo">DETECT</span></div></div>
+  <div class="zone"><div class="zl zl-c">Network Segmentation</div><div class="node nc"><div class="ni">🔀</div><div class="nb"><div class="nn">Micro-segmentation</div><div class="nd">Illumio / NSX</div><div class="ntags"><span class="tag sc">SC-5.4</span><span class="tag mo">PROTECT</span></div></div></div><div class="node naz"><div class="ni">🔵</div><div class="nb"><div class="nn">Azure NSG + ASG</div><div class="nd">App security groups</div><div class="ntags"><span class="tag taz">AZURE</span><span class="tag sc">SC-4.2</span></div></div></div><div class="node naw"><div class="ni">🟠</div><div class="nb"><div class="nn">AWS Security Groups</div><div class="nd">Stateful E-W control</div><div class="ntags"><span class="tag taw">AWS</span><span class="tag sc">SC-4.2</span></div></div></div><div class="node nc"><div class="ni">🏷</div><div class="nb"><div class="nn">Zero Trust Segmentation</div><div class="nd">Identity-based access</div><div class="ntags"><span class="tag sc">SC-3.2</span><span class="tag mo">PROTECT</span></div></div></div><div class="node nc"><div class="ni">📝</div><div class="nb"><div class="nn">VPC / NSG Flow Logs</div><div class="nd">Anomalous traffic detect.</div><div class="ntags"><span class="tag sc">SC-6.4</span><span class="tag ttp">T1021</span></div></div></div><div class="node no"><div class="ni">🌀</div><div class="nb"><div class="nn">Covert Channel</div><div class="nd">DNS tunnelling / ICMP</div><div class="ntags"><span class="tag ttp">T1071.004</span><span class="tag ttp">T1001</span></div></div></div></div>
+</div>
+
+<div class="st">⑥ CLOUD ENVIRONMENTS   AWS &amp; AZURE<span class="mp">T1530·T1537·T1078.004·T1611</span><span class="sp">SABSA: SC-5 Component · SC-6 Operational</span><span class="tag mo">MoST: DETECT·RESPOND</span></div>
+<div class="r2">
+  <div class="zone"><div class="cb caw">🟠 Amazon Web Services</div><div class="zl zl-aw">AWS Landing Zone Targets</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:5px"><div class="node naw"><div class="ni">🪣</div><div class="nb"><div class="nn">S3 Bucket</div><div class="nd">Data exfil / misconfig</div><div class="ntags"><span class="tag ttp">T1530</span><span class="tag sc">SC-5.7</span></div></div></div><div class="node naw"><div class="ni">⚡</div><div class="nb"><div class="nn">Lambda Function</div><div class="nd">Serverless pivot</div><div class="ntags"><span class="tag ttp">T1648</span><span class="tag ttp">T1059</span></div></div></div><div class="node naw"><div class="ni">🖥</div><div class="nb"><div class="nn">EC2 / ECS</div><div class="nd">Instance compromise</div><div class="ntags"><span class="tag ttp">T1059</span><span class="tag ttp">T1496</span></div></div></div><div class="node naw"><div class="ni">🔑</div><div class="nb"><div class="nn">IAM Role Abuse</div><div class="nd">Privilege escalation</div><div class="ntags"><span class="tag ttp">T1078.004</span><span class="tag ttp">T1548</span></div></div></div><div class="node naw"><div class="ni">🗄</div><div class="nb"><div class="nn">RDS / DynamoDB</div><div class="nd">Data store exfil</div><div class="ntags"><span class="tag ttp">T1530</span><span class="tag sc">SC-5.7</span></div></div></div><div class="node naw"><div class="ni">☸</div><div class="nb"><div class="nn">EKS (Kubernetes)</div><div class="nd">Container escape</div><div class="ntags"><span class="tag ttp">T1611</span><span class="tag ttp">T1610</span></div></div></div><div class="node nc"><div class="ni">👁</div><div class="nb"><div class="nn">GuardDuty</div><div class="nd">Threat detection</div><div class="ntags"><span class="tag sc">SC-6.4</span><span class="tag mo">DETECT</span></div></div></div><div class="node nc"><div class="ni">🔍</div><div class="nb"><div class="nn">CloudTrail / SIEM</div><div class="nd">Audit &amp; correlation</div><div class="ntags"><span class="tag sc">SC-6.4</span></div></div></div><div class="node nc"><div class="ni">🔒</div><div class="nb"><div class="nn">AWS Security Hub</div><div class="nd">Posture management</div><div class="ntags"><span class="tag sc">SC-2.2</span></div></div></div><div class="node nc"><div class="ni">🌐</div><div class="nb"><div class="nn">VPC Flow Logs</div><div class="nd">E-W traffic audit</div><div class="ntags"><span class="tag sc">SC-6.4</span></div></div></div></div></div>
+  <div class="zone"><div class="cb caz">🔵 Microsoft Azure</div><div class="zl zl-az">Azure Landing Zone Targets</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:5px"><div class="node naz"><div class="ni">📦</div><div class="nb"><div class="nn">Blob Storage</div><div class="nd">SAS token abuse</div><div class="ntags"><span class="tag ttp">T1530</span><span class="tag sc">SC-5.7</span></div></div></div><div class="node naz"><div class="ni">⚡</div><div class="nb"><div class="nn">Azure Functions</div><div class="nd">Serverless pivot</div><div class="ntags"><span class="tag ttp">T1648</span><span class="tag ttp">T1059</span></div></div></div><div class="node naz"><div class="ni">🖥</div><div class="nb"><div class="nn">VM / VMSS</div><div class="nd">Instance compromise</div><div class="ntags"><span class="tag ttp">T1059</span><span class="tag ttp">T1496</span></div></div></div><div class="node naz"><div class="ni">🔑</div><div class="nb"><div class="nn">Entra ID / App Reg.</div><div class="nd">OAuth token theft</div><div class="ntags"><span class="tag ttp">T1528</span><span class="tag ttp">T1098.001</span></div></div></div><div class="node naz"><div class="ni">🗄</div><div class="nb"><div class="nn">SQL / Cosmos DB</div><div class="nd">Exfil / ransomware</div><div class="ntags"><span class="tag ttp">T1530</span><span class="tag sc">SC-5.7</span></div></div></div><div class="node naz"><div class="ni">☸</div><div class="nb"><div class="nn">AKS (Kubernetes)</div><div class="nd">Container escape</div><div class="ntags"><span class="tag ttp">T1611</span><span class="tag ttp">T1610</span></div></div></div><div class="node nc"><div class="ni">🛡</div><div class="nb"><div class="nn">Defender for Cloud</div><div class="nd">CSPM / CWPP</div><div class="ntags"><span class="tag sc">SC-2.2</span><span class="tag mo">DETECT</span></div></div></div><div class="node nc"><div class="ni">📊</div><div class="nb"><div class="nn">Sentinel SIEM/SOAR</div><div class="nd">Analytics / playbook</div><div class="ntags"><span class="tag sc">SC-6.4</span><span class="tag mo">RESPOND</span></div></div></div><div class="node nc"><div class="ni">🔑</div><div class="nb"><div class="nn">Key Vault</div><div class="nd">Secret protect / audit</div><div class="ntags"><span class="tag sc">SC-5.7</span></div></div></div><div class="node nc"><div class="ni">📋</div><div class="nb"><div class="nn">Activity / NSG Logs</div><div class="nd">E-W traffic audit</div><div class="ntags"><span class="tag sc">SC-6.4</span></div></div></div></div></div>
+</div>
+
+<div class="st">⑦ TARGET SYSTEMS   IMPACT &amp; OBJECTIVES<span class="mp">TA0009·TA0010·TA0040</span><span class="sp">SABSA: SC-6 Operational · SC-1 Business</span><span class="tag mo">MoST: RESPOND·RECOVER</span></div>
+<div class="r4">
+  <div class="zone"><div class="zl zl-r">Data / IP Exfiltration</div><div class="node nr"><div class="ni">💰</div><div class="nb"><div class="nn">PII / PCI Data Store</div><div class="nd">Structured data exfil</div><div class="ntags"><span class="tag ttp">T1041</span><span class="tag ttp">T1537</span></div></div></div><div class="node nr"><div class="ni">📁</div><div class="nb"><div class="nn">Source Code Repos</div><div class="nd">GitHub / ADO / Bitbucket</div><div class="ntags"><span class="tag ttp">T1213.003</span></div></div></div><div class="node nr"><div class="ni">🔐</div><div class="nb"><div class="nn">Secrets / Key Stores</div><div class="nd">Vault / Parameter Store</div><div class="ntags"><span class="tag ttp">T1552</span><span class="tag sc">SC-5.7</span></div></div></div><div class="node nc"><div class="ni">🕵</div><div class="nb"><div class="nn">DLP / CASB</div><div class="nd">Exfil detection</div><div class="ntags"><span class="tag sc">SC-6.5</span><span class="tag mo">DETECT</span></div></div></div></div>
+  <div class="zone"><div class="zl zl-r">Ransomware / Disruption</div><div class="node nr"><div class="ni">💣</div><div class="nb"><div class="nn">Ransomware Payload</div><div class="nd">Encrypt / wipe data</div><div class="ntags"><span class="tag ttp">T1486</span><span class="tag ttp">T1490</span></div></div></div><div class="node nr"><div class="ni">🔁</div><div class="nb"><div class="nn">Backup Destruction</div><div class="nd">Shadow copy deletion</div><div class="ntags"><span class="tag ttp">T1490</span><span class="tag ttp">T1485</span></div></div></div><div class="node nr"><div class="ni">⚡</div><div class="nb"><div class="nn">DoS / API Flood</div><div class="nd">Availability impact</div><div class="ntags"><span class="tag ttp">T1498</span><span class="tag ttp">T1499</span></div></div></div><div class="node nc"><div class="ni">💾</div><div class="nb"><div class="nn">Immutable Backups</div><div class="nd">Air-gap recovery</div><div class="ntags"><span class="tag sc">SC-6.6</span><span class="tag mo">RECOVER</span></div></div></div></div>
+  <div class="zone"><div class="zl zl-r">Identity &amp; Credential</div><div class="node nr"><div class="ni">👑</div><div class="nb"><div class="nn">Domain Admin Takeover</div><div class="nd">DCSync / Golden Ticket</div><div class="ntags"><span class="tag ttp">T1003.006</span><span class="tag ttp">T1558.001</span></div></div></div><div class="node nr"><div class="ni">🔓</div><div class="nb"><div class="nn">Cloud Root / GA Hijack</div><div class="nd">Entra Global Admin</div><div class="ntags"><span class="tag ttp">T1098</span><span class="tag ttp">T1078.004</span></div></div></div><div class="node nc"><div class="ni">🛡</div><div class="nb"><div class="nn">PIM / Conditional Access</div><div class="nd">JIT privilege</div><div class="ntags"><span class="tag sc">SC-6.2</span><span class="tag mo">PROTECT</span></div></div></div><div class="node nc"><div class="ni">📲</div><div class="nb"><div class="nn">MFA / FIDO2</div><div class="nd">Phish-resistant auth</div><div class="ntags"><span class="tag sc">SC-5.3</span><span class="tag mo">PROTECT</span></div></div></div></div>
+  <div class="zone"><div class="zl zl-r">Detection &amp; Response</div><div class="node nc"><div class="ni">🚨</div><div class="nb"><div class="nn">SOC / MDR Alert</div><div class="nd">Triage &amp; escalation</div><div class="ntags"><span class="tag sc">SC-6.4</span><span class="tag mo">DETECT</span></div></div></div><div class="node nc"><div class="ni">🤖</div><div class="nb"><div class="nn">SOAR Playbook</div><div class="nd">Auto-isolation / block</div><div class="ntags"><span class="tag sc">SC-6.7</span><span class="tag mo">RESPOND</span></div></div></div><div class="node nc"><div class="ni">🧪</div><div class="nb"><div class="nn">Threat Hunting</div><div class="nd">Proactive TI sweep</div><div class="ntags"><span class="tag sc">SC-6.4</span><span class="tag mo">DETECT</span></div></div></div><div class="node nc"><div class="ni">📋</div><div class="nb"><div class="nn">IR / Forensics</div><div class="nd">Evidence &amp; containment</div><div class="ntags"><span class="tag sc">SC-6.7</span><span class="tag mo">RESPOND</span></div></div></div></div>
+</div>
+
+<div class="sabsa">
+  <div class="sabsa-t">🏛 SABSA Security Architecture Control Matrix<span class="sabsa-sub">Sherwood Applied Business Security Architecture   6 Architecture Layers × Security Controls</span></div>
+  <div class="sg">
+    <div class="sc-cell"><div class="sc-t">SC-1 Contextual</div><div class="sc-s">Business Layer · WHY</div><div class="sc-i"><span class="sc-ref">SC-1.1</span>Business risk assessment aligned to crown jewels</div><div class="sc-i"><span class="sc-ref">SC-1.2</span>Security policy driven by business objectives</div><div class="sc-i"><span class="sc-ref">SC-1.3</span>Threat &amp; risk appetite definition</div><div class="sc-i"><span class="sc-ref">SC-1.4</span>Regulatory mapping (GDPR, PCI DSS, SOC 2, ISO 27001)</div></div>
+    <div class="sc-cell"><div class="sc-t">SC-2 Conceptual</div><div class="sc-s">Architecture Layer · WHAT</div><div class="sc-i"><span class="sc-ref">SC-2.1</span>Asset classification &amp; value framework</div><div class="sc-i"><span class="sc-ref">SC-2.2</span>Security domain model (Zero Trust architecture)</div><div class="sc-i"><span class="sc-ref">SC-2.3</span>Trust model &amp; boundary definition</div><div class="sc-i"><span class="sc-ref">SC-2.4</span>Security attribute taxonomy</div></div>
+    <div class="sc-cell"><div class="sc-t">SC-3 Logical</div><div class="sc-s">Design Layer · HOW</div><div class="sc-i"><span class="sc-ref">SC-3.1</span>Logical security policy enforcement</div><div class="sc-i"><span class="sc-ref">SC-3.2</span>IAM &amp; access management architecture</div><div class="sc-i"><span class="sc-ref">SC-3.3</span>Encryption &amp; key management design</div><div class="sc-i"><span class="sc-ref">SC-3.4</span>Security service architecture (SSE / SASE)</div></div>
+    <div class="sc-cell"><div class="sc-t">SC-4 Physical</div><div class="sc-s">Technology Layer · WITH WHAT</div><div class="sc-i"><span class="sc-ref">SC-4.1</span>WAF · NGFW · IPS/IDS deployment</div><div class="sc-i"><span class="sc-ref">SC-4.2</span>Network perimeter &amp; hybrid connectivity controls</div><div class="sc-i"><span class="sc-ref">SC-4.3</span>Physical access control &amp; bastion hosts</div><div class="sc-i"><span class="sc-ref">SC-4.4</span>Cloud-native firewall &amp; NSG services</div></div>
+    <div class="sc-cell"><div class="sc-t">SC-5 Component</div><div class="sc-s">Solution Layer · WHERE / WHEN</div><div class="sc-i"><span class="sc-ref">SC-5.1</span>Security rule &amp; policy configuration</div><div class="sc-i"><span class="sc-ref">SC-5.2</span>TLS/mTLS &amp; certificate management</div><div class="sc-i"><span class="sc-ref">SC-5.3</span>MFA · FIDO2 · PAM controls</div><div class="sc-i"><span class="sc-ref">SC-5.4</span>Micro-segmentation &amp; VLAN isolation</div><div class="sc-i"><span class="sc-ref">SC-5.5</span>EDR/XDR agent deployment</div><div class="sc-i"><span class="sc-ref">SC-5.6</span>Application allow-listing</div><div class="sc-i"><span class="sc-ref">SC-5.7</span>Data encryption at rest &amp; in transit</div></div>
+    <div class="sc-cell"><div class="sc-t">SC-6 Operational</div><div class="sc-s">Management Layer · WHO</div><div class="sc-i"><span class="sc-ref">SC-6.1</span>Vulnerability &amp; patch management</div><div class="sc-i"><span class="sc-ref">SC-6.2</span>Privileged access governance (JIT / JEA)</div><div class="sc-i"><span class="sc-ref">SC-6.3</span>Credential hygiene &amp; rotation policy</div><div class="sc-i"><span class="sc-ref">SC-6.4</span>SIEM · SOC · threat detection ops</div><div class="sc-i"><span class="sc-ref">SC-6.5</span>Supply chain &amp; 3rd-party risk management</div><div class="sc-i"><span class="sc-ref">SC-6.6</span>Business continuity &amp; DR (air-gap backups)</div><div class="sc-i"><span class="sc-ref">SC-6.7</span>Incident response &amp; forensics (SOAR)</div></div>
+  </div>
+</div>
+
+<div class="st">⑧ BREACH &amp; ATTACK SIMULATION (BAS) OUTPUTS<span class="mp">ATT&CK Coverage</span><span class="sp">SABSA SC-1 · SC-6</span><span class="tag mo">MoST: All Functions</span></div>
+<div class="r4">
+  <div class="zone" style="border-color:rgba(255,59,59,.35)"><div class="zl zl-r">Attack Coverage</div><div class="node nr"><div class="ni">📊</div><div class="nb"><div class="nn">MITRE ATT&amp;CK Coverage</div><div class="nd">% TTPs validated</div><div class="ntags"><span class="tag mo">IDENTIFY</span></div></div></div><div class="node no"><div class="ni">🔢</div><div class="nb"><div class="nn">Attack Path Count</div><div class="nd">Routes to crown jewels</div><div class="ntags"><span class="tag sc">SC-1.3</span></div></div></div><div class="node nr"><div class="ni">🎯</div><div class="nb"><div class="nn">Critical Asset Exposure</div><div class="nd">Reachable crown jewels</div><div class="ntags"><span class="tag sc">SC-1.1</span></div></div></div></div>
+  <div class="zone" style="border-color:rgba(0,229,255,.3)"><div class="zl zl-c">Control Validation</div><div class="node nc"><div class="ni">✅</div><div class="nb"><div class="nn">Prevention Rate</div><div class="nd">Controls that blocked</div><div class="ntags"><span class="tag mo">PROTECT</span><span class="tag sc">SC-4/5</span></div></div></div><div class="node nc"><div class="ni">🔔</div><div class="nb"><div class="nn">Detection Rate</div><div class="nd">Alerts triggered</div><div class="ntags"><span class="tag mo">DETECT</span><span class="tag sc">SC-6.4</span></div></div></div><div class="node no"><div class="ni">❌</div><div class="nb"><div class="nn">Control Gaps</div><div class="nd">Bypassed / failed</div><div class="ntags"><span class="tag sc">SC-2.2</span></div></div></div></div>
+  <div class="zone" style="border-color:rgba(0,255,136,.3)"><div class="zl zl-g">Risk Metrics</div><div class="node ng"><div class="ni">🌡</div><div class="nb"><div class="nn">Risk Score (0-100)</div><div class="nd">Weighted by criticality</div><div class="ntags"><span class="tag sc">SC-1.3</span></div></div></div><div class="node ng"><div class="ni">⏱</div><div class="nb"><div class="nn">MTTD</div><div class="nd">Mean time to detect</div><div class="ntags"><span class="tag mo">DETECT</span></div></div></div><div class="node ng"><div class="ni">⏩</div><div class="nb"><div class="nn">MTTR</div><div class="nd">Mean time to respond</div><div class="ntags"><span class="tag mo">RESPOND</span></div></div></div></div>
+  <div class="zone" style="border-color:rgba(155,93,229,.35)"><div class="zl zl-p">Remediation</div><div class="node np"><div class="ni">🔧</div><div class="nb"><div class="nn">Prioritised Fix List</div><div class="nd">CVSS + exploitability</div><div class="ntags"><span class="tag sc">SC-6.1</span></div></div></div><div class="node np"><div class="ni">📈</div><div class="nb"><div class="nn">Trend &amp; Regression</div><div class="nd">Continuous simulation</div><div class="ntags"><span class="tag sc">SC-6.1</span></div></div></div><div class="node np"><div class="ni">📑</div><div class="nb"><div class="nn">Board / Exec Report</div><div class="nd">Risk posture narrative</div><div class="ntags"><span class="tag sc">SC-1.2</span></div></div></div></div>
+</div>
+
+<div class="foot">
+  <div class="foot-l">ASSUME BREACH INFOGRAPHIC · MITRE ATT&amp;CK v14 · SABSA SC-1–6 · MoST/NIST CSF · AWS + AZURE MULTI-CLOUD<br>BAS Tools: Vectra AI · Cymulate · SafeBreach · AttackIQ · XM Cyber · Mandiant ASM · Picus Security</div>
+  <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-start">
+    <div style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--dim);text-transform:uppercase">Author</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text);font-weight:600;letter-spacing:1px">Saleem Yousaf</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" style="display:inline-flex;align-items:center;gap:4px;font-family:'Share Tech Mono',monospace;font-size:8px;font-weight:600;padding:2px 8px;border-radius:3px;text-decoration:none;background:rgba(0,119,181,.2);color:#60b8ff;border:1px solid rgba(0,119,181,.4);letter-spacing:1px">LinkedIn</a>
+      <a href="https://saleemyousaf.co.uk" target="_blank" style="display:inline-flex;align-items:center;gap:4px;font-family:'Share Tech Mono',monospace;font-size:8px;font-weight:600;padding:2px 8px;border-radius:3px;text-decoration:none;background:rgba(212,160,23,.15);color:#d4a017;border:1px solid rgba(212,160,23,.4);letter-spacing:1px">saleemyousaf.github.io</a>
+    </div>
+  </div>
+  <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><span class="fp fm">MITRE ATT&CK v14</span><span class="fp fs">SABSA SC-1 → SC-6</span><span class="fp fn">MoST / NIST CSF</span></div>
+  <div class="sev-bar">SEVERITY: <div class="sv" style="background:#00ff88"></div>LOW <div class="sv" style="background:#ffcc00"></div>MED <div class="sv" style="background:#ff7b1a"></div>HIGH <div class="sv" style="background:#ff3b3b"></div>CRIT</div>
+</div>
+
+</div>
+</div>
+
+</div><!-- end infographic-wrapper -->
+
+<!-- BACK BAR -->
+<div class="back-bar">
+  <a href="https://saleemyousaf.co.uk/assume-breach/">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Back to Assume Breach
+  </a>
+  <a href="https://saleemyousaf.co.uk/assume-breach/bas-framework/">
+    Full technical paper
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Saleem <span>Yousaf</span></div>
+      <div class="footer-desc">Cloud &amp; Cyber Security Architect · AWS · Azure · Zero Trust · AI Governance · OT Security · Enterprise Architecture</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
+      <a href="https://saleem-yousaf.blogspot.com/" target="_blank" rel="noopener">Blogger</a>
+      <a href="https://codepen.io/Saleem-Yousaf" target="_blank" rel="noopener">CodePen</a>
+      <a href="https://www.cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
+    <a href="https://www.saleemyousaf.co.uk/privacy-policy/" style="font-size:12px;color:var(--muted2);text-decoration:none;">Privacy Policy</a>
+  </div>
+
+<!-- Cross-property links (static HTML, mirrors nav for crawlers and no-JS visitors) -->
+<div style="max-width:1100px;margin:0 auto;padding:24px 32px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;border-top:1px solid rgba(255,255,255,0.07);">
+  <a href="https://breachforge.co.uk" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:4px;text-decoration:none;letter-spacing:0.04em;font-weight:500;background:rgba(230,57,70,0.12);color:#e63946;border:1px solid rgba(230,57,70,0.25);">
+    ⦡ breachforge.co.uk
+  </a>
+  <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:4px;text-decoration:none;letter-spacing:0.04em;font-weight:500;background:rgba(0,217,255,0.12);color:#00d9ff;border:1px solid rgba(0,217,255,0.25);">
+    ⬢ cyberspartans.co.uk
+  </a>
+</div>
+
+</footer>
+
+<script>
+(function(){
+  const btn = document.createElement('button');
+  btn.textContent = '⬇ Save as PNG';
+  btn.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;background:#c0392b;color:#fff;border:none;border-radius:4px;padding:10px 18px;font-family:"Share Tech Mono",monospace;font-size:12px;font-weight:600;letter-spacing:2px;cursor:pointer;box-shadow:0 4px 20px rgba(192,57,43,.5);transition:all .2s;';
+  btn.onmouseover = ()=>btn.style.background='#e74c3c';
+  btn.onmouseout  = ()=>btn.style.background='#c0392b';
+  btn.onclick = async ()=>{
+    btn.textContent = '⏳ Rendering…'; btn.disabled = true;
+    try {
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+      document.head.appendChild(script);
+      await new Promise(r=>script.onload=r);
+      const wrapper = document.querySelector('.ig-root');
+      const canvas = await html2canvas(wrapper, {backgroundColor:'#060912',scale:1.5,useCORS:true,allowTaint:true,logging:false});
+      const a = document.createElement('a');
+      a.download = 'assume-breach-infographic.png';
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+    } catch(e){ alert('Save failed: '+e.message); }
+    btn.textContent = '⬇ Save as PNG'; btn.disabled = false;
+  };
+  document.body.appendChild(btn);
+})();
+</script>
+
+<!-- Shared nav loader: edit NAV_CONFIG in /nav.js to change nav site-wide -->
+<script src="/nav.js" defer></script>
+
+</body>
+</html>
