@@ -24,6 +24,8 @@
       { label: 'Articles',    href: 'https://saleemyousaf.co.uk/articles/', dropdown: [
         { label: 'All Articles',                href: 'https://saleemyousaf.co.uk/articles/' },
         { label: 'Assume Breach',               href: 'https://saleemyousaf.co.uk/assume-breach/' },
+        { label: '\u00a0\u00a0\u2937 BAS Framework',     href: 'https://saleemyousaf.co.uk/assume-breach/bas-framework/' },
+        { label: '\u00a0\u00a0\u2937 BAS Infographic',   href: 'https://saleemyousaf.co.uk/assume-breach/bas-infographic/' },
         { label: 'AI Security & Governance',    href: 'https://saleemyousaf.co.uk/ai-security-governance/' }
       ]}
     ],
