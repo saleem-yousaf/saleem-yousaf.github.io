@@ -1,0 +1,8 @@
+# saleemyousaf.co.uk
+# Allow all crawlers everywhere except the BreachForge redirect stubs
+
+User-agent: *
+Allow: /
+Disallow: /breachforge/
+
+Sitemap: https://saleemyousaf.co.uk/sitemap.xml
