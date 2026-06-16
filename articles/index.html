@@ -612,7 +612,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
     <p class="page-sub">Practical articles covering cloud security, AI governance, Zero Trust, OT security, and enterprise architecture. Written for architects, engineers, and security leaders.</p>
     <div class="header-stats">
       <div class="header-stat">
-        <div class="header-stat-num">19<span>+</span></div>
+        <div class="header-stat-num">20<span>+</span></div>
         <div class="header-stat-label">Articles published</div>
       </div>
       <div class="header-stat">
@@ -630,37 +630,37 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
 <!-- ═══ FEATURED ARTICLE ════════════════════════════════ -->
 <section class="featured">
   <div class="wrap">
-    <a href="https://saleemyousaf.co.uk/articles/zero-trust-landing-zone/" class="article-featured">
+    <a href="https://saleemyousaf.co.uk/articles/cloud-hsm/" class="article-featured">
       <div>
         <div class="af-eyebrow">
           <span class="af-label">// Latest article</span>
           <span class="af-new">New</span>
         </div>
-        <div class="af-title">Enterprise Zero Trust Secure Landing Zone Reference Architecture</div>
-        <div class="af-excerpt">A technical deep dive into enterprise Zero Trust landing zone design for AWS and Azure, covering firewall engineering, Zscaler SSE, SIEM integration, and XSOAR orchestration using Palo Alto and Fortinet. A blueprint for organisations building security-first cloud foundations.</div>
+        <div class="af-title">Cloud HSM: What the Vendor Documentation Skips Over</div>
+        <div class="af-excerpt">Three paths, one decision. The honest comparison of AWS KMS, CloudHSM custom key store, and CloudHSM direct that most architects wish they had read before procurement. Covers real operational costs, key ceremonies, latency implications, and when dedicated HSMs are genuinely justified.</div>
         <div class="af-tags">
-          <span class="af-tag">Zero Trust</span>
+          <span class="af-tag">Cloud Security</span>
           <span class="af-tag">AWS</span>
-          <span class="af-tag">Azure</span>
-          <span class="af-tag">Firewall</span>
-          <span class="af-tag">SIEM</span>
-          <span class="af-tag">Landing Zone</span>
+          <span class="af-tag">Key Management</span>
+          <span class="af-tag">HSM</span>
+          <span class="af-tag">PKI</span>
+          <span class="af-tag">Compliance</span>
         </div>
         <div class="af-meta">
-          <span>14 May 2026</span>
+          <span>16 June 2026</span>
           <div class="af-meta-dot"></div>
-          <span>~15 min read</span>
+          <span>~12 min read</span>
           <div class="af-meta-dot"></div>
           <span>Cloud Security</span>
         </div>
       </div>
       <div class="af-aside">
         <div class="af-aside-label">// Topics covered</div>
-        <div class="af-topic"><div class="af-topic-dot"></div>Zero Trust architecture patterns</div>
-        <div class="af-topic"><div class="af-topic-dot"></div>Firewall and SSE integration</div>
-        <div class="af-topic"><div class="af-topic-dot"></div>SIEM and XSOAR orchestration</div>
-        <div class="af-topic"><div class="af-topic-dot"></div>Private API and ECS design</div>
-        <div class="af-topic"><div class="af-topic-dot"></div>Compliance control mapping</div>
+        <div class="af-topic"><div class="af-topic-dot"></div>AWS KMS vs CloudHSM decision framework</div>
+        <div class="af-topic"><div class="af-topic-dot"></div>FIPS 140-2 Level 2 vs Level 3 explained</div>
+        <div class="af-topic"><div class="af-topic-dot"></div>Key ceremony operational reality</div>
+        <div class="af-topic"><div class="af-topic-dot"></div>Latency and cost implications at scale</div>
+        <div class="af-topic"><div class="af-topic-dot"></div>When dedicated HSMs are genuinely justified</div>
       </div>
     </a>
   </div>
@@ -679,10 +679,26 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
         <button class="filter-btn" onclick="filterArticles('zerotrust', this)">Zero Trust</button>
         <button class="filter-btn" onclick="filterArticles('threat', this)">Threat Modelling</button>
       </div>
-      <div class="article-count" id="article-count">18 articles</div>
+      <div class="article-count" id="article-count">19 articles</div>
     </div>
 
     <div class="articles-grid" id="articles-grid">
+
+      <!-- Article 1: Cloud HSM -->
+      <a href="https://saleemyousaf.co.uk/articles/cloud-hsm/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag teal">Cloud Security</span>
+          <span class="ac-tag teal">AWS</span>
+          <span class="ac-tag teal">Key Management</span>
+        </div>
+        <div class="ac-title">Cloud HSM: What the Vendor Documentation Skips Over</div>
+        <div class="ac-excerpt">Three paths, one decision. The honest comparison of AWS KMS, CloudHSM custom key store, and CloudHSM direct, including the operational costs that never appear on the pricing page.</div>
+        <div class="ac-meta">
+          <span>16 June 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~12 min read</span>
+        </div>
+      </a>
 
       <!-- Article 2 -->
       <a href="https://saleemyousaf.co.uk/articles/broken-rag-vs-governed-rag/" class="article-card" data-cat="ai">
