@@ -20,6 +20,7 @@
     items: [
       { label: 'About',       href: 'https://saleemyousaf.co.uk/about/' },
       { label: 'Experience',  href: 'https://saleemyousaf.co.uk/experience/' },
+      { label: 'Capabilities', href: 'https://saleemyousaf.co.uk/capabilities/' },
       { label: 'Projects',    href: 'https://saleemyousaf.co.uk/projects/' },
       { label: 'Articles',    href: 'https://saleemyousaf.co.uk/articles/', dropdown: [
         { label: 'All Articles',                href: 'https://saleemyousaf.co.uk/articles/' },
