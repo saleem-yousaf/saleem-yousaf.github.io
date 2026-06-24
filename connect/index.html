@@ -355,7 +355,7 @@ h2 {
 
 .platforms-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
 }
 
@@ -386,8 +386,6 @@ h2 {
 .platform-icon.hashnode { background: var(--teal-dim);         color: var(--teal); }
 .platform-icon.devto    { background: var(--purple-dim);       color: var(--purple); }
 .platform-icon.cyber    { background: var(--amber-dim);        color: var(--amber); }
-.platform-icon.blogger  { background: rgba(255,88,0,0.10);    color: #fb923c; }
-.platform-icon.codepen  { background: rgba(255,255,255,0.06); color: var(--text); }
 
 .platform-name {
   font-family: var(--mono);
@@ -693,7 +691,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
         </div>
       </a>
 
-      <a href="https://www.cyberspartans.co.uk" target="_blank" rel="noopener" class="platform-card">
+      <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener" class="platform-card">
         <div class="platform-icon cyber">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
@@ -702,32 +700,6 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
         <div class="platform-body">Security awareness, governance discussions, cloud security initiatives, and enterprise resilience content through the Cyber Spartans community.</div>
         <div class="platform-link">
           cyberspartans.co.uk
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </div>
-      </a>
-
-      <a href="https://saleem-yousaf.blogspot.com/" target="_blank" rel="noopener" class="platform-card">
-        <div class="platform-icon blogger">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.976 24H2.026C.9 24 0 23.1 0 21.976V2.026C0 .9.9 0 2.026 0h19.95C23.1 0 24 .9 24 2.026v19.95C24 23.1 23.1 24 21.976 24zM7.078 5.75a1.328 1.328 0 000 2.656h4.282c.734 0 1.328.595 1.328 1.328v.047c0 .734.594 1.328 1.328 1.328h.938c2.344 0 4.235 1.875 4.235 4.22v1.594c0 2.344-1.891 4.219-4.235 4.219H9.046c-2.344 0-4.234-1.875-4.234-4.22v-7.97c0-1.562 1.266-2.812 2.828-2.812zm2.25 7.078H9.28a1.328 1.328 0 000 2.657h.047a1.328 1.328 0 000-2.657zm5.344 0h-.047a1.328 1.328 0 000 2.657h.047a1.328 1.328 0 000-2.657z"/></svg>
-        </div>
-        <div class="platform-name">Blogger</div>
-        <div class="platform-title">Security Architecture Blog</div>
-        <div class="platform-body">Insights on AI security, cloud governance, AWS and Azure security, threat modelling, and modern security design patterns. Actively published.</div>
-        <div class="platform-link">
-          saleem-yousaf.blogspot.com
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </div>
-      </a>
-
-      <a href="https://codepen.io/Saleem-Yousaf" target="_blank" rel="noopener" class="platform-card">
-        <div class="platform-icon codepen">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 8.182l-.018-.087-.017-.05c-.01-.024-.018-.05-.03-.075-.003-.018-.015-.034-.02-.05l-.035-.067-.03-.05-.044-.06-.046-.045-.06-.045-.046-.03-.06-.044-.044-.04-.015-.02L12.58.19c-.347-.232-.796-.232-1.142 0L.453 7.502l-.015.015-.044.035-.06.05-.038.04-.05.056-.037.045-.05.06c-.02.017-.03.03-.03.046l-.05.06-.02.06c-.02.01-.02.04-.03.07l-.01.05C0 8.12 0 8.15 0 8.18v7.497c0 .044.003.09.01.135l.01.046c.005.03.01.06.02.086l.015.05c.01.026.018.05.03.075l.016.05c.01.02.02.04.03.06l.016.04c.01.018.02.035.03.05l.03.04c.01.015.02.03.03.045l.04.04c.01.01.02.02.03.035l.05.04.01.01.06.04.046.03.06.04.044.03.01.003 11 7.133c.177.12.38.18.583.18s.406-.06.583-.18l11-7.133.015-.01.037-.03.056-.04.045-.03.06-.04.038-.03.06-.044.036-.04.03-.04.03-.046.03-.04.014-.04c.01-.016.02-.03.028-.05l.014-.05c.01-.02.015-.04.02-.07l.01-.05c.003-.04.006-.077.006-.117V8.18c0-.03-.003-.06-.006-.09l-.01-.047zm-11 12.08l-3.69-2.396 3.69-2.396 3.69 2.396-3.69 2.396zm-5-3.254L3.908 12l4.092-2.854V16.2zM6.31 10.07l-3.69-2.395 3.69-2.396 3.69 2.396-3.69 2.396zm2 1.107L12.09 8.98l3.78 2.196-3.78 2.196-3.78-2.196zm8.69-1.108l-3.69-2.395 3.69-2.396 3.69 2.396-3.69 2.396zm2 3.023V9.146L23.09 12l-4.09 3.092z"/></svg>
-        </div>
-        <div class="platform-name">CodePen</div>
-        <div class="platform-title">Interactive Demos &amp; Visualisations</div>
-        <div class="platform-body">Security architecture visualisations, interactive diagrams, and front-end demonstrations of cloud and security design patterns built in the open.</div>
-        <div class="platform-link">
-          codepen.io/Saleem-Yousaf
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </div>
       </a>
@@ -770,14 +742,12 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
         <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
         <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
         <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
-        <a href="https://saleem-yousaf.blogspot.com/" target="_blank" rel="noopener">Blogger</a>
-        <a href="https://codepen.io/Saleem-Yousaf" target="_blank" rel="noopener">CodePen</a>
-        <a href="https://www.cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+        <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
       </div>
     </div>
     <div class="footer-bottom">
       <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
-      <a href="https://www.saleemyousaf.co.uk/privacy-policy/" style="font-size:12px; color:var(--muted2); text-decoration:none;">Privacy Policy</a>
+      <a href="https://saleemyousaf.co.uk/privacy-policy/" style="font-size:12px; color:var(--muted2); text-decoration:none;">Privacy Policy</a>
     </div>
   </div>
 
