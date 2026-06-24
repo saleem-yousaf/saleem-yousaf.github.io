@@ -131,7 +131,45 @@
     @media (max-width: 720px) {
       .site-nav-injected .nav-links { display: none; }
     }
+
+    /* Back-to-top button */
+    .s-back-to-top { position: fixed; bottom: 24px; right: 24px; z-index: 90; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: #0f1318; color: #2dd4bf; border: 1px solid rgba(45,212,191,0.45); border-radius: 50%; cursor: pointer; opacity: 0; transform: translateY(10px); pointer-events: none; box-shadow: 0 6px 20px rgba(0,0,0,0.4); -webkit-tap-highlight-color: transparent; transition: opacity 0.25s ease, transform 0.25s ease, background 0.2s, border-color 0.2s; }
+    .s-back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .s-back-to-top:hover { background: #161b22; border-color: #2dd4bf; }
+    .s-back-to-top:focus-visible { outline: 2px solid #2dd4bf; outline-offset: 2px; }
+    .s-back-to-top svg { width: 18px; height: 18px; display: block; }
+    @media (max-width: 600px) { .s-back-to-top { bottom: 18px; right: 18px; width: 42px; height: 42px; } }
+    @media (prefers-reduced-motion: reduce) { .s-back-to-top, .s-back-to-top.visible { transform: none; transition: opacity 0.2s ease; } }
   `;
+
+  /* ============================================
+     Back-to-top button
+     ============================================ */
+  function injectBackToTop() {
+    if (document.getElementById('s-back-to-top')) return;
+    const btn = document.createElement('button');
+    btn.id = 's-back-to-top';
+    btn.className = 's-back-to-top';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Back to top');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+    document.body.appendChild(btn);
+
+    btn.addEventListener('click', function () {
+      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    });
+
+    let ticking = false;
+    function update() {
+      btn.classList.toggle('visible', window.pageYOffset > 400);
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    update();
+  }
 
   /* ============================================
      Boot
@@ -155,6 +193,8 @@
       wrapper.innerHTML = render();
       document.body.insertBefore(wrapper.firstElementChild, document.body.firstChild);
     }
+
+    injectBackToTop();
   }
 
   if (document.readyState === 'loading') {
