@@ -413,7 +413,7 @@ h2 {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.35s ease;
   position: relative;
   overflow: hidden;
 }
@@ -462,6 +462,47 @@ h2 {
 .cert-badge.aws   { background: var(--amber-dim); color: var(--amber); }
 .cert-badge.comp  { background: rgba(224,32,32,0.1); color: #f87171; }
 .cert-badge.ceh   { background: rgba(139,92,246,0.12); color: #a78bfa; }
+
+/* ── CERT CINEMATIC TOUCH (progressive enhancement, off without JS) ── */
+.certs-grid.js-reveal .cert-card { opacity: 0; }
+.certs-grid.js-reveal .cert-card.in { animation: certReveal 0.7s cubic-bezier(0.22,0.61,0.18,1) both; }
+.certs-grid.js-reveal .cert-card::before { transform: scaleX(0); transform-origin: left center; }
+.certs-grid.js-reveal .cert-card.in::before { animation: certBarDraw 0.75s cubic-bezier(0.22,0.61,0.18,1) both; }
+
+/* staggered cascade */
+.certs-grid.js-reveal .cert-card:nth-child(1).in,
+.certs-grid.js-reveal .cert-card:nth-child(1).in::before { animation-delay: 0.00s; }
+.certs-grid.js-reveal .cert-card:nth-child(2).in,
+.certs-grid.js-reveal .cert-card:nth-child(2).in::before { animation-delay: 0.08s; }
+.certs-grid.js-reveal .cert-card:nth-child(3).in,
+.certs-grid.js-reveal .cert-card:nth-child(3).in::before { animation-delay: 0.16s; }
+.certs-grid.js-reveal .cert-card:nth-child(4).in,
+.certs-grid.js-reveal .cert-card:nth-child(4).in::before { animation-delay: 0.10s; }
+.certs-grid.js-reveal .cert-card:nth-child(5).in,
+.certs-grid.js-reveal .cert-card:nth-child(5).in::before { animation-delay: 0.18s; }
+.certs-grid.js-reveal .cert-card:nth-child(6).in,
+.certs-grid.js-reveal .cert-card:nth-child(6).in::before { animation-delay: 0.26s; }
+
+.cert-card:hover { box-shadow: 0 14px 34px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(45,212,191,0.06); }
+.cert-card::before { transition: filter 0.3s ease; }
+.cert-card:hover::before { filter: brightness(1.5) saturate(1.15); }
+
+@keyframes certReveal {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes certBarDraw {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .certs-grid.js-reveal .cert-card,
+  .certs-grid.js-reveal .cert-card.in { animation: none; opacity: 1; transform: none; }
+  .certs-grid.js-reveal .cert-card::before,
+  .certs-grid.js-reveal .cert-card.in::before { animation: none; transform: scaleX(1); }
+  .cert-card:hover::before { filter: none; }
+}
 
 /* ── CTA STRIP ──────────────────────────────────────── */
 .cta-strip {
@@ -589,7 +630,7 @@ footer {
       <span class="eyebrow-text">Architecture &amp; Security Experience</span>
     </div>
     <h1>Built across the sectors<br>that <em>cannot afford to fail.</em></h1>
-    <p class="page-sub">20+ years of enterprise cloud and security architecture spanning UK government, Critical National Infrastructure, manufacturing, and regulated enterprise environments.</p>
+    <p class="page-sub">Enterprise cloud and security architecture across UK government, Critical National Infrastructure, manufacturing, and regulated enterprise environments.</p>
   </div>
 </div>
 
@@ -907,6 +948,7 @@ footer {
           Connect on LinkedIn
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
+        <a href="https://saleemyousaf.co.uk/capabilities/" class="btn-outline">View capabilities</a>
         <a href="https://saleemyousaf.co.uk/projects/" class="btn-outline">View projects</a>
       </div>
     </div>
@@ -955,6 +997,20 @@ function showPanel(id) {
   document.getElementById('panel-' + id).classList.add('active');
   event.currentTarget.classList.add('active');
 }
+
+/* Cert cards: subtle staggered reveal on scroll (progressive enhancement) */
+(function () {
+  var grid = document.querySelector('.certs-grid');
+  if (!grid || !('IntersectionObserver' in window)) return;
+  grid.classList.add('js-reveal');
+  var cards = grid.querySelectorAll('.cert-card');
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.2, rootMargin: '0px 0px -10% 0px' });
+  cards.forEach(function (c) { io.observe(c); });
+})();
 </script>
 
 
