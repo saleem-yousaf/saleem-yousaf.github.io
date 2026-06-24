@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capabilities &amp; Impact | Saleem Yousaf</title>
+<meta name="description" content="Saleem Yousaf's security architecture capabilities and measurable outcomes across identity, threat detection, cloud governance, and continuous validation for UK government, Critical National Infrastructure, and regulated enterprise.">
+<meta name="author" content="Saleem Yousaf">
+<link rel="canonical" href="https://saleemyousaf.co.uk/capabilities/">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://saleemyousaf.co.uk/capabilities/">
+<meta property="og:title" content="Capabilities &amp; Impact | Saleem Yousaf">
+<meta property="og:description" content="Security architecture by capability: the controls designed, the risk removed, and the measurable outcomes across UK government, CNI, and regulated enterprise.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Capabilities &amp; Impact | Saleem Yousaf">
+<meta name="twitter:description" content="Security architecture by capability: identity, detection, cloud governance, and continuous validation across UK government, CNI, and enterprise.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Saleem Yousaf",
+  "url": "https://saleemyousaf.co.uk/",
+  "jobTitle": "Cloud & Cyber Security Architect",
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Cyber Spartans",
+    "url": "https://cyberspartans.co.uk"
+  },
+  "knowsAbout": [
+    "Cloud Security Architecture",
+    "Zero Trust",
+    "Identity and Access Management",
+    "Threat Detection",
+    "Breach and Attack Simulation",
+    "STRIDE Threat Modelling",
+    "MITRE ATT&CK",
+    "AWS Security",
+    "Azure Security",
+    "OT Security",
+    "AI Security Governance"
+  ],
+  "sameAs": [
+    "https://www.linkedin.com/in/saleemyousaf",
+    "https://github.com/saleem-yousaf",
+    "https://saleemyousaf.medium.com/",
+    "https://hashnode.com/@saleemyousaf",
+    "https://dev.to/saleem_yousaf",
+    "https://cyberspartans.co.uk/saleemyousaf",
+    "https://about.me/saleemyousaf"
+  ]
+}
+</script>
+
+<style>
+/* ── TOKENS ─────────────────────────────────────────── */
+:root {
+  --bg:         #090c10;
+  --bg2:        #0f1318;
+  --bg3:        #161b22;
+  --border:     rgba(255,255,255,0.07);
+  --border2:    rgba(255,255,255,0.12);
+  --text:       #e6eaf0;
+  --muted:      #7a8694;
+  --muted2:     #4a5568;
+  --teal:       #2dd4bf;
+  --teal-dim:   rgba(45,212,191,0.12);
+  --amber:      #f59e0b;
+  --amber-dim:  rgba(245,158,11,0.1);
+  --mono:       'DM Mono', monospace;
+  --display:    'Syne', sans-serif;
+  --body:       'Inter', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(45,212,191,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45,212,191,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── LAYOUT ─────────────────────────────────────────── */
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+section { position: relative; z-index: 1; }
+
+/* ── NAV (shared, rendered by /nav.js) ──────────────── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(9,12,16,0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+.nav-logo span { color: var(--teal); }
+.nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+.nav-links a {
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a.active { color: var(--teal); }
+.nav-dropdown { position: relative; }
+.nav-dropdown-toggle {
+  font-size: 13px; color: var(--muted); background: none; border: none;
+  cursor: pointer; letter-spacing: 0.03em; display: flex; align-items: center; gap: 5px;
+  font-family: var(--body); padding: 0; transition: color 0.2s;
+}
+.nav-dropdown-toggle:hover { color: var(--teal); }
+.nav-dropdown:hover .nav-dropdown-toggle { color: var(--teal); }
+.nav-dropdown-toggle svg { transition: transform 0.2s; }
+.nav-dropdown:hover .nav-dropdown-toggle svg { transform: rotate(180deg); }
+.nav-dropdown-menu {
+  position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  padding-top: 12px; opacity: 0; pointer-events: none;
+  transition: opacity 0.15s; z-index: 200;
+}
+.nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: all; }
+.nav-dropdown-menu-inner {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+  padding: 8px; min-width: 220px;
+}
+.nav-dropdown-menu a {
+  display: block; padding: 9px 14px; font-size: 13px; color: var(--muted);
+  text-decoration: none; border-radius: 5px; transition: background 0.15s, color 0.15s; white-space: nowrap;
+}
+.nav-dropdown-menu a:hover { background: var(--bg3); color: var(--text); }
+.nav-dropdown-menu a.active { color: var(--teal); }
+.nav-cta {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--teal) !important;
+  border: 1px solid rgba(45,212,191,0.3);
+  padding: 6px 16px;
+  border-radius: 4px;
+  transition: background 0.2s, border-color 0.2s !important;
+}
+.nav-cta:hover { background: var(--teal-dim); border-color: var(--teal) !important; }
+
+/* ── PAGE HEADER ────────────────────────────────────── */
+.page-header {
+  padding: 140px 0 80px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+.page-header-glow {
+  position: absolute;
+  top: -150px; right: -150px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(45,212,191,0.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+.eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.eyebrow-line { width: 24px; height: 1px; background: var(--teal); }
+.eyebrow-text {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--teal);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+h1 {
+  font-family: var(--display);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 20px;
+}
+h1 em { font-style: normal; color: var(--teal); }
+.page-sub {
+  font-size: 17px;
+  color: var(--muted);
+  max-width: 680px;
+  line-height: 1.7;
+}
+
+/* ── SECTION SHARED ─────────────────────────────────── */
+.section-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.section-eyebrow-line { width: 24px; height: 1px; background: var(--teal); }
+.section-eyebrow-text {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--teal);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+h2 {
+  font-family: var(--display);
+  font-size: clamp(24px, 2.8vw, 36px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 14px;
+}
+.section-sub {
+  font-size: 16px;
+  color: var(--muted);
+  max-width: 640px;
+  line-height: 1.7;
+  margin-bottom: 40px;
+}
+
+/* ── CAPABILITY THEMES ──────────────────────────────── */
+.cap-themes { padding: 80px 0 40px; }
+.cap-theme { margin-bottom: 64px; }
+.cap-theme:last-child { margin-bottom: 0; }
+
+.cap-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+.cap-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px;
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  transition: border-color 0.2s, background 0.2s;
+}
+.cap-card:hover { border-color: var(--border2); background: var(--bg3); }
+
+.cap-value {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--teal);
+  background: var(--teal-dim);
+  border: 1px solid rgba(45,212,191,0.25);
+  padding: 8px 12px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  min-width: 104px;
+  max-width: 104px;
+  text-align: center;
+  line-height: 1.35;
+}
+.cap-value.soft {
+  color: var(--amber);
+  background: var(--amber-dim);
+  border-color: rgba(245,158,11,0.25);
+}
+
+.cap-body { flex: 1; }
+.cap-text { font-size: 14px; color: var(--text); line-height: 1.6; }
+.cap-tag {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted2);
+}
+
+/* ── CTA STRIP ──────────────────────────────────────── */
+.cta-strip {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 80px 0;
+}
+.cta-inner { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
+.cta-heading {
+  font-family: var(--display);
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10px;
+}
+.cta-sub { font-size: 15px; color: var(--muted); line-height: 1.6; }
+.cta-actions { display: flex; gap: 12px; flex-shrink: 0; align-items: center; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--teal); color: #090c10;
+  font-family: var(--body); font-size: 14px; font-weight: 600;
+  padding: 12px 24px; border-radius: 4px; text-decoration: none;
+  letter-spacing: 0.02em; transition: opacity 0.2s, transform 0.15s;
+}
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid var(--border2); color: var(--muted);
+  font-size: 14px; padding: 11px 24px; border-radius: 4px;
+  text-decoration: none; transition: border-color 0.2s, color 0.2s;
+}
+.btn-outline:hover { border-color: var(--teal); color: var(--teal); }
+
+/* ── FOOTER ─────────────────────────────────────────── */
+footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
+.footer-inner { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
+.footer-logo { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.footer-logo span { color: var(--teal); }
+.footer-desc { font-size: 13px; color: var(--muted); max-width: 380px; line-height: 1.6; }
+.footer-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--teal); }
+.footer-bottom { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.footer-copy { font-size: 12px; color: var(--muted2); }
+
+/* ── ANIMATIONS ─────────────────────────────────────── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.page-header > .wrap > * { animation: fadeUp 0.55s ease both; }
+.page-header > .wrap > *:nth-child(1) { animation-delay: 0.05s; }
+.page-header > .wrap > *:nth-child(2) { animation-delay: 0.15s; }
+.page-header > .wrap > *:nth-child(3) { animation-delay: 0.25s; }
+
+/* ── RESPONSIVE ─────────────────────────────────────── */
+@media (max-width: 900px) {
+  .cap-grid { grid-template-columns: 1fr; }
+  .cta-inner { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .wrap { padding: 0 20px; }
+  .nav-links { display: none; }
+  .cap-card { flex-direction: column; gap: 12px; }
+  .cap-value { min-width: 0; max-width: none; align-self: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══════════════════════════════════════════ -->
+<!-- Shared nav: rendered by /nav.js. Edit NAV_CONFIG in nav.js to change site-wide. -->
+<div id="site-nav"></div>
+
+<!-- ═══ PAGE HEADER ════════════════════════════════════ -->
+<div class="page-header">
+  <div class="page-header-glow"></div>
+  <div class="wrap">
+    <div class="eyebrow">
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">Capabilities &amp; Measurable Impact</span>
+    </div>
+    <h1>What the architecture<br><em>actually delivered.</em></h1>
+    <p class="page-sub">A view of the work by capability rather than by employer: the controls designed, the risk taken off the table, and the outcomes that can be pointed at. Drawn from engagements across UK government, Critical National Infrastructure, manufacturing, and regulated enterprise.</p>
+  </div>
+</div>
+
+<!-- ═══ CAPABILITY THEMES ══════════════════════════════ -->
+<section class="cap-themes">
+  <div class="wrap">
+
+    <!-- ── Identity & Access ── -->
+    <div class="cap-theme">
+      <div class="section-eyebrow">
+        <div class="section-eyebrow-line"></div>
+        <span class="section-eyebrow-text">01 · Identity &amp; Access</span>
+      </div>
+      <h2>Identity as the control plane.</h2>
+      <p class="section-sub">Treating identity as the primary security boundary, so access is decided on explicit, auditable signals rather than assumed network trust.</p>
+
+      <div class="cap-grid">
+        <div class="cap-card">
+          <div class="cap-value">80%</div>
+          <div class="cap-body">
+            <div class="cap-text">High-risk sign-ins fell by 80% in a government tenant once Entra ID Protection, Conditional Access, and Defender XDR identity signals were wired to work together rather than in isolation.</div>
+            <span class="cap-tag">Government</span>
+          </div>
+        </div>
+        <div class="cap-card">
+          <div class="cap-value">OAuth OIDC mTLS</div>
+          <div class="cap-body">
+            <div class="cap-text">Replaced implicit trust between internal services with explicit, auditable authentication across a government application estate, using OAuth, OIDC, and mTLS in place of standing assumptions.</div>
+            <span class="cap-tag">Government</span>
+          </div>
+        </div>
+        <div class="cap-card">
+          <div class="cap-value">Device Trust</div>
+          <div class="cap-body">
+            <div class="cap-text">Built conditional access strategies that tie each access decision to device and workload posture, moving the boundary off the network perimeter and onto the identity itself.</div>
+            <span class="cap-tag">Enterprise</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Detection & Response ── -->
+    <div class="cap-theme">
+      <div class="section-eyebrow">
+        <div class="section-eyebrow-line"></div>
+        <span class="section-eyebrow-text">02 · Detection &amp; Response</span>
+      </div>
+      <h2>Seeing the attack sooner.</h2>
+      <p class="section-sub">Rebuilding detection so coverage maps to real adversary behaviour, and the gap between compromise and discovery keeps shrinking.</p>
+
+      <div class="cap-grid">
+        <div class="cap-card">
+          <div class="cap-value">Months to weeks</div>
+          <div class="cap-body">
+            <div class="cap-text">Mean time to detect dropped from months to weeks across a government environment after Defender XDR and Sentinel were brought into the SOC and tuned against real signal.</div>
+            <span class="cap-tag">Government</span>
+          </div>
+        </div>
+        <div class="cap-card">
+          <div class="cap-value">80%</div>
+          <div class="cap-body">
+            <div class="cap-text">Detection visibility improved by 80% across Azure, AWS, and GCP by rebuilding the Sentinel analytics rules from the ground up and aligning coverage to MITRE ATT&amp;CK rather than to vendor defaults.</div>
+            <span class="cap-tag">Financial Services</span>
+          </div>
+        </div>
+        <div class="cap-card">
+          <div class="cap-value">70%</div>
+          <div class="cap-body">
+            <div class="cap-text">Security incident exposure reduced by 70% across a Critical National Infrastructure enterprise after introducing zero-trust controls and tightening the underlying security architecture.</div>
+            <span class="cap-tag">CNI</span>
+          </div>
+        </div>
+        <div class="cap-card">
+          <div class="cap-value">AI for SecOps</div>
+          <div class="cap-body">
+            <div class="cap-text">Hands-on with AI inside the security stack in production: Copilot for Security running in Sentinel, and Copilot configured for GitHub, used to speed triage and review rather than as a demo.</div>
+            <span class="cap-tag">AI Security</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Cloud Architecture & Governance ── -->
+    <div class="cap-theme">
+      <div class="section-eyebrow">
+        <div class="section-eyebrow-line"></div>
+        <span class="section-eyebrow-text">03 · Cloud Architecture &amp; Governance</span>
+      </div>
+      <h2>Platforms that stay governed at scale.</h2>
+      <p class="section-sub">Designing cloud estates and the guardrails around them, so growth does not quietly outrun the controls.</p>
+
+      <div class="cap-grid">
+        <div class="cap-card">
+          <div class="cap-value">20+ accounts</div>
+          <div class="cap-body">
+            <div class="cap-text">Stood up AWS account governance from scratch for a government platform: VPC design, IAM service control policies, KMS in production, Control Tower guardrails, and four native security services running together (GuardDuty, Security Hub, Inspector, Macie).</div>
+            <span class="cap-tag">Government</span>
+          </div>
+        </div>
+        <div class="cap-card">
+          <div class="cap-value">50 to 100</div>
+          <div class="cap-body">
+            <div class="cap-text">Migrated 50 to 100 workloads off an on-premise datacentre into Azure, then closed the datacentre on schedule with no programme management structure above the architecture role to lean on.</div>
+            <span class="cap-tag">Government</span>
+          </div>
+        </div>
+        <div class="cap-card">
+          <div class="cap-value">20+ pipelines</div>
+          <div class="cap-body">
+            <div class="cap-text">Brought more than 20 CI/CD pipelines under one governance framework across Azure DevOps and GitHub, with security gates and policy-as-code so the controls travel with the deployment.</div>
+            <span class="cap-tag">Enterprise</span>
+          </div>
+        </div>
+        <div class="cap-card">
+          <div class="cap-value">80%</div>
+          <div class="cap-body">
+            <div class="cap-text">Shadow IT exposure cut by 80% at a global manufacturer through governed provisioning and controlled third-party access, replacing unmanaged tooling with sanctioned routes.</div>
+            <span class="cap-tag">Manufacturing</span>
+          </div>
+        </div>
+        <div class="cap-card">
+          <div class="cap-value">50 to 100 rules</div>
+          <div class="cap-body">
+            <div class="cap-text">Remediated 50 to 100 redundant, shadowed, and non-compliant firewall rules through AlgoSec across a global estate, taking out the cruft that hides real exposure.</div>
+            <span class="cap-tag">Financial Services</span>
+          </div>
+        </div>
+        <div class="cap-card">
+          <div class="cap-value soft">Within target</div>
+          <div class="cap-body">
+            <div class="cap-text">Brought cloud spend back inside programme targets through structured cost governance: tagging discipline, budgets, right-sizing, and reserved instances, rather than blanket cuts.</div>
+            <span class="cap-tag">FinOps</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Validation & Assurance ── -->
+    <div class="cap-theme">
+      <div class="section-eyebrow">
+        <div class="section-eyebrow-line"></div>
+        <span class="section-eyebrow-text">04 · Validation &amp; Assurance</span>
+      </div>
+      <h2>Proving the controls hold.</h2>
+      <p class="section-sub">Continuous validation and threat modelling embedded into how teams work, so assurance is something the organisation does for itself rather than waits to be told.</p>
+
+      <div class="cap-grid">
+        <div class="cap-card">
+          <div class="cap-value">6 months</div>
+          <div class="cap-body">
+            <div class="cap-text">STRIDE threat modelling went from years of stalled attempts to teams self-serving it within six months of a practical reintroduction, the point where it stopped being a security activity and became theirs.</div>
+            <span class="cap-tag">Government</span>
+          </div>
+        </div>
+        <div class="cap-card">
+          <div class="cap-value">50+ payloads</div>
+          <div class="cap-body">
+            <div class="cap-text">Ran more than 50 simulated attack payloads through Cymulate Breach and Attack Simulation as continuous control validation, treating it as a standing health check rather than a one-off test.</div>
+            <span class="cap-tag">BAS</span>
+          </div>
+        </div>
+        <div class="cap-card">
+          <div class="cap-value">Adopted</div>
+          <div class="cap-body">
+            <div class="cap-text">After a proof of concept proved its worth, the red team folded Cymulate into their permanent assurance toolbox and DevOps teams began self-validating deployments without waiting on an external review.</div>
+            <span class="cap-tag">Enterprise</span>
+          </div>
+        </div>
+        <div class="cap-card">
+          <div class="cap-value">$500K</div>
+          <div class="cap-body">
+            <div class="cap-text">Produced a costed security improvement backlog worth around $500K from ten stakeholder workshops, with an actionable design attached to every item so it could be picked up and built, not just logged.</div>
+            <span class="cap-tag">Financial Services</span>
+          </div>
+        </div>
+        <div class="cap-card">
+          <div class="cap-value">Architecture board</div>
+          <div class="cap-body">
+            <div class="cap-text">Chaired an enterprise architecture board aligned to SABSA, and led the project design gates so work had to meet the security architecture standard before it could progress.</div>
+            <span class="cap-tag">CNI · Government</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ CTA STRIP ═════════════════════════════════════ -->
+<div class="cta-strip">
+  <div class="wrap">
+    <div class="cta-inner">
+      <div>
+        <div class="cta-heading">Want the detail behind any of these?</div>
+        <div class="cta-sub">Happy to talk through the architecture, the trade-offs, and what did not work first time. Cloud security, Zero Trust, AI governance, or enterprise security strategy.</div>
+      </div>
+      <div class="cta-actions">
+        <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener" class="btn-primary">
+          Connect on LinkedIn
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+        <a href="https://saleemyousaf.co.uk/experience/" class="btn-outline">View experience</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ════════════════════════════════════════ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Saleem <span>Yousaf</span></div>
+        <div class="footer-desc">Cloud &amp; Cyber Security Architect · AWS · Azure · Zero Trust · AI Governance · OT Security · Enterprise Architecture</div>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+        <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+        <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
+        <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
+      <a href="https://saleemyousaf.co.uk/privacy-policy/" style="font-size:12px; color:var(--muted2); text-decoration:none;">Privacy Policy</a>
+    </div>
+  </div>
+
+<!-- Cross-property links (static HTML, mirrors nav for crawlers and no-JS visitors) -->
+<div style="max-width:1100px;margin:0 auto;padding:24px 32px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;border-top:1px solid rgba(255,255,255,0.07);">
+  <a href="https://breachforge.co.uk" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:4px;text-decoration:none;letter-spacing:0.04em;font-weight:500;background:rgba(230,57,70,0.12);color:#e63946;border:1px solid rgba(230,57,70,0.25);">
+    &#x2B61; breachforge.co.uk
+  </a>
+  <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:4px;text-decoration:none;letter-spacing:0.04em;font-weight:500;background:rgba(0,217,255,0.12);color:#00d9ff;border:1px solid rgba(0,217,255,0.25);">
+    &#x2B22; cyberspartans.co.uk
+  </a>
+</div>
+
+</footer>
+
+<script src="/nav.js" defer></script>
+</body>
+</html>
