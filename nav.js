@@ -120,10 +120,10 @@
     .site-nav-injected .nav-dropdown-menu a:hover { background: #161b22; color: #e6eaf0; }
 
     .site-nav-injected .nav-ext { display: inline-flex !important; align-items: center; gap: 4px; font-size: 12px !important; padding: 4px 10px !important; border-radius: 3px; transition: background 0.2s, color 0.2s !important; }
-    .site-nav-injected .nav-ext.bf { color: #e63946 !important; }
-    .site-nav-injected .nav-ext.bf:hover { background: rgba(230,57,70,0.12); }
-    .site-nav-injected .nav-ext.cs { color: #00d9ff !important; }
-    .site-nav-injected .nav-ext.cs:hover { background: rgba(0,217,255,0.12); }
+    .site-nav-injected .nav-ext.bf { color: #00d4ff !important; }
+    .site-nav-injected .nav-ext.bf:hover { background: rgba(0,212,255,0.12); }
+    .site-nav-injected .nav-ext.cs { color: #2f9e6f !important; }
+    .site-nav-injected .nav-ext.cs:hover { background: rgba(47,158,111,0.12); }
     .site-nav-injected .nav-ext-arrow { font-size: 10px; opacity: 0.7; }
 
     .site-nav-injected .nav-cta { font-size: 13px !important; font-weight: 500; color: #2dd4bf !important; border: 1px solid rgba(45,212,191,0.3); padding: 6px 16px !important; border-radius: 4px; }
