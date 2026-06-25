@@ -192,9 +192,9 @@ nav {
 .nav-ext.cs:hover { background: var(--cyan-dim); }
 .nav-ext-arrow { font-size: 10px; opacity: 0.7; }
 
-.hero { min-height: 88vh; display: flex; align-items: center; padding-top: 60px; position: relative; z-index: 0; }
+.hero { min-height: auto; display: flex; align-items: center; padding: 100px 0 0; position: relative; z-index: 0; }
 .hero-glow { position: absolute; top: -200px; right: -200px; width: 700px; height: 700px; background: radial-gradient(circle, rgba(45,212,191,0.07) 0%, transparent 65%); pointer-events: none; }
-.hero-content { display: grid; grid-template-columns: 1fr 380px; gap: 80px; align-items: center; padding: 60px 0; position: relative; z-index: 1; }
+.hero-content { display: grid; grid-template-columns: 1fr 380px; gap: 80px; align-items: center; padding: 60px 0 16px; position: relative; z-index: 1; }
 
 .hero-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
 .hero-eyebrow-line { width: 32px; height: 1px; background: var(--teal); }
@@ -223,7 +223,7 @@ h1 em { font-style: normal; color: var(--teal); }
 
 .hero-sub { font-size: 17px; line-height: 1.7; color: var(--muted); max-width: 540px; margin-bottom: 36px; }
 
-.hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.hero-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
 .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #090c10; font-size: 14px; font-weight: 600; padding: 12px 22px; border-radius: 4px; text-decoration: none; letter-spacing: 0.02em; transition: opacity 0.2s; }
 .btn-primary:hover { opacity: 0.9; }
 .btn-secondary { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 14px; text-decoration: none; }
@@ -252,7 +252,7 @@ h2 { font-family: var(--display); font-size: clamp(26px, 3vw, 38px); font-weight
 .section-sub { font-size: 16px; color: var(--muted); max-width: 560px; line-height: 1.7; margin-bottom: 48px; }
 
 /* EXPERTISE */
-.expertise { padding: 100px 0; }
+.expertise { padding: 60px 0 32px; }
 .expertise-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
 .exp-card { background: var(--bg2); padding: 32px 28px; transition: background 0.2s; }
 .exp-card:hover { background: var(--bg3); }
@@ -342,20 +342,34 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
 .hero-card .ztc-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%, rgba(9,12,16,0.82) 0%, rgba(9,12,16,0.48) 55%, rgba(9,12,16,0.04) 100%);}
 .hero-card .hcard-inner{position:relative;z-index:2;}
 /* Contained properties (Option A) */
-.sy-props{padding:90px 0;}
+.sy-props{padding:8px 0 48px;}
 .sy-props-h{font-family:var(--display);font-size:30px;font-weight:800;letter-spacing:-0.5px;color:#fff;margin-bottom:10px;}
-.sy-props-sub{font-size:15px;color:var(--muted);line-height:1.6;margin-bottom:30px;max-width:560px;}
-.pa-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:840px;}
-.pa-card{display:flex;flex-direction:column;gap:10px;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;text-decoration:none;color:inherit;transition:border-color .2s,transform .2s,background .2s;}
+.sy-props-sub{font-size:15px;color:var(--muted);line-height:1.6;margin-bottom:14px;max-width:560px;}
+.pa-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:680px;}
+.pa-card{display:flex;flex-direction:column;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;text-decoration:none;color:inherit;transition:border-color .2s,transform .2s,background .2s;}
 .pa-card:hover{border-color:var(--teal);transform:translateY(-3px);background:var(--bg3);}
 .pa-top{display:flex;align-items:center;justify-content:space-between;}
-.pa-mono{width:38px;height:38px;border-radius:9px;background:var(--teal-dim);border:1px solid rgba(45,212,191,0.25);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:15px;color:var(--teal);}
+.pa-mono{width:32px;height:32px;border-radius:7px;background:var(--teal-dim);border:1px solid rgba(45,212,191,0.25);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:13px;color:var(--teal);}
 .pa-tag{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);background:var(--teal-dim);border:1px solid rgba(45,212,191,0.25);padding:3px 8px;border-radius:4px;}
-.pa-name{font-family:var(--display);font-weight:800;font-size:19px;color:#fff;letter-spacing:-0.3px;}
+.pa-name{font-family:var(--display);font-weight:700;font-size:15px;color:#fff;letter-spacing:-0.2px;}
 .pa-dom{font-family:var(--mono);font-size:11px;color:var(--muted);}
 .pa-desc{font-size:13px;color:var(--muted);line-height:1.55;flex:1;}
 .pa-cta{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--teal);margin-top:2px;}
 @media(max-width:720px){.pa-grid{grid-template-columns:1fr;}}
+
+/* CyberSpartans card: emerald green */
+.pa-card.cs-card .pa-mono{background:rgba(47,158,111,0.12);border-color:rgba(47,158,111,0.3);color:#2f9e6f;}
+.pa-card.cs-card .pa-tag{color:#2f9e6f;background:rgba(47,158,111,0.12);border-color:rgba(47,158,111,0.25);}
+.pa-card.cs-card:hover{border-color:rgba(47,158,111,0.45);}
+/* BreachForge card: electric cyan */
+.pa-card.bf-card .pa-mono{background:rgba(0,212,255,0.1);border-color:rgba(0,212,255,0.25);color:#00d4ff;}
+.pa-card.bf-card .pa-tag{color:#00d4ff;background:rgba(0,212,255,0.1);border-color:rgba(0,212,255,0.2);}
+.pa-card.bf-card:hover{border-color:rgba(0,212,255,0.4);}
+/* Footer property links */
+.footer-prop-link.cs{background:rgba(47,158,111,0.1);color:#2f9e6f;border:1px solid rgba(47,158,111,0.25);}
+.footer-prop-link.cs:hover{background:rgba(47,158,111,0.18);}
+.footer-prop-link.bf{background:rgba(0,212,255,0.1);color:#00d4ff;border:1px solid rgba(0,212,255,0.25);}
+.footer-prop-link.bf:hover{background:rgba(0,212,255,0.18);}
 </style>
 </head>
 <body>
@@ -410,13 +424,13 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
     <h2 class="sy-props-h">Two properties, one operator.</h2>
     <p class="sy-props-sub">Alongside the consulting, I build and run two things of my own.</p>
     <div class="pa-grid">
-      <a href="https://breachforge.co.uk" class="pa-card" target="_blank" rel="noopener">
+      <a href="https://breachforge.co.uk" class="pa-card bf-card" target="_blank" rel="noopener">
         <div class="pa-top"><div class="pa-mono">BF</div><span class="pa-tag">Live</span></div>
         <div><div class="pa-name">BreachForge</div><div class="pa-dom">breachforge.co.uk</div></div>
         <p class="pa-desc">Breach and attack simulation platform I built and maintain, mapped to MITRE ATT&amp;CK. Tests your defences continuously and shows what works and what doesn't.</p>
         <span class="pa-cta">Visit BreachForge &#8594;</span>
       </a>
-      <a href="https://cyberspartans.co.uk" class="pa-card" target="_blank" rel="noopener">
+      <a href="https://cyberspartans.co.uk" class="pa-card cs-card" target="_blank" rel="noopener">
         <div class="pa-top"><div class="pa-mono">CS</div><span class="pa-tag">Consultancy</span></div>
         <div><div class="pa-name">Cyber Spartans</div><div class="pa-dom">cyberspartans.co.uk</div></div>
         <p class="pa-desc">My cybersecurity and cloud consultancy. Security validation, vulnerability management, cloud audits and FinOps. Director and lead architect.</p>
