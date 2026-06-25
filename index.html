@@ -242,84 +242,6 @@ h1 em { font-style: normal; color: var(--teal); }
 /* =========================================
    NEW: PROPERTIES STRIP (the cross-links)
    ========================================= */
-.properties-strip {
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  padding: 0;
-}
-.props-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-.prop-card {
-  padding: 36px 32px;
-  border-right: 1px solid var(--border);
-  text-decoration: none;
-  color: inherit;
-  transition: background 0.2s;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  position: relative;
-}
-.prop-card:last-child { border-right: none; }
-.prop-card:hover { background: var(--bg3); }
-
-.prop-card-eyebrow {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-.prop-card.bf .prop-card-eyebrow { color: var(--red); }
-.prop-card.cs .prop-card-eyebrow { color: var(--cyan); }
-
-.prop-card-title {
-  font-family: var(--display);
-  font-size: 24px;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: -0.5px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.prop-card-domain {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--muted);
-}
-.prop-card-desc {
-  font-size: 14px;
-  color: var(--muted);
-  line-height: 1.6;
-  flex: 1;
-}
-.prop-card-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  margin-top: 6px;
-}
-.prop-card.bf .prop-card-cta { color: var(--red); }
-.prop-card.cs .prop-card-cta { color: var(--cyan); }
-
-.prop-card-tag {
-  display: inline-block;
-  font-family: var(--mono);
-  font-size: 10px;
-  padding: 3px 8px;
-  border-radius: 3px;
-  letter-spacing: 0.06em;
-  margin-left: 8px;
-}
-.prop-card.bf .prop-card-tag { background: var(--red-dim); color: var(--red); }
-.prop-card.cs .prop-card-tag { background: var(--cyan-dim); color: var(--cyan); }
 
 /* SECTION BASE */
 section { position: relative; z-index: 1; }
@@ -403,9 +325,6 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
 
 @media (max-width: 900px) {
   .hero-content { grid-template-columns: 1fr; gap: 40px; }
-  .props-grid { grid-template-columns: 1fr; }
-  .prop-card { border-right: none; border-bottom: 1px solid var(--border); }
-  .prop-card:last-child { border-bottom: none; }
   .expertise-grid { grid-template-columns: 1fr 1fr; }
   .clients-grid { grid-template-columns: 1fr; }
   .cta-inner { grid-template-columns: 1fr; }
@@ -417,6 +336,26 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
   .expertise-grid { grid-template-columns: 1fr; }
   h1 { font-size: 32px; }
 }
+
+/* Zero Trust Core hero backdrop */
+.hero-card .ztc{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
+.hero-card .ztc-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%, rgba(9,12,16,0.82) 0%, rgba(9,12,16,0.48) 55%, rgba(9,12,16,0.04) 100%);}
+.hero-card .hcard-inner{position:relative;z-index:2;}
+/* Contained properties (Option A) */
+.sy-props{padding:90px 0;}
+.sy-props-h{font-family:var(--display);font-size:30px;font-weight:800;letter-spacing:-0.5px;color:#fff;margin-bottom:10px;}
+.sy-props-sub{font-size:15px;color:var(--muted);line-height:1.6;margin-bottom:30px;max-width:560px;}
+.pa-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:840px;}
+.pa-card{display:flex;flex-direction:column;gap:10px;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;text-decoration:none;color:inherit;transition:border-color .2s,transform .2s,background .2s;}
+.pa-card:hover{border-color:var(--teal);transform:translateY(-3px);background:var(--bg3);}
+.pa-top{display:flex;align-items:center;justify-content:space-between;}
+.pa-mono{width:38px;height:38px;border-radius:9px;background:var(--teal-dim);border:1px solid rgba(45,212,191,0.25);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:15px;color:var(--teal);}
+.pa-tag{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);background:var(--teal-dim);border:1px solid rgba(45,212,191,0.25);padding:3px 8px;border-radius:4px;}
+.pa-name{font-family:var(--display);font-weight:800;font-size:19px;color:#fff;letter-spacing:-0.3px;}
+.pa-dom{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.pa-desc{font-size:13px;color:var(--muted);line-height:1.55;flex:1;}
+.pa-cta{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--teal);margin-top:2px;}
+@media(max-width:720px){.pa-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -452,47 +391,40 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
         </div>
       </div>
       <div class="hero-card">
-        <div class="hcard-label">// snapshot</div>
-        <div class="hcard-stat"><div class="hcard-num">UK<span></span></div><div class="hcard-desc">Government, CNI &amp; global enterprise experience</div></div>
-        <div class="hcard-stat"><div class="hcard-num">2</div><div class="hcard-desc">Active properties: BreachForge &amp; Cyber Spartans</div></div>
-        <div class="hcard-stat"><div class="hcard-num">19<span>+</span></div><div class="hcard-desc">Published technical articles</div></div>
+        <canvas class="ztc" id="ztc" aria-hidden="true"></canvas>
+        <div class="ztc-scrim"></div>
+        <div class="hcard-inner">
+          <div class="hcard-label">// snapshot</div>
+          <div class="hcard-stat"><div class="hcard-num">UK<span></span></div><div class="hcard-desc">Government, CNI &amp; global enterprise experience</div></div>
+          <div class="hcard-stat"><div class="hcard-num">2</div><div class="hcard-desc">Active properties: BreachForge &amp; Cyber Spartans</div></div>
+          <div class="hcard-stat"><div class="hcard-num">19<span>+</span></div><div class="hcard-desc">Published technical articles</div></div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- =========================================
-     NEW: PROPERTIES STRIP (the cross-link)
-     ========================================= -->
-<div class="properties-strip">
-  <div class="props-grid">
-    <a href="https://breachforge.co.uk" class="prop-card bf" target="_blank" rel="noopener">
-      <span class="prop-card-eyebrow">// My platform</span>
-      <div class="prop-card-title">
-        BreachForge
-        <span class="prop-card-tag">LIVE</span>
-      </div>
-      <div class="prop-card-domain">breachforge.co.uk</div>
-      <p class="prop-card-desc">
-        Breach and Attack Simulation platform I built and maintain. Maps adversary techniques to MITRE ATT&amp;CK, tests your defences continuously, and shows you what works and what doesn't. Live at breachforge.co.uk.
-      </p>
-      <span class="prop-card-cta">Visit BreachForge →</span>
-    </a>
-
-    <a href="https://cyberspartans.co.uk" class="prop-card cs" target="_blank" rel="noopener">
-      <span class="prop-card-eyebrow">// My consultancy</span>
-      <div class="prop-card-title">
-        Cyber Spartans
-        <span class="prop-card-tag">CONSULTANCY</span>
-      </div>
-      <div class="prop-card-domain">cyberspartans.co.uk</div>
-      <p class="prop-card-desc">
-        My cybersecurity and cloud consultancy. Security validation, vulnerability management, cloud audits, and FinOps for organisations that want measurable assurance. Director and lead architect.
-      </p>
-      <span class="prop-card-cta">Visit Cyber Spartans →</span>
-    </a>
+<section class="sy-props">
+  <div class="wrap">
+    <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span class="section-eyebrow-text">Also building</span></div>
+    <h2 class="sy-props-h">Two properties, one operator.</h2>
+    <p class="sy-props-sub">Alongside the consulting, I build and run two things of my own.</p>
+    <div class="pa-grid">
+      <a href="https://breachforge.co.uk" class="pa-card" target="_blank" rel="noopener">
+        <div class="pa-top"><div class="pa-mono">BF</div><span class="pa-tag">Live</span></div>
+        <div><div class="pa-name">BreachForge</div><div class="pa-dom">breachforge.co.uk</div></div>
+        <p class="pa-desc">Breach and attack simulation platform I built and maintain, mapped to MITRE ATT&amp;CK. Tests your defences continuously and shows what works and what doesn't.</p>
+        <span class="pa-cta">Visit BreachForge &#8594;</span>
+      </a>
+      <a href="https://cyberspartans.co.uk" class="pa-card" target="_blank" rel="noopener">
+        <div class="pa-top"><div class="pa-mono">CS</div><span class="pa-tag">Consultancy</span></div>
+        <div><div class="pa-name">Cyber Spartans</div><div class="pa-dom">cyberspartans.co.uk</div></div>
+        <p class="pa-desc">My cybersecurity and cloud consultancy. Security validation, vulnerability management, cloud audits and FinOps. Director and lead architect.</p>
+        <span class="pa-cta">Visit Cyber Spartans &#8594;</span>
+      </a>
+    </div>
   </div>
-</div>
+</section>
 
 <!-- EXPERTISE -->
 <section class="expertise">
@@ -579,5 +511,36 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
 <!-- Shared nav loader: edit NAV_CONFIG in /nav.js to change nav site-wide -->
 <script src="/nav.js" defer></script>
 
+<script>
+(function ztc(){
+  var c=document.getElementById('ztc'); if(!c) return;
+  var ctx=c.getContext('2d');
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W,H,dpr;
+  function size(){dpr=Math.min(window.devicePixelRatio||1,2);var r=c.getBoundingClientRect();W=r.width;H=r.height;c.width=W*dpr;c.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+  size();window.addEventListener('resize',size);
+  var t=0, rings=[0.42,0.66,0.92], rot=[0,0,0], pulses=[];
+  function frame(){var cx=W/2,cy=H/2,base=Math.min(W,H)/2; ctx.clearRect(0,0,W,H); t+=0.016;
+    ctx.globalCompositeOperation='lighter';
+    var bp=0.4+0.18*Math.sin(t*2);
+    var g=ctx.createRadialGradient(cx,cy,2,cx,cy,base*0.6); g.addColorStop(0,'rgba(45,212,191,'+(0.16*bp+0.05)+')'); g.addColorStop(1,'transparent');
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cy,base*0.6,0,6.3); ctx.fill();
+    ctx.globalCompositeOperation='source-over';
+    rings.forEach(function(rf,i){var r=base*rf; if(!reduce) rot[i]+=0.0016*(i%2?-1:1);
+      ctx.strokeStyle='rgba(45,212,191,0.14)'; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(cx,cy,r,0,6.3); ctx.stroke();
+      var n=3+i; for(var k=0;k<n;k++){var a=(k/n)*6.3+rot[i]; var x=cx+Math.cos(a)*r,y=cy+Math.sin(a)*r;
+        ctx.fillStyle='#0b1016'; ctx.strokeStyle='rgba(45,212,191,0.55)'; ctx.lineWidth=1.1; ctx.beginPath(); ctx.arc(x,y,4,0,6.3); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle='rgba(94,234,212,0.9)'; ctx.lineWidth=1.1; ctx.beginPath(); ctx.moveTo(x-1.6,y); ctx.lineTo(x-0.4,y+1.3); ctx.lineTo(x+2,y-1.6); ctx.stroke();}});
+    ctx.globalCompositeOperation='lighter';
+    if(!reduce){ if(Math.random()<0.06) pulses.push({ang:Math.random()*6.3,d:base});
+      for(var i=pulses.length-1;i>=0;i--){var p=pulses[i]; p.d-=base*0.006; var x=cx+Math.cos(p.ang)*p.d,y=cy+Math.sin(p.ang)*p.d;
+        ctx.fillStyle='rgba(94,234,212,0.9)'; ctx.shadowColor='#2dd4bf'; ctx.shadowBlur=8; ctx.beginPath(); ctx.arc(x,y,2,0,6.3); ctx.fill(); ctx.shadowBlur=0;
+        if(p.d<=base*0.16) pulses.splice(i,1);} }
+    ctx.globalCompositeOperation='source-over';
+    if(!reduce) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
 </body>
 </html>
