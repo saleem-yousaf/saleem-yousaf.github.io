@@ -183,7 +183,7 @@ nav {
 
 /* ── PAGE HEADER ────────────────────────────────────── */
 .page-header {
-  padding: 140px 0 80px;
+  padding: 100px 0 48px;
   position: relative;
   overflow: hidden;
   border-bottom: 1px solid var(--border);
@@ -214,12 +214,7 @@ h1 {
   margin-bottom: 20px;
 }
 h1 em { font-style: normal; color: var(--teal); }
-.page-sub {
-  font-size: 17px;
-  color: var(--muted);
-  max-width: 680px;
-  line-height: 1.7;
-}
+.page-sub { font-size: 17px; color: var(--muted); line-height: 1.7; }
 
 /* ── SECTION SHARED ─────────────────────────────────── */
 .section-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
@@ -240,16 +235,10 @@ h2 {
   color: #fff;
   margin-bottom: 14px;
 }
-.section-sub {
-  font-size: 16px;
-  color: var(--muted);
-  max-width: 640px;
-  line-height: 1.7;
-  margin-bottom: 40px;
-}
+.section-sub { font-size: 16px; color: var(--muted); line-height: 1.7; margin-bottom: 40px; }
 
 /* ── CAPABILITY THEMES ──────────────────────────────── */
-.cap-themes { padding: 80px 0 40px; }
+.cap-themes { padding: 60px 0 32px; }
 .cap-theme { margin-bottom: 64px; }
 .cap-theme:last-child { margin-bottom: 0; }
 
@@ -334,16 +323,16 @@ h2 {
 .btn-outline:hover { border-color: var(--teal); color: var(--teal); }
 
 /* ── FOOTER ─────────────────────────────────────────── */
-footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
-.footer-inner { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
-.footer-logo { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
-.footer-logo span { color: var(--teal); }
-.footer-desc { font-size: 13px; color: var(--muted); max-width: 380px; line-height: 1.6; }
-.footer-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
-.footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-.footer-links a:hover { color: var(--teal); }
-.footer-bottom { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-.footer-copy { font-size: 12px; color: var(--muted2); }
+
+
+
+
+
+
+
+
+
+
 
 /* ── ANIMATIONS ─────────────────────────────────────── */
 @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
@@ -356,7 +345,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
 @media (max-width: 900px) {
   .cap-grid { grid-template-columns: 1fr; }
   .cta-inner { grid-template-columns: 1fr; }
-  .footer-inner { grid-template-columns: 1fr; }
+  
 }
 @media (max-width: 600px) {
   .wrap { padding: 0 20px; }
@@ -364,6 +353,24 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
   .cap-card { flex-direction: column; gap: 12px; }
   .cap-value { min-width: 0; max-width: none; align-self: flex-start; }
 }
+
+/* FOOTER */
+footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
+.footer-inner { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: start; }
+.footer-logo { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.footer-logo span { color: var(--teal); }
+.footer-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-top: 4px; }
+.footer-col-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted2); margin-bottom: 12px; }
+.footer-properties { display: flex; flex-direction: column; gap: 10px; }
+.footer-prop-link { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; padding: 8px 14px; border-radius: 5px; text-decoration: none; letter-spacing: 0.04em; transition: background 0.2s; }
+.footer-prop-link.bf { background: rgba(0,212,255,0.1); color: #00d4ff; border: 1px solid rgba(0,212,255,0.25); }
+.footer-prop-link.cs { background: rgba(47,158,111,0.1); color: #2f9e6f; border: 1px solid rgba(47,158,111,0.25); }
+.footer-social { display: flex; gap: 24px; align-items: center; flex-wrap: nowrap; padding: 20px 0; border-top: 1px solid var(--border); }
+.footer-social a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-social a:hover { color: var(--teal); }
+.footer-bottom { padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.footer-copy { font-size: 12px; color: var(--muted2); }
+@media(max-width:720px){.footer-inner{grid-template-columns:1fr;}.footer-social{flex-wrap:wrap;}}
 </style>
 </head>
 <body>
@@ -418,6 +425,13 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
           <div class="cap-body">
             <div class="cap-text">Built conditional access strategies that tie each access decision to device and workload posture, moving the boundary off the network perimeter and onto the identity itself.</div>
             <span class="cap-tag">Enterprise</span>
+          </div>
+        </div>
+        <div class="cap-card">
+          <div class="cap-value">Zero standing access</div>
+          <div class="cap-body">
+            <div class="cap-text">Removed permanent privileged access from a government application estate using Entra PIM, replacing standing admin rights with just-in-time elevation tied to approval and justification. Every privileged action now has an audit trail showing who approved it and why, not just that access occurred.</div>
+            <span class="cap-tag">Government</span>
           </div>
         </div>
       </div>
@@ -558,6 +572,13 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
           </div>
         </div>
         <div class="cap-card">
+          <div class="cap-value">Cloud Migration</div>
+          <div class="cap-body">
+            <div class="cap-text">Led a six-month lift and shift migration from on-premises to Azure for a European airline, eliminating accumulated tech debt and cutting legacy vulnerabilities in container images by 60%. Governed the transition from day one so the cloud baseline was secure before the legacy estate was retired, not patched retrospectively after.</div>
+            <span class="cap-tag">Aviation</span>
+          </div>
+        </div>
+        <div class="cap-card">
           <div class="cap-value">Architecture board</div>
           <div class="cap-body">
             <div class="cap-text">Chaired an enterprise architecture board aligned to SABSA, and led the project design gates so work had to meet the security architecture standard before it could progress.</div>
@@ -595,33 +616,28 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
     <div class="footer-inner">
       <div>
         <div class="footer-logo">Saleem <span>Yousaf</span></div>
-        <div class="footer-desc">Cloud &amp; Cyber Security Architect · AWS · Azure · Zero Trust · AI Governance · OT Security · Enterprise Architecture</div>
+        <div class="footer-desc">Cloud &amp; Cyber Security Architect<br>Founder of BreachForge · Director at Cyber Spartans<br>AWS · Azure · Zero Trust · AI Governance · OT Security</div>
       </div>
-      <div class="footer-links">
-        <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
-        <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
-        <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
-        <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+      <div>
+        <div class="footer-col-label">// Properties</div>
+        <div class="footer-properties">
+          <a href="https://breachforge.co.uk" target="_blank" rel="noopener" class="footer-prop-link bf">⬡ breachforge.co.uk</a>
+          <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener" class="footer-prop-link cs">⬢ cyberspartans.co.uk</a>
+        </div>
       </div>
+    </div>
+    <div class="footer-social">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
     </div>
     <div class="footer-bottom">
       <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
-      <a href="https://saleemyousaf.co.uk/privacy-policy/" style="font-size:12px; color:var(--muted2); text-decoration:none;">Privacy Policy</a>
+      <a href="https://saleemyousaf.co.uk/privacy-policy/" style="font-size:12px;color:var(--muted2);text-decoration:none;">Privacy Policy</a>
     </div>
   </div>
-
-<!-- Cross-property links (static HTML, mirrors nav for crawlers and no-JS visitors) -->
-<div style="max-width:1100px;margin:0 auto;padding:24px 32px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;border-top:1px solid rgba(255,255,255,0.07);">
-  <a href="https://breachforge.co.uk" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:4px;text-decoration:none;letter-spacing:0.04em;font-weight:500;background:rgba(230,57,70,0.12);color:#e63946;border:1px solid rgba(230,57,70,0.25);">
-    &#x2B61; breachforge.co.uk
-  </a>
-  <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:4px;text-decoration:none;letter-spacing:0.04em;font-weight:500;background:rgba(0,217,255,0.12);color:#00d9ff;border:1px solid rgba(0,217,255,0.25);">
-    &#x2B22; cyberspartans.co.uk
-  </a>
-</div>
-
 </footer>
 
 <script src="/nav.js" defer></script>
