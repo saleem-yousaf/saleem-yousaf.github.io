@@ -206,12 +206,7 @@ nav {
 .nav-cta:hover { background: var(--teal-dim); border-color: var(--teal) !important; }
 
 /* ── PAGE HEADER ─────────────────────────────────────── */
-.page-header {
-  padding: 140px 0 80px;
-  position: relative;
-  overflow: hidden;
-  border-bottom: 1px solid var(--border);
-}
+.page-header { padding: 100px 0 0; position: relative; overflow: hidden; border-bottom: 1px solid var(--border); }
 .page-header-glow {
   position: absolute;
   top: -150px; right: -100px;
@@ -243,13 +238,7 @@ h1 {
   margin-bottom: 20px;
 }
 h1 em { font-style: normal; color: var(--teal); }
-.page-sub {
-  font-size: 17px;
-  color: var(--muted);
-  max-width: 580px;
-  line-height: 1.7;
-  margin-bottom: 36px;
-}
+.page-sub { font-size: 17px; color: var(--muted); line-height: 1.7; margin-bottom: 36px; }
 .header-stats {
   display: flex;
   gap: 32px;
@@ -284,7 +273,7 @@ h1 em { font-style: normal; color: var(--teal); }
   border-radius: 12px;
   padding: 44px 48px;
   display: grid;
-  grid-template-columns: 1fr 260px;
+  grid-template-columns: 1fr 240px;
   gap: 48px;
   align-items: center;
   text-decoration: none;
@@ -643,62 +632,41 @@ h1 em { font-style: normal; color: var(--teal); }
 }
 .btn-outline:hover { border-color: var(--teal); color: var(--teal); }
 
-/* ── FOOTER ──────────────────────────────────────────── */
+
+/* FOOTER */
 footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
-.footer-inner {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 32px;
-  align-items: start;
-}
+.footer-inner { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: start; }
 .footer-logo { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
 .footer-logo span { color: var(--teal); }
-.footer-desc { font-size: 13px; color: var(--muted); max-width: 380px; line-height: 1.6; }
-.footer-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
-.footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-.footer-links a:hover { color: var(--teal); }
-.footer-bottom {
-  margin-top: 32px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+.footer-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-top: 4px; }
+.footer-col-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted2); margin-bottom: 12px; }
+.footer-properties { display: flex; flex-direction: column; gap: 10px; }
+.footer-prop-link { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; padding: 8px 14px; border-radius: 5px; text-decoration: none; letter-spacing: 0.04em; transition: background 0.2s; }
+.footer-prop-link.bf { background: rgba(0,212,255,0.1); color: #00d4ff; border: 1px solid rgba(0,212,255,0.25); }
+.footer-prop-link.cs { background: rgba(47,158,111,0.1); color: #2f9e6f; border: 1px solid rgba(47,158,111,0.25); }
+.footer-social { display: flex; gap: 24px; align-items: center; flex-wrap: nowrap; padding: 20px 0; border-top: 1px solid var(--border); }
+.footer-social a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-social a:hover { color: var(--teal); }
+.footer-bottom { padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
 .footer-copy { font-size: 12px; color: var(--muted2); }
+@media(max-width:720px){.footer-inner{grid-template-columns:1fr;}.footer-social{flex-wrap:wrap;}}
 
-/* ── ANIMATIONS ──────────────────────────────────────── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.page-header > .wrap > * { animation: fadeUp 0.55s ease both; }
-.page-header > .wrap > *:nth-child(1) { animation-delay: 0.05s; }
-.page-header > .wrap > *:nth-child(2) { animation-delay: 0.15s; }
-.page-header > .wrap > *:nth-child(3) { animation-delay: 0.25s; }
-.page-header > .wrap > *:nth-child(4) { animation-delay: 0.32s; }
 
-/* ── RESPONSIVE ──────────────────────────────────────── */
-@media (max-width: 960px) {
-  .article-featured { grid-template-columns: 1fr; }
-  .af-aside { display: none; }
-  .articles-grid { grid-template-columns: repeat(2, 1fr); }
-  .cta-inner { grid-template-columns: 1fr; }
-  .footer-inner { grid-template-columns: 1fr; }
-  .latest-tags { display: none; }
-}
-@media (max-width: 600px) {
-  .wrap { padding: 0 20px; }
-  .nav-links { display: none; }
-  .articles-grid { grid-template-columns: 1fr; }
-  .article-featured { padding: 28px; }
-  .articles-controls { flex-direction: column; align-items: flex-start; }
-  .latest-strip-inner { gap: 10px; }
-  .latest-label { display: none; }
-  .latest-divider { display: none; }
-  .latest-meta { display: none; }
-  .latest-title { white-space: normal; }
-}
+/* Hero card animation */
+.hero-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 24px; position: relative; overflow: hidden; }
+.hero-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--teal), transparent); }
+.hero-card .ztc{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
+.hero-card .ztc-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%, rgba(9,12,16,0.82) 0%, rgba(9,12,16,0.48) 55%, rgba(9,12,16,0.04) 100%);}
+.hero-card .hcard-inner{position:relative;z-index:2;}
+.hcard-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); margin-bottom: 14px; }
+.hcard-stat { display: flex; flex-direction: column; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.hcard-stat:last-of-type { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.hcard-num { font-family: var(--display); font-size: 24px; font-weight: 800; color: #fff; line-height: 1; margin-bottom: 4px; }
+.hcard-num span { color: var(--teal); font-size: 16px; }
+.hcard-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.hcard-inner{position:relative;z-index:2;}
+.ztc{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
+.ztc-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%, rgba(9,12,16,0.82) 0%, rgba(9,12,16,0.48) 55%, rgba(9,12,16,0.04) 100%);}
 </style>
 </head>
 <body>
@@ -711,24 +679,33 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
 <div class="page-header">
   <div class="page-header-glow"></div>
   <div class="wrap">
-    <div class="eyebrow">
-      <div class="eyebrow-line"></div>
-      <span class="eyebrow-text">Articles &amp; Insights</span>
-    </div>
-    <h1>Security architecture<br><em>written to be used.</em></h1>
-    <p class="page-sub">Practical articles covering cloud security, AI governance, Zero Trust, OT security, and enterprise architecture. Written for architects, engineers, and security leaders.</p>
-    <div class="header-stats">
-      <div class="header-stat">
-        <div class="header-stat-num">20<span>+</span></div>
-        <div class="header-stat-label">Articles published</div>
+    <div class="page-header-inner">
+      <div>
+        <div class="eyebrow">
+          <div class="eyebrow-line"></div>
+          <span class="eyebrow-text">Articles &amp; Insights</span>
+        </div>
+        <h1>Security architecture<br><em>written to be used.</em></h1>
+        <p class="page-sub">Practical articles covering cloud security, AI governance, Zero Trust, OT security, and enterprise architecture. Written for architects, engineers, and security leaders.</p>
       </div>
-      <div class="header-stat">
-        <div class="header-stat-num">5</div>
-        <div class="header-stat-label">Topic areas</div>
-      </div>
-      <div class="header-stat">
-        <div class="header-stat-num">2026</div>
-        <div class="header-stat-label">Actively publishing</div>
+      <div class="hero-card">
+        <canvas class="ztc" id="ztc" aria-hidden="true"></canvas>
+        <div class="ztc-scrim"></div>
+        <div class="hcard-inner">
+          <div class="hcard-label">// articles</div>
+          <div class="hcard-stat">
+            <div class="hcard-num">20<span>+</span></div>
+            <div class="hcard-desc">Articles published</div>
+          </div>
+          <div class="hcard-stat">
+            <div class="hcard-num">5</div>
+            <div class="hcard-desc">Topic areas</div>
+          </div>
+          <div class="hcard-stat">
+            <div class="hcard-num">2026</div>
+            <div class="hcard-desc">Actively publishing</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1170,33 +1147,28 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
     <div class="footer-inner">
       <div>
         <div class="footer-logo">Saleem <span>Yousaf</span></div>
-        <div class="footer-desc">Cloud &amp; Cyber Security Architect · AWS · Azure · Zero Trust · AI Governance · OT Security · Enterprise Architecture</div>
+        <div class="footer-desc">Cloud &amp; Cyber Security Architect<br>Founder of BreachForge · Director at Cyber Spartans<br>AWS · Azure · Zero Trust · AI Governance · OT Security</div>
       </div>
-      <div class="footer-links">
-        <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
-        <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
-        <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
-        <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+      <div>
+        <div class="footer-col-label">// Properties</div>
+        <div class="footer-properties">
+          <a href="https://breachforge.co.uk" target="_blank" rel="noopener" class="footer-prop-link bf">⬡ breachforge.co.uk</a>
+          <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener" class="footer-prop-link cs">⬢ cyberspartans.co.uk</a>
+        </div>
       </div>
+    </div>
+    <div class="footer-social">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
     </div>
     <div class="footer-bottom">
       <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
-      <a href="https://saleemyousaf.co.uk/privacy-policy/" style="font-size:12px; color:var(--muted2); text-decoration:none;">Privacy Policy</a>
+      <a href="https://saleemyousaf.co.uk/privacy-policy/" style="font-size:12px;color:var(--muted2);text-decoration:none;">Privacy Policy</a>
     </div>
   </div>
-
-<!-- Cross-property links (static HTML, mirrors nav for crawlers and no-JS visitors) -->
-<div style="max-width:1100px;margin:0 auto;padding:24px 32px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;border-top:1px solid rgba(255,255,255,0.07);">
-  <a href="https://breachforge.co.uk" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:4px;text-decoration:none;letter-spacing:0.04em;font-weight:500;background:rgba(230,57,70,0.12);color:#e63946;border:1px solid rgba(230,57,70,0.25);">
-    ⦡ breachforge.co.uk
-  </a>
-  <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:4px;text-decoration:none;letter-spacing:0.04em;font-weight:500;background:rgba(0,217,255,0.12);color:#00d9ff;border:1px solid rgba(0,217,255,0.25);">
-    ⬢ cyberspartans.co.uk
-  </a>
-</div>
-
 </footer>
 
 <script>
@@ -1223,5 +1195,37 @@ function filterArticles(cat, btn) {
 
 
 <script src="/nav.js" defer></script>
+
+<script>
+(function ztc(){
+  var c=document.getElementById('ztc'); if(!c) return;
+  var ctx=c.getContext('2d');
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W,H,dpr;
+  function size(){dpr=Math.min(window.devicePixelRatio||1,2);var r=c.getBoundingClientRect();W=r.width;H=r.height;c.width=W*dpr;c.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+  size();window.addEventListener('resize',size);
+  var t=0, rings=[0.42,0.66,0.92], rot=[0,0,0], pulses=[];
+  function frame(){var cx=W/2,cy=H/2,base=Math.min(W,H)/2; ctx.clearRect(0,0,W,H); t+=0.016;
+    ctx.globalCompositeOperation='lighter';
+    var bp=0.4+0.18*Math.sin(t*2);
+    var g=ctx.createRadialGradient(cx,cy,2,cx,cy,base*0.6); g.addColorStop(0,'rgba(45,212,191,'+(0.16*bp+0.05)+')'); g.addColorStop(1,'transparent');
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cy,base*0.6,0,6.3); ctx.fill();
+    ctx.globalCompositeOperation='source-over';
+    rings.forEach(function(rf,i){var r=base*rf; if(!reduce) rot[i]+=0.0016*(i%2?-1:1);
+      ctx.strokeStyle='rgba(45,212,191,0.14)'; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(cx,cy,r,0,6.3); ctx.stroke();
+      var n=3+i; for(var k=0;k<n;k++){var a=(k/n)*6.3+rot[i]; var x=cx+Math.cos(a)*r,y=cy+Math.sin(a)*r;
+        ctx.fillStyle='#0b1016'; ctx.strokeStyle='rgba(45,212,191,0.55)'; ctx.lineWidth=1.1; ctx.beginPath(); ctx.arc(x,y,4,0,6.3); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle='rgba(94,234,212,0.9)'; ctx.lineWidth=1.1; ctx.beginPath(); ctx.moveTo(x-1.6,y); ctx.lineTo(x-0.4,y+1.3); ctx.lineTo(x+2,y-1.6); ctx.stroke();}});
+    ctx.globalCompositeOperation='lighter';
+    if(!reduce){ if(Math.random()<0.06) pulses.push({ang:Math.random()*6.3,d:base});
+      for(var i=pulses.length-1;i>=0;i--){var p=pulses[i]; p.d-=base*0.006; var x=cx+Math.cos(p.ang)*p.d,y=cy+Math.sin(p.ang)*p.d;
+        ctx.fillStyle='rgba(94,234,212,0.9)'; ctx.shadowColor='#2dd4bf'; ctx.shadowBlur=8; ctx.beginPath(); ctx.arc(x,y,2,0,6.3); ctx.fill(); ctx.shadowBlur=0;
+        if(p.d<=base*0.16) pulses.splice(i,1);} }
+    ctx.globalCompositeOperation='source-over';
+    if(!reduce) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
 </body>
 </html>
