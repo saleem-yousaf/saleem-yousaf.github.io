@@ -194,7 +194,7 @@ nav {
 
 .hero { min-height: auto; display: flex; align-items: center; padding: 100px 0 0; position: relative; z-index: 0; }
 .hero-glow { position: absolute; top: -200px; right: -200px; width: 700px; height: 700px; background: radial-gradient(circle, rgba(45,212,191,0.07) 0%, transparent 65%); pointer-events: none; }
-.hero-content { display: grid; grid-template-columns: 1fr 380px; gap: 80px; align-items: center; padding: 60px 0 16px; position: relative; z-index: 1; }
+.hero-content { display: grid; grid-template-columns: 1fr 380px; gap: 80px; align-items: center; padding: 60px 0 32px; position: relative; z-index: 1; }
 
 .hero-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
 .hero-eyebrow-line { width: 32px; height: 1px; background: var(--teal); }
@@ -223,7 +223,7 @@ h1 em { font-style: normal; color: var(--teal); }
 
 .hero-sub { font-size: 17px; line-height: 1.7; color: var(--muted); max-width: 540px; margin-bottom: 36px; }
 
-.hero-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+.hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
 .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #090c10; font-size: 14px; font-weight: 600; padding: 12px 22px; border-radius: 4px; text-decoration: none; letter-spacing: 0.02em; transition: opacity 0.2s; }
 .btn-primary:hover { opacity: 0.9; }
 .btn-secondary { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 14px; text-decoration: none; }
@@ -249,7 +249,7 @@ section { position: relative; z-index: 1; }
 .section-eyebrow-line { width: 24px; height: 1px; background: var(--teal); }
 .section-eyebrow-text { font-family: var(--mono); font-size: 11px; color: var(--teal); letter-spacing: 0.12em; text-transform: uppercase; }
 h2 { font-family: var(--display); font-size: clamp(26px, 3vw, 38px); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color: #fff; margin-bottom: 16px; }
-.section-sub { font-size: 16px; color: var(--muted); max-width: 560px; line-height: 1.7; margin-bottom: 48px; }
+.section-sub { font-size: 16px; color: var(--muted); line-height: 1.7; margin-bottom: 48px; }
 
 /* EXPERTISE */
 .expertise { padding: 60px 0 32px; }
@@ -280,10 +280,10 @@ h2 { font-family: var(--display); font-size: clamp(26px, 3vw, 38px); font-weight
 
 /* FOOTER */
 footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
-.footer-inner { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
+.footer-inner { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: start; }
 .footer-logo { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
 .footer-logo span { color: var(--teal); }
-.footer-desc { font-size: 13px; color: var(--muted); max-width: 380px; line-height: 1.6; }
+.footer-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-top: 4px; }
 
 /* FOOTER - reorganised with property links prominent */
 .footer-links-group {
@@ -293,8 +293,8 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
 }
 .footer-properties {
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 10px;
 }
 .footer-prop-link {
   display: inline-flex;
@@ -308,16 +308,16 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
   font-weight: 500;
 }
 .footer-prop-link.bf {
-  background: var(--red-dim);
-  color: var(--red);
-  border: 1px solid rgba(230,57,70,0.25);
+  background: rgba(0,212,255,0.1);
+  color: #00d4ff;
+  border: 1px solid rgba(0,212,255,0.25);
 }
 .footer-prop-link.cs {
-  background: var(--cyan-dim);
-  color: var(--cyan);
-  border: 1px solid rgba(0,217,255,0.25);
+  background: rgba(47,158,111,0.1);
+  color: #2f9e6f;
+  border: 1px solid rgba(47,158,111,0.25);
 }
-.footer-social { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.footer-social { display: flex; gap: 24px; align-items: center; flex-wrap: nowrap; padding: 20px 0; border-top: 1px solid var(--border); }
 .footer-social a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
 .footer-social a:hover { color: var(--teal); }
 .footer-bottom { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
@@ -344,32 +344,44 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
 /* Contained properties (Option A) */
 .sy-props{padding:8px 0 48px;}
 .sy-props-h{font-family:var(--display);font-size:30px;font-weight:800;letter-spacing:-0.5px;color:#fff;margin-bottom:10px;}
-.sy-props-sub{font-size:15px;color:var(--muted);line-height:1.6;margin-bottom:14px;max-width:560px;}
-.pa-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:680px;}
-.pa-card{display:flex;flex-direction:column;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;text-decoration:none;color:inherit;transition:border-color .2s,transform .2s,background .2s;}
+.sy-props-sub{font-size:15px;color:var(--muted);line-height:1.6;margin-bottom:30px;max-width:560px;}
+.pa-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.pa-card{display:flex;flex-direction:column;gap:10px;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;text-decoration:none;color:inherit;transition:border-color .2s,transform .2s,background .2s;}
 .pa-card:hover{border-color:var(--teal);transform:translateY(-3px);background:var(--bg3);}
 .pa-top{display:flex;align-items:center;justify-content:space-between;}
-.pa-mono{width:32px;height:32px;border-radius:7px;background:var(--teal-dim);border:1px solid rgba(45,212,191,0.25);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:13px;color:var(--teal);}
+.pa-mono{width:38px;height:38px;border-radius:9px;background:var(--teal-dim);border:1px solid rgba(45,212,191,0.25);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:15px;color:var(--teal);}
 .pa-tag{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);background:var(--teal-dim);border:1px solid rgba(45,212,191,0.25);padding:3px 8px;border-radius:4px;}
-.pa-name{font-family:var(--display);font-weight:700;font-size:15px;color:#fff;letter-spacing:-0.2px;}
+.pa-name{font-family:var(--display);font-weight:800;font-size:19px;color:#fff;letter-spacing:-0.3px;}
 .pa-dom{font-family:var(--mono);font-size:11px;color:var(--muted);}
 .pa-desc{font-size:13px;color:var(--muted);line-height:1.55;flex:1;}
 .pa-cta{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--teal);margin-top:2px;}
 @media(max-width:720px){.pa-grid{grid-template-columns:1fr;}}
 
-/* CyberSpartans card: emerald green */
-.pa-card.cs-card .pa-mono{background:rgba(47,158,111,0.12);border-color:rgba(47,158,111,0.3);color:#2f9e6f;}
-.pa-card.cs-card .pa-tag{color:#2f9e6f;background:rgba(47,158,111,0.12);border-color:rgba(47,158,111,0.25);}
-.pa-card.cs-card:hover{border-color:rgba(47,158,111,0.45);}
 /* BreachForge card: electric cyan */
-.pa-card.bf-card .pa-mono{background:rgba(0,212,255,0.1);border-color:rgba(0,212,255,0.25);color:#00d4ff;}
-.pa-card.bf-card .pa-tag{color:#00d4ff;background:rgba(0,212,255,0.1);border-color:rgba(0,212,255,0.2);}
-.pa-card.bf-card:hover{border-color:rgba(0,212,255,0.4);}
-/* Footer property links */
-.footer-prop-link.cs{background:rgba(47,158,111,0.1);color:#2f9e6f;border:1px solid rgba(47,158,111,0.25);}
-.footer-prop-link.cs:hover{background:rgba(47,158,111,0.18);}
-.footer-prop-link.bf{background:rgba(0,212,255,0.1);color:#00d4ff;border:1px solid rgba(0,212,255,0.25);}
-.footer-prop-link.bf:hover{background:rgba(0,212,255,0.18);}
+.bf-card .pa-mono{background:rgba(0,212,255,0.12);border-color:rgba(0,212,255,0.3);color:#00d4ff;}
+.bf-card .pa-tag{color:#00d4ff;background:rgba(0,212,255,0.1);border-color:rgba(0,212,255,0.25);}
+.bf-card .pa-cta{color:#00d4ff;}
+.bf-card:hover{border-color:rgba(0,212,255,0.45);}
+
+/* CyberSpartans card: emerald green */
+.cs-card .pa-mono{background:rgba(47,158,111,0.12);border-color:rgba(47,158,111,0.3);color:#2f9e6f;}
+.cs-card .pa-tag{color:#2f9e6f;background:rgba(47,158,111,0.1);border-color:rgba(47,158,111,0.25);}
+.cs-card .pa-cta{color:#2f9e6f;}
+.cs-card:hover{border-color:rgba(47,158,111,0.45);}
+
+.footer-col-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  margin-bottom: 12px;
+}
+
+@media(max-width:720px){
+  .footer-inner{grid-template-columns:1fr;}
+  .bf-card .pa-mono,.cs-card .pa-mono{width:32px;height:32px;font-size:13px;}
+}
 </style>
 </head>
 <body>
@@ -444,7 +456,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
 <section class="expertise">
   <div class="wrap">
     <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span class="section-eyebrow-text">Core expertise</span></div>
-    <h2>Architecture that holds<br>under pressure.</h2>
+    <h2>Architecture that holds under pressure.</h2>
     <p class="section-sub">Security-by-design across cloud, identity, OT, and AI, built for complex enterprise and regulated environments.</p>
 
     <div class="expertise-grid">
@@ -466,10 +478,12 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
     <p class="section-sub">Delivering secure architecture across government, CNI, manufacturing, and enterprise, where the stakes and governance requirements are highest.</p>
 
     <div class="clients-grid">
-      <div class="client-card"><div class="client-num">01</div><div><div class="client-sector">Government · AWS</div><div class="client-name">HM Land Registry</div><div class="client-body">Security architecture across APIs and middleware within a fully AWS-based enterprise platform. Strengthened API security and implemented structured STRIDE threat modelling.</div></div></div>
-      <div class="client-card"><div class="client-num">02</div><div><div class="client-sector">Government · Cloud Security</div><div class="client-name">Ministry of Justice</div><div class="client-body">Lead Cloud Security Architect within MOJ Digital &amp; Technology. Secure-by-design, cloud assurance, threat modelling, Breach Attack Simulation, API security.</div></div></div>
-      <div class="client-card"><div class="client-num">03</div><div><div class="client-sector">Critical National Infrastructure</div><div class="client-name">Smart DCC</div><div class="client-body">Enterprise security architecture across CNI systems. AWS-based PKI cloud architecture, threat detection, security governance.</div></div></div>
-      <div class="client-card"><div class="client-num">04</div><div><div class="client-sector">Manufacturing · Enterprise</div><div class="client-name">Jaguar Land Rover</div><div class="client-body">Enterprise architecture and governance across manufacturing environments. Third-party access controls, Shadow IT reduction, security posture improvements.</div></div></div>
+      <div class="client-card"><div class="client-num">01</div><div><div class="client-sector">Government · AWS</div><div class="client-name">.gov</div><div class="client-body">Security architecture across APIs and middleware within a fully AWS-based enterprise platform. Strengthened API security and implemented structured STRIDE threat modelling.</div></div></div>
+      <div class="client-card"><div class="client-num">02</div><div><div class="client-sector">Government · Cloud Security</div><div class="client-name">.gov</div><div class="client-body">Lead Cloud Security Architect across government digital services. Secure-by-design, cloud assurance, threat modelling, Breach Attack Simulation, API security.</div></div></div>
+      <div class="client-card"><div class="client-num">03</div><div><div class="client-sector">Critical National Infrastructure</div><div class="client-name">UK Smart Energy Network</div><div class="client-body">Enterprise security architecture across CNI systems. AWS-based PKI cloud architecture, threat detection, security governance.</div></div></div>
+      <div class="client-card"><div class="client-num">04</div><div><div class="client-sector">Manufacturing · Enterprise</div><div class="client-name">Global Luxury Car Manufacturer</div><div class="client-body">Enterprise architecture and governance across manufacturing environments. Third-party access controls, Shadow IT reduction, and security posture improvements across a complex global production estate.</div></div></div>
+      <div class="client-card"><div class="client-num">05</div><div><div class="client-sector">Sport &amp; Distribution</div><div class="client-name">Global Sport Brand</div><div class="client-body">Security architecture and OT security across enterprise distribution and logistics environments. Network segmentation, infrastructure security design, and secure operational architecture across a global sporting goods business with significant OT and logistics exposure.</div></div></div>
+      <div class="client-card"><div class="client-num">06</div><div><div class="client-sector">Aviation · Multi-Cloud</div><div class="client-name">European Airlines</div><div class="client-body">Multi-cloud security architecture across Azure and GCP. CSPM-driven remediation, SteerCo-level security leadership, lift and shift migration security from design to delivery. Traffic filtering and segmentation strategy (east/west, hub and spoke), NIST 800, CIS and MITRE ATT&CK control alignment.</div></div></div>
     </div>
   </div>
 </section>
@@ -495,25 +509,22 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
     <div class="footer-inner">
       <div>
         <div class="footer-logo">Saleem <span>Yousaf</span></div>
-        <div class="footer-desc">Cloud &amp; Cyber Security Architect · Founder of BreachForge · Director at Cyber Spartans. AWS, Azure, Zero Trust, AI Governance, OT Security.</div>
+        <div class="footer-desc">Cloud &amp; Cyber Security Architect<br>Founder of BreachForge · Director at Cyber Spartans<br>AWS · Azure · Zero Trust · AI Governance · OT Security</div>
       </div>
-      <div class="footer-links-group">
+      <div>
+        <div class="footer-col-label">// Properties</div>
         <div class="footer-properties">
-          <a href="https://breachforge.co.uk" target="_blank" rel="noopener" class="footer-prop-link bf">
-            ⬡ breachforge.co.uk
-          </a>
-          <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener" class="footer-prop-link cs">
-            ⬢ cyberspartans.co.uk
-          </a>
-        </div>
-        <div class="footer-social">
-          <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
-          <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
-          <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
+          <a href="https://breachforge.co.uk" target="_blank" rel="noopener" class="footer-prop-link bf">⬡ breachforge.co.uk</a>
+          <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener" class="footer-prop-link cs">⬢ cyberspartans.co.uk</a>
         </div>
       </div>
+    </div>
+    <div class="footer-social">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
     </div>
     <div class="footer-bottom">
       <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
