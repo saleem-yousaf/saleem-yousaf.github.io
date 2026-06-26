@@ -82,7 +82,7 @@ nav {
 .page-header-glow { position: absolute; top: -160px; right: -120px; width: 640px; height: 640px; background: radial-gradient(circle, rgba(45,212,191,0.07) 0%, transparent 65%); pointer-events: none; }
 .page-header-glow-2 { position: absolute; bottom: -80px; left: -80px; width: 440px; height: 440px; background: radial-gradient(circle, rgba(245,158,11,0.04) 0%, transparent 65%); pointer-events: none; }
 
-.hero-grid { display: grid; grid-template-columns: 1fr 320px; gap: 72px; align-items: center; }
+
 
 .eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
 .eyebrow-line { width: 24px; height: 1px; background: var(--teal); }
@@ -91,17 +91,17 @@ nav {
 h1 { font-family: var(--display); font-size: clamp(32px, 4vw, 52px); font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; color: #fff; margin-bottom: 20px; }
 h1 em { font-style: normal; color: var(--teal); }
 
-.hero-sub { font-size: 17px; color: var(--muted); line-height: 1.75; margin-bottom: 32px; }
 
-.hero-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 32px; }
-.hero-tag { font-family: var(--mono); font-size: 10px; padding: 4px 12px; border-radius: 3px; letter-spacing: 0.06em; text-transform: uppercase; }
-.hero-tag.teal   { background: var(--teal-dim);   color: var(--teal); }
-.hero-tag.amber  { background: var(--amber-dim);  color: var(--amber); }
-.hero-tag.purple { background: var(--purple-dim); color: var(--purple); }
 
-.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
-.btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #090c10; font-size: 14px; font-weight: 600; padding: 12px 24px; border-radius: 4px; text-decoration: none; transition: opacity 0.2s, transform 0.15s; }
-.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+
+
+
+
+
+
+
+
 .btn-outline { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border2); color: var(--muted); font-size: 14px; padding: 11px 24px; border-radius: 4px; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
 .btn-outline:hover { border-color: var(--teal); color: var(--teal); }
 
@@ -120,10 +120,10 @@ h1 em { font-style: normal; color: var(--teal); }
 .section-eyebrow-line { width: 24px; height: 1px; background: var(--teal); }
 .section-eyebrow-text { font-family: var(--mono); font-size: 11px; color: var(--teal); letter-spacing: 0.12em; text-transform: uppercase; }
 h2 { font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color: #fff; margin-bottom: 14px; }
-.section-sub { font-size: 16px; color: var(--muted); max-width: 600px; line-height: 1.7; margin-bottom: 48px; }
+.section-sub { font-size: 16px; color: var(--muted); line-height: 1.7; margin-bottom: 36px; }
 
 /* ── STORY SECTION ── */
-.story { padding: 88px 0 0; }
+.story { padding: 60px 0 32px; }
 .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
 .story-prose p { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 18px; }
 .story-prose p:last-child { margin-bottom: 0; }
@@ -133,10 +133,10 @@ h2 { font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); font-weig
 .highlight-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
 
 /* ── PHILOSOPHY ── */
-.philosophy { padding: 72px 0; }
+.philosophy { padding: 60px 0 32px; }
 .philosophy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-.philosophy-card { background: var(--bg2); padding: 28px; transition: background 0.2s; }
-.philosophy-card:hover { background: var(--bg3); }
+.philosophy-card { background: var(--bg2); padding: 28px; transition: background 0.2s, box-shadow 0.2s; }
+.philosophy-card:hover { background: var(--bg3); box-shadow: 0 0 20px rgba(45,212,191,0.08); }
 .philosophy-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
 .philosophy-icon svg { width: 17px; height: 17px; }
 .philosophy-icon.teal   { background: var(--teal-dim);   color: var(--teal); }
@@ -146,7 +146,7 @@ h2 { font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); font-weig
 .philosophy-body { font-size: 13px; color: var(--muted); line-height: 1.65; }
 
 /* ── EXPERTISE GRID ── */
-.expertise { padding: 0 0 72px; }
+.expertise { padding: 60px 0 32px; }
 .expertise-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
 .exp-card { background: var(--bg2); padding: 28px; transition: background 0.2s; }
 .exp-card:hover { background: var(--bg3); }
@@ -156,19 +156,19 @@ h2 { font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); font-weig
 .exp-body { font-size: 13px; color: var(--muted); line-height: 1.65; }
 
 /* ── EXPERIENCE STRIP ── */
-.clients { padding: 0 0 72px; }
+.clients { padding: 60px 0 32px; }
 .clients-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-.client-row { background: var(--bg2); padding: 28px 36px; display: grid; grid-template-columns: 48px 200px 1fr; gap: 0 24px; align-items: center; transition: background 0.2s; }
-.client-row:hover { background: var(--bg3); }
+.client-row { background: var(--bg2); padding: 28px 36px; display: grid; grid-template-columns: 48px 200px 1fr; gap: 0 24px; align-items: center; transition: background 0.2s, box-shadow 0.2s; }
+.client-row:hover { background: var(--bg3); box-shadow: inset 3px 0 0 var(--teal); }
 .client-num { font-family: var(--mono); font-size: 11px; color: var(--teal); letter-spacing: 0.06em; }
 .client-name { font-family: var(--display); font-size: 17px; font-weight: 700; color: #fff; }
 .client-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
 
 /* ── CERTIFICATIONS ── */
-.certs { padding: 0 0 72px; }
+.certs { padding: 60px 0 32px; }
 .certs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-.cert-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 24px; position: relative; overflow: hidden; transition: border-color 0.2s; }
-.cert-card:hover { border-color: var(--border2); }
+.cert-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 24px; position: relative; overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s; }
+.cert-card:hover { border-color: var(--teal); box-shadow: 0 0 20px rgba(45,212,191,0.1); }
 .cert-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
 .cert-card.azure::before { background: linear-gradient(90deg, #0078d4, transparent); }
 .cert-card.aws::before   { background: linear-gradient(90deg, var(--amber), transparent); }
@@ -183,10 +183,10 @@ h2 { font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); font-weig
 .cert-badge.ceh   { background: var(--purple-dim); color: var(--purple); }
 
 /* ── THOUGHT LEADERSHIP ── */
-.leadership { padding: 0 0 72px; }
+.leadership { padding: 60px 0 32px; }
 .leadership-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.leadership-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 28px; display: flex; gap: 20px; align-items: flex-start; text-decoration: none; color: inherit; transition: border-color 0.2s; }
-.leadership-card:hover { border-color: var(--border2); }
+.leadership-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 28px; display: flex; gap: 20px; align-items: flex-start; text-decoration: none; color: inherit; transition: border-color 0.2s, box-shadow 0.2s; }
+.leadership-card:hover { border-color: var(--teal); box-shadow: 0 0 20px rgba(45,212,191,0.1); }
 .leadership-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .leadership-icon svg { width: 18px; height: 18px; }
 .leadership-icon.teal   { background: var(--teal-dim);   color: var(--teal); }
@@ -203,42 +203,141 @@ h2 { font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); font-weig
 .cta-sub { font-size: 15px; color: var(--muted); line-height: 1.6; }
 .cta-actions { display: flex; gap: 12px; flex-shrink: 0; align-items: center; }
 
-/* ── FOOTER ── */
+
+
+
+/* FOOTER */
 footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
-.footer-inner { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
+.footer-inner { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: start; }
 .footer-logo { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
 .footer-logo span { color: var(--teal); }
-.footer-desc { font-size: 13px; color: var(--muted); max-width: 380px; line-height: 1.6; }
-.footer-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
-.footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-.footer-links a:hover { color: var(--teal); }
+.footer-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-top: 4px; }
+.footer-links-group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.footer-properties {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.footer-prop-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+.footer-prop-link.bf {
+  background: rgba(0,212,255,0.1);
+  color: #00d4ff;
+  border: 1px solid rgba(0,212,255,0.25);
+}
+.footer-prop-link.cs {
+  background: rgba(47,158,111,0.1);
+  color: #2f9e6f;
+  border: 1px solid rgba(47,158,111,0.25);
+}
+.footer-social { display: flex; gap: 24px; align-items: center; flex-wrap: nowrap; padding: 20px 0; border-top: 1px solid var(--border); }
+.footer-social a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-social a:hover { color: var(--teal); }
 .footer-bottom { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
 .footer-copy { font-size: 12px; color: var(--muted2); }
-
-@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-.page-header .wrap > * { animation: fadeUp 0.55s ease both; }
-.page-header .wrap > *:nth-child(1) { animation-delay: 0.05s; }
-.page-header .wrap > *:nth-child(2) { animation-delay: 0.15s; }
-
-@media (max-width: 960px) {
-  .hero-grid { grid-template-columns: 1fr; gap: 48px; }
-  .story-grid { grid-template-columns: 1fr; }
-  .philosophy-grid { grid-template-columns: repeat(2, 1fr); }
-  .expertise-grid { grid-template-columns: repeat(2, 1fr); }
-  .client-row { grid-template-columns: 48px 1fr; }
-  .client-desc { display: none; }
-  .certs-grid { grid-template-columns: repeat(2, 1fr); }
-  .leadership-grid { grid-template-columns: 1fr; }
-  .cta-inner { grid-template-columns: 1fr; }
-  .footer-inner { grid-template-columns: 1fr; }
+.footer-inner { grid-template-columns: 1fr; }
+.footer-col-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  margin-bottom: 12px;
 }
-@media (max-width: 600px) {
-  .wrap { padding: 0 20px; }
-  .nav-links { display: none; }
-  .philosophy-grid, .expertise-grid { grid-template-columns: 1fr; }
-  .certs-grid { grid-template-columns: 1fr; }
-  .client-row { grid-template-columns: 1fr; }
-  .client-num { display: none; }
+.footer-inner{grid-template-columns:1fr;}
+.footer-col-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  margin-bottom: 12px;
+}
+
+.footer-prop-link.bf { background: rgba(0,212,255,0.1); color: #00d4ff; border: 1px solid rgba(0,212,255,0.25); }
+.footer-prop-link.cs { background: rgba(47,158,111,0.1); color: #2f9e6f; border: 1px solid rgba(47,158,111,0.25); }
+.footer-social { display: flex; gap: 24px; align-items: center; flex-wrap: nowrap; padding: 20px 0; border-top: 1px solid var(--border); }
+.footer-social a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-social a:hover { color: var(--teal); }
+.footer-inner { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: start; }
+
+/* HERO (ported from homepage) */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* === HERO (exact from homepage) === */
+.hero { min-height: auto; display: flex; align-items: center; padding: 100px 0 0; position: relative; z-index: 0; }
+.hero-glow { position: absolute; top: -200px; right: -200px; width: 700px; height: 700px; background: radial-gradient(circle, rgba(45,212,191,0.07) 0%, transparent 65%); pointer-events: none; }
+.hero-content { display: grid; grid-template-columns: 1fr 380px; gap: 80px; align-items: center; padding: 60px 0 32px; position: relative; z-index: 1; }
+.hero-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+.hero-eyebrow-line { width: 32px; height: 1px; background: var(--teal); }
+.hero-eyebrow-text { font-family: var(--mono); font-size: 12px; color: var(--teal); letter-spacing: 0.12em; text-transform: uppercase; }
+.hero-name {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.hero-name strong { color: var(--text); font-weight: 500; }
+.hero-sub { font-size: 17px; line-height: 1.7; color: var(--muted); max-width: 540px; margin-bottom: 36px; }
+.hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #090c10; font-size: 14px; font-weight: 600; padding: 12px 22px; border-radius: 4px; text-decoration: none; letter-spacing: 0.02em; transition: opacity 0.2s; }
+.btn-primary:hover { opacity: 0.9; }
+.btn-secondary { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 14px; text-decoration: none; }
+.btn-secondary:hover { color: var(--text); }
+.hero-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 32px; position: relative; overflow: hidden; }
+.hero-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--teal), transparent); }
+.hcard-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); margin-bottom: 18px; }
+.hcard-stat { display: flex; flex-direction: column; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
+.hcard-stat:last-of-type { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.hcard-num { font-family: var(--display); font-size: 32px; font-weight: 800; color: #fff; line-height: 1; margin-bottom: 4px; }
+.hcard-num span { color: var(--teal); font-size: 20px; }
+.hcard-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.hero-card .ztc{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
+.hero-card .ztc-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%, rgba(9,12,16,0.82) 0%, rgba(9,12,16,0.48) 55%, rgba(9,12,16,0.04) 100%);}
+.hero-card .hcard-inner{position:relative;z-index:2;}
+
+@media (max-width: 900px) {
+  .hero-content { grid-template-columns: 1fr; gap: 40px; }
 }
 </style>
 </head>
@@ -248,55 +347,44 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
 <!-- Shared nav: rendered by /nav.js. Edit NAV_CONFIG in nav.js to change site-wide. -->
 <div id="site-nav"></div>
 
-<!-- PAGE HEADER -->
-<div class="page-header">
-  <div class="page-header-glow"></div>
-  <div class="page-header-glow-2"></div>
+<!-- HERO with name above the fold for SEO -->
+<section class="hero">
+  <div class="hero-glow"></div>
   <div class="wrap">
-    <div class="hero-grid">
+    <div class="hero-content">
       <div>
-        <div class="eyebrow">
-          <div class="eyebrow-line"></div>
-          <span class="eyebrow-text">Cloud &amp; Cyber Security Architect · UK</span>
+        <div class="hero-eyebrow">
+          <div class="hero-eyebrow-line"></div>
+          <span class="hero-eyebrow-text">Cloud &amp; Cyber Security Architect · UK</span>
         </div>
-        <h1>Security architecture<br>built for the <em>real world.</em></h1>
-        <p class="hero-sub">More than 20 years designing secure, scalable enterprise systems across UK government, Critical National Infrastructure, manufacturing, and global enterprise. The focus has always been on architecture that works in practice, not just on paper.</p>
-        <div class="hero-tags">
-          <span class="hero-tag teal">AWS</span>
-          <span class="hero-tag teal">Azure</span>
-          <span class="hero-tag teal">Zero Trust</span>
-          <span class="hero-tag amber">AI Governance</span>
-          <span class="hero-tag purple">OT Security</span>
-          <span class="hero-tag teal">SABSA</span>
-          <span class="hero-tag teal">MITRE ATT&amp;CK</span>
-        </div>
+        <div class="hero-name"><strong>Saleem Yousaf</strong> · saleemyousaf.co.uk</div>
+        <h1>Secure by design.<br><em>Resilient by architecture.</em></h1>
+        <p class="hero-sub">
+          I'm Saleem Yousaf, a Cloud and Cyber Security Architect securing UK government, Critical National Infrastructure, and global enterprise across AWS, Azure, and Zero Trust environments. Founder of BreachForge. Director at Cyber Spartans.
+        </p>
         <div class="hero-actions">
           <a href="https://saleemyousaf.co.uk/experience/" class="btn-primary">
-            View experience
+            View my experience
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
-          <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener" class="btn-outline">Connect on LinkedIn</a>
+          <a href="https://saleemyousaf.co.uk/articles/" class="btn-secondary">
+            Read articles →
+          </a>
         </div>
       </div>
-
-      <div class="profile-card">
-        <div class="profile-card-label">// at a glance</div>
-        <div class="profile-stat">
-          <div class="profile-stat-num">20<span>+</span></div>
-          <div class="profile-stat-label">Years of architecture and security experience</div>
-        </div>
-        <div class="profile-stat">
-          <div class="profile-stat-num">10<span>+</span></div>
-          <div class="profile-stat-label">Cloud migration programmes delivered</div>
-        </div>
-        <div class="profile-stat">
-          <div class="profile-stat-num">15<span>+</span></div>
-          <div class="profile-stat-label">Enterprise cloud and security programmes</div>
+      <div class="hero-card">
+        <canvas class="ztc" id="ztc" aria-hidden="true"></canvas>
+        <div class="ztc-scrim"></div>
+        <div class="hcard-inner">
+          <div class="hcard-label">// snapshot</div>
+          <div class="hcard-stat"><div class="hcard-num">UK<span></span></div><div class="hcard-desc">Government, CNI &amp; global enterprise experience</div></div>
+          <div class="hcard-stat"><div class="hcard-num">2</div><div class="hcard-desc">Active properties: BreachForge &amp; Cyber Spartans</div></div>
+          <div class="hcard-stat"><div class="hcard-num">19<span>+</span></div><div class="hcard-desc">Published technical articles</div></div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
 <!-- STORY -->
 <section class="story">
@@ -310,7 +398,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
 
     <div class="story-grid">
       <div class="story-prose">
-        <p>Saleem Yousaf is a senior Cloud and Cyber Security Architect with more than 20 years of experience across cloud transformation, cyber security, governance, and infrastructure modernisation. He has worked across some of the UK's most complex and regulated environments, delivering secure-by-design architectures, Zero Trust strategies, and AI governance capabilities for organisations where security cannot be an afterthought.</p>
+        <p>Saleem Yousaf is a Cloud and Cyber Security Architect with deep experience across cloud transformation, cyber security, governance, and infrastructure modernisation. He has worked across some of the UK's most complex and regulated environments, delivering secure-by-design architectures, Zero Trust strategies, and AI governance capabilities for organisations where security cannot be an afterthought.</p>
         <p>Having worked within sectors including UK central government, Critical National Infrastructure, automotive manufacturing, and financial services, the experience is grounded in environments where the stakes are high and the architecture decisions have lasting consequences. That background shapes an approach that is pragmatic, business-aligned, and always focused on what works in practice rather than what looks good in a diagram.</p>
         <p>The work spans AWS and Azure cloud security architecture, Zero Trust design, OT security, threat modelling using STRIDE and MITRE ATT&CK, Breach Attack Simulation, AI governance frameworks, and enterprise architecture assurance. Alongside delivery work, Saleem contributes openly to the security community through GitHub repositories, published articles, and the Cyber Spartans security initiative.</p>
         <p>The underlying belief is that security architecture works best when it is embedded from the start, aligned to business risk, and designed to be operationally sustainable. Not bolted on after the fact. Not driven by compliance checklists alone. Built to hold under real conditions.</p>
@@ -453,33 +541,38 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
     <div class="clients-list">
       <div class="client-row">
         <div class="client-num">01</div>
-        <div class="client-name">HM Land Registry</div>
+        <div class="client-name">UK Government</div>
         <div class="client-desc">Cloud security architecture, secure platform design, AWS and Azure security assurance, STRIDE threat modelling, and enterprise security architecture across a major government transformation programme.</div>
       </div>
       <div class="client-row">
         <div class="client-num">02</div>
-        <div class="client-name">Ministry of Justice</div>
-        <div class="client-desc">Lead Cloud Security Architect within MOJ Digital and Technology. Security architecture and governance support across enterprise cloud transformation and secure digital service delivery.</div>
+        <div class="client-name">UK Government</div>
+        <div class="client-desc">Lead Cloud Security Architect across government digital services. Security architecture and governance support across enterprise cloud transformation and secure digital service delivery.</div>
       </div>
       <div class="client-row">
         <div class="client-num">03</div>
-        <div class="client-name">Smart DCC</div>
+        <div class="client-name">UK Smart Energy Network</div>
         <div class="client-desc">Security architecture activities supporting regulated Critical National Infrastructure systems, AWS-based PKI cloud architecture, and enterprise security governance.</div>
       </div>
       <div class="client-row">
         <div class="client-num">04</div>
-        <div class="client-name">Jaguar Land Rover</div>
-        <div class="client-desc">Cloud and enterprise security architecture support across large-scale automotive manufacturing environments, covering OT security, third-party access governance, and Shadow IT reduction.</div>
+        <div class="client-name">Global Luxury Car Manufacturer</div>
+        <div class="client-desc">Cloud and enterprise security architecture support across large-scale global manufacturing environments, covering OT security, third-party access governance, and Shadow IT reduction.</div>
       </div>
       <div class="client-row">
         <div class="client-num">05</div>
-        <div class="client-name">AIG</div>
+        <div class="client-name">Global Financial Services</div>
         <div class="client-desc">Cloud security and solution architecture across enterprise platforms and transformation initiatives within a global financial services environment with complex regulatory obligations.</div>
       </div>
       <div class="client-row">
         <div class="client-num">06</div>
-        <div class="client-name">Amer Sports</div>
+        <div class="client-name">Global Sport Brand</div>
         <div class="client-desc">Security architecture and OT security within enterprise distribution and logistics environments, covering network segmentation, infrastructure security design, and secure operational architecture.</div>
+      </div>
+      <div class="client-row">
+        <div class="client-num">07</div>
+        <div class="client-name">European Airlines</div>
+        <div class="client-desc">Multi-cloud security architecture across Azure and GCP. Azure CSPM-driven remediation, SteerCo-level security leadership, lift and shift migration security from design to delivery, traffic filtering and segmentation strategy, and alignment of NIST 800, CIS and MITRE ATT&CK controls.</div>
       </div>
     </div>
   </div>
@@ -610,36 +703,63 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
     <div class="footer-inner">
       <div>
         <div class="footer-logo">Saleem <span>Yousaf</span></div>
-        <div class="footer-desc">Cloud &amp; Cyber Security Architect · AWS · Azure · Zero Trust · AI Governance · OT Security · Enterprise Architecture</div>
+        <div class="footer-desc">Cloud &amp; Cyber Security Architect<br>Founder of BreachForge · Director at Cyber Spartans<br>AWS · Azure · Zero Trust · AI Governance · OT Security</div>
       </div>
-      <div class="footer-links">
-        <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
-        <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
-        <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
-        <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+      <div>
+        <div class="footer-col-label">// Properties</div>
+        <div class="footer-properties">
+          <a href="https://breachforge.co.uk" target="_blank" rel="noopener" class="footer-prop-link bf">⬡ breachforge.co.uk</a>
+          <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener" class="footer-prop-link cs">⬢ cyberspartans.co.uk</a>
+        </div>
       </div>
+    </div>
+    <div class="footer-social">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
     </div>
     <div class="footer-bottom">
       <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
       <a href="https://saleemyousaf.co.uk/privacy-policy/" style="font-size:12px;color:var(--muted2);text-decoration:none;">Privacy Policy</a>
     </div>
   </div>
-
-<!-- Cross-property links (static HTML, mirrors nav for crawlers and no-JS visitors) -->
-<div style="max-width:1100px;margin:0 auto;padding:24px 32px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;border-top:1px solid rgba(255,255,255,0.07);">
-  <a href="https://breachforge.co.uk" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:4px;text-decoration:none;letter-spacing:0.04em;font-weight:500;background:rgba(230,57,70,0.12);color:#e63946;border:1px solid rgba(230,57,70,0.25);">
-    ⦡ breachforge.co.uk
-  </a>
-  <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:4px;text-decoration:none;letter-spacing:0.04em;font-weight:500;background:rgba(0,217,255,0.12);color:#00d9ff;border:1px solid rgba(0,217,255,0.25);">
-    ⬢ cyberspartans.co.uk
-  </a>
-</div>
-
 </footer>
 
 
 <script src="/nav.js" defer></script>
+
+<script>
+(function ztc(){
+  var c=document.getElementById('ztc'); if(!c) return;
+  var ctx=c.getContext('2d');
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W,H,dpr;
+  function size(){dpr=Math.min(window.devicePixelRatio||1,2);var r=c.getBoundingClientRect();W=r.width;H=r.height;c.width=W*dpr;c.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+  size();window.addEventListener('resize',size);
+  var t=0, rings=[0.42,0.66,0.92], rot=[0,0,0], pulses=[];
+  function frame(){var cx=W/2,cy=H/2,base=Math.min(W,H)/2; ctx.clearRect(0,0,W,H); t+=0.016;
+    ctx.globalCompositeOperation='lighter';
+    var bp=0.4+0.18*Math.sin(t*2);
+    var g=ctx.createRadialGradient(cx,cy,2,cx,cy,base*0.6); g.addColorStop(0,'rgba(45,212,191,'+(0.16*bp+0.05)+')'); g.addColorStop(1,'transparent');
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cy,base*0.6,0,6.3); ctx.fill();
+    ctx.globalCompositeOperation='source-over';
+    rings.forEach(function(rf,i){var r=base*rf; if(!reduce) rot[i]+=0.0016*(i%2?-1:1);
+      ctx.strokeStyle='rgba(45,212,191,0.14)'; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(cx,cy,r,0,6.3); ctx.stroke();
+      var n=3+i; for(var k=0;k<n;k++){var a=(k/n)*6.3+rot[i]; var x=cx+Math.cos(a)*r,y=cy+Math.sin(a)*r;
+        ctx.fillStyle='#0b1016'; ctx.strokeStyle='rgba(45,212,191,0.55)'; ctx.lineWidth=1.1; ctx.beginPath(); ctx.arc(x,y,4,0,6.3); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle='rgba(94,234,212,0.9)'; ctx.lineWidth=1.1; ctx.beginPath(); ctx.moveTo(x-1.6,y); ctx.lineTo(x-0.4,y+1.3); ctx.lineTo(x+2,y-1.6); ctx.stroke();}});
+    ctx.globalCompositeOperation='lighter';
+    if(!reduce){ if(Math.random()<0.06) pulses.push({ang:Math.random()*6.3,d:base});
+      for(var i=pulses.length-1;i>=0;i--){var p=pulses[i]; p.d-=base*0.006; var x=cx+Math.cos(p.ang)*p.d,y=cy+Math.sin(p.ang)*p.d;
+        ctx.fillStyle='rgba(94,234,212,0.9)'; ctx.shadowColor='#2dd4bf'; ctx.shadowBlur=8; ctx.beginPath(); ctx.arc(x,y,2,0,6.3); ctx.fill(); ctx.shadowBlur=0;
+        if(p.d<=base*0.16) pulses.splice(i,1);} }
+    ctx.globalCompositeOperation='source-over';
+    if(!reduce) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
 </body>
 </html>
