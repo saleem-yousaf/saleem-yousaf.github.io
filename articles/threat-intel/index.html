@@ -1,1 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Threat Intelligence Platforms: The Honest Conversation | Saleem Yousaf</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#090c10;--bg2:#0f1318;--bg3:#161b22;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#e6eaf0;--muted:#7a8694;--muted2:#4a5568;--teal:#2dd4bf;--teal-dim:rgba(45,212,191,0.12);--amber:#f59e0b;--amber-dim:rgba(245,158,11,0.12);--red:#f87171;--red-dim:rgba(248,113,113,0.12);--green:#10b981;--green-dim:rgba(16,185,129,0.12);--purple:#a78bfa;--purple-dim:rgba(167,139,250,0.1);--mono:'DM Mono',monospace;--display:'Syne',sans-serif;--body:'Inter',sans-serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased;padding-bottom:80px;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(45,212,191,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(45,212,191,0.015) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+.wrap{max-width:760px;margin:0 auto;padding:0 32px;position:relative;z-index:1;}
+nav{padding:20px 0;border-bottom:1px solid var(--border);}
+.nav-inner{max-width:760px;margin:0 auto;padding:0 32px;display:flex;justify-content:space-between;align-items:center;}
+.nav-logo{font-family:var(--display);font-size:14px;font-weight:700;color:var(--text);text-decoration:none;}
+.nav-logo span{color:var(--teal);}
+.nav-back{font-family:var(--mono);font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:0.06em;}
+.nav-back:hover{color:var(--teal);}
+.hero{padding:64px 0 48px;border-bottom:1px solid var(--border);}
+.eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+.eyebrow-line{width:24px;height:1px;background:var(--teal);}
+.eyebrow-text{font-family:var(--mono);font-size:11px;color:var(--teal);letter-spacing:0.12em;text-transform:uppercase;}
+h1{font-family:var(--display);font-size:clamp(28px,4vw,44px);font-weight:800;line-height:1.1;letter-spacing:-0.02em;color:#fff;margin-bottom:20px;}
+h1 em{font-style:normal;color:var(--teal);}
+.hero-meta{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.meta-item{font-family:var(--mono);font-size:11px;color:var(--muted2);}
+.meta-dot{width:3px;height:3px;border-radius:50%;background:var(--muted2);display:inline-block;margin:0 4px;vertical-align:middle;}
+.hero-intro{font-size:18px;color:var(--muted);line-height:1.75;margin-top:24px;max-width:640px;}
+.article-body{padding:48px 0;}
+h2{font-family:var(--display);font-size:22px;font-weight:700;color:#fff;letter-spacing:-0.02em;margin:48px 0 16px;line-height:1.2;}
+h3{font-family:var(--display);font-size:17px;font-weight:700;color:var(--text);margin:32px 0 12px;}
+p{margin-bottom:20px;color:var(--text);}
+strong{color:#fff;font-weight:600;}
+.callout{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:0 6px 6px 0;padding:20px 24px;margin:32px 0;font-size:15px;color:var(--muted);}
+.callout strong{color:var(--teal);}
+.warn{background:var(--amber-dim);border:1px solid rgba(245,158,11,0.2);border-left:3px solid var(--amber);border-radius:0 6px 6px 0;padding:20px 24px;margin:32px 0;font-size:15px;color:var(--muted);}
+.warn strong{color:var(--amber);}
+ul{margin:0 0 20px 0;padding-left:0;list-style:none;}
+ul li{padding:6px 0 6px 20px;position:relative;color:var(--text);font-size:15px;}
+ul li::before{content:'';position:absolute;left:0;top:16px;width:6px;height:1px;background:var(--teal);}
+.diagram-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:28px;margin:40px 0;}
+.diagram-title{font-family:var(--mono);font-size:11px;color:var(--teal);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;}
+.diagram-sub{font-size:13px;color:var(--muted);margin-bottom:24px;}
 
+/* INTEL FLOW DIAGRAM */
+.flow{display:flex;flex-direction:column;gap:0;align-items:stretch;}
+.flow-row{display:grid;gap:12px;margin-bottom:0;}
+.flow-sources{grid-template-columns:repeat(3,1fr);}
+.flow-tip{grid-template-columns:1fr;}
+.flow-consumers{grid-template-columns:repeat(4,1fr);}
+.flow-node{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:14px 12px;text-align:center;transition:border-color 0.2s;cursor:pointer;}
+.flow-node:hover{border-color:var(--border2);}
+.flow-node.source{border-color:rgba(167,139,250,0.3);}
+.flow-node.source:hover{border-color:var(--purple);}
+.flow-node.tip{border-color:rgba(45,212,191,0.3);background:var(--teal-dim);}
+.flow-node.consumer{border-color:rgba(16,185,129,0.3);}
+.flow-node.consumer:hover{border-color:var(--green);}
+.node-label{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;}
+.source .node-label{color:var(--purple);}
+.tip .node-label{color:var(--teal);}
+.consumer .node-label{color:var(--green);}
+.node-name{font-size:13px;color:var(--text);font-weight:500;line-height:1.3;}
+.node-detail{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4;}
+.flow-arrow{display:flex;justify-content:center;align-items:center;padding:6px 0;gap:8px;}
+.arrow-line{flex:1;height:1px;background:var(--border2);}
+.arrow-label{font-family:var(--mono);font-size:10px;color:var(--muted2);letter-spacing:0.06em;white-space:nowrap;}
+.arrow-down{font-size:16px;color:var(--muted2);}
+
+/* DECISION MATRIX */
+.matrix{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
+.matrix-row{display:grid;grid-template-columns:180px 1fr;gap:16px;align-items:start;background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:14px 16px;cursor:pointer;transition:border-color 0.15s;}
+.matrix-row:hover{border-color:var(--border2);}
+.matrix-condition{font-size:13px;color:var(--text);font-weight:500;line-height:1.4;}
+.matrix-rec{font-size:13px;color:var(--muted);line-height:1.5;}
+.rec-badge{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:3px;margin-bottom:6px;letter-spacing:0.06em;}
+.rec-feed{background:var(--green-dim);color:var(--green);}
+.rec-opensource{background:var(--teal-dim);color:var(--teal);}
+.rec-commercial{background:var(--amber-dim);color:var(--amber);}
+.rec-enterprise{background:var(--purple-dim);color:var(--purple);}
+
+@media(max-width:600px){.wrap{padding:0 20px;}.flow-sources,.flow-consumers{grid-template-columns:repeat(2,1fr);}.matrix-row{grid-template-columns:1fr;}}
+
+/* Threat intel infographic lightbox (ti- scope) */
+.ti-ig-launch{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:18px 22px;margin:36px 0;cursor:pointer;font-family:inherit;color:var(--text);transition:border-color .2s,background .2s,transform .2s;}
+.ti-ig-launch:hover{border-color:var(--teal);background:var(--bg3);transform:translateY(-1px);}
+.ti-ig-launch:focus-visible{outline:2px solid var(--teal);outline-offset:2px;}
+.ti-ig-launch-ico{width:40px;height:40px;flex-shrink:0;border-radius:9px;background:rgba(45,212,191,0.1);border:1px solid rgba(45,212,191,0.25);display:flex;align-items:center;justify-content:center;color:var(--teal);}
+.ti-ig-launch-tx{display:flex;flex-direction:column;gap:3px;}
+.ti-ig-launch-tx b{font-family:var(--display);font-weight:700;font-size:15px;color:#fff;}
+.ti-ig-launch-tx em{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:0.03em;}
+.ti-ig-launch-cue{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--teal);white-space:nowrap;}
+.ti-ig-overlay{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:3vh 2vw;background:rgba(5,7,10,0.86);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+.ti-ig-overlay.open{display:flex;}
+.ti-ig-modal{position:relative;width:96vw;max-width:920px;height:94vh;background:var(--bg);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.6);display:flex;flex-direction:column;}
+.ti-ig-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;}
+.ti-ig-bar span{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;}
+.ti-ig-close{width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:15px;line-height:1;display:flex;align-items:center;justify-content:center;transition:color .2s,border-color .2s;}
+.ti-ig-close:hover,.ti-ig-close:focus-visible{color:var(--teal);border-color:var(--teal);outline:none;}
+.ti-ig-frame{flex:1;width:100%;border:0;background:var(--bg);}
+@media(prefers-reduced-motion:reduce){.ti-ig-launch{transition:none;}}
+@media(max-width:600px){.ti-ig-launch-cue{display:none;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="https://saleemyousaf.co.uk" class="nav-logo">Saleem <span>Yousaf</span></a>
+    <a href="https://saleemyousaf.co.uk/articles/" class="nav-back">← All articles</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<div class="hero">
+  <div class="eyebrow">
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-text">Threat Intelligence</span>
+  </div>
+  <h1>Threat intelligence platforms:<br><em>the honest conversation</em></h1>
+  <div class="hero-meta">
+    <span class="meta-item">Saleem Yousaf</span>
+    <span class="meta-dot"></span>
+    <span class="meta-item">June 2026</span>
+    <span class="meta-dot"></span>
+    <span class="meta-item">~13 min read</span>
+    <span class="meta-dot"></span>
+    <span class="meta-item">Threat Intelligence · SIEM · SOC Architecture</span>
+  </div>
+  <p class="hero-intro">Most TIP deployments I've seen are shelfware within 18 months. Not because the platforms are bad. Because the organisations that bought them didn't have the analyst capacity to curate them, the integrations to make them useful, or a clear answer to the question: what decision does this platform help us make faster?</p>
+</div>
+
+<div class="article-body">
+
+<p>The sales cycle for a threat intelligence platform tends to go like this: a CSO attends a conference, a vendor demo shows real-time threat actor tracking, automated IOC enrichment, and a global feed of adversary TTPs mapped to MITRE ATT&CK. The demo is impressive. The procurement happens. Eighteen months later there are three analysts looking at a platform with 40,000 unprocessed indicators and an integration to the SIEM that someone built during the initial deployment and nobody has updated since.</p>
+
+<p>The platform didn't fail. The organisation wasn't ready for it. These are different problems with different solutions.</p>
+
+<h2>The three types of threat intelligence, and why most organisations only use one</h2>
+
+<p>Threat intelligence gets discussed as if it's a single thing. It isn't. There are three distinct types and they require different platforms, different skills, and different operational processes to be useful.</p>
+
+<p><strong>Tactical intelligence</strong> is indicators of compromise: IP addresses, domains, file hashes, URLs associated with known malicious activity. It's high volume, short shelf life (an IOC is useful for hours to days before the attacker rotates infrastructure), and immediately actionable. Block the IP, quarantine the hash, take down the domain. Your SIEM can consume this directly via a threat intelligence feed without a TIP sitting in the middle.</p>
+
+<p><strong>Operational intelligence</strong> is information about specific campaigns and threat actor activity: who is targeting your sector right now, what TTPs they're using, what the kill chain looked like in the last three incidents attributed to them. This requires correlation across multiple sources, analyst judgment, and context about your specific environment. It's where TIPs genuinely add value because they aggregate, normalise, and allow you to build a picture across sources that would take significant manual effort to build without them.</p>
+
+<p><strong>Strategic intelligence</strong> is the long-horizon view: threat actor motivations, geopolitical drivers, emerging technology risks, sector-specific trends. This is what Gartner and Forrester produce. It informs security strategy and investment decisions. It doesn't come from a TIP. It comes from analysts, subscription reports, and sector-specific information sharing communities.</p>
+
+<div class="callout">
+  <strong>The mismatch in most TIP procurement:</strong> organisations buy a platform that promises all three, configure it primarily as a tactical IOC aggregator, and never invest the analyst resource to use the operational intelligence capability. The result is an expensive feed aggregator when a $15,000/year threat intel feed piped directly into Sentinel would have achieved the same operational outcome.
+</div>
+
+<button class="ti-ig-launch" type="button" id="tiIgOpen" aria-haspopup="dialog">
+  <span class="ti-ig-launch-ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></span>
+  <span class="ti-ig-launch-tx"><b>Threat intelligence platform architecture</b><em>Interactive infographic: the three intel types, the data pipeline, and the decision matrix</em></span>
+  <span class="ti-ig-launch-cue">Open &#8599;</span>
+</button>
+
+<!-- INTEL FLOW DIAGRAM -->
+<div class="diagram-wrap">
+  <div class="diagram-title">// Threat intelligence data flow</div>
+  <div class="diagram-sub">How intel moves from sources through a TIP to consumption points. The integration quality between each layer determines whether the platform adds value or creates overhead. Click any node for detail.</div>
+
+  <div class="flow">
+    <div class="flow-row flow-sources">
+      <div class="flow-node source" onclick="showNodeDetail('n1')">
+        <div class="node-label">External</div>
+        <div class="node-name">Commercial feeds</div>
+        <div class="node-detail">Recorded Future, Mandiant, CrowdStrike Intel</div>
+      </div>
+      <div class="flow-node source" onclick="showNodeDetail('n2')">
+        <div class="node-label">Open source</div>
+        <div class="node-name">OSINT feeds</div>
+        <div class="node-detail">AlienVault OTX, abuse.ch, MISP communities</div>
+      </div>
+      <div class="flow-node source" onclick="showNodeDetail('n3')">
+        <div class="node-label">Sector</div>
+        <div class="node-name">ISAC / NCSC</div>
+        <div class="node-detail">CISP, FS-ISAC, Energy ISAC, NCSC feeds</div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">
+      <div class="arrow-line"></div>
+      <div class="arrow-down">↓</div>
+      <div class="arrow-label">ingest + normalise + deduplicate</div>
+      <div class="arrow-line"></div>
+    </div>
+
+    <div class="flow-row flow-tip">
+      <div class="flow-node tip" onclick="showNodeDetail('n4')">
+        <div class="node-label">Core platform</div>
+        <div class="node-name">Threat Intelligence Platform (TIP)</div>
+        <div class="node-detail">MISP · OpenCTI · ThreatConnect · Anomali · EclecticIQ</div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">
+      <div class="arrow-line"></div>
+      <div class="arrow-down">↓</div>
+      <div class="arrow-label">enrichment + scoring + distribution</div>
+      <div class="arrow-line"></div>
+    </div>
+
+    <div class="flow-row flow-consumers">
+      <div class="flow-node consumer" onclick="showNodeDetail('n5')">
+        <div class="node-label">Detection</div>
+        <div class="node-name">SIEM</div>
+        <div class="node-detail">Sentinel, Splunk, Chronicle</div>
+      </div>
+      <div class="flow-node consumer" onclick="showNodeDetail('n6')">
+        <div class="node-label">Response</div>
+        <div class="node-name">SOAR</div>
+        <div class="node-detail">Sentinel Playbooks, Palo XSOAR</div>
+      </div>
+      <div class="flow-node consumer" onclick="showNodeDetail('n7')">
+        <div class="node-label">Endpoint</div>
+        <div class="node-name">EDR</div>
+        <div class="node-detail">Defender, CrowdStrike, SentinelOne</div>
+      </div>
+      <div class="flow-node consumer" onclick="showNodeDetail('n8')">
+        <div class="node-label">Network</div>
+        <div class="node-name">Firewall / Proxy</div>
+        <div class="node-detail">Palo Alto, Zscaler ZIA, Fortinet</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="node-detail-panel" style="display:none;margin-top:20px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px;font-size:13px;color:var(--muted);line-height:1.65;">
+    <span id="node-detail-text"></span>
+  </div>
+</div>
+
+<h2>The integration problem the vendor glosses over</h2>
+
+<p>Every TIP vendor will show you a diagram that looks like the one above, with clean arrows connecting sources to the platform to your SIEM and EDR. The arrows imply automated, reliable, low-maintenance data flow. The reality is different.</p>
+
+<p>The SIEM integration is typically the most mature and best-supported connection. Sentinel has a native TAXII connector. Splunk has an ES TIP framework. Chronicle has threat intelligence ingestion built in. This connection usually works reasonably well on day one.</p>
+
+<p>The EDR integration is where it gets harder. Getting IOCs from your TIP into CrowdStrike or Defender for Endpoint as watchlist indicators requires either a supported integration (which exists for major platforms but needs configuration) or custom automation. More importantly, it requires a decision about IOC scoring: you don't want to push every unvalidated IOC from every feed to every endpoint. High-confidence, high-severity indicators only. Building that scoring and filtering logic takes time and analyst judgment that often isn't accounted for in the initial deployment plan.</p>
+
+<p>The firewall and proxy integration is often the weakest. Pushing dynamic block lists to a Palo Alto or to Zscaler ZIA requires either a supported API integration or a script that someone maintains. Scripts that someone maintains become scripts that nobody maintains when that someone leaves.</p>
+
+<div class="warn">
+  <strong>The integration maintenance reality:</strong> TIP integrations are not fire-and-forget. Feed formats change. API versions get deprecated. STIX/TAXII schema updates break parsers. The normalisation rules you built for one feed's IP reputation data don't automatically apply when the feed provider changes their output format. Budget for ongoing integration maintenance, not just initial deployment.
+</div>
+
+<h2>Open source vs commercial: the actual decision</h2>
+
+<p>MISP and OpenCTI are both genuinely capable platforms. MISP has been around since 2012 and has a large community. OpenCTI is newer, has a cleaner data model aligned to STIX 2.1, and better graph visualisation. Both are free to run on infrastructure you control. Neither is free in terms of operational overhead.</p>
+
+<p>Running MISP in production means maintaining the deployment, managing the PostgreSQL and Redis backends, keeping the feed synchronisation jobs healthy, and having someone who understands the MISP data model well enough to troubleshoot when something breaks. For an organisation with a small security team, this operational overhead often consumes more analyst time than the platform saves.</p>
+
+<p>Commercial platforms (ThreatConnect, Anomali, EclecticIQ, Recorded Future Intelligence Cloud) solve the operational overhead problem but introduce cost and vendor dependency. The question worth asking before procurement is: are you paying for the platform itself, or are you paying for the feed coverage and curation that comes with it? If it's primarily the latter, a commercial threat intel feed subscription without a full TIP platform may be the more cost-effective path.</p>
+
+<!-- DECISION MATRIX -->
+<div class="diagram-wrap">
+  <div class="diagram-title">// When to use what</div>
+  <div class="diagram-sub">Based on analyst capacity and operational maturity. Hover each row to expand.</div>
+  <div class="matrix">
+    <div class="matrix-row" onclick="toggleMatrix(this)">
+      <div class="matrix-condition">Small team, limited analyst capacity</div>
+      <div class="matrix-rec">
+        <span class="rec-badge rec-feed">Feed only</span>
+        Subscribe to one or two high-quality commercial threat intel feeds (Recorded Future, Mandiant) and ingest directly into your SIEM via TAXII. Skip the TIP entirely. You get tactical IOC coverage without the platform overhead.
+      </div>
+    </div>
+    <div class="matrix-row" onclick="toggleMatrix(this)">
+      <div class="matrix-condition">Mid-size team, sharing intel across sector or with partners</div>
+      <div class="matrix-rec">
+        <span class="rec-badge rec-opensource">MISP or OpenCTI</span>
+        Open source TIP gives you the sharing infrastructure (TAXII server, feed aggregation, STIX export) without commercial licensing cost. Worth the operational overhead if you have an analyst who owns the platform. OpenCTI is the better choice for new deployments.
+      </div>
+    </div>
+    <div class="matrix-row" onclick="toggleMatrix(this)">
+      <div class="matrix-condition">Mature SOC, multiple analysts, active threat hunting</div>
+      <div class="matrix-rec">
+        <span class="rec-badge rec-commercial">Commercial TIP</span>
+        ThreatConnect or Anomali make sense when you have the analyst throughput to use the operational intelligence capabilities, not just the IOC feeds. The ROI requires active use of the correlation and actor tracking features, not just feed aggregation.
+      </div>
+    </div>
+    <div class="matrix-row" onclick="toggleMatrix(this)">
+      <div class="matrix-condition">CNI, government, or high-threat sector</div>
+      <div class="matrix-rec">
+        <span class="rec-badge rec-enterprise">Commercial + NCSC/ISAC</span>
+        Prioritise NCSC CISP membership and sector ISAC participation alongside commercial intel. Government threat intel for UK CNI environments often provides more contextually relevant intelligence than commercial feeds. NCSC Malware Information Sharing Platform (MISP) feeds are available to CISP members and should be a baseline input.
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2>The CNI and government angle that most TIP articles miss</h2>
+
+<p>If you're running security for a UK CNI operator or a government department, the commercial TIP conversation is secondary to the question of sector intelligence sharing. NCSC's Cyber Security Information Sharing Partnership (CISP) exists precisely to provide government and CNI operators with threat intelligence that is relevant to UK infrastructure specifically. The intelligence sharing that happens through CISP is frequently more operationally relevant than a commercial feed, because it's curated for the UK threat landscape rather than global IOC aggregation.</p>
+
+<p>The practical integration is straightforward: NCSC provides STIX/TAXII feeds that can be ingested into any SIEM or TIP directly. Microsoft Sentinel has a native connector for NCSC feeds. This is the baseline for any UK CNI security architecture and it should be in place before any commercial TIP procurement is considered.</p>
+
+<p>Sector ISACs (FS-ISAC for financial services, Energy ISAC for utilities, the equivalent bodies for other CNI sectors) provide a similar function: sector-specific intelligence from peers who are facing the same threat actors. The value isn't the volume of IOCs. It's the context that comes from "this IP was observed scanning NHS infrastructure yesterday before hitting three financial services firms today."</p>
+
+<h2>The questions to answer before you buy</h2>
+
+<p>Three questions cut through most TIP procurement conversations.</p>
+
+<p>First: what decision will this platform help you make faster? If you can't name a specific decision (escalating an alert based on threat actor context, prioritising a vulnerability based on active exploitation evidence, blocking a network path based on campaign intelligence), you're buying capability rather than solving a problem.</p>
+
+<p>Second: do you have an analyst who will own the platform's curation? Not a shared responsibility across the team. One person who is accountable for feed quality, normalisation rule maintenance, and the scoring logic that determines which indicators reach your SIEM and EDR. Without this person, the platform degrades from month three onwards.</p>
+
+<p>Third: have you mapped the integrations you need and tested them in a non-production environment before committing? The vendor will confirm that an integration exists. That's not the same as the integration working reliably with your specific SIEM version, your specific EDR tenant configuration, and your specific firewall firmware. Test it before you sign.</p>
+
+<div class="callout">
+  <strong>The summary position:</strong> A well-configured SIEM with one or two high-quality threat intel feeds handles tactical intelligence well without a TIP. Add a TIP when you have the analyst capacity to use its operational intelligence capabilities actively, the integrations to distribute enriched indicators to your security controls, and someone who owns the platform's ongoing curation. In that order, not the reverse.
+</div>
+
+<p>The organisations running effective threat intelligence programmes have one thing in common with effective FinOps programmes and effective HSM deployments: they started with a specific problem, chose tooling that addressed that problem, and built the operational capability to use the tooling properly before expanding scope. The technology wasn't the hard part.</p>
+
+</div>
+
+<div style="border-top:1px solid var(--border);padding-top:32px;margin-top:0;">
+  <p style="font-size:13px;color:var(--muted);">Saleem Yousaf is a Cloud Security Architect and Director at <a href="https://cyberspartans.co.uk" style="color:var(--teal);text-decoration:none;">Cyber Spartans Ltd</a>. He writes about cloud security, AI governance, and enterprise architecture at <a href="https://saleemyousaf.co.uk" style="color:var(--teal);text-decoration:none;">saleemyousaf.co.uk</a>.</p>
+</div>
+
+</div>
+
+<script>
+const nodeDetails = {
+  n1: '<strong>Commercial feeds:</strong> High-quality, curated intel from vendors with large sensor networks. Recorded Future excels at threat actor tracking and vulnerability intelligence. Mandiant (now Google) has strong attribution data. CrowdStrike Intel ties directly into CrowdStrike Falcon deployments. Expect $30k to $200k+ annually depending on scope. Evaluate based on feed relevance to your sector, not total IOC volume.',
+  n2: '<strong>OSINT feeds:</strong> AlienVault OTX is free and broad but signal-to-noise ratio is low without curation. abuse.ch runs focused, high-quality feeds for specific malware families (URLhaus, MalwareBazaar, ThreatFox) that are worth ingesting directly into any SIEM. MISP communities vary significantly in quality depending on the specific community. Free but requires curation effort.',
+  n3: '<strong>Sector and government feeds:</strong> For UK organisations, NCSC CISP is the starting point. TAXII feeds available to members. FS-ISAC, Energy ISAC, and equivalent sector bodies provide peer-sourced intelligence that is often more contextually relevant than global commercial feeds for sector-specific threats. Membership typically requires sector qualification.',
+  n4: '<strong>The TIP itself:</strong> Its core job is to ingest from multiple sources, normalise to a common schema (STIX 2.1 is the standard), deduplicate, score indicators, and distribute enriched intel to consumption points. MISP is the dominant open source option. OpenCTI has a cleaner modern data model. Commercial options (ThreatConnect, Anomali, EclecticIQ) add managed curation and better support.',
+  n5: '<strong>SIEM integration:</strong> Typically the most reliable integration. Microsoft Sentinel has native TAXII connector and NCSC feed connector. Splunk has ES TIP framework. The key design decision is which indicators go to the SIEM: high-confidence, high-severity only, not every IOC from every feed. Volume of noisy low-confidence indicators in the SIEM increases false positive alert rates.',
+  n6: '<strong>SOAR integration:</strong> TIP data enriches automated investigation playbooks. When an alert fires in Sentinel, a playbook can query the TIP to add threat actor context, campaign attribution, and related IOCs to the incident. This is where TIP investment pays back most clearly in SOC efficiency. Requires well-maintained playbooks and reliable TIP API.',
+  n7: '<strong>EDR integration:</strong> Pushing IOCs to EDR as watchlist indicators enables detection at endpoint before network-level controls see the traffic. Requires careful scoring: only high-confidence IOCs should reach EDR to avoid alert fatigue. Most major EDR platforms support API-based indicator management. Test the integration thoroughly before enabling in production.',
+  n8: '<strong>Firewall/Proxy integration:</strong> Dynamic block lists for IP addresses and domains at the network perimeter. Zscaler ZIA has a threat intelligence feed integration. Palo Alto supports dynamic address groups fed from external sources. This is often the least reliable integration in practice because it involves operational network changes and typically requires change management process.',
+};
+
+function showNodeDetail(id) {
+  const panel = document.getElementById('node-detail-panel');
+  const text = document.getElementById('node-detail-text');
+  if (panel.dataset.current === id) {
+    panel.style.display = 'none';
+    panel.dataset.current = '';
+  } else {
+    text.innerHTML = nodeDetails[id];
+    panel.style.display = 'block';
+    panel.dataset.current = id;
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+function toggleMatrix(el) {
+  const rec = el.querySelector('.matrix-rec');
+  const isOpen = el.style.background === 'var(--bg3)';
+  document.querySelectorAll('.matrix-row').forEach(r => {
+    r.style.background = '';
+    r.style.borderColor = '';
+  });
+  if (!isOpen) {
+    el.style.background = 'var(--bg2)';
+    el.style.borderColor = 'rgba(255,255,255,0.13)';
+  }
+}
+</script>
+
+
+<div class="ti-ig-overlay" id="tiIgOverlay" role="dialog" aria-modal="true" aria-label="Threat intelligence platform architecture infographic">
+  <div class="ti-ig-modal">
+    <div class="ti-ig-bar"><span>// TIP architecture</span><button class="ti-ig-close" id="tiIgClose" type="button" aria-label="Close infographic">&#10005;</button></div>
+    <iframe class="ti-ig-frame" id="tiIgFrame" title="Threat intelligence platform architecture infographic"></iframe>
+  </div>
+</div>
+<script>
+(function(){
+  var INFOGRAPHIC = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Threat Intelligence Platform Architecture | Saleem Yousaf</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#090c10;--bg2:#0f1318;--bg3:#161b22;--border:rgba(255,255,255,0.07);--text:#e6eaf0;--muted:#7a8694;--muted2:#4a5568;--teal:#2dd4bf;--amber:#f59e0b;--green:#10b981;--red:#f87171;--purple:#a78bfa;--mono:'DM Mono',monospace;--display:'Syne',sans-serif;--body:'Inter',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);font-family:var(--body);color:var(--text);padding:40px 20px;display:flex;flex-direction:column;align-items:center;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(45,212,191,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(45,212,191,0.02) 1px,transparent 1px);background-size:32px 32px;pointer-events:none;}
+.infographic{width:100%;max-width:820px;}
+.ig-header{text-align:center;margin-bottom:40px;}
+.ig-eyebrow{font-family:var(--mono);font-size:11px;color:var(--teal);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:12px;}
+.ig-title{font-family:var(--display);font-size:clamp(22px,4vw,38px);font-weight:800;color:#fff;line-height:1.1;letter-spacing:-0.02em;margin-bottom:10px;}
+.ig-title span{color:var(--purple);}
+.ig-sub{font-size:14px;color:var(--muted);max-width:520px;margin:0 auto;}
+
+/* INTEL TYPE TIERS */
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px;}
+.tier{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px 16px;position:relative;overflow:hidden;}
+.tier::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.t-tactical::before{background:var(--red);}
+.t-operational::before{background:var(--amber);}
+.t-strategic::before{background:var(--purple);}
+.tier-label{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;}
+.t-tactical .tier-label{color:var(--red);}
+.t-operational .tier-label{color:var(--amber);}
+.t-strategic .tier-label{color:var(--purple);}
+.tier-name{font-family:var(--display);font-size:16px;font-weight:700;color:#fff;margin-bottom:8px;}
+.tier-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px;}
+.tier-shelf{display:flex;align-items:center;gap:6px;font-size:11px;}
+.shelf-label{font-family:var(--mono);font-size:9px;color:var(--muted2);letter-spacing:0.06em;text-transform:uppercase;}
+.shelf-val{font-family:var(--mono);font-size:11px;}
+.t-tactical .shelf-val{color:var(--red);}
+.t-operational .shelf-val{color:var(--amber);}
+.t-strategic .shelf-val{color:var(--purple);}
+
+/* ANIMATED PIPELINE */
+.pipeline-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:24px;position:relative;overflow:hidden;}
+.pipe-label{font-family:var(--mono);font-size:10px;color:var(--teal);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:20px;}
+
+/* Sources row */
+.pipe-row{display:flex;justify-content:center;gap:10px;margin-bottom:0;}
+.pipe-node{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px 14px;text-align:center;min-width:120px;flex:1;max-width:160px;transition:border-color 0.2s;}
+.pipe-node:hover{border-color:var(--border);}
+.pn-label{font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;}
+.pn-name{font-size:13px;color:var(--text);font-weight:500;line-height:1.3;margin-bottom:4px;}
+.pn-detail{font-size:10px;color:var(--muted2);line-height:1.4;}
+
+.pn-source .pn-label{color:var(--purple);}
+.pn-source{border-color:rgba(167,139,250,0.2);}
+
+.pn-tip{border-color:rgba(45,212,191,0.3);background:var(--teal-dim) !important;min-width:100%;max-width:100%;}
+.pn-tip .pn-label{color:var(--teal);}
+.pn-tip .pn-name{font-size:15px;}
+
+.pn-consumer .pn-label{color:var(--green);}
+.pn-consumer{border-color:rgba(16,185,129,0.2);}
+
+/* Animated flow lines between rows */
+.flow-connector{display:flex;align-items:center;justify-content:center;padding:10px 0;gap:0;position:relative;}
+.flow-line-h{flex:1;height:1px;background:var(--border);}
+.flow-arrow-v{display:flex;flex-direction:column;align-items:center;gap:0;}
+
+/* Animated particles flowing downward */
+.flow-particles{position:relative;width:100%;height:32px;overflow:hidden;}
+.fp{position:absolute;width:6px;height:6px;border-radius:50%;animation:fpFlow 1.8s linear infinite;}
+.fp1{background:var(--purple);left:16%;animation-delay:0s;}
+.fp2{background:var(--amber);left:33%;animation-delay:0.3s;}
+.fp3{background:var(--green);left:50%;animation-delay:0.6s;}
+.fp4{background:var(--teal);left:66%;animation-delay:0.9s;}
+.fp5{background:var(--red);left:83%;animation-delay:1.2s;}
+@keyframes fpFlow{
+  0%{top:-6px;opacity:0;}
+  15%{opacity:1;}
+  85%{opacity:1;}
+  100%{top:100%;opacity:0;}
+}
+
+/* Down arrow animated */
+.down-arrow{font-size:18px;color:var(--muted2);animation:arrowPulse 2s ease-in-out infinite;}
+@keyframes arrowPulse{0%,100%{color:var(--muted2);}50%{color:var(--teal);}}
+
+/* SHELFWARE WARNING */
+.shelfware{background:rgba(248,113,113,0.06);border:1px solid rgba(248,113,113,0.2);border-radius:10px;padding:20px 24px;margin-bottom:24px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;}
+.sw-icon{font-size:22px;margin-top:2px;}
+.sw-title{font-family:var(--display);font-size:15px;font-weight:700;color:var(--red);margin-bottom:8px;}
+.sw-text{font-size:13px;color:var(--muted);line-height:1.7;}
+
+/* DECISION MATRIX */
+.matrix{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px;}
+.m-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;position:relative;overflow:hidden;}
+.m-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;}
+.mc-feed::before{background:var(--green);}
+.mc-os::before{background:var(--teal);}
+.mc-comm::before{background:var(--amber);}
+.mc-cni::before{background:var(--purple);}
+.m-badge{font-family:var(--mono);font-size:9px;padding:3px 8px;border-radius:3px;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;display:inline-block;}
+.mc-feed .m-badge{background:rgba(16,185,129,0.1);color:var(--green);}
+.mc-os .m-badge{background:rgba(45,212,191,0.1);color:var(--teal);}
+.mc-comm .m-badge{background:rgba(245,158,11,0.1);color:var(--amber);}
+.mc-cni .m-badge{background:rgba(167,139,250,0.1);color:var(--purple);}
+.m-condition{font-size:13px;font-weight:500;color:#fff;margin-bottom:6px;}
+.m-rec{font-size:12px;color:var(--muted);line-height:1.6;}
+
+/* INTEGRATION REALITY */
+.integration-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px;}
+.int-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;}
+.int-icon{font-size:18px;margin-bottom:8px;}
+.int-name{font-size:12px;font-weight:500;color:var(--text);margin-bottom:6px;}
+.int-status{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:3px;letter-spacing:0.04em;}
+.status-good{background:rgba(16,185,129,0.1);color:var(--green);}
+.status-ok{background:rgba(245,158,11,0.1);color:var(--amber);}
+.status-hard{background:rgba(248,113,113,0.1);color:var(--red);}
+.int-note{font-size:11px;color:var(--muted2);margin-top:6px;line-height:1.4;}
+
+@keyframes scanAnim{0%{top:0;}100%{top:100vh;}}
+.scanline{position:fixed;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(167,139,250,0.08),transparent);animation:scanAnim 12s linear infinite;pointer-events:none;}
+
+.ig-footer{text-align:center;padding-top:16px;border-top:1px solid var(--border);}
+.ig-footer a{font-family:var(--mono);font-size:11px;color:var(--teal);text-decoration:none;letter-spacing:0.06em;}
+
+@media(max-width:600px){.tiers{grid-template-columns:1fr;}.pipe-row{flex-wrap:wrap;}.matrix{grid-template-columns:1fr;}.integration-row{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+<div class="scanline"></div>
+
+<div class="infographic">
+
+  <div class="ig-header">
+    <div class="ig-eyebrow">// Threat Intelligence Architecture</div>
+    <div class="ig-title">Most TIPs are <span>shelfware</span><br>within 18 months.</div>
+    <div class="ig-sub">Not because the platform is wrong. Because organisations buy operational intelligence capability and only use it as an expensive IOC feed aggregator.</div>
+  </div>
+
+  <!-- THREE INTEL TYPES -->
+  <div style="font-family:var(--mono);font-size:10px;color:var(--teal);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">// Three types of threat intelligence (they need different tooling)</div>
+  <div class="tiers">
+    <div class="tier t-tactical">
+      <div class="tier-label">Type 01</div>
+      <div class="tier-name">Tactical</div>
+      <div class="tier-desc">IOCs: IP addresses, domains, file hashes. High volume, short shelf life. Your SIEM can consume this directly from a feed. A TIP is not required.</div>
+      <div class="tier-shelf">
+        <span class="shelf-label">Shelf life</span>
+        <span class="shelf-val">Hours to days</span>
+      </div>
+    </div>
+    <div class="tier t-operational">
+      <div class="tier-label">Type 02</div>
+      <div class="tier-name">Operational</div>
+      <div class="tier-desc">Campaign tracking, TTP mapping, threat actor activity. Requires correlation across sources and analyst judgment. This is where TIPs add genuine value.</div>
+      <div class="tier-shelf">
+        <span class="shelf-label">Shelf life</span>
+        <span class="shelf-val">Weeks to months</span>
+      </div>
+    </div>
+    <div class="tier t-strategic">
+      <div class="tier-label">Type 03</div>
+      <div class="tier-name">Strategic</div>
+      <div class="tier-desc">Threat actor motivations, geopolitical drivers, sector trends. Informs investment and strategy. Comes from analysts and reports, not a TIP.</div>
+      <div class="tier-shelf">
+        <span class="shelf-label">Shelf life</span>
+        <span class="shelf-val">Months to years</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANIMATED PIPELINE -->
+  <div class="pipeline-wrap">
+    <div class="pipe-label">// How intel flows (and where the integration breaks)</div>
+
+    <!-- Sources -->
+    <div class="pipe-row">
+      <div class="pipe-node pn-source">
+        <div class="pn-label">Commercial</div>
+        <div class="pn-name">Recorded Future, Mandiant</div>
+        <div class="pn-detail">$30k to $200k+ per year</div>
+      </div>
+      <div class="pipe-node pn-source">
+        <div class="pn-label">Open source</div>
+        <div class="pn-name">MISP, abuse.ch, OTX</div>
+        <div class="pn-detail">Free but needs curation</div>
+      </div>
+      <div class="pipe-node pn-source">
+        <div class="pn-label">Sector / Gov</div>
+        <div class="pn-name">NCSC CISP, ISACs</div>
+        <div class="pn-detail">UK CNI baseline</div>
+      </div>
+    </div>
+
+    <!-- Animated connector -->
+    <div class="flow-particles">
+      <div class="fp fp1"></div>
+      <div class="fp fp2"></div>
+      <div class="fp fp3"></div>
+      <div class="fp fp4"></div>
+      <div class="fp fp5"></div>
+    </div>
+
+    <!-- TIP -->
+    <div class="pipe-row">
+      <div class="pipe-node pn-tip">
+        <div class="pn-label">Core platform</div>
+        <div class="pn-name">Threat Intelligence Platform</div>
+        <div class="pn-detail">MISP · OpenCTI · ThreatConnect · Anomali · EclecticIQ<br>Ingest · Normalise · Deduplicate · Score · Distribute</div>
+      </div>
+    </div>
+
+    <!-- Animated connector -->
+    <div class="flow-particles">
+      <div class="fp fp1"></div>
+      <div class="fp fp2"></div>
+      <div class="fp fp3"></div>
+      <div class="fp fp4"></div>
+      <div class="fp fp5"></div>
+    </div>
+
+    <!-- Consumers -->
+    <div class="pipe-row">
+      <div class="pipe-node pn-consumer">
+        <div class="pn-label">Detection</div>
+        <div class="pn-name">SIEM</div>
+        <div class="pn-detail">Most reliable integration</div>
+      </div>
+      <div class="pipe-node pn-consumer">
+        <div class="pn-label">Response</div>
+        <div class="pn-name">SOAR</div>
+        <div class="pn-detail">Best ROI on TIP investment</div>
+      </div>
+      <div class="pipe-node pn-consumer">
+        <div class="pn-label">Endpoint</div>
+        <div class="pn-name">EDR</div>
+        <div class="pn-detail">Needs careful IOC scoring</div>
+      </div>
+      <div class="pipe-node pn-consumer">
+        <div class="pn-label">Network</div>
+        <div class="pn-name">Firewall / Proxy</div>
+        <div class="pn-detail">Often weakest integration</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTEGRATION REALITY -->
+  <div style="font-family:var(--mono);font-size:10px;color:var(--teal);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">// Integration reliability in practice</div>
+  <div class="integration-row">
+    <div class="int-card">
+      <div class="int-icon">📊</div>
+      <div class="int-name">SIEM</div>
+      <div class="int-status status-good">Reliable</div>
+      <div class="int-note">Native TAXII connectors in Sentinel and Splunk. Works on day one.</div>
+    </div>
+    <div class="int-card">
+      <div class="int-icon">⚡</div>
+      <div class="int-name">SOAR</div>
+      <div class="int-status status-ok">Good with maintenance</div>
+      <div class="int-note">Best payback. Playbook enrichment is high-value but needs ongoing upkeep.</div>
+    </div>
+    <div class="int-card">
+      <div class="int-icon">💻</div>
+      <div class="int-name">EDR</div>
+      <div class="int-status status-ok">Needs scoring logic</div>
+      <div class="int-note">Only high-confidence IOCs to endpoints. Building scoring takes analyst time.</div>
+    </div>
+    <div class="int-card">
+      <div class="int-icon">🔥</div>
+      <div class="int-name">Firewall</div>
+      <div class="int-status status-hard">Weakest link</div>
+      <div class="int-note">Dynamic block lists need scripts. Scripts break when the person who wrote them leaves.</div>
+    </div>
+  </div>
+
+  <!-- SHELFWARE WARNING -->
+  <div class="shelfware">
+    <div class="sw-icon">⚠️</div>
+    <div>
+      <div class="sw-title">The shelfware pattern</div>
+      <div class="sw-text">TIP deployed. Feeds connected. SIEM integration working. Six months later: 40,000 unprocessed indicators, integration to the SIEM nobody has updated since deployment, three analysts looking at a platform nobody owns. The platform didn't fail. The organisation was not ready for it.</div>
+    </div>
+  </div>
+
+  <!-- DECISION MATRIX -->
+  <div style="font-family:var(--mono);font-size:10px;color:var(--teal);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">// What you actually need based on team size</div>
+  <div class="matrix">
+    <div class="m-card mc-feed">
+      <div class="m-badge">Feed only</div>
+      <div class="m-condition">Small team, limited analyst capacity</div>
+      <div class="m-rec">Skip the TIP. Subscribe to one high-quality commercial feed, ingest via TAXII directly into your SIEM. You get tactical coverage without the platform overhead.</div>
+    </div>
+    <div class="m-card mc-os">
+      <div class="m-badge">MISP or OpenCTI</div>
+      <div class="m-condition">Mid-size team, sharing intel with partners</div>
+      <div class="m-rec">Open source TIP gives you sharing infrastructure without licensing cost. Worth the overhead if one analyst owns the platform. OpenCTI for new deployments.</div>
+    </div>
+    <div class="m-card mc-comm">
+      <div class="m-badge">Commercial TIP</div>
+      <div class="m-condition">Mature SOC, active threat hunting</div>
+      <div class="m-rec">ThreatConnect or Anomali make sense when you have analyst throughput to use operational intelligence, not just feed aggregation. ROI requires active use.</div>
+    </div>
+    <div class="m-card mc-cni">
+      <div class="m-badge">Commercial + NCSC</div>
+      <div class="m-condition">UK CNI or government</div>
+      <div class="m-rec">NCSC CISP membership and sector ISAC participation first. Government intel is often more contextually relevant than commercial feeds for UK-specific threats.</div>
+    </div>
+  </div>
+
+  <div class="ig-footer">
+    <a href="https://saleemyousaf.co.uk">saleemyousaf.co.uk</a>
+    <span style="color:var(--muted2);font-family:var(--mono);font-size:11px;margin:0 12px;">·</span>
+    <a href="https://cyberspartans.co.uk">cyberspartans.co.uk</a>
+  </div>
+
+</div>
+</body>
+</html>
+`;
+  var overlay=document.getElementById('tiIgOverlay'),openBtn=document.getElementById('tiIgOpen'),closeBtn=document.getElementById('tiIgClose'),frame=document.getElementById('tiIgFrame');
+  if(!overlay||!openBtn) return;
+  var loaded=false,lastFocus=null;
+  function open(){ if(!loaded){frame.srcdoc=INFOGRAPHIC;loaded=true;} lastFocus=document.activeElement; overlay.classList.add('open'); document.body.style.overflow='hidden'; closeBtn.focus(); }
+  function close(){ overlay.classList.remove('open'); document.body.style.overflow=''; if(lastFocus&&lastFocus.focus){lastFocus.focus();} }
+  openBtn.addEventListener('click',open);
+  closeBtn.addEventListener('click',close);
+  overlay.addEventListener('click',function(e){ if(e.target===overlay) close(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&overlay.classList.contains('open')) close(); });
+})();
+</script>
+</body>
+</html>
