@@ -1,1 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Post-Quantum Migration: Inventory First, Agility Second, Algorithms Last | Saleem Yousaf</title>
+<meta name="description" content="What a post-quantum cryptography migration actually is, why harvest-now-decrypt-later makes it urgent, and the order that works: inventory first, crypto-agility second, algorithms last.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/post-quantum-migration/">
 
+<meta property="og:type" content="article">
+<meta property="og:title" content="Post-Quantum Migration: Inventory First, Agility Second, Algorithms Last">
+<meta property="og:description" content="The cipher is the easy decision and the last one. The hard part is knowing what cryptography you have and being able to change it. A practical guide to post-quantum migration.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/post-quantum-migration/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/assets/og-post-quantum-migration.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Post-Quantum Migration: Inventory First, Agility Second, Algorithms Last">
+<meta name="twitter:description" content="A practical guide to post-quantum migration: inventory, crypto-agility, hybrid, then the algorithm.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Post-Quantum Migration: Inventory First, Agility Second, Algorithms Last",
+  "description": "What a post-quantum cryptography migration is, why it is urgent now, and the order that works in practice.",
+  "datePublished": "2026-07-09",
+  "dateModified": "2026-07-09",
+  "author": {
+    "@type": "Person",
+    "name": "Saleem Yousaf",
+    "url": "https://saleemyousaf.co.uk",
+    "sameAs": [
+      "https://www.linkedin.com/in/saleemyousaf",
+      "https://github.com/saleem-yousaf",
+      "https://cyberspartans.co.uk"
+    ]
+  },
+  "publisher": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://saleemyousaf.co.uk/articles/post-quantum-migration/" },
+  "image": "https://saleemyousaf.co.uk/assets/og-post-quantum-migration.png",
+  "articleSection": "Cryptography",
+  "keywords": "post-quantum cryptography, PQC migration, harvest now decrypt later, ML-KEM, ML-DSA, SLH-DSA, crypto-agility, hybrid, CNSA 2.0"
+}
+</script>
+
+<style>
+:root{
+  --bg:#090c10;--bg2:#0f1318;--bg3:#161b22;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --text:#e6eaf0;--muted:#8a96a8;--muted2:#5a6675;
+  --teal:#2dd4bf;--teal-bright:#5eead4;--teal-dim:rgba(45,212,191,0.12);--teal-line:rgba(45,212,191,0.30);
+  --amber:#f5b73c;--amber-dim:rgba(245,183,60,0.12);--amber-line:rgba(245,183,60,0.32);
+  --bf:#00d4ff;--cs:#2f9e6f;
+  --mono:'DM Mono',monospace;--display:'Syne',sans-serif;--body:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-weight:300;line-height:1.75;font-size:17px;-webkit-font-smoothing:antialiased;}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px;}
+.hero{padding:70px 0 34px;}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:10px;margin-bottom:22px;}
+.eyebrow .line{width:30px;height:1px;background:var(--teal);}
+h1{font-family:var(--display);font-weight:800;font-size:40px;line-height:1.12;letter-spacing:-1px;color:#fff;margin-bottom:22px;}
+.meta{display:flex;flex-wrap:wrap;gap:10px 18px;font-family:var(--mono);font-size:12.5px;color:var(--muted);align-items:center;}
+.meta .who{color:var(--text);}
+.meta .dot{width:4px;height:4px;border-radius:50%;background:var(--muted2);}
+.hr{height:1px;background:var(--border);margin:34px 0;}
+article p{margin:0 0 22px;color:#d3dae4;}
+article p.lead{font-size:19px;color:var(--text);font-weight:400;}
+article h2{font-family:var(--display);font-weight:700;font-size:25px;letter-spacing:-.4px;color:#fff;margin:48px 0 16px;line-height:1.25;}
+article strong{color:#fff;font-weight:600;}
+article a{color:var(--teal-bright);text-decoration:none;border-bottom:1px solid var(--teal-line);}
+article a:hover{border-color:var(--teal-bright);}
+.callout{border:1px solid var(--teal-line);border-left:3px solid var(--teal);background:var(--teal-dim);border-radius:0 10px 10px 0;padding:18px 22px;margin:30px 0;font-size:16px;color:var(--text);}
+.callout b{color:var(--teal-bright);font-weight:600;}
+article ol,article ul{margin:0 0 22px;padding-left:0;list-style:none;counter-reset:li;}
+article ol li,article ul li{position:relative;padding-left:34px;margin-bottom:14px;color:#d3dae4;}
+article ol li{counter-increment:li;}
+article ol li::before{content:counter(li);position:absolute;left:0;top:1px;width:22px;height:22px;border-radius:6px;background:var(--teal-dim);border:1px solid var(--teal-line);color:var(--teal-bright);font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;}
+article ul li::before{content:"";position:absolute;left:8px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--teal);}
+code{font-family:var(--mono);font-size:13.5px;color:var(--teal-bright);background:var(--teal-dim);border:1px solid var(--teal-line);border-radius:4px;padding:1px 6px;}
+figure.fig{margin:30px 0;border:1px solid var(--border);border-radius:12px;background:var(--bg2);padding:22px 22px 16px;cursor:zoom-in;position:relative;transition:border-color .2s;}
+figure.fig:hover,figure.fig:focus-visible{border-color:var(--teal-line);outline:none;}
+figure.fig .zoom{position:absolute;top:12px;right:12px;width:24px;height:24px;border:1px solid var(--border2);border-radius:6px;color:var(--muted);display:flex;align-items:center;justify-content:center;}
+figure.fig svg{width:100%;height:auto;display:block;}
+figure.fig figcaption{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:14px;line-height:1.5;}
+.lb{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:3vh 2vw;background:rgba(5,7,10,0.9);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+.lb.open{display:flex;}
+.lb-inner{position:relative;width:96vw;max-width:1100px;max-height:94vh;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:30px;overflow:auto;}
+.lb-inner svg{width:100%;height:auto;}
+.lb-close{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;}
+.lb-close:hover,.lb-close:focus-visible{color:var(--teal);border-color:var(--teal);outline:none;}
+.d-box{fill:var(--bg3);stroke:var(--teal-line);}
+.d-box-soft{fill:var(--bg);stroke:var(--border2);}
+.d-box-warn{fill:var(--bg);stroke:var(--amber-line);}
+.d-t{fill:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;}
+.d-s{fill:#8a96a8;font-family:'DM Mono',monospace;font-size:11px;}
+.d-lab{fill:var(--teal);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;}
+.d-lab-a{fill:var(--amber);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;}
+.d-line{stroke:var(--teal-line);stroke-width:1.5;fill:none;}
+footer{border-top:1px solid var(--border);margin-top:70px;background:var(--bg2);}
+.footer-inner{max-width:1100px;margin:0 auto;padding:42px 32px 10px;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;}
+.footer-logo{font-family:var(--display);font-weight:800;font-size:20px;color:var(--muted2);}
+.footer-logo span{color:var(--teal);}
+.footer-desc{font-size:13px;color:var(--muted);max-width:520px;margin-top:8px;line-height:1.6;}
+.footer-links{display:flex;flex-wrap:wrap;gap:18px;align-items:center;}
+.footer-links a{font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;}
+.footer-links a:hover{color:var(--teal);}
+.footer-bottom{max-width:1100px;margin:0 auto;padding:18px 32px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;border-top:1px solid var(--border);}
+.footer-copy{font-family:var(--mono);font-size:12px;color:var(--muted2);}
+.footer-cross{max-width:1100px;margin:0 auto;padding:20px 32px 34px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;border-top:1px solid rgba(255,255,255,0.07);}
+.footer-cross a{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;padding:6px 12px;border-radius:5px;text-decoration:none;letter-spacing:.03em;}
+.cross-bf{background:rgba(0,212,255,0.10);color:var(--bf);border:1px solid rgba(0,212,255,0.28);}
+.cross-cs{background:rgba(47,158,111,0.10);color:var(--cs);border:1px solid rgba(47,158,111,0.30);}
+@media (max-width:600px){h1{font-size:30px;}body{font-size:16px;}.hero{padding:48px 0 24px;}}
+
+.related{margin-top:58px;padding-top:30px;border-top:1px solid var(--border);}
+.related-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.related-eyebrow .line{width:24px;height:1px;background:var(--teal);}
+.related-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.related-card{display:block;border:1px solid var(--border);border-radius:11px;background:var(--bg2);padding:16px 18px;text-decoration:none;transition:border-color .2s,transform .2s;}
+.related-card:hover{border-color:var(--teal-line);transform:translateY(-2px);}
+.related-card .rc-cat{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2);}
+.related-card .rc-t{font-family:var(--display);font-weight:700;font-size:15px;color:#fff;margin-top:6px;line-height:1.3;}
+.related-card .rc-go{font-family:var(--mono);font-size:11px;color:var(--teal);margin-top:8px;display:inline-block;}
+@media(max-width:600px){.related-grid{grid-template-columns:1fr;}}
+
+/* PQ infographic lightbox (pq-ig scope) */
+.pq-ig-launch{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:0 10px 10px 0;padding:18px 22px;margin:30px 0;cursor:pointer;font-family:inherit;color:var(--text);transition:border-color .2s,background .2s,transform .2s;}
+.pq-ig-launch:hover{border-color:var(--teal);background:var(--bg3);transform:translateY(-1px);}
+.pq-ig-launch:focus-visible{outline:2px solid var(--teal);outline-offset:2px;}
+.pq-ig-launch-ico{width:40px;height:40px;flex-shrink:0;border-radius:9px;background:var(--teal-dim);border:1px solid var(--teal-line);display:flex;align-items:center;justify-content:center;color:var(--teal);}
+.pq-ig-launch-tx{display:flex;flex-direction:column;gap:3px;}
+.pq-ig-launch-tx b{font-family:var(--display);font-weight:700;font-size:15px;color:#fff;}
+.pq-ig-launch-tx em{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.02em;line-height:1.4;}
+.pq-ig-launch-cue{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--teal);white-space:nowrap;}
+.pq-ig-overlay{position:fixed;inset:0;z-index:1001;display:none;align-items:center;justify-content:center;padding:3vh 2vw;background:rgba(5,7,10,0.9);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+.pq-ig-overlay.open{display:flex;}
+.pq-ig-modal{position:relative;width:96vw;max-width:980px;height:94vh;background:var(--bg);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.6);display:flex;flex-direction:column;}
+.pq-ig-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;}
+.pq-ig-bar span{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;}
+.pq-ig-close{width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:color .2s,border-color .2s;}
+.pq-ig-close:hover,.pq-ig-close:focus-visible{color:var(--teal);border-color:var(--teal);outline:none;}
+.pq-ig-frame{flex:1;width:100%;border:0;background:var(--bg);}
+@media(max-width:600px){.pq-ig-launch-cue{display:none;}}
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow"><span class="line"></span>Cryptography</div>
+    <h1>Post-quantum migration: inventory first, agility second, algorithms last</h1>
+    <div class="meta">
+      <span class="who">Saleem Yousaf</span>
+      <span class="dot"></span><span>9 July 2026</span>
+      <span class="dot"></span><span>~13 min read</span>
+    </div>
+  </header>
+
+  <div class="hr"></div>
+
+  <article>
+    <p class="lead">A post-quantum migration is the work of replacing the public-key cryptography you rely on today with algorithms a quantum computer cannot break, before that computer exists.</p>
+
+    <p>It is not a switch you flip. It is a multi-year programme, closer in shape to the move off SHA-1, or to IPv6, than to a patch. And the part that decides whether it goes smoothly is not which algorithm you pick. It is whether you know where your cryptography lives and whether you can change it without rebuilding the system around it.</p>
+
+    <div class="callout"><b>The mismatch most teams start with:</b> treating this as "swap the algorithm later." The algorithm swap is the easy, final part. The slow and expensive part is finding everywhere cryptography is used and being able to change it without a rewrite.</div>
+
+    <button class="pq-ig-launch" type="button" id="pqIgOpen" aria-haspopup="dialog">
+      <span class="pq-ig-launch-ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></span>
+      <span class="pq-ig-launch-tx"><b>The migration on one screen</b><em>Interactive infographic: what breaks, the order of the work, the standards, and the questions to answer before you start</em></span>
+      <span class="pq-ig-launch-cue">Open &#8599;</span>
+    </button>
+
+    <h2>What a quantum computer actually breaks</h2>
+    <p>Be precise here, because the panic usually is not. A large, fault-tolerant quantum computer running Shor's algorithm would break the maths behind RSA and elliptic-curve cryptography: the key exchange and the digital signatures that sit under almost every TLS session, code signature, VPN tunnel and SSH connection in use today. That is the real exposure.</p>
+    <p>Symmetric cryptography and hashes are far less affected. Grover's algorithm chips at them, but only enough that moving to AES-256 and SHA-384 keeps you comfortable. So a post-quantum migration is not "replace all your cryptography." It is a targeted replacement of the public-key half: key establishment and signatures.</p>
+
+    <figure class="fig" tabindex="0" role="button" aria-label="Expand the diagram of what a quantum computer breaks">
+      <span class="zoom" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></span>
+      <svg viewBox="0 0 720 220" role="img" aria-label="Public-key cryptography is broken by Shor's algorithm; symmetric cryptography and hashes are only weakened and need larger sizes.">
+        <rect x="14" y="40" width="330" height="150" rx="11" class="d-box-warn"/>
+        <text x="36" y="68" class="d-lab-a">broken by Shor</text>
+        <text x="36" y="98" class="d-t">Public-key crypto</text>
+        <text x="36" y="124" class="d-s">RSA, ECDSA, ECDH, DH</text>
+        <text x="36" y="146" class="d-s">key exchange and signatures</text>
+        <text x="36" y="172" class="d-s">this is what you migrate</text>
+        <rect x="376" y="40" width="330" height="150" rx="11" class="d-box"/>
+        <text x="398" y="68" class="d-lab">weakened, just enlarge</text>
+        <text x="398" y="98" class="d-t">Symmetric and hashes</text>
+        <text x="398" y="124" class="d-s">AES-256, SHA-384</text>
+        <text x="398" y="146" class="d-s">Grover only halves strength</text>
+        <text x="398" y="172" class="d-s">larger sizes, not new algorithms</text>
+      </svg>
+      <figcaption>The migration is the public-key half. Symmetric encryption and hashing survive with larger key and digest sizes. Click to enlarge.</figcaption>
+    </figure>
+
+    <h2>Why now, and not when the computer arrives</h2>
+    <p>The threat does not wait for the hardware. The near-term risk is harvest now, decrypt later: an adversary records your encrypted traffic, or copies your encrypted data, today, stores it, and decrypts it once a capable quantum computer exists. Anything that has to stay confidential for years, health records, government data, long-lived intellectual property, anything with a long regulatory retention period, is already exposed in that model even though nothing has been broken yet.</p>
+    <p>That is why the deadlines are real without a quantum computer in the room. NSA's CNSA 2.0 sets a path for national security systems to prefer post-quantum algorithms from around now and use them exclusively by the early 2030s, with full migration targeted by the middle of the decade, and the EU published a coordinated roadmap on a similar horizon. If you sell to government, that timeline reaches you through procurement whether or not you are directly in scope.</p>
+
+    <h2>The destination</h2>
+    <p>The standards exist now, which removes the old excuse to wait. NIST finalised the first three in August 2024: ML-KEM (FIPS 203) for key establishment, and ML-DSA (FIPS 204) and SLH-DSA (FIPS 205) for signatures. For firmware and software signing specifically, the hash-based schemes LMS and XMSS are already recommended and available, because code you sign today is verified for a long time and that is exactly the long-lived case.</p>
+    <p>You do not deploy these alone at first. The recommended path is hybrid: run a classical algorithm and a post-quantum one together, so a session or a signature is safe unless both are broken. Hybrid key exchange combining X25519 with ML-KEM is already shipping in major browsers and across large content delivery networks. This is not theoretical. It is in production traffic now.</p>
+
+    <h2>The migration, in order</h2>
+    <p>Here is the shape that works. The order matters far more than the algorithm choice.</p>
+
+    <figure class="fig" tabindex="0" role="button" aria-label="Expand the migration order diagram">
+      <span class="zoom" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></span>
+      <svg viewBox="0 0 720 170" role="img" aria-label="The migration order: inventory, then prioritise by exposure, then crypto-agility, then hybrid rollout. Algorithms come last.">
+        <rect x="14" y="40" width="150" height="74" rx="9" class="d-box"/>
+        <text x="32" y="66" class="d-lab">01</text><text x="32" y="88" class="d-t" style="font-size:13px">Inventory</text><text x="32" y="106" class="d-s">find the crypto</text>
+        <path class="d-line" d="M164 77 H188" marker-end="url(#aq)"/>
+        <rect x="188" y="40" width="150" height="74" rx="9" class="d-box"/>
+        <text x="206" y="66" class="d-lab">02</text><text x="206" y="88" class="d-t" style="font-size:13px">Prioritise</text><text x="206" y="106" class="d-s">by data lifetime</text>
+        <path class="d-line" d="M338 77 H362" marker-end="url(#aq)"/>
+        <rect x="362" y="40" width="150" height="74" rx="9" class="d-box"/>
+        <text x="380" y="66" class="d-lab">03</text><text x="380" y="88" class="d-t" style="font-size:13px">Crypto-agility</text><text x="380" y="106" class="d-s">be able to change</text>
+        <path class="d-line" d="M512 77 H536" marker-end="url(#aq)"/>
+        <rect x="536" y="40" width="170" height="74" rx="9" class="d-box"/>
+        <text x="554" y="66" class="d-lab">04</text><text x="554" y="88" class="d-t" style="font-size:13px">Hybrid rollout</text><text x="554" y="106" class="d-s">algorithms, last</text>
+        <text x="14" y="150" class="d-s">The algorithm choice is the final and easiest step, once the first three are done.</text>
+        <defs><marker id="aq" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#2dd4bf"/></marker></defs>
+      </svg>
+      <figcaption>Inventory, prioritise, agility, then a hybrid rollout. The cipher is the last decision, not the first. Click to enlarge.</figcaption>
+    </figure>
+
+    <ol>
+      <li><strong>Inventory first.</strong> You cannot migrate cryptography you have not located. Find where public-key crypto is used: TLS certificates, code signing keys, VPN and SSH configurations, encrypted data stores, the libraries your applications pull in, and the kit your vendors ship. Record the algorithms, the key lifetimes, and which data must stay secret longest. The output is sometimes called a cryptographic bill of materials. This stage is the bulk of the early effort, and it pays off regardless of what comes next.</li>
+      <li><strong>Prioritise by exposure.</strong> Long-lived secrets and long-lived systems go first, because they carry the most harvest-now-decrypt-later risk and are the hardest to change later. A short web session matters less than a firmware signing key that has to be trusted for a decade.</li>
+      <li><strong>Build crypto-agility.</strong> The ability to change algorithm without re-architecting. Most legacy systems hard-wire their cryptography, and that rigidity, not the new maths, is what makes the migration slow. Anything that needs a firmware update or a vendor release to change algorithm, think IoT, OT and SCADA, cannot pivot quickly, so it needs attention early.</li>
+      <li><strong>Roll out, hybrid first.</strong> Turn on hybrid where it is supported, starting with lower-stakes systems, and keep the classical algorithm alongside until confidence is high. The algorithm choice, the part everyone fixates on, is the last and easiest step.</li>
+    </ol>
+
+    <h2>Where it gets hard</h2>
+    <ul>
+      <li><strong>The crypto you do not control.</strong> Vendor products, managed services and dependencies carry their own algorithms. Part of your migration is a procurement exercise: ask for roadmaps, and set post-quantum support as a requirement.</li>
+      <li><strong>Signatures outlive sessions.</strong> A TLS session lasts seconds. A signed firmware image or a long-validity certificate is trusted for years, so signing migrations need a longer runway than transport encryption.</li>
+      <li><strong>Bigger keys and payloads.</strong> Post-quantum keys and signatures are larger than their classical equivalents, which can stress constrained devices, packet sizes and handshake budgets. Test, do not assume.</li>
+      <li><strong>The certificate tie-in.</strong> Shorter certificate lifetimes and automated issuance, already arriving for other reasons, use the same muscles you need for an orderly post-quantum certificate transition. The teams that automated their certificate lifecycle will migrate far more smoothly.</li>
+    </ul>
+
+    <h2>Best practices</h2>
+    <ol>
+      <li>Build the cryptographic inventory before anything else. It is the deliverable that makes every later decision possible.</li>
+      <li>Rank by data lifetime and system lifetime, and start where harvest-now-decrypt-later bites hardest.</li>
+      <li>Make crypto-agility a design requirement for anything new, so the next change is configuration rather than a rebuild.</li>
+      <li>Adopt hybrid first, in lower-stakes environments, before you touch anything critical.</li>
+      <li>Put post-quantum readiness into vendor and procurement requirements, because much of your exposure sits in code you did not write.</li>
+      <li>Track the standards and the deadlines that apply to you (NIST, CNSA 2.0, and your sector's regulator) rather than guessing.</li>
+      <li>Do not invent your own scheme or rush an exotic one. Use the finalised standards, in hybrid mode.</li>
+    </ol>
+
+    <h2>The part to take away</h2>
+    <p>A post-quantum migration is inventory first, agility second, and algorithms last. The cipher is the easy decision and the final one. The hard part, the part worth starting now, is knowing exactly what cryptography you have and being able to change it without rebuilding the system around it.</p>
+    <p>Harvest now, decrypt later means the clock for your long-lived data started a while ago. The work that protects it is not glamorous, and it is mostly an inventory.</p>
+  </article>
+  <div class="related">
+    <div class="related-eyebrow"><span class="line"></span>Related reading</div>
+    <div class="related-grid">
+    <a class="related-card" href="https://saleemyousaf.co.uk/articles/cryptographic-keys-pki-rotation/">
+      <div class="rc-cat">Cryptography</div>
+      <div class="rc-t">Cryptographic keys, key material and PKI</div>
+      <div class="rc-go">Read &#8599;</div>
+    </a>
+    <a class="related-card" href="https://saleemyousaf.co.uk/articles/cloud-iam-blast-radius/">
+      <div class="rc-cat">Cloud Security</div>
+      <div class="rc-t">Cloud IAM and the blast-radius problem</div>
+      <div class="rc-go">Read &#8599;</div>
+    </a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Saleem <span>Yousaf</span></div>
+      <div class="footer-desc">Cloud &amp; Cyber Security Architect &middot; AWS &middot; Azure &middot; Zero Trust &middot; AI Governance &middot; OT Security &middot; Enterprise Architecture</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
+      <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
+    <a href="https://saleemyousaf.co.uk/privacy-policy/" style="font-family:var(--mono);font-size:12px;color:var(--muted2);text-decoration:none;">Privacy Policy</a>
+  </div>
+  <div class="footer-cross">
+    <a class="cross-bf" href="https://breachforge.co.uk" target="_blank" rel="noopener">&#x2B61; breachforge.co.uk</a>
+    <a class="cross-cs" href="https://cyberspartans.co.uk" target="_blank" rel="noopener">&#x2B22; cyberspartans.co.uk</a>
+  </div>
+</footer>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged diagram">
+  <div class="lb-inner"><button class="lb-close" id="lbClose" type="button" aria-label="Close">&#10005;</button><div id="lbBody"></div></div>
+</div>
+
+<script src="/nav.js" defer></script>
+<script>
+(function(){
+  var lb=document.getElementById('lb'),body=document.getElementById('lbBody'),close=document.getElementById('lbClose'),last=null;
+  function open(fig){
+    var svg=fig.querySelector('svg[role="img"]'); if(!svg) return;
+    body.innerHTML=''; body.appendChild(svg.cloneNode(true));
+    last=document.activeElement; lb.classList.add('open'); document.body.style.overflow='hidden'; close.focus();
+  }
+  function shut(){ lb.classList.remove('open'); document.body.style.overflow=''; body.innerHTML=''; if(last&&last.focus)last.focus(); }
+  document.querySelectorAll('figure.fig').forEach(function(f){
+    f.addEventListener('click',function(){open(f);});
+    f.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){e.preventDefault();open(f);} });
+  });
+  close.addEventListener('click',shut);
+  lb.addEventListener('click',function(e){ if(e.target===lb) shut(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&lb.classList.contains('open')) shut(); });
+})();
+</script>
+
+<div class="pq-ig-overlay" id="pqIgOverlay" role="dialog" aria-modal="true" aria-label="Post-quantum migration infographic">
+  <div class="pq-ig-modal">
+    <div class="pq-ig-bar"><span>// post-quantum migration</span><button class="pq-ig-close" id="pqIgClose" type="button" aria-label="Close infographic">&#10005;</button></div>
+    <iframe class="pq-ig-frame" id="pqIgFrame" title="Post-quantum migration infographic"></iframe>
+  </div>
+</div>
+<script>
+(function(){
+  var INFOGRAPHIC = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Post-quantum migration infographic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e14;--panel:#0f1419;--elev:#161b22;--border:rgba(255,255,255,0.09);
+  --text:#e6eaf0;--muted:#8a96a8;--muted2:#5a6675;
+  --teal:#2dd4bf;--teal-b:#5eead4;--teal-dim:rgba(45,212,191,0.12);--teal-line:rgba(45,212,191,0.30);
+  --blue:#4aa8ff;--blue-dim:rgba(74,168,255,0.12);--blue-line:rgba(74,168,255,0.30);
+  --amber:#f5b73c;--amber-dim:rgba(245,183,60,0.12);--amber-line:rgba(245,183,60,0.32);
+  --purple:#a78bfa;--purple-dim:rgba(167,139,250,0.12);--purple-line:rgba(167,139,250,0.30);
+  --mono:'DM Mono',monospace;--display:'Syne',sans-serif;--body:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-weight:300;line-height:1.5;padding:46px 28px 40px;}
+.ig{max-width:900px;margin:0 auto;}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:16px;}
+h1{font-family:var(--display);font-weight:800;font-size:42px;line-height:1.08;letter-spacing:-1px;color:#fff;}
+h1 .g{color:var(--teal);}
+.sub{font-size:15px;color:var(--muted);margin:14px 0 6px;max-width:640px;}
+.rule{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin:38px 0 14px;}
+.rule.b{color:var(--blue);}.rule.a{color:var(--amber);}.rule.p{color:var(--purple);}
+.life{display:flex;gap:8px;flex-wrap:wrap;}
+.stage{flex:1;min-width:150px;border:1px solid var(--border);border-top:2px solid var(--teal);border-radius:0 0 9px 9px;background:var(--panel);padding:13px 13px 15px;}
+.stage b{display:block;font-family:var(--display);font-weight:700;font-size:14px;color:#fff;margin-bottom:4px;}
+.stage span{font-family:var(--mono);font-size:10.5px;color:var(--muted);line-height:1.45;}
+.stage .n{font-family:var(--mono);font-size:10px;color:var(--teal);}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.card{border:1px solid var(--border);border-radius:11px;background:var(--panel);padding:18px 20px;}
+.card.t{border-top:2px solid var(--teal);}
+.card.a{border-top:2px solid var(--amber);}
+.card .tag{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);}
+.card.a .tag{color:var(--amber);}
+.card h3{font-family:var(--display);font-weight:700;font-size:17px;color:#fff;margin:6px 0 6px;}
+.card p{font-size:13px;color:var(--muted);line-height:1.55;}
+.flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;border:1px solid var(--border);border-radius:11px;background:var(--panel);overflow:hidden;}
+.fnode{flex:1;min-width:150px;padding:18px 18px;}
+.fnode + .fnode{border-left:1px solid var(--border);}
+.fnode .k{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted2);}
+.fnode b{display:block;font-family:var(--display);font-weight:700;font-size:16px;color:#fff;margin:5px 0 4px;}
+.fnode span{font-size:12px;color:var(--muted);}
+.fnote{font-family:var(--mono);font-size:11px;color:var(--teal);margin-top:9px;}
+.warn{border:1px solid var(--amber-line);background:var(--amber-dim);border-radius:11px;padding:18px 22px;}
+.warn h3{font-family:var(--display);font-weight:700;font-size:16px;color:var(--amber);margin-bottom:10px;}
+.warn ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 22px;}
+.warn li{font-size:13px;color:var(--text);padding-left:16px;position:relative;line-height:1.45;}
+.warn li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--amber);}
+.q{display:flex;gap:14px;margin-bottom:10px;align-items:flex-start;}
+.q .num{flex-shrink:0;width:28px;height:28px;border-radius:7px;background:var(--purple-dim);border:1px solid var(--purple-line);color:var(--purple);font-family:var(--mono);font-size:13px;display:flex;align-items:center;justify-content:center;}
+.q p{font-size:14px;color:var(--text);padding-top:3px;}
+.foot{margin-top:36px;padding-top:18px;border-top:1px solid var(--border);text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted2);}
+.foot span{color:var(--teal);}
+@media(max-width:620px){h1{font-size:30px;}.cols,.warn ul{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="ig">
+
+  <div class="eyebrow">// post-quantum readiness</div>
+  <h1>Harvest now, <span class="g">decrypt later.</span></h1>
+  <p class="sub">A post-quantum migration is inventory first, agility second, and algorithms last. The cipher is the easy decision, and the final one.</p>
+
+  <div class="rule a">// what a quantum computer breaks</div>
+  <div class="cols">
+    <div class="card a"><div class="tag">Broken by Shor</div><h3>Public-key</h3><p>RSA, ECDSA, ECDH. Key exchange and signatures, under almost every TLS session and code signature. This is the half you migrate.</p></div>
+    <div class="card t"><div class="tag">Just enlarge</div><h3>Symmetric and hashes</h3><p>AES-256, SHA-384. Grover only halves the strength. You move to larger sizes, not to new algorithms.</p></div>
+  </div>
+
+  <div class="rule">// the migration, in order</div>
+  <div class="life">
+    <div class="stage"><b>Inventory</b><span class="n">01</span><span><br>Find every place public-key crypto is used.</span></div>
+    <div class="stage"><b>Prioritise</b><span class="n">02</span><span><br>By data lifetime and system lifetime.</span></div>
+    <div class="stage"><b>Crypto-agility</b><span class="n">03</span><span><br>Be able to change without a rebuild.</span></div>
+    <div class="stage"><b>Hybrid rollout</b><span class="n">04</span><span><br>Lower stakes first. Algorithms last.</span></div>
+  </div>
+
+  <div class="rule b">// the destination</div>
+  <div class="flow">
+    <div class="fnode"><div class="k">FIPS 203</div><b>ML-KEM</b><span>Key establishment.</span></div>
+    <div class="fnode"><div class="k">FIPS 204</div><b>ML-DSA</b><span>Digital signatures.</span></div>
+    <div class="fnode"><div class="k">FIPS 205</div><b>SLH-DSA</b><span>Hash-based signatures.</span><div class="fnote">Deploy hybrid first. Already in TLS in major browsers and CDNs.</div></div>
+  </div>
+
+  <div class="rule a">// the deadlines that reach you</div>
+  <div class="warn">
+    <h3>Why now, not when the computer arrives</h3>
+    <ul>
+      <li>Harvest now, decrypt later is already happening to long-lived data.</li>
+      <li>CNSA 2.0: prefer post-quantum now, exclusive use by the early 2030s.</li>
+      <li>The EU published a coordinated roadmap on the same horizon.</li>
+      <li>Sell to government and procurement pulls the timeline to you.</li>
+    </ul>
+  </div>
+
+  <div class="rule p">// before you start, answer three</div>
+  <div class="q"><div class="num">1</div><p>Where is public-key crypto used, and what protects your longest-lived data?</p></div>
+  <div class="q"><div class="num">2</div><p>Can you change algorithm without a rebuild or a firmware release?</p></div>
+  <div class="q"><div class="num">3</div><p>Which of your vendors have a published post-quantum roadmap?</p></div>
+
+  <div class="foot"><span>saleemyousaf.co.uk</span> &nbsp;&middot;&nbsp; <span>cyberspartans.co.uk</span></div>
+
+</div>
+</body>
+</html>
+`;
+  var overlay=document.getElementById('pqIgOverlay'),openBtn=document.getElementById('pqIgOpen'),closeBtn=document.getElementById('pqIgClose'),frame=document.getElementById('pqIgFrame');
+  if(!overlay||!openBtn) return;
+  var loaded=false,last=null;
+  function open(){ if(!loaded){frame.srcdoc=INFOGRAPHIC;loaded=true;} last=document.activeElement; overlay.classList.add('open'); document.body.style.overflow='hidden'; closeBtn.focus(); }
+  function shut(){ overlay.classList.remove('open'); document.body.style.overflow=''; if(last&&last.focus){last.focus();} }
+  openBtn.addEventListener('click',open);
+  closeBtn.addEventListener('click',shut);
+  overlay.addEventListener('click',function(e){ if(e.target===overlay) shut(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&overlay.classList.contains('open')) shut(); });
+})();
+</script>
+</body>
+</html>
