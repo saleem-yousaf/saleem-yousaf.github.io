@@ -1,1 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloud IAM and Blast Radius: Over-Privileged Roles, Least Privilege, and What Holds Up in Production | Saleem Yousaf</title>
+<meta name="description" content="Most cloud breaches are not clever. They are an over-privileged identity doing exactly what it was allowed to do. A practitioner's take on cloud IAM, blast radius, least privilege and the guardrails that hold up in production.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/cloud-iam-blast-radius/">
 
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cloud IAM and Blast Radius: Over-Privileged Roles, Least Privilege, and What Holds Up in Production">
+<meta property="og:description" content="The breach is rarely the entry. It is the blast radius. Cloud IAM, least privilege and the guardrails that contain a single compromised identity.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/cloud-iam-blast-radius/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/assets/og-cloud-iam-blast-radius.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cloud IAM and Blast Radius: Over-Privileged Roles and Least Privilege">
+<meta name="twitter:description" content="The breach is rarely the entry. It is the blast radius. Cloud IAM and the guardrails that contain it.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Cloud IAM and Blast Radius: Over-Privileged Roles, Least Privilege, and What Holds Up in Production",
+  "description": "A practitioner's take on cloud IAM, blast radius, least privilege and the guardrails that contain a single compromised identity.",
+  "datePublished": "2026-07-07",
+  "dateModified": "2026-07-07",
+  "author": {
+    "@type": "Person",
+    "name": "Saleem Yousaf",
+    "url": "https://saleemyousaf.co.uk",
+    "sameAs": [
+      "https://www.linkedin.com/in/saleemyousaf",
+      "https://github.com/saleem-yousaf",
+      "https://cyberspartans.co.uk"
+    ]
+  },
+  "publisher": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://saleemyousaf.co.uk/articles/cloud-iam-blast-radius/" },
+  "image": "https://saleemyousaf.co.uk/assets/og-cloud-iam-blast-radius.png",
+  "articleSection": "Cloud Security",
+  "keywords": "cloud IAM, blast radius, least privilege, over-privileged roles, SCP, permission boundary, STS, PassRole, privilege escalation"
+}
+</script>
+
+<style>
+:root{
+  --bg:#090c10;--bg2:#0f1318;--bg3:#161b22;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --text:#e6eaf0;--muted:#8a96a8;--muted2:#5a6675;
+  --teal:#2dd4bf;--teal-bright:#5eead4;--teal-dim:rgba(45,212,191,0.12);--teal-line:rgba(45,212,191,0.30);
+  --amber:#f5b73c;--amber-dim:rgba(245,183,60,0.12);--amber-line:rgba(245,183,60,0.32);
+  --bf:#00d4ff;--cs:#2f9e6f;
+  --mono:'DM Mono',monospace;--display:'Syne',sans-serif;--body:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-weight:300;line-height:1.75;font-size:17px;-webkit-font-smoothing:antialiased;}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px;}
+.hero{padding:70px 0 34px;}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:10px;margin-bottom:22px;}
+.eyebrow .line{width:30px;height:1px;background:var(--teal);}
+h1{font-family:var(--display);font-weight:800;font-size:40px;line-height:1.12;letter-spacing:-1px;color:#fff;margin-bottom:22px;}
+.meta{display:flex;flex-wrap:wrap;gap:10px 18px;font-family:var(--mono);font-size:12.5px;color:var(--muted);align-items:center;}
+.meta .who{color:var(--text);}
+.meta .dot{width:4px;height:4px;border-radius:50%;background:var(--muted2);}
+.hr{height:1px;background:var(--border);margin:34px 0;}
+article p{margin:0 0 22px;color:#d3dae4;}
+article p.lead{font-size:19px;color:var(--text);font-weight:400;}
+article h2{font-family:var(--display);font-weight:700;font-size:25px;letter-spacing:-.4px;color:#fff;margin:48px 0 16px;line-height:1.25;}
+article strong{color:#fff;font-weight:600;}
+article a{color:var(--teal-bright);text-decoration:none;border-bottom:1px solid var(--teal-line);}
+article a:hover{border-color:var(--teal-bright);}
+.callout{border:1px solid var(--teal-line);border-left:3px solid var(--teal);background:var(--teal-dim);border-radius:0 10px 10px 0;padding:18px 22px;margin:30px 0;font-size:16px;color:var(--text);}
+.callout b{color:var(--teal-bright);font-weight:600;}
+article ol,article ul{margin:0 0 22px;padding-left:0;list-style:none;counter-reset:li;}
+article ol li,article ul li{position:relative;padding-left:34px;margin-bottom:14px;color:#d3dae4;}
+article ol li{counter-increment:li;}
+article ol li::before{content:counter(li);position:absolute;left:0;top:1px;width:22px;height:22px;border-radius:6px;background:var(--teal-dim);border:1px solid var(--teal-line);color:var(--teal-bright);font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;}
+article ul li::before{content:"";position:absolute;left:8px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--teal);}
+code{font-family:var(--mono);font-size:13.5px;color:var(--teal-bright);background:var(--teal-dim);border:1px solid var(--teal-line);border-radius:4px;padding:1px 6px;}
+pre{font-family:var(--mono);font-size:13px;line-height:1.65;color:#cdd6e2;background:#0a0e14;border:1px solid var(--border);border-radius:10px;padding:15px 17px;overflow-x:auto;margin:0 0 24px;}
+pre code{background:none;border:0;color:inherit;padding:0;}
+figure.fig{margin:30px 0;border:1px solid var(--border);border-radius:12px;background:var(--bg2);padding:22px 22px 16px;cursor:zoom-in;position:relative;transition:border-color .2s;}
+figure.fig:hover,figure.fig:focus-visible{border-color:var(--teal-line);outline:none;}
+figure.fig .zoom{position:absolute;top:12px;right:12px;width:24px;height:24px;border:1px solid var(--border2);border-radius:6px;color:var(--muted);display:flex;align-items:center;justify-content:center;}
+figure.fig svg{width:100%;height:auto;display:block;}
+figure.fig figcaption{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:14px;line-height:1.5;}
+.lb{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:3vh 2vw;background:rgba(5,7,10,0.9);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+.lb.open{display:flex;}
+.lb-inner{position:relative;width:96vw;max-width:1100px;max-height:94vh;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:30px;overflow:auto;}
+.lb-inner svg{width:100%;height:auto;}
+.lb-close{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;}
+.lb-close:hover,.lb-close:focus-visible{color:var(--teal);border-color:var(--teal);outline:none;}
+.d-box{fill:var(--bg3);stroke:var(--teal-line);}
+.d-box-soft{fill:var(--bg);stroke:var(--border2);}
+.d-box-warn{fill:var(--bg);stroke:var(--amber-line);}
+.d-t{fill:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;}
+.d-s{fill:#8a96a8;font-family:'DM Mono',monospace;font-size:11px;}
+.d-lab{fill:var(--teal);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;}
+.d-lab-a{fill:var(--amber);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;}
+.d-line{stroke:var(--teal-line);stroke-width:1.5;fill:none;}
+.d-line-a{stroke:var(--amber-line);stroke-width:1.5;fill:none;}
+.d-dash{stroke:var(--border2);stroke-width:1.3;stroke-dasharray:4 4;fill:none;}
+footer{border-top:1px solid var(--border);margin-top:70px;background:var(--bg2);}
+.footer-inner{max-width:1100px;margin:0 auto;padding:42px 32px 10px;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;}
+.footer-logo{font-family:var(--display);font-weight:800;font-size:20px;color:var(--muted2);}
+.footer-logo span{color:var(--teal);}
+.footer-desc{font-size:13px;color:var(--muted);max-width:520px;margin-top:8px;line-height:1.6;}
+.footer-links{display:flex;flex-wrap:wrap;gap:18px;align-items:center;}
+.footer-links a{font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;}
+.footer-links a:hover{color:var(--teal);}
+.footer-bottom{max-width:1100px;margin:0 auto;padding:18px 32px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;border-top:1px solid var(--border);}
+.footer-copy{font-family:var(--mono);font-size:12px;color:var(--muted2);}
+.footer-cross{max-width:1100px;margin:0 auto;padding:20px 32px 34px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;border-top:1px solid rgba(255,255,255,0.07);}
+.footer-cross a{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;padding:6px 12px;border-radius:5px;text-decoration:none;letter-spacing:.03em;}
+.cross-bf{background:rgba(0,212,255,0.10);color:var(--bf);border:1px solid rgba(0,212,255,0.28);}
+.cross-cs{background:rgba(47,158,111,0.10);color:var(--cs);border:1px solid rgba(47,158,111,0.30);}
+@media (max-width:600px){h1{font-size:30px;}body{font-size:16px;}.hero{padding:48px 0 24px;}}
+
+.related{margin-top:58px;padding-top:30px;border-top:1px solid var(--border);}
+.related-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.related-eyebrow .line{width:24px;height:1px;background:var(--teal);}
+.related-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.related-card{display:block;border:1px solid var(--border);border-radius:11px;background:var(--bg2);padding:16px 18px;text-decoration:none;transition:border-color .2s,transform .2s;}
+.related-card:hover{border-color:var(--teal-line);transform:translateY(-2px);}
+.related-card .rc-cat{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2);}
+.related-card .rc-t{font-family:var(--display);font-weight:700;font-size:15px;color:#fff;margin-top:6px;line-height:1.3;}
+.related-card .rc-go{font-family:var(--mono);font-size:11px;color:var(--teal);margin-top:8px;display:inline-block;}
+@media(max-width:600px){.related-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow"><span class="line"></span>Cloud Security</div>
+    <h1>Cloud IAM and blast radius: over-privileged roles, least privilege, and what holds up in production</h1>
+    <div class="meta">
+      <span class="who">Saleem Yousaf</span>
+      <span class="dot"></span><span>7 July 2026</span>
+      <span class="dot"></span><span>~14 min read</span>
+    </div>
+  </header>
+
+  <div class="hr"></div>
+
+  <article>
+    <p class="lead">Most cloud breaches I look at are not clever. An attacker gets hold of one set of credentials, and those credentials were allowed to do far more than the job ever needed.</p>
+
+    <p>The entry point is rarely the interesting part. A leaked access key, a phished session, a server-side request forgery that reaches the metadata endpoint: these happen. What decides whether that becomes a bad afternoon or a reportable incident is what the compromised identity was permitted to do. That is the blast radius, and you set its size long before the attacker arrives.</p>
+
+    <div class="callout"><b>The mismatch in most accounts:</b> teams grant broad permissions to make something work, then never narrow them. The role keeps the access long after the reason for it is gone. A compromised identity then does exactly what it was permitted to do, at the scale it was permitted to do it.</div>
+
+    <h2>What IAM actually decides</h2>
+    <p>Identity and access management answers one question on every request: can this identity perform this action, on this resource, under these conditions. Identities are people, roles, service accounts and workloads. Policies are the rules. The platform evaluates what the identity is allowed against any guardrails sitting above it, and returns allow or deny.</p>
+    <p>Get that model right and most of cloud security follows from it. Get it wrong and the strongest network controls you own become decoration, because the attacker is already inside, authenticated, and authorised. IAM is not a feature of cloud security. For practical purposes it is the perimeter.</p>
+
+    <figure class="fig" tabindex="0" role="button" aria-label="Expand the IAM request evaluation diagram">
+      <span class="zoom" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></span>
+      <svg viewBox="0 0 720 250" role="img" aria-label="A request from an identity is evaluated against both the identity policy and a guardrail, and only what both permit is allowed.">
+        <rect x="14" y="92" width="150" height="70" rx="9" class="d-box"/>
+        <text x="34" y="124" class="d-t">Identity</text>
+        <text x="34" y="144" class="d-s">role, user, workload</text>
+        <path class="d-line" d="M164 127 H226" marker-end="url(#a2)"/>
+        <text x="170" y="118" class="d-lab">requests</text>
+        <rect x="226" y="44" width="250" height="166" rx="10" class="d-box"/>
+        <text x="248" y="72" class="d-lab">policy evaluation</text>
+        <rect x="248" y="86" width="206" height="48" rx="7" class="d-box-soft"/>
+        <text x="266" y="108" class="d-t" style="font-size:12.5px">Identity policy</text>
+        <text x="266" y="124" class="d-s">what this role may do</text>
+        <rect x="248" y="146" width="206" height="48" rx="7" class="d-box-soft"/>
+        <text x="266" y="168" class="d-t" style="font-size:12.5px">Guardrail</text>
+        <text x="266" y="184" class="d-s">SCP / permission boundary</text>
+        <path class="d-line" d="M476 127 H556" marker-end="url(#a2)"/>
+        <text x="486" y="118" class="d-lab">allow only</text>
+        <text x="486" y="150" class="d-lab">if both permit</text>
+        <rect x="556" y="92" width="150" height="70" rx="9" class="d-box-soft"/>
+        <text x="576" y="124" class="d-t">Allow / Deny</text>
+        <text x="576" y="144" class="d-s">effective access</text>
+        <defs><marker id="a2" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#2dd4bf"/></marker></defs>
+      </svg>
+      <figcaption>Effective access is the intersection of the identity policy and the guardrail above it. A broad identity policy still cannot exceed the guardrail. Click to enlarge.</figcaption>
+    </figure>
+
+    <h2>Blast radius is the real metric</h2>
+    <p>Blast radius is everything a single identity can reach if it is compromised. The size of that radius is set by you, in advance, through the permissions you attach. A role with wildcard actions on wildcard resources has an account-sized blast radius. A role scoped to read three specific buckets has a small one. Same breach, very different incident.</p>
+    <p>The part that makes it worse than it first looks is movement. An identity that can assume other roles inherits their reach. An identity that can pass a role to a service, through <code>iam:PassRole</code>, can often borrow that service's permissions. Chains like these turn a modest foothold into account-wide access without the attacker needing a single new exploit. They are just using the permissions you granted, in an order you did not anticipate.</p>
+
+    <h2>Why least privilege is genuinely hard</h2>
+    <p>If least privilege were easy, everyone would already have it. The honest reasons it slips:</p>
+    <p>You rarely know upfront exactly which permissions an application needs, so the quickest way to unblock a deployment is to grant broadly and move on. That breadth then sticks, because nothing forces it to narrow. Permissions accrete over time: every incident, every new feature, every "just attach the policy" leaves residue that nobody removes. The result is a large and growing gap between what an identity is granted and what it actually uses, and that gap is exactly where the risk sits.</p>
+    <p>The fix is data rather than guesswork. AWS IAM Access Analyzer and last-accessed information, and the equivalent reporting in Azure and Google Cloud, show you which permissions were really used over a window. You scope down to that, then review on a schedule, because usage changes and grants drift back upward.</p>
+
+    <h2>The escalation paths people miss</h2>
+    <p>Most privilege escalation in the cloud is not a vulnerability. It is a misconfiguration that the platform is happily honouring. The recurring ones:</p>
+    <ul>
+      <li><strong>PassRole plus a service.</strong> An identity that can pass a privileged role to a compute or automation service can run code as that role. Scope <code>iam:PassRole</code> tightly, or it becomes a quiet path to admin.</li>
+      <li><strong>Policy self-service.</strong> Permissions like creating a new policy version or attaching a managed policy let a low-privileged role grant itself more. These belong to a very small set of identities.</li>
+      <li><strong>Wildcard trust.</strong> A role trust policy with a wildcard principal, or an over-broad <code>sts:AssumeRole</code>, lets the wrong accounts or identities step into the role. Trust policies deserve the same scrutiny as permission policies.</li>
+      <li><strong>The admin CI role.</strong> A pipeline role carrying AdministratorAccess so a deploy "just works" is a standing key to the account, sitting in a system that runs third-party code on every push.</li>
+    </ul>
+
+    <figure class="fig" tabindex="0" role="button" aria-label="Expand the blast radius comparison diagram">
+      <span class="zoom" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></span>
+      <svg viewBox="0 0 720 300" role="img" aria-label="A compromised broad role reaches the whole account, while a scoped role under a guardrail is contained to one resource.">
+        <text x="14" y="26" class="d-lab-a">broad role: whole account</text>
+        <rect x="14" y="40" width="120" height="50" rx="8" class="d-box-warn"/>
+        <text x="30" y="62" class="d-t" style="font-size:12.5px">Compromised</text>
+        <text x="30" y="79" class="d-s">role: *:*</text>
+        <path class="d-line-a" d="M134 65 H196" marker-end="url(#a3)"/>
+        <rect x="196" y="14" width="120" height="34" rx="7" class="d-box-soft"/><text x="212" y="36" class="d-s">S3 buckets</text>
+        <rect x="196" y="54" width="120" height="34" rx="7" class="d-box-soft"/><text x="212" y="76" class="d-s">Databases</text>
+        <rect x="196" y="94" width="120" height="34" rx="7" class="d-box-soft"/><text x="212" y="116" class="d-s">IAM + other roles</text>
+        <path class="d-line-a" d="M256 48 V54"/><path class="d-line-a" d="M256 88 V94"/>
+        <line x1="360" y1="14" x2="360" y2="286" class="d-dash"/>
+        <text x="392" y="26" class="d-lab">scoped role + guardrail: contained</text>
+        <rect x="392" y="40" width="120" height="50" rx="8" class="d-box"/>
+        <text x="408" y="62" class="d-t" style="font-size:12.5px">Compromised</text>
+        <text x="408" y="79" class="d-s">scoped role</text>
+        <path class="d-line" d="M512 65 H574" marker-end="url(#a2b)"/>
+        <rect x="574" y="48" width="124" height="34" rx="7" class="d-box-soft"/><text x="590" y="70" class="d-s">one bucket, read</text>
+        <rect x="392" y="150" width="306" height="58" rx="9" class="d-box"/>
+        <text x="412" y="178" class="d-t" style="font-size:12.5px">SCP / permission boundary</text>
+        <text x="412" y="196" class="d-s">caps reach regardless of the role policy</text>
+        <path class="d-dash" d="M545 90 V150"/>
+        <defs>
+          <marker id="a3" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#f5b73c"/></marker>
+          <marker id="a2b" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#2dd4bf"/></marker>
+        </defs>
+      </svg>
+      <figcaption>Same compromise, two outcomes. Permissions and guardrails decide whether one identity reaches the whole account or a single resource. Click to enlarge.</figcaption>
+    </figure>
+
+    <h2>The mechanisms that contain blast radius</h2>
+    <p>None of these are exotic. They are the difference between an account that fails small and one that fails completely.</p>
+    <ul>
+      <li><strong>Kill long-lived keys.</strong> Static access keys are the credential that shows up most often in breach write-ups. Use roles and short-lived STS credentials, and for CI use workload identity federation through OIDC instead of storing keys in the pipeline.</li>
+      <li><strong>Scope to actions, resources and conditions.</strong> Name the actions, name the resources, and add conditions such as MFA, source, or session tags where they fit. Wildcards are where blast radius hides.</li>
+      <li><strong>Put guardrails above identity policies.</strong> Service control policies in AWS Organizations, and management group policy in Azure, cap what is possible across an account no matter what an individual policy grants. A permission boundary does the same at the level of a single role.</li>
+      <li><strong>Separate humans from workloads,</strong> and make standing privileged access the exception. Just-in-time elevation, through Azure Privileged Identity Management or an approval step, means admin is something you hold for an hour, not a permanent attribute.</li>
+      <li><strong>Watch IAM itself.</strong> Who can assume what, who changed a policy, who used a sensitive action. CloudTrail and its equivalents are where escalation shows up first, if anyone is looking.</li>
+    </ul>
+
+    <h2>Best practices that survive production</h2>
+    <ol>
+      <li>No long-lived access keys. Roles, short-lived STS credentials, and federation only.</li>
+      <li>Scope every policy to specific actions and resources, with conditions where they fit. Treat a wildcard as something you have to justify.</li>
+      <li>Use service control policies and permission boundaries as guardrails that cap blast radius even when an identity policy is too broad.</li>
+      <li>Right-size from usage data, then review on a schedule. Granted is not the same as used, and grants drift upward over time.</li>
+      <li>Separate human and workload identities, and make privileged human access just-in-time rather than standing.</li>
+      <li>Monitor for escalation paths, not only for who holds admin. PassRole, policy editing, and trust policies are where it hides.</li>
+      <li>Keep a break-glass account, locked down and alarmed, so least privilege never becomes the reason you cannot respond during an incident.</li>
+    </ol>
+
+    <h2>The part to take away</h2>
+    <p>Least privilege is not about saying no. It is about deciding, before anything goes wrong, how far a single compromise can travel. Blast radius is a design choice you make when you write the policy, not a number you discover during the incident.</p>
+    <p>If you want one place to start, list the identities that can assume other roles or carry a wildcard, and look at them first. That is where your account is widest, and it is almost never where people are looking.</p>
+  </article>
+  <div class="related">
+    <div class="related-eyebrow"><span class="line"></span>Related reading</div>
+    <div class="related-grid">
+    <a class="related-card" href="https://saleemyousaf.co.uk/articles/cryptographic-keys-pki-rotation/">
+      <div class="rc-cat">Cryptography</div>
+      <div class="rc-t">Cryptographic keys, key material and PKI</div>
+      <div class="rc-go">Read &#8599;</div>
+    </a>
+    <a class="related-card" href="https://saleemyousaf.co.uk/articles/post-quantum-migration/">
+      <div class="rc-cat">Cryptography</div>
+      <div class="rc-t">Post-quantum migration</div>
+      <div class="rc-go">Read &#8599;</div>
+    </a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Saleem <span>Yousaf</span></div>
+      <div class="footer-desc">Cloud &amp; Cyber Security Architect &middot; AWS &middot; Azure &middot; Zero Trust &middot; AI Governance &middot; OT Security &middot; Enterprise Architecture</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
+      <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
+    <a href="https://saleemyousaf.co.uk/privacy-policy/" style="font-family:var(--mono);font-size:12px;color:var(--muted2);text-decoration:none;">Privacy Policy</a>
+  </div>
+  <div class="footer-cross">
+    <a class="cross-bf" href="https://breachforge.co.uk" target="_blank" rel="noopener">&#x2B61; breachforge.co.uk</a>
+    <a class="cross-cs" href="https://cyberspartans.co.uk" target="_blank" rel="noopener">&#x2B22; cyberspartans.co.uk</a>
+  </div>
+</footer>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged diagram">
+  <div class="lb-inner"><button class="lb-close" id="lbClose" type="button" aria-label="Close">&#10005;</button><div id="lbBody"></div></div>
+</div>
+
+<script src="/nav.js" defer></script>
+<script>
+(function(){
+  var lb=document.getElementById('lb'),body=document.getElementById('lbBody'),close=document.getElementById('lbClose'),last=null;
+  function open(fig){
+    var svg=fig.querySelector('svg[role="img"]'); if(!svg) return;
+    body.innerHTML=''; body.appendChild(svg.cloneNode(true));
+    last=document.activeElement; lb.classList.add('open'); document.body.style.overflow='hidden'; close.focus();
+  }
+  function shut(){ lb.classList.remove('open'); document.body.style.overflow=''; body.innerHTML=''; if(last&&last.focus)last.focus(); }
+  document.querySelectorAll('figure.fig').forEach(function(f){
+    f.addEventListener('click',function(){open(f);});
+    f.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){e.preventDefault();open(f);} });
+  });
+  close.addEventListener('click',shut);
+  lb.addEventListener('click',function(e){ if(e.target===lb) shut(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&lb.classList.contains('open')) shut(); });
+})();
+</script>
+</body>
+</html>
