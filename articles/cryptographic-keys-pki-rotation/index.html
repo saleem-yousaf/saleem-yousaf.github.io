@@ -1,1 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cryptographic Keys and PKI: Key Material, Rotation, and What Holds Up in Production | Saleem Yousaf</title>
+<meta name="description" content="A practitioner's take on cryptographic keys, key material, key rotation and PKI. Why key management, not the algorithm, decides whether encryption protects anything, and the best practices that hold up in production.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/cryptographic-keys-pki-rotation/">
 
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cryptographic Keys and PKI: Key Material, Rotation, and What Holds Up in Production">
+<meta property="og:description" content="Why key management, not the algorithm, decides whether encryption protects anything. Keys, key material, rotation and PKI, with the best practices that survive production.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/cryptographic-keys-pki-rotation/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/assets/og-cryptographic-keys-pki.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cryptographic Keys and PKI: Key Material, Rotation, and What Holds Up in Production">
+<meta name="twitter:description" content="Keys, key material, rotation and PKI, and the best practices that survive production.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Cryptographic Keys and PKI: Key Material, Rotation, and What Holds Up in Production",
+  "description": "A practitioner's take on cryptographic keys, key material, key rotation and PKI, and the best practices that decide whether encryption actually protects anything.",
+  "datePublished": "2026-06-30",
+  "dateModified": "2026-06-30",
+  "author": {
+    "@type": "Person",
+    "name": "Saleem Yousaf",
+    "url": "https://saleemyousaf.co.uk",
+    "sameAs": [
+      "https://www.linkedin.com/in/saleemyousaf",
+      "https://github.com/saleem-yousaf",
+      "https://cyberspartans.co.uk"
+    ]
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Saleem Yousaf",
+    "url": "https://saleemyousaf.co.uk"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://saleemyousaf.co.uk/articles/cryptographic-keys-pki-rotation/"
+  },
+  "image": "https://saleemyousaf.co.uk/assets/og-cryptographic-keys-pki.png",
+  "articleSection": "Cryptography",
+  "keywords": "cryptographic keys, key material, key rotation, PKI, KMS, HSM, envelope encryption, certificate lifetimes, post-quantum"
+}
+</script>
+
+<style>
+:root{
+  --bg:#090c10;--bg2:#0f1318;--bg3:#161b22;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --text:#e6eaf0;--muted:#8a96a8;--muted2:#5a6675;
+  --teal:#2dd4bf;--teal-bright:#5eead4;--teal-dim:rgba(45,212,191,0.12);--teal-line:rgba(45,212,191,0.30);
+  --bf:#00d4ff;--cs:#2f9e6f;
+  --mono:'DM Mono',monospace;--display:'Syne',sans-serif;--body:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-weight:300;line-height:1.75;font-size:17px;-webkit-font-smoothing:antialiased;}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px;}
+
+/* hero */
+.hero{padding:70px 0 34px;}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:10px;margin-bottom:22px;}
+.eyebrow .line{width:30px;height:1px;background:var(--teal);}
+h1{font-family:var(--display);font-weight:800;font-size:40px;line-height:1.12;letter-spacing:-1px;color:#fff;margin-bottom:22px;}
+.meta{display:flex;flex-wrap:wrap;gap:10px 18px;font-family:var(--mono);font-size:12.5px;color:var(--muted);align-items:center;}
+.meta .who{color:var(--text);}
+.meta .dot{width:4px;height:4px;border-radius:50%;background:var(--muted2);}
+.hr{height:1px;background:var(--border);margin:34px 0;}
+
+/* body */
+article p{margin:0 0 22px;color:#d3dae4;}
+article p.lead{font-size:19px;color:var(--text);font-weight:400;}
+article h2{font-family:var(--display);font-weight:700;font-size:25px;letter-spacing:-.4px;color:#fff;margin:48px 0 16px;line-height:1.25;}
+article strong{color:#fff;font-weight:600;}
+article a{color:var(--teal-bright);text-decoration:none;border-bottom:1px solid var(--teal-line);}
+article a:hover{border-color:var(--teal-bright);}
+.callout{border:1px solid var(--teal-line);border-left:3px solid var(--teal);background:var(--teal-dim);border-radius:0 10px 10px 0;padding:18px 22px;margin:30px 0;font-size:16px;color:var(--text);}
+.callout b{color:var(--teal-bright);font-weight:600;}
+article ol,article ul{margin:0 0 22px;padding-left:0;list-style:none;counter-reset:li;}
+article ol li,article ul li{position:relative;padding-left:34px;margin-bottom:14px;color:#d3dae4;}
+article ol li{counter-increment:li;}
+article ol li::before{content:counter(li);position:absolute;left:0;top:1px;width:22px;height:22px;border-radius:6px;background:var(--teal-dim);border:1px solid var(--teal-line);color:var(--teal-bright);font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;}
+article ul li::before{content:"";position:absolute;left:8px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--teal);}
+code{font-family:var(--mono);font-size:13.5px;color:var(--teal-bright);background:var(--teal-dim);border:1px solid var(--teal-line);border-radius:4px;padding:1px 6px;}
+pre{font-family:var(--mono);font-size:13px;line-height:1.65;color:#cdd6e2;background:#0a0e14;border:1px solid var(--border);border-radius:10px;padding:15px 17px;overflow-x:auto;margin:0 0 24px;}
+pre code{background:none;border:0;color:inherit;padding:0;}
+
+/* figures + lightbox */
+figure.fig{margin:30px 0;border:1px solid var(--border);border-radius:12px;background:var(--bg2);padding:22px 22px 16px;cursor:zoom-in;position:relative;transition:border-color .2s;}
+figure.fig:hover,figure.fig:focus-visible{border-color:var(--teal-line);outline:none;}
+figure.fig .zoom{position:absolute;top:12px;right:12px;width:24px;height:24px;border:1px solid var(--border2);border-radius:6px;color:var(--muted);display:flex;align-items:center;justify-content:center;}
+figure.fig svg{width:100%;height:auto;display:block;}
+figure.fig figcaption{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:14px;line-height:1.5;}
+.lb{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:3vh 2vw;background:rgba(5,7,10,0.9);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+.lb.open{display:flex;}
+.lb-inner{position:relative;width:96vw;max-width:1100px;max-height:94vh;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:30px;overflow:auto;}
+.lb-inner svg{width:100%;height:auto;}
+.lb-close{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;}
+.lb-close:hover,.lb-close:focus-visible{color:var(--teal);border-color:var(--teal);outline:none;}
+
+/* svg diagram helpers */
+.d-box{fill:var(--bg3);stroke:var(--teal-line);}
+.d-box-soft{fill:var(--bg);stroke:var(--border2);}
+.d-t{fill:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;}
+.d-s{fill:#8a96a8;font-family:'DM Mono',monospace;font-size:11px;}
+.d-lab{fill:var(--teal);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;}
+.d-line{stroke:var(--teal-line);stroke-width:1.5;fill:none;}
+.d-dash{stroke:var(--border2);stroke-width:1.3;stroke-dasharray:4 4;fill:none;}
+
+/* footer */
+footer{border-top:1px solid var(--border);margin-top:70px;background:var(--bg2);}
+.footer-inner{max-width:1100px;margin:0 auto;padding:42px 32px 10px;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;}
+.footer-logo{font-family:var(--display);font-weight:800;font-size:20px;color:var(--muted2);}
+.footer-logo span{color:var(--teal);}
+.footer-desc{font-size:13px;color:var(--muted);max-width:520px;margin-top:8px;line-height:1.6;}
+.footer-links{display:flex;flex-wrap:wrap;gap:18px;align-items:center;}
+.footer-links a{font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;}
+.footer-links a:hover{color:var(--teal);}
+.footer-bottom{max-width:1100px;margin:0 auto;padding:18px 32px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;border-top:1px solid var(--border);}
+.footer-copy{font-family:var(--mono);font-size:12px;color:var(--muted2);}
+.footer-cross{max-width:1100px;margin:0 auto;padding:20px 32px 34px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;border-top:1px solid rgba(255,255,255,0.07);}
+.footer-cross a{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;padding:6px 12px;border-radius:5px;text-decoration:none;letter-spacing:.03em;}
+.cross-bf{background:rgba(0,212,255,0.10);color:var(--bf);border:1px solid rgba(0,212,255,0.28);}
+.cross-cs{background:rgba(47,158,111,0.10);color:var(--cs);border:1px solid rgba(47,158,111,0.30);}
+
+@media (max-width:600px){h1{font-size:30px;}body{font-size:16px;}.hero{padding:48px 0 24px;}}
+
+/* Key management infographic lightbox (cx-ig scope) */
+.cx-ig-launch{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:0 10px 10px 0;padding:18px 22px;margin:30px 0;cursor:pointer;font-family:inherit;color:var(--text);transition:border-color .2s,background .2s,transform .2s;}
+.cx-ig-launch:hover{border-color:var(--teal);background:var(--bg3);transform:translateY(-1px);}
+.cx-ig-launch:focus-visible{outline:2px solid var(--teal);outline-offset:2px;}
+.cx-ig-launch-ico{width:40px;height:40px;flex-shrink:0;border-radius:9px;background:var(--teal-dim);border:1px solid var(--teal-line);display:flex;align-items:center;justify-content:center;color:var(--teal);}
+.cx-ig-launch-tx{display:flex;flex-direction:column;gap:3px;}
+.cx-ig-launch-tx b{font-family:var(--display);font-weight:700;font-size:15px;color:#fff;}
+.cx-ig-launch-tx em{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.02em;line-height:1.4;}
+.cx-ig-launch-cue{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--teal);white-space:nowrap;}
+.cx-ig-overlay{position:fixed;inset:0;z-index:1001;display:none;align-items:center;justify-content:center;padding:3vh 2vw;background:rgba(5,7,10,0.9);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+.cx-ig-overlay.open{display:flex;}
+.cx-ig-modal{position:relative;width:96vw;max-width:980px;height:94vh;background:var(--bg);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.6);display:flex;flex-direction:column;}
+.cx-ig-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;}
+.cx-ig-bar span{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;}
+.cx-ig-close{width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:color .2s,border-color .2s;}
+.cx-ig-close:hover,.cx-ig-close:focus-visible{color:var(--teal);border-color:var(--teal);outline:none;}
+.cx-ig-frame{flex:1;width:100%;border:0;background:var(--bg);}
+@media(max-width:600px){.cx-ig-launch-cue{display:none;}}
+
+.related{margin-top:58px;padding-top:30px;border-top:1px solid var(--border);}
+.related-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.related-eyebrow .line{width:24px;height:1px;background:var(--teal);}
+.related-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.related-card{display:block;border:1px solid var(--border);border-radius:11px;background:var(--bg2);padding:16px 18px;text-decoration:none;transition:border-color .2s,transform .2s;}
+.related-card:hover{border-color:var(--teal-line);transform:translateY(-2px);}
+.related-card .rc-cat{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2);}
+.related-card .rc-t{font-family:var(--display);font-weight:700;font-size:15px;color:#fff;margin-top:6px;line-height:1.3;}
+.related-card .rc-go{font-family:var(--mono);font-size:11px;color:var(--teal);margin-top:8px;display:inline-block;}
+@media(max-width:600px){.related-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow"><span class="line"></span>Cryptography</div>
+    <h1>Cryptographic keys and PKI: key material, rotation, and what holds up in production</h1>
+    <div class="meta">
+      <span class="who">Saleem Yousaf</span>
+      <span class="dot"></span><span>30 June 2026</span>
+      <span class="dot"></span><span>~15 min read</span>
+    </div>
+  </header>
+
+  <div class="hr"></div>
+
+  <article>
+    <p class="lead">Most cryptography failures I see in production have nothing to do with broken algorithms. AES-256 is not the problem. RSA is not the problem. The problem is almost always the key: where it came from, where it lives, who can use it, and what happens when it has to change.</p>
+
+    <p>A strong cipher protecting a key that sits in a Git history is not security. A private key that has not moved in years because nobody dares touch it is not security either. Both are deferred incidents. This is the unglamorous half of cryptography, and it is the half that decides whether the encryption actually protects anything.</p>
+
+    <div class="callout"><b>The mismatch in most environments:</b> teams choose strong algorithms, then manage the keys with the same care they give a config file. The cipher is the easy decision. Generation, storage, access and rotation are where the real work sits, and where the failures happen.</div>
+
+    <button class="cx-ig-launch" type="button" id="cxIgOpen" aria-haspopup="dialog">
+      <span class="cx-ig-launch-ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></span>
+      <span class="cx-ig-launch-tx"><b>The key management picture, on one screen</b><em>Interactive infographic: the lifecycle, envelope encryption, the PKI chain, the certificate countdown, and the questions to answer before you ship</em></span>
+      <span class="cx-ig-launch-cue">Open &#8599;</span>
+    </button>
+
+    <h2>A key is not the same thing as key material</h2>
+    <p>The word "key" usually refers to the logical object: an identifier, some metadata, a usage policy, often several versions over time. <strong>Key material</strong> is the actual secret: the raw bytes of a symmetric key, or the private exponent and parameters of an asymmetric key pair. The distinction matters because nearly every good practice here is about protecting the material while letting the logical key stay stable.</p>
+    <p>Two families to keep straight. Symmetric keys are a single shared secret, fast, used for bulk data, with AES-256-GCM the usual choice. Asymmetric keys come as a pair, a private and a public half, used for signatures, key exchange and identity, with RSA-3072 or elliptic curve options like P-256 and Ed25519 in common use.</p>
+    <p>A key is only ever as strong as two things you cannot judge from the algorithm name: the randomness used to generate it, and the protection around the material once it exists. A 256-bit key drawn from a weak random source is not a 256-bit key. Generation needs a cryptographically secure random source seeded from real entropy, which is one of the reasons keys that matter are generated inside dedicated hardware rather than in application code.</p>
+
+    <h2>Where keys live: HSMs, KMS, and the material that should never leave</h2>
+    <p>The safest place for key material is somewhere it can be used but never extracted in the clear. That is the whole premise of a hardware security module. The private key is generated inside the device, signing and decryption happen inside the device, and the material never leaves in plaintext. HSMs are validated against FIPS 140-2, or the newer FIPS 140-3, and for regulated work you will usually see Level 3 as the bar.</p>
+    <p>Cloud key management services (AWS KMS, Azure Key Vault, Google Cloud KMS) sit on HSMs and give you an API instead of a device to rack. The pattern worth internalising is <strong>envelope encryption</strong>. You do not encrypt your data directly with the key held in the service. The service holds a key-encryption key that never leaves, and you use it to wrap a locally generated data-encryption key. The data key encrypts the data; the wrapped data key is stored next to the ciphertext.</p>
+
+    <figure class="fig" tabindex="0" role="button" aria-label="Expand the envelope encryption diagram">
+      <span class="zoom" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></span>
+      <svg viewBox="0 0 720 250" role="img" aria-label="Envelope encryption: a key-encryption key inside the KMS or HSM wraps a data key, which encrypts the data.">
+        <rect x="14" y="60" width="200" height="120" rx="10" class="d-box"/>
+        <text x="34" y="90" class="d-lab">KMS / HSM</text>
+        <rect x="40" y="104" width="148" height="56" rx="8" class="d-box-soft"/>
+        <text x="60" y="130" class="d-t">KEK</text>
+        <text x="60" y="148" class="d-s">never leaves</text>
+        <path class="d-line" d="M214 132 H300" marker-end="url(#ar)"/>
+        <text x="222" y="124" class="d-lab">wraps</text>
+        <rect x="300" y="92" width="160" height="80" rx="9" class="d-box"/>
+        <text x="320" y="126" class="d-t">Data key</text>
+        <text x="320" y="146" class="d-s">DEK, stored wrapped</text>
+        <path class="d-line" d="M460 132 H548" marker-end="url(#ar)"/>
+        <text x="470" y="124" class="d-lab">encrypts</text>
+        <rect x="548" y="92" width="158" height="80" rx="9" class="d-box-soft"/>
+        <text x="568" y="126" class="d-t">Your data</text>
+        <text x="568" y="146" class="d-s">at rest</text>
+        <text x="14" y="216" class="d-s">Rotate the KEK and only the wrapped data key changes. The data itself is not re-encrypted.</text>
+        <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#2dd4bf"/></marker></defs>
+      </svg>
+      <figcaption>Envelope encryption. The key-encryption key stays inside the service; the data key it wraps is what actually encrypts your data. Click to enlarge.</figcaption>
+    </figure>
+
+    <p>Two consequences fall out of this, and both matter for rotation: the key-encryption key can change without re-encrypting terabytes of data, and the blast radius of any single data key is limited to the data it wrapped. You can also bring your own key material, or hold the key outside the provider entirely, for cases where you cannot accept the provider generating or holding it. Useful, but every step toward holding it yourself is a step toward owning the operational burden, including being the person who has to be available when it needs rotating.</p>
+    <p>For the most sensitive keys, no single person should be able to use or export them alone. Dual control, where two people are required, and split knowledge, where no one person holds the whole secret, are old controls from the payments world and still the right ones for root material.</p>
+
+    <h2>PKI: the trust chain, and why the root sits offline</h2>
+    <p>Public key infrastructure is how you turn "this is a public key" into "this is the public key for that identity, and someone I trust vouches for it." The structure is a chain. A root certificate authority sits at the top, one or more intermediate or issuing authorities sit below it, and the end-entity certificates at the bottom are issued to your servers, services and clients. A client trusts a leaf certificate because it chains up to a root already in its trust store.</p>
+
+    <figure class="fig" tabindex="0" role="button" aria-label="Expand the PKI hierarchy diagram">
+      <span class="zoom" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></span>
+      <svg viewBox="0 0 720 330" role="img" aria-label="PKI hierarchy: an offline root CA signs an issuing CA, which issues leaf certificates. Revocation is published via CRL and OCSP.">
+        <rect x="270" y="16" width="180" height="58" rx="9" class="d-box"/>
+        <text x="296" y="42" class="d-t">Root CA</text>
+        <text x="296" y="60" class="d-s">offline, in an HSM</text>
+        <path class="d-line" d="M360 74 V112"/>
+        <rect x="262" y="112" width="196" height="58" rx="9" class="d-box"/>
+        <text x="286" y="138" class="d-t">Issuing CA</text>
+        <text x="286" y="156" class="d-s">online, day to day</text>
+        <path class="d-line" d="M360 170 V196"/>
+        <path class="d-line" d="M150 214 H570"/>
+        <path class="d-line" d="M150 196 V214"/><path class="d-line" d="M360 196 V214"/><path class="d-line" d="M570 196 V214"/>
+        <path class="d-line" d="M150 214 V236"/><path class="d-line" d="M360 214 V236"/><path class="d-line" d="M570 214 V236"/>
+        <rect x="70" y="236" width="160" height="58" rx="8" class="d-box-soft"/>
+        <text x="90" y="262" class="d-t" style="font-size:12.5px">TLS server cert</text>
+        <text x="90" y="280" class="d-s">public site</text>
+        <rect x="280" y="236" width="160" height="58" rx="8" class="d-box-soft"/>
+        <text x="300" y="262" class="d-t" style="font-size:12.5px">Service mTLS</text>
+        <text x="300" y="280" class="d-s">internal</text>
+        <rect x="490" y="236" width="160" height="58" rx="8" class="d-box-soft"/>
+        <text x="510" y="262" class="d-t" style="font-size:12.5px">Client / device</text>
+        <text x="510" y="280" class="d-s">identity</text>
+        <rect x="520" y="112" width="170" height="58" rx="9" class="d-box-soft"/>
+        <text x="540" y="138" class="d-t" style="font-size:12.5px">CRL / OCSP</text>
+        <text x="540" y="156" class="d-s">revocation</text>
+        <path class="d-dash" d="M520 150 H458"/>
+      </svg>
+      <figcaption>The chain of trust. The root stays offline and signs intermediates; the issuing CA does the daily work; revocation is published through CRL and OCSP. Click to enlarge.</figcaption>
+    </figure>
+
+    <p>The single most important operational fact about the root is that it stays offline. It signs a small number of intermediates, then sits powered down, often on an HSM, brought out only for rare ceremonies. The intermediates do the everyday issuing. If an intermediate is compromised you revoke it and issue a new one from the root. If the root is compromised, every certificate beneath it is worthless and you are rebuilding trust from nothing. That asymmetry is the entire reason for the hierarchy.</p>
+    <p>Revocation is the part most teams underestimate. When a certificate must be killed before it expires, you publish that through a Certificate Revocation List or the Online Certificate Status Protocol, often with OCSP stapling so the server presents its own freshness proof. Revocation has always been the weak joint, because clients do not always check, and checking adds latency and a dependency. That weakness is exactly why the industry is moving to short-lived certificates, so that a certificate expiring on its own does most of the work revocation was supposed to do.</p>
+    <p>One more distinction. Public certificate authorities issue what browsers trust. Internal PKI, through AWS Private CA, Azure, or Active Directory Certificate Services, issues certificates the public internet never sees: service-to-service mTLS, internal APIs, device identity. The rules differ, and the public lifetime changes below do not bind your internal CA. They are still a good prompt to check whether anything internal is quietly issuing five-year leaf certificates.</p>
+
+    <h2>Rotation: the discipline most teams defer</h2>
+    <p>Rotation is changing the key material on a schedule, or on demand after a suspected compromise, while keeping the system working. The reasons are easy to state and easy to ignore: limit how much data any single key protects, limit how long a stolen key stays useful, recover cleanly from compromise, and stay within the cryptoperiod guidance that frameworks such as NIST SP 800-57 lay out per key type.</p>
+    <p>This is where the envelope pattern earns its place. Rotating a key-encryption key in a KMS does not re-encrypt your data. It creates a new version, starts using it to wrap new data keys, and keeps the old versions available for decryption only. Old data still decrypts under its old version; new data uses the new one. AWS KMS and Azure Key Vault both automate this on a schedule.</p>
+    <pre><code>aws kms enable-key-rotation \
+  --key-id arn:aws:kms:eu-west-2:111122223333:key/abcd... \
+  --rotation-period-in-days 90</code></pre>
+    <p>The trap is assuming "rotation enabled" means the old versions are gone. They are not, and they should not be, or you would lose access to everything encrypted under them. Rotation limits forward exposure. It does not retroactively re-protect old ciphertext unless you explicitly re-encrypt it, which is a separate, deliberate job.</p>
+    <p>Certificate rotation is a different animal, and it is about to get much more frequent. In April 2025 the CA/Browser Forum approved a phased reduction in the maximum lifetime of public TLS certificates. The cap drops from 398 days to 200 days in March 2026, to 100 days in March 2027, and to 47 days in March 2029, with the window for reusing domain validation shrinking to around 10 days by the end. The message is not subtle. Manual certificate renewal is finished. The 2026 step alone breaks an annual cadence, and by 2029 you are renewing every six to seven weeks.</p>
+    <p>The answer is automation through ACME, the protocol behind Let's Encrypt and now most issuers, with DNS-01 or HTTP-01 validation wired into your platform. Let's Encrypt has signalled even shorter certificates, around 45 days, ahead of the mandate. Internal PKI is exempt from these specific rules, but the direction everywhere is the same: shorter lifetimes, more automation, less reliance on revocation.</p>
+    <p>The gotchas that actually cause outages are worth naming plainly:</p>
+    <ul>
+      <li><strong>Deleted old key versions.</strong> Removing old key-encryption key versions because "rotation was done" orphans every data key they wrapped, and the data they protected becomes unreadable.</li>
+      <li><strong>Pinning plus rotation.</strong> If a mobile app or service pins a specific certificate or key, rotating it breaks every pinned client until they update. Pin to a CA or a public key you control across rotations, never to a leaf you replace every six weeks.</li>
+      <li><strong>Expired intermediates.</strong> A leaf can still be valid while the intermediate above it has expired, and the chain fails anyway. Monitor the whole chain, not just the leaf.</li>
+      <li><strong>The forgotten certificate.</strong> The most common cause of certificate outages is the one nobody knew existed. You cannot rotate what you have not inventoried.</li>
+    </ul>
+    <p>For the last one, the cheapest insurance is knowing what you actually have. A quick way to inspect a live chain:</p>
+    <pre><code>openssl s_client -connect example.com:443 -showcerts &lt; /dev/null</code></pre>
+
+    <h2>Best practices that survive contact with production</h2>
+    <p>A short, opinionated list, in rough priority order.</p>
+    <ol>
+      <li>Generate key material in an HSM or KMS, never in application code, and never commit it to a repository or let it pass through CI logs.</li>
+      <li>Separate the key-encryption key from the data keys and use envelope encryption, so rotation and blast radius stay manageable.</li>
+      <li>Apply least privilege to key use, not just key storage. Who can call decrypt or sign is the control that matters. Log every use through CloudTrail or Key Vault logging and alert on the unusual.</li>
+      <li>Automate rotation for both KMS keys and certificates. If rotation depends on a human remembering, it will eventually not happen.</li>
+      <li>Plan revocation and recovery before you need them. Know how you would kill a compromised key and what breaks when you do.</li>
+      <li>Build crypto-agility: the ability to change algorithm or key without re-architecting. This is no longer abstract, for the reason in the next point.</li>
+      <li>Treat the post-quantum move as inventory, not panic. In August 2024 NIST finalised its first post-quantum standards, FIPS 203, 204 and 205. The near-term risk is "harvest now, decrypt later," where an adversary stores your encrypted traffic today to break it once large quantum computers exist. The first step is not swapping algorithms; it is knowing where your long-lived secrets and long-lived encrypted data sit, so you can prioritise what to migrate first.</li>
+    </ol>
+
+    <h2>The part to take away</h2>
+    <p>Treat keys as a lifecycle, not a setup step. Generation, storage, access, rotation, revocation, retirement: each stage is a place where the cryptography either holds or quietly fails. The algorithms are settled and rarely the issue. The discipline around the keys is where the security actually lives, and it is the part that rewards being boring and consistent far more than being clever.</p>
+    <p>If you are deciding where to start, start with an inventory. You cannot rotate, revoke, or migrate what you have not written down.</p>
+  </article>
+  <div class="related">
+    <div class="related-eyebrow"><span class="line"></span>Related reading</div>
+    <div class="related-grid">
+    <a class="related-card" href="https://saleemyousaf.co.uk/articles/cloud-iam-blast-radius/">
+      <div class="rc-cat">Cloud Security</div>
+      <div class="rc-t">Cloud IAM and the blast-radius problem</div>
+      <div class="rc-go">Read &#8599;</div>
+    </a>
+    <a class="related-card" href="https://saleemyousaf.co.uk/articles/post-quantum-migration/">
+      <div class="rc-cat">Cryptography</div>
+      <div class="rc-t">Post-quantum migration</div>
+      <div class="rc-go">Read &#8599;</div>
+    </a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Saleem <span>Yousaf</span></div>
+      <div class="footer-desc">Cloud &amp; Cyber Security Architect &middot; AWS &middot; Azure &middot; Zero Trust &middot; AI Governance &middot; OT Security &middot; Enterprise Architecture</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
+      <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
+    <a href="https://saleemyousaf.co.uk/privacy-policy/" style="font-family:var(--mono);font-size:12px;color:var(--muted2);text-decoration:none;">Privacy Policy</a>
+  </div>
+  <div class="footer-cross">
+    <a class="cross-bf" href="https://breachforge.co.uk" target="_blank" rel="noopener">&#x2B61; breachforge.co.uk</a>
+    <a class="cross-cs" href="https://cyberspartans.co.uk" target="_blank" rel="noopener">&#x2B22; cyberspartans.co.uk</a>
+  </div>
+</footer>
+
+<!-- diagram lightbox -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged diagram">
+  <div class="lb-inner"><button class="lb-close" id="lbClose" type="button" aria-label="Close">&#10005;</button><div id="lbBody"></div></div>
+</div>
+
+<script src="/nav.js" defer></script>
+<script>
+(function(){
+  var lb=document.getElementById('lb'),body=document.getElementById('lbBody'),close=document.getElementById('lbClose'),last=null;
+  function open(fig){
+    var svg=fig.querySelector('svg[role="img"]'); if(!svg) return;
+    body.innerHTML=''; body.appendChild(svg.cloneNode(true));
+    last=document.activeElement; lb.classList.add('open'); document.body.style.overflow='hidden'; close.focus();
+  }
+  function shut(){ lb.classList.remove('open'); document.body.style.overflow=''; body.innerHTML=''; if(last&&last.focus)last.focus(); }
+  document.querySelectorAll('figure.fig').forEach(function(f){
+    f.addEventListener('click',function(){open(f);});
+    f.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){e.preventDefault();open(f);} });
+  });
+  close.addEventListener('click',shut);
+  lb.addEventListener('click',function(e){ if(e.target===lb) shut(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&lb.classList.contains('open')) shut(); });
+})();
+</script>
+
+<div class="cx-ig-overlay" id="cxIgOverlay" role="dialog" aria-modal="true" aria-label="Cryptographic key management infographic">
+  <div class="cx-ig-modal">
+    <div class="cx-ig-bar"><span>// key management</span><button class="cx-ig-close" id="cxIgClose" type="button" aria-label="Close infographic">&#10005;</button></div>
+    <iframe class="cx-ig-frame" id="cxIgFrame" title="Cryptographic key management infographic"></iframe>
+  </div>
+</div>
+<script>
+(function(){
+  var INFOGRAPHIC = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cryptographic key management infographic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e14;--panel:#0f1419;--elev:#161b22;--border:rgba(255,255,255,0.09);
+  --text:#e6eaf0;--muted:#8a96a8;--muted2:#5a6675;
+  --teal:#2dd4bf;--teal-b:#5eead4;--teal-dim:rgba(45,212,191,0.12);--teal-line:rgba(45,212,191,0.30);
+  --blue:#4aa8ff;--blue-dim:rgba(74,168,255,0.12);--blue-line:rgba(74,168,255,0.30);
+  --amber:#f5b73c;--amber-dim:rgba(245,183,60,0.12);--amber-line:rgba(245,183,60,0.32);
+  --purple:#a78bfa;--purple-dim:rgba(167,139,250,0.12);--purple-line:rgba(167,139,250,0.30);
+  --mono:'DM Mono',monospace;--display:'Syne',sans-serif;--body:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-weight:300;line-height:1.5;padding:46px 28px 40px;}
+.ig{max-width:900px;margin:0 auto;}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:16px;}
+h1{font-family:var(--display);font-weight:800;font-size:42px;line-height:1.08;letter-spacing:-1px;color:#fff;}
+h1 .g{color:var(--teal);}
+.sub{font-size:15px;color:var(--muted);margin:14px 0 6px;max-width:620px;}
+.rule{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin:38px 0 14px;}
+.rule.b{color:var(--blue);}.rule.a{color:var(--amber);}.rule.p{color:var(--purple);}
+
+/* lifecycle */
+.life{display:flex;gap:8px;flex-wrap:wrap;}
+.stage{flex:1;min-width:120px;border:1px solid var(--border);border-top:2px solid var(--teal);border-radius:0 0 9px 9px;background:var(--panel);padding:13px 13px 15px;}
+.stage b{display:block;font-family:var(--display);font-weight:700;font-size:14px;color:#fff;margin-bottom:4px;}
+.stage span{font-family:var(--mono);font-size:10.5px;color:var(--muted);line-height:1.45;}
+.stage .n{font-family:var(--mono);font-size:10px;color:var(--teal);}
+
+/* two families */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.card{border:1px solid var(--border);border-radius:11px;background:var(--panel);padding:18px 20px;}
+.card.t{border-top:2px solid var(--teal);}
+.card.b{border-top:2px solid var(--blue);}
+.card .tag{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);}
+.card.b .tag{color:var(--blue);}
+.card h3{font-family:var(--display);font-weight:700;font-size:17px;color:#fff;margin:6px 0 6px;}
+.card p{font-size:13px;color:var(--muted);line-height:1.55;}
+
+/* flow rows */
+.flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;border:1px solid var(--border);border-radius:11px;background:var(--panel);overflow:hidden;}
+.fnode{flex:1;min-width:150px;padding:18px 18px;}
+.fnode + .fnode{border-left:1px solid var(--border);}
+.fnode .k{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted2);}
+.fnode b{display:block;font-family:var(--display);font-weight:700;font-size:16px;color:#fff;margin:5px 0 4px;}
+.fnode span{font-size:12px;color:var(--muted);}
+.fnote{font-family:var(--mono);font-size:11px;color:var(--teal);margin-top:9px;}
+
+/* timeline */
+.tl{display:flex;gap:10px;align-items:flex-end;}
+.tlc{flex:1;text-align:center;}
+.tlbar{margin:0 auto 10px;width:60%;border-radius:6px 6px 0 0;}
+.tlc .d{font-family:var(--display);font-weight:800;font-size:26px;color:#fff;line-height:1;}
+.tlc .u{font-family:var(--mono);font-size:10px;color:var(--muted);}
+.tlc .w{font-family:var(--mono);font-size:11px;color:var(--muted2);margin-top:6px;}
+
+/* pattern box */
+.warn{border:1px solid var(--amber-line);background:var(--amber-dim);border-radius:11px;padding:18px 22px;}
+.warn h3{font-family:var(--display);font-weight:700;font-size:16px;color:var(--amber);margin-bottom:10px;}
+.warn ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 22px;}
+.warn li{font-size:13px;color:var(--text);padding-left:16px;position:relative;line-height:1.45;}
+.warn li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--amber);}
+
+/* questions */
+.q{display:flex;gap:14px;margin-bottom:10px;align-items:flex-start;}
+.q .num{flex-shrink:0;width:28px;height:28px;border-radius:7px;background:var(--purple-dim);border:1px solid var(--purple-line);color:var(--purple);font-family:var(--mono);font-size:13px;display:flex;align-items:center;justify-content:center;}
+.q p{font-size:14px;color:var(--text);padding-top:3px;}
+
+.foot{margin-top:36px;padding-top:18px;border-top:1px solid var(--border);text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted2);}
+.foot span{color:var(--teal);}
+@media(max-width:620px){h1{font-size:30px;}.cols,.warn ul{grid-template-columns:1fr;}.tlc .d{font-size:20px;}}
+</style>
+</head>
+<body>
+<div class="ig">
+
+  <div class="eyebrow">// cryptographic key management</div>
+  <h1>Strong ciphers, <span class="g">weak keys.</span></h1>
+  <p class="sub">The break is almost never the algorithm. It is where the key came from, where it lives, who can use it, and what happens when it has to change.</p>
+
+  <div class="rule">// the key lifecycle</div>
+  <div class="life">
+    <div class="stage"><b>Generate</b><span class="n">01</span><span><br>In an HSM or KMS, from a real random source.</span></div>
+    <div class="stage"><b>Store</b><span class="n">02</span><span><br>Material that can be used but never extracted.</span></div>
+    <div class="stage"><b>Use</b><span class="n">03</span><span><br>Least privilege on decrypt and sign. Log it.</span></div>
+    <div class="stage"><b>Rotate</b><span class="n">04</span><span><br>On a schedule, and on demand after compromise.</span></div>
+    <div class="stage"><b>Revoke</b><span class="n">05</span><span><br>A planned way to kill a key fast.</span></div>
+    <div class="stage"><b>Retire</b><span class="n">06</span><span><br>Keep old versions for decrypt only.</span></div>
+  </div>
+
+  <div class="rule b">// two families, two jobs</div>
+  <div class="cols">
+    <div class="card t"><div class="tag">Symmetric</div><h3>AES-256-GCM</h3><p>One shared secret. Fast. Used for bulk data. Wrapped by a key-encryption key, never hardcoded.</p></div>
+    <div class="card b"><div class="tag">Asymmetric</div><h3>RSA-3072 / ECC</h3><p>A key pair. Used for identity, signatures and key exchange. The private half lives in hardware.</p></div>
+  </div>
+
+  <div class="rule">// envelope encryption</div>
+  <div class="flow">
+    <div class="fnode"><div class="k">KMS / HSM</div><b>KEK</b><span>Never leaves the boundary.</span></div>
+    <div class="fnode"><div class="k">wraps</div><b>Data key</b><span>Generated locally, stored wrapped.</span></div>
+    <div class="fnode"><div class="k">encrypts</div><b>Your data</b><span>At rest, at scale.</span><div class="fnote">Rotate the KEK and the data is not re-encrypted.</div></div>
+  </div>
+
+  <div class="rule">// the trust chain</div>
+  <div class="flow">
+    <div class="fnode"><div class="k">top</div><b>Root CA</b><span>Offline, in an HSM. Signs intermediates only.</span></div>
+    <div class="fnode"><div class="k">daily</div><b>Issuing CA</b><span>Online. Issues the leaf certificates.</span></div>
+    <div class="fnode"><div class="k">bottom</div><b>Leaf certs</b><span>TLS, service mTLS, client identity.</span><div class="fnote">Revoke via CRL and OCSP. Short lifetimes do most of the work.</div></div>
+  </div>
+
+  <div class="rule a">// the public certificate countdown</div>
+  <div class="tl">
+    <div class="tlc"><div class="tlbar" style="height:96px;background:var(--teal);"></div><div class="d">398</div><div class="u">days, now</div><div class="w">annual</div></div>
+    <div class="tlc"><div class="tlbar" style="height:62px;background:#7fd9b0;"></div><div class="d">200</div><div class="u">days</div><div class="w">Mar 2026</div></div>
+    <div class="tlc"><div class="tlbar" style="height:38px;background:#cdcb6e;"></div><div class="d">100</div><div class="u">days</div><div class="w">Mar 2027</div></div>
+    <div class="tlc"><div class="tlbar" style="height:20px;background:var(--amber);"></div><div class="d">47</div><div class="u">days</div><div class="w">Mar 2029</div></div>
+  </div>
+  <p class="sub" style="margin-top:14px">Public TLS certificate lifetimes, set by the CA/Browser Forum. Manual renewal is finished. Automate with ACME.</p>
+
+  <div class="rule a">// patterns that cause outages</div>
+  <div class="warn">
+    <h3>What actually breaks</h3>
+    <ul>
+      <li>Deleted old key versions orphan the data they wrapped.</li>
+      <li>Pinning plus rotation breaks every pinned client.</li>
+      <li>An expired intermediate fails a valid leaf.</li>
+      <li>The forgotten certificate nobody inventoried.</li>
+    </ul>
+  </div>
+
+  <div class="rule p">// before you ship, answer three</div>
+  <div class="q"><div class="num">1</div><p>Where is the key generated, and can it ever be extracted in the clear?</p></div>
+  <div class="q"><div class="num">2</div><p>Who, by name, can call decrypt or sign? Not the team. One owner.</p></div>
+  <div class="q"><div class="num">3</div><p>How do you rotate and revoke it without taking the service down?</p></div>
+
+  <div class="foot"><span>saleemyousaf.co.uk</span> &nbsp;&middot;&nbsp; <span>cyberspartans.co.uk</span></div>
+
+</div>
+</body>
+</html>
+`;
+  var overlay=document.getElementById('cxIgOverlay'),openBtn=document.getElementById('cxIgOpen'),closeBtn=document.getElementById('cxIgClose'),frame=document.getElementById('cxIgFrame');
+  if(!overlay||!openBtn) return;
+  var loaded=false,last=null;
+  function open(){ if(!loaded){frame.srcdoc=INFOGRAPHIC;loaded=true;} last=document.activeElement; overlay.classList.add('open'); document.body.style.overflow='hidden'; closeBtn.focus(); }
+  function shut(){ overlay.classList.remove('open'); document.body.style.overflow=''; if(last&&last.focus){last.focus();} }
+  openBtn.addEventListener('click',open);
+  closeBtn.addEventListener('click',shut);
+  overlay.addEventListener('click',function(e){ if(e.target===overlay) shut(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&overlay.classList.contains('open')) shut(); });
+})();
+</script>
+</body>
+</html>
