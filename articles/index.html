@@ -698,7 +698,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
             <div class="hcard-desc">Articles published</div>
           </div>
           <div class="hcard-stat">
-            <div class="hcard-num">5</div>
+            <div class="hcard-num">6</div>
             <div class="hcard-desc">Topic areas</div>
           </div>
           <div class="hcard-stat">
@@ -758,18 +758,18 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
     <div class="latest-strip-inner">
       <div class="latest-label">// Latest</div>
       <div class="latest-divider"></div>
-      <a href="https://saleemyousaf.co.uk/articles/threat-intel/" class="latest-card">
+      <a href="https://saleemyousaf.co.uk/articles/post-quantum-migration/" class="latest-card">
         <div class="latest-card-left">
           <span class="latest-new">New</span>
-          <div class="latest-title">Threat Intelligence Platforms: The Honest Conversation</div>
+          <div class="latest-title">Post-Quantum Migration: Inventory First, Agility Second, Algorithms Last</div>
         </div>
         <div class="latest-tags">
-          <span class="ac-tag red">Threat Intelligence</span>
-          <span class="ac-tag red">SOC</span>
-          <span class="ac-tag teal">MITRE ATT&amp;CK</span>
+          <span class="ac-tag teal">Cryptography</span>
+          <span class="ac-tag teal">Post-Quantum</span>
+          <span class="ac-tag amber">Migration</span>
         </div>
         <div class="latest-meta">
-          <span>30 June 2026</span>
+          <span>9 July 2026</span>
           <div class="af-meta-dot"></div>
           <span>~13 min read</span>
         </div>
@@ -790,11 +790,60 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
         <button class="filter-btn" onclick="filterArticles('ot', this)">OT Security</button>
         <button class="filter-btn" onclick="filterArticles('zerotrust', this)">Zero Trust</button>
         <button class="filter-btn" onclick="filterArticles('threat', this)">Threat Modelling</button>
+        <button class="filter-btn" onclick="filterArticles('crypto', this)">Cryptography</button>
       </div>
-      <div class="article-count" id="article-count">21 articles</div>
+      <div class="article-count" id="article-count">24 articles</div>
     </div>
 
     <div class="articles-grid" id="articles-grid">
+
+      <!-- Article: Post-Quantum Migration (latest) -->
+      <a href="https://saleemyousaf.co.uk/articles/post-quantum-migration/" class="article-card" data-cat="crypto">
+        <div class="ac-tags">
+          <span class="ac-tag teal">Cryptography</span>
+          <span class="ac-tag teal">Post-Quantum</span>
+          <span class="ac-tag amber">Migration</span>
+        </div>
+        <div class="ac-title">Post-Quantum Migration: Inventory First, Agility Second, Algorithms Last</div>
+        <div class="ac-excerpt">A post-quantum migration is inventory first, agility second, and algorithms last. What a quantum computer actually breaks, why harvest-now-decrypt-later makes it urgent, the NIST standards, and the order that works in practice.</div>
+        <div class="ac-meta">
+          <span>9 July 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~13 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: Cloud IAM and Blast Radius -->
+      <a href="https://saleemyousaf.co.uk/articles/cloud-iam-blast-radius/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag teal">Cloud Security</span>
+          <span class="ac-tag teal">IAM</span>
+          <span class="ac-tag red">Blast Radius</span>
+        </div>
+        <div class="ac-title">Cloud IAM and Blast Radius: Over-Privileged Roles and Least Privilege</div>
+        <div class="ac-excerpt">Most cloud breaches are not clever. They are an over-privileged identity doing exactly what it was allowed to do. Blast radius, why least privilege is hard, the escalation paths people miss, and the guardrails that contain a single compromised identity.</div>
+        <div class="ac-meta">
+          <span>7 July 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~14 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: Cryptographic Keys and PKI -->
+      <a href="https://saleemyousaf.co.uk/articles/cryptographic-keys-pki-rotation/" class="article-card" data-cat="crypto">
+        <div class="ac-tags">
+          <span class="ac-tag teal">Cryptography</span>
+          <span class="ac-tag teal">PKI</span>
+          <span class="ac-tag teal">Key Rotation</span>
+        </div>
+        <div class="ac-title">Cryptographic Keys and PKI: Key Material, Rotation, and What Holds Up in Production</div>
+        <div class="ac-excerpt">Most cryptography failures are not broken algorithms. They are mismanaged keys. Key material, HSMs and KMS, envelope encryption, PKI and the trust chain, and why rotating a key does not re-encrypt your data. Plus the certificate lifetime changes coming through 2029.</div>
+        <div class="ac-meta">
+          <span>30 June 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~15 min read</span>
+        </div>
+      </a>
 
       <!-- Article: Threat Intelligence (latest) -->
       <a href="https://saleemyousaf.co.uk/articles/threat-intel/" class="article-card" data-cat="threat">
