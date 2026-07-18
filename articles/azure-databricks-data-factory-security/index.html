@@ -1,1 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Azure Databricks and Data Factory: Use Cases and the Security Controls That Matter | Saleem Yousaf</title>
+<meta name="description" content="A practitioner's guide to securing Azure Data Factory and Azure Databricks. Real use cases, why the data platform is a top-tier security boundary, and the identity, secrets, network, data, compute, and monitoring controls required in production.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/azure-databricks-data-factory-security/">
 
+<meta property="og:type" content="article">
+<meta property="og:title" content="Azure Databricks and Data Factory: Use Cases and the Security Controls That Matter">
+<meta property="og:description" content="The data platform concentrates access to everything and runs code against it. A practitioner's guide to the controls that secure Azure Data Factory and Databricks in production.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/azure-databricks-data-factory-security/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/articles/azure-databricks-data-factory-security/og-azure-data-platform.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Azure Databricks and Data Factory: Use Cases and the Security Controls That Matter">
+<meta name="twitter:description" content="Securing the Azure data platform: identity, secrets, network, data, compute, and monitoring controls that hold up in production.">
+<meta name="twitter:image" content="https://saleemyousaf.co.uk/articles/azure-databricks-data-factory-security/og-azure-data-platform.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Azure Databricks and Data Factory: Use Cases and the Security Controls That Matter",
+  "description": "A practitioner's guide to securing Azure Data Factory and Azure Databricks: use cases and the controls required in production.",
+  "datePublished": "2026-07-14",
+  "dateModified": "2026-07-14",
+  "author": {
+    "@type": "Person",
+    "name": "Saleem Yousaf",
+    "url": "https://saleemyousaf.co.uk",
+    "sameAs": [
+      "https://www.linkedin.com/in/saleemyousaf",
+      "https://github.com/saleem-yousaf",
+      "https://cyberspartans.co.uk"
+    ]
+  },
+  "publisher": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://saleemyousaf.co.uk/articles/azure-databricks-data-factory-security/" },
+  "image": "https://saleemyousaf.co.uk/articles/azure-databricks-data-factory-security/og-azure-data-platform.png",
+  "articleSection": "Cloud Security",
+  "keywords": "Azure Databricks, Azure Data Factory, Unity Catalog, data platform security, Key Vault, Private Link, managed identity, cluster policies, lakehouse security"
+}
+</script>
+
+<style>
+:root{
+  --bg:#090c10;--bg2:#0f1318;--bg3:#161b22;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --text:#e6eaf0;--muted:#8a96a8;--muted2:#5a6675;
+  --teal:#2dd4bf;--teal-bright:#5eead4;--teal-dim:rgba(45,212,191,0.12);--teal-line:rgba(45,212,191,0.30);
+  --amber:#f5b73c;--amber-dim:rgba(245,183,60,0.12);--amber-line:rgba(245,183,60,0.32);
+  --bf:#00d4ff;--cs:#2f9e6f;
+  --mono:'DM Mono',monospace;--display:'Syne',sans-serif;--body:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-weight:300;line-height:1.75;font-size:17px;-webkit-font-smoothing:antialiased;}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px;}
+.hero{padding:70px 0 34px;}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:10px;margin-bottom:22px;}
+.eyebrow .line{width:30px;height:1px;background:var(--teal);}
+h1{font-family:var(--display);font-weight:800;font-size:40px;line-height:1.12;letter-spacing:-1px;color:#fff;margin-bottom:22px;}
+.meta{display:flex;flex-wrap:wrap;gap:10px 18px;font-family:var(--mono);font-size:12.5px;color:var(--muted);align-items:center;}
+.meta .who{color:var(--text);}
+.meta .dot{width:4px;height:4px;border-radius:50%;background:var(--muted2);}
+.hr{height:1px;background:var(--border);margin:34px 0;}
+article p{margin:0 0 22px;color:#d3dae4;}
+article p.lead{font-size:19px;color:var(--text);font-weight:400;}
+article h2{font-family:var(--display);font-weight:700;font-size:25px;letter-spacing:-.4px;color:#fff;margin:48px 0 16px;line-height:1.25;}
+article h3{font-family:var(--display);font-weight:700;font-size:18px;color:#fff;margin:30px 0 12px;}
+article strong{color:#fff;font-weight:600;}
+article a{color:var(--teal-bright);text-decoration:none;border-bottom:1px solid var(--teal-line);}
+article a:hover{border-color:var(--teal-bright);}
+.callout{border:1px solid var(--teal-line);border-left:3px solid var(--teal);background:var(--teal-dim);border-radius:0 10px 10px 0;padding:18px 22px;margin:30px 0;font-size:16px;color:var(--text);}
+.callout b{color:var(--teal-bright);font-weight:600;}
+article ol,article ul{margin:0 0 22px;padding-left:0;list-style:none;counter-reset:li;}
+article ol li,article ul li{position:relative;padding-left:34px;margin-bottom:14px;color:#d3dae4;}
+article ol li{counter-increment:li;}
+article ol li::before{content:counter(li);position:absolute;left:0;top:1px;width:22px;height:22px;border-radius:6px;background:var(--teal-dim);border:1px solid var(--teal-line);color:var(--teal-bright);font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;}
+article ul li::before{content:"";position:absolute;left:8px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--teal);}
+code{font-family:var(--mono);font-size:13.5px;color:var(--teal-bright);background:var(--teal-dim);border:1px solid var(--teal-line);border-radius:4px;padding:1px 6px;}
+figure.fig{margin:30px 0;border:1px solid var(--border);border-radius:12px;background:var(--bg2);padding:22px 22px 16px;cursor:zoom-in;position:relative;transition:border-color .2s;}
+figure.fig:hover,figure.fig:focus-visible{border-color:var(--teal-line);outline:none;}
+figure.fig .zoom{position:absolute;top:12px;right:12px;width:24px;height:24px;border:1px solid var(--border2);border-radius:6px;color:var(--muted);display:flex;align-items:center;justify-content:center;}
+figure.fig svg{width:100%;height:auto;display:block;}
+figure.fig figcaption{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:14px;line-height:1.5;}
+.lb{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:3vh 2vw;background:rgba(5,7,10,0.9);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+.lb.open{display:flex;}
+.lb-inner{position:relative;width:96vw;max-width:1100px;max-height:94vh;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:30px;overflow:auto;}
+.lb-inner svg{width:100%;height:auto;}
+.lb-close{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;}
+.lb-close:hover,.lb-close:focus-visible{color:var(--teal);border-color:var(--teal);outline:none;}
+.d-box{fill:var(--bg3);stroke:var(--teal-line);}
+.d-box-soft{fill:var(--bg);stroke:var(--border2);}
+.d-core{fill:var(--teal-dim);stroke:var(--teal);}
+.d-t{fill:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;}
+.d-s{fill:#8a96a8;font-family:'DM Mono',monospace;font-size:11px;}
+.d-lab{fill:var(--teal);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.05em;}
+.d-line{stroke:var(--teal-line);stroke-width:1.5;fill:none;}
+footer{border-top:1px solid var(--border);margin-top:70px;background:var(--bg2);}
+.footer-inner{max-width:1100px;margin:0 auto;padding:42px 32px 10px;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;}
+.footer-logo{font-family:var(--display);font-weight:800;font-size:20px;color:var(--muted2);}
+.footer-logo span{color:var(--teal);}
+.footer-desc{font-size:13px;color:var(--muted);max-width:520px;margin-top:8px;line-height:1.6;}
+.footer-links{display:flex;flex-wrap:wrap;gap:18px;align-items:center;}
+.footer-links a{font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;}
+.footer-links a:hover{color:var(--teal);}
+.footer-bottom{max-width:1100px;margin:0 auto;padding:18px 32px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;border-top:1px solid var(--border);}
+.footer-copy{font-family:var(--mono);font-size:12px;color:var(--muted2);}
+.footer-cross{max-width:1100px;margin:0 auto;padding:20px 32px 34px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;border-top:1px solid rgba(255,255,255,0.07);}
+.footer-cross a{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;padding:6px 12px;border-radius:5px;text-decoration:none;letter-spacing:.03em;}
+.cross-bf{background:rgba(0,212,255,0.10);color:var(--bf);border:1px solid rgba(0,212,255,0.28);}
+.cross-cs{background:rgba(47,158,111,0.10);color:var(--cs);border:1px solid rgba(47,158,111,0.30);}
+.related{margin-top:58px;padding-top:30px;border-top:1px solid var(--border);}
+.related-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.related-eyebrow .line{width:24px;height:1px;background:var(--teal);}
+.related-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.related-card{display:block;border:1px solid var(--border);border-radius:11px;background:var(--bg2);padding:16px 18px;text-decoration:none;transition:border-color .2s,transform .2s;}
+.related-card:hover{border-color:var(--teal-line);transform:translateY(-2px);}
+.related-card .rc-cat{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2);}
+.related-card .rc-t{font-family:var(--display);font-weight:700;font-size:15px;color:#fff;margin-top:6px;line-height:1.3;}
+.related-card .rc-go{font-family:var(--mono);font-size:11px;color:var(--teal);margin-top:8px;display:inline-block;}
+@media (max-width:600px){h1{font-size:30px;}body{font-size:16px;}.hero{padding:48px 0 24px;}.related-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow"><span class="line"></span>Cloud Security</div>
+    <h1>Azure Databricks and Data Factory: use cases and the security controls that matter</h1>
+    <div class="meta">
+      <span class="who">Saleem Yousaf</span>
+      <span class="dot"></span><span>14 July 2026</span>
+      <span class="dot"></span><span>~16 min read</span>
+    </div>
+  </header>
+
+  <div class="hr"></div>
+
+  <article>
+    <p class="lead">The data platform is where an organisation's most sensitive information is concentrated, and it is often the least-secured part of the Azure estate.</p>
+
+    <p>Azure Data Factory and Azure Databricks move and process that data at scale. They hold credentials to every source system, and they run code against the data itself. That combination is why the security model is not the same as a typical application, and why the getting-started defaults are the wrong place to leave it.</p>
+
+    <div class="callout"><b>The mismatch:</b> teams secure the application tier carefully, then wire up a data platform that holds the keys to every source, runs arbitrary notebooks against the crown jewels, and ships with defaults built for a quick proof of concept rather than production. The app was hard to breach. The data platform behind it was not.</div>
+
+    <h2>What each one does, quickly</h2>
+    <p>Two tools, two jobs, usually working together.</p>
+    <p><strong>Azure Data Factory</strong> is the mover and scheduler. Pipelines, activities, and triggers move and transform data between systems. Integration runtimes do the actual work: the Azure runtime for cloud-to-cloud, the self-hosted runtime for on-premises and private sources, and the SSIS runtime for lift and shift. Linked services hold the connection details to every source and sink it touches.</p>
+    <p><strong>Azure Databricks</strong> is the processor. Apache Spark, notebooks, jobs, SQL warehouses, and machine learning, with Delta Lake for storage and Unity Catalog as the governance layer. It is where the heavy transformation and analytics happen.</p>
+    <p>A common pattern uses both: Data Factory lands raw data and handles scheduling, and Databricks runs the transformation through the medallion layers, bronze to silver to gold, before the data is served to a warehouse or to business intelligence.</p>
+
+    <figure class="fig" tabindex="0" role="button" aria-label="Expand the data platform reference flow diagram">
+      <span class="zoom" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></span>
+      <svg viewBox="0 0 840 250" role="img" aria-label="Reference flow: sources into Data Factory, into the data lake, into Databricks, out to serving, with a security control noted under each stage.">
+        <rect x="16" y="62" width="130" height="96" rx="9" class="d-box-soft"/>
+        <text x="34" y="98" class="d-t" style="font-size:13px">Sources</text>
+        <text x="34" y="118" class="d-s">on-prem, SaaS, DB</text>
+        <path class="d-line" d="M146 110 H183" marker-end="url(#ard)"/>
+        <rect x="185" y="62" width="130" height="96" rx="9" class="d-box"/>
+        <text x="203" y="98" class="d-t" style="font-size:13px">Data Factory</text>
+        <text x="203" y="118" class="d-s">move + schedule</text>
+        <text x="185" y="182" class="d-lab">managed VNet + Key Vault</text>
+        <path class="d-line" d="M315 110 H352" marker-end="url(#ard)"/>
+        <rect x="354" y="62" width="130" height="96" rx="9" class="d-box"/>
+        <text x="372" y="94" class="d-t" style="font-size:13px">Data lake</text>
+        <text x="372" y="113" class="d-s">ADLS Gen2</text>
+        <text x="372" y="131" class="d-s">bronze/silver/gold</text>
+        <text x="354" y="182" class="d-lab">private endpoint + firewall</text>
+        <path class="d-line" d="M484 110 H521" marker-end="url(#ard)"/>
+        <rect x="523" y="62" width="130" height="96" rx="9" class="d-box"/>
+        <text x="541" y="98" class="d-t" style="font-size:13px">Databricks</text>
+        <text x="541" y="118" class="d-s">transform + ML</text>
+        <text x="523" y="182" class="d-lab">no public IP + Unity Catalog</text>
+        <path class="d-line" d="M653 110 H690" marker-end="url(#ard)"/>
+        <rect x="692" y="62" width="130" height="96" rx="9" class="d-box-soft"/>
+        <text x="710" y="98" class="d-t" style="font-size:13px">Serving</text>
+        <text x="710" y="118" class="d-s">Power BI, SQL</text>
+        <defs><marker id="ard" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#2dd4bf"/></marker></defs>
+      </svg>
+      <figcaption>A typical flow, with the control that matters most at each stage noted underneath. Click to enlarge.</figcaption>
+    </figure>
+
+    <h2>The use cases</h2>
+    <p>The reason this pairing shows up everywhere:</p>
+    <ul>
+      <li><strong>Batch ETL and ELT.</strong> Ingest from databases, SaaS, files, and on-premises systems into a lake, transform through the medallion layers, and serve to a warehouse or to reporting.</li>
+      <li><strong>Streaming and near real-time.</strong> Databricks structured streaming from Event Hubs or Kafka, for data that cannot wait for the nightly batch.</li>
+      <li><strong>Machine learning and AI.</strong> Feature engineering, training, and serving on Databricks, scheduled by Data Factory, with MLflow and Unity Catalog governing the models as well as the data.</li>
+      <li><strong>Lakehouse and business intelligence.</strong> Delta Lake plus Unity Catalog serving Databricks SQL and Power BI, without copying data into a separate warehouse.</li>
+      <li><strong>Migration and hybrid integration.</strong> Data Factory's large connector library and the self-hosted integration runtime, pulling from on-premises and private sources.</li>
+    </ul>
+    <p>Every one of these concentrates access. That is the whole security story, so it is worth being explicit about why.</p>
+
+    <h2>Why the security model is different</h2>
+    <ul>
+      <li><strong>Credentials are concentrated.</strong> Linked services and Databricks connections hold the keys to every source and sink. Compromise the platform, and you inherit everything it can reach. The blast radius is the entire data estate.</li>
+      <li><strong>It runs arbitrary code by design.</strong> Notebooks, jobs, init scripts, and libraries all execute code. A compromised notebook, a malicious dependency, or a rogue init script runs with the compute's identity and its data access. Treat the compute as if it runs untrusted code, because sometimes it does.</li>
+      <li><strong>It bridges networks.</strong> The self-hosted integration runtime reaches from the cloud into on-premises networks. Serverless compute runs in a Microsoft-managed plane with its own egress to think about.</li>
+      <li><strong>Defaults favour speed.</strong> Public endpoints, broad tokens, and legacy storage mounts are the path of least resistance to a working pipeline, and they tend to stay long after the demo is over.</li>
+    </ul>
+
+    <h2>The controls that matter</h2>
+    <p>Grouped by domain, because that is how you assign and review them.</p>
+
+    <h3>Identity and access</h3>
+    <ul>
+      <li><strong>Kill keys and passwords.</strong> For Data Factory linked services, authenticate with the factory's managed identity or a service principal, not account keys or connection strings. For Databricks reading storage, use Unity Catalog storage credentials and external locations rather than mounted keys.</li>
+      <li><strong>Least privilege on those identities.</strong> A managed identity that can read the entire lake is a large blast radius in one object. Scope it to what the workload needs.</li>
+      <li><strong>Govern Databricks with Unity Catalog.</strong> It is the single governance layer across catalogs, schemas, tables, volumes, models, and functions, with grants down to the row and column. Define principals at the account level and provision them with SCIM from Entra ID, and turn off workspace-level provisioning. Grant to groups, not individuals, and run production jobs as service principals so a person cannot overwrite production by accident.</li>
+      <li><strong>Choose the right access mode.</strong> Standard access mode, previously called shared, is the recommendation for almost everything and is Unity Catalog enabled. Reserve dedicated access mode, previously single-user, for the cases standard cannot cover. Avoid the legacy no-isolation clusters for sensitive data, because they do not enforce isolation between users.</li>
+      <li><strong>Rein in personal access tokens.</strong> Long-lived tokens sprawl and over-grant. Prefer single sign-on and short-lived, governed tokens, and disable token creation where you can.</li>
+      <li><strong>Separate factories and use the narrow role.</strong> Distinct factories for dev, test, and production. Data Factory Contributor is not Owner, so grant the narrower role.</li>
+    </ul>
+
+    <h3>Secrets</h3>
+    <ul>
+      <li><strong>Data Factory:</strong> store every credential in Azure Key Vault and reference it through a Key Vault linked service, so nothing sensitive sits inline in the pipeline definition or in your Git history.</li>
+      <li><strong>Databricks:</strong> use secret scopes backed by Key Vault, and never hardcode a secret in a notebook. Databricks redacts known secrets from output, but that is a backstop, not a control.</li>
+    </ul>
+
+    <h3>Network</h3>
+    <ul>
+      <li><strong>Databricks classic:</strong> deploy into your own virtual network, enable secure cluster connectivity so nodes have no public IP, and use Private Link for the control plane and the web application. Route outbound through a NAT gateway or a firewall with a user-defined route where you need egress inspection.</li>
+      <li><strong>Databricks serverless:</strong> there is no network to inject into, so you govern it with network connectivity configurations and serverless egress policies. Lock outbound to the resources it actually needs, use private endpoints to your storage, and you can now put a firewall in front of the workspace storage account as well.</li>
+      <li><strong>Data Factory:</strong> use a managed virtual network with managed private endpoints to your sources, so pipeline traffic does not cross the public internet, and Private Link to the factory itself.</li>
+      <li><strong>Storage (ADLS Gen2):</strong> private endpoints on, storage firewall on, public access off. This is the data. Treat it accordingly.</li>
+      <li><strong>Self-hosted integration runtime:</strong> it bridges networks, so patch the host, restrict its outbound, and give it the least access it needs on both sides.</li>
+    </ul>
+
+    <h3>Data protection</h3>
+    <ul>
+      <li><strong>Encryption.</strong> Transit is TLS by default. For data at rest, use customer-managed keys for the workspace and storage where compliance requires it, and consider Azure confidential computing for protecting data in use on the most sensitive workloads.</li>
+      <li><strong>Protect the sensitive columns in Unity Catalog.</strong> Column masks and row filters, delivered through dynamic views, so a user sees only what their role allows, enforced at query time rather than by copying redacted extracts around.</li>
+      <li><strong>Classify and trace.</strong> Use Unity Catalog lineage for impact analysis, and Microsoft Purview for enterprise classification and discovery across the wider estate.</li>
+    </ul>
+
+    <h3>Compute hardening</h3>
+    <ul>
+      <li><strong>Enforce configuration with compute policies.</strong> Require Unity Catalog enabled access modes, allowed instance types, auto-termination, mandatory tags, and no public IP. A policy is how you stop a well-meaning engineer from spinning up an open cluster at 5pm on a Friday.</li>
+      <li><strong>Govern init scripts and libraries.</strong> An init script runs arbitrary code at cluster start, and a library is a supply-chain dependency. Store init scripts in Unity Catalog volumes or the workspace, allow-list them, and control where libraries come from. Restrict Git folders to trusted repositories.</li>
+      <li><strong>Restart compute on a schedule,</strong> so a long-lived cluster is not carrying stale state or quietly hosting a persistent foothold.</li>
+    </ul>
+
+    <h3>Monitoring and audit</h3>
+    <ul>
+      <li><strong>Turn on verbose audit logging</strong> in Databricks and read it through system tables or Azure Log Analytics. Send Data Factory diagnostic logs to Log Analytics too.</li>
+      <li><strong>Watch the signals that matter:</strong> unusual data egress, failed authentication, privilege changes, and new external locations. Wire it into Microsoft Defender for Cloud and Sentinel.</li>
+      <li><strong>Check for drift.</strong> Run the Databricks Security Analysis Tool against your workspaces on a schedule, rather than assuming the settings you made on day one still hold six months later.</li>
+    </ul>
+
+    <figure class="fig" tabindex="0" role="button" aria-label="Expand the defense-in-depth control layers diagram">
+      <span class="zoom" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></span>
+      <svg viewBox="0 0 760 320" role="img" aria-label="Defense in depth: monitoring, network, compute, identity and secrets layered around the data at the core.">
+        <rect x="20" y="14" width="720" height="52" rx="9" class="d-box-soft"/>
+        <text x="42" y="46" class="d-t" style="font-size:13px">Monitoring and audit</text>
+        <text x="300" y="45" class="d-s">verbose audit logs · system tables · SAT · Sentinel</text>
+        <rect x="20" y="74" width="720" height="52" rx="9" class="d-box"/>
+        <text x="42" y="106" class="d-t" style="font-size:13px">Network</text>
+        <text x="300" y="105" class="d-s">Private Link · VNet injection · NCC · no public IP</text>
+        <rect x="20" y="134" width="720" height="52" rx="9" class="d-box"/>
+        <text x="42" y="166" class="d-t" style="font-size:13px">Compute</text>
+        <text x="300" y="165" class="d-s">policies · governed init scripts · standard access mode</text>
+        <rect x="20" y="194" width="720" height="52" rx="9" class="d-box"/>
+        <text x="42" y="226" class="d-t" style="font-size:13px">Identity and secrets</text>
+        <text x="300" y="225" class="d-s">Unity Catalog · managed identities · Key Vault</text>
+        <rect x="20" y="254" width="720" height="52" rx="9" class="d-core"/>
+        <text x="42" y="286" class="d-t" style="font-size:13px" fill="#5eead4">Your data</text>
+        <text x="300" y="285" class="d-s" fill="#aeb5bf">customer-managed keys · column masks · row filters</text>
+      </svg>
+      <figcaption>Defense in depth for the data platform. Each layer assumes the one outside it can fail. Click to enlarge.</figcaption>
+    </figure>
+
+    <h2>The gotchas that cause the incidents</h2>
+    <ul>
+      <li><strong>Inline credentials in linked services,</strong> committed to Git in the deployment template. Move them to Key Vault.</li>
+      <li><strong>Hardcoded secrets in notebooks,</strong> then pushed to a repository where they live forever. Same fix.</li>
+      <li><strong>Legacy storage mounts and no-isolation clusters</strong> sharing one broad identity across every user. Move to Unity Catalog external locations and standard access mode.</li>
+      <li><strong>Personal access tokens,</strong> long-lived, over-permissioned, handed out and never revoked.</li>
+      <li><strong>Public workspace or public storage,</strong> because Private Link "was going to be done later".</li>
+      <li><strong>Serverless egress left wide open,</strong> quietly able to send data anywhere. Lock it with network connectivity configurations and egress policies.</li>
+      <li><strong>An init script or an untrusted library as the way in.</strong> This is a supply-chain problem, so govern it rather than trusting it.</li>
+      <li><strong>A self-hosted integration runtime host</strong> that is unpatched and over-privileged, bridging straight into the on-premises network.</li>
+    </ul>
+
+    <h2>Best practices, in short</h2>
+    <ol>
+      <li>No keys or passwords. Managed identities and service principals everywhere, least privileged.</li>
+      <li>Unity Catalog as the single governance layer, account-level SCIM, grants to groups, standard access mode.</li>
+      <li>Every secret in Key Vault, referenced, never inline.</li>
+      <li>Private by default: VNet injection or network connectivity configurations, secure cluster connectivity, private endpoints, storage firewall on, public access off.</li>
+      <li>Compute policies to enforce the safe configuration, with governed init scripts and libraries.</li>
+      <li>Customer-managed keys and column-level controls where the data demands it.</li>
+      <li>Verbose audit logging, system tables, and the Security Analysis Tool, watched rather than just switched on.</li>
+      <li>Separate workspaces and factories for production and non-production, and isolate the most sensitive workloads.</li>
+    </ol>
+
+    <h2>The part to take away</h2>
+    <p>A data platform concentrates access to everything an organisation knows, and it runs code against it. That combination is why it deserves top-tier security treatment rather than the getting-started defaults. Govern it centrally with Unity Catalog and Key Vault, put it behind Private Link, assume the compute runs untrusted code, and watch the audit trail.</p>
+    <p>The controls are all there in the platform. The failure, almost every time, is that the defaults were never changed. If you want two questions to start with: where are your credentials stored, and can your compute reach the public internet. The answers tell you most of what you need to know about how exposed your data platform really is.</p>
+  </article>
+
+  <div class="related">
+    <div class="related-eyebrow"><span class="line"></span>Related reading</div>
+    <div class="related-grid">
+      <a class="related-card" href="https://saleemyousaf.co.uk/articles/cloud-iam-blast-radius/">
+        <div class="rc-cat">Cloud Security</div>
+        <div class="rc-t">Cloud IAM and the blast-radius problem</div>
+        <div class="rc-go">Read &#8599;</div>
+      </a>
+      <a class="related-card" href="https://saleemyousaf.co.uk/articles/cryptographic-keys-pki-rotation/">
+        <div class="rc-cat">Cryptography</div>
+        <div class="rc-t">Cryptographic keys, key material and PKI</div>
+        <div class="rc-go">Read &#8599;</div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Saleem <span>Yousaf</span></div>
+      <div class="footer-desc">Cloud &amp; Cyber Security Architect &middot; AWS &middot; Azure &middot; Zero Trust &middot; AI Governance &middot; OT Security &middot; Enterprise Architecture</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
+      <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
+    <a href="https://saleemyousaf.co.uk/privacy-policy/" style="font-family:var(--mono);font-size:12px;color:var(--muted2);text-decoration:none;">Privacy Policy</a>
+  </div>
+  <div class="footer-cross">
+    <a class="cross-bf" href="https://breachforge.co.uk" target="_blank" rel="noopener">&#x2B61; breachforge.co.uk</a>
+    <a class="cross-cs" href="https://cyberspartans.co.uk" target="_blank" rel="noopener">&#x2B22; cyberspartans.co.uk</a>
+  </div>
+</footer>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged diagram">
+  <div class="lb-inner"><button class="lb-close" id="lbClose" type="button" aria-label="Close">&#10005;</button><div id="lbBody"></div></div>
+</div>
+
+<script src="/nav.js" defer></script>
+<script>
+(function(){
+  var lb=document.getElementById('lb'),body=document.getElementById('lbBody'),close=document.getElementById('lbClose'),last=null;
+  function open(fig){
+    var svg=fig.querySelector('svg[role="img"]'); if(!svg) return;
+    body.innerHTML=''; body.appendChild(svg.cloneNode(true));
+    last=document.activeElement; lb.classList.add('open'); document.body.style.overflow='hidden'; close.focus();
+  }
+  function shut(){ lb.classList.remove('open'); document.body.style.overflow=''; body.innerHTML=''; if(last&&last.focus)last.focus(); }
+  document.querySelectorAll('figure.fig').forEach(function(f){
+    f.addEventListener('click',function(){open(f);});
+    f.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){e.preventDefault();open(f);} });
+  });
+  close.addEventListener('click',shut);
+  lb.addEventListener('click',function(e){ if(e.target===lb) shut(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&lb.classList.contains('open')) shut(); });
+})();
+</script>
+</body>
+</html>
