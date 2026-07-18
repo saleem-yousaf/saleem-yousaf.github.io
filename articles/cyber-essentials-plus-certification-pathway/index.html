@@ -1,1 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Cyber Essentials Plus Pathway: What Danzell Changed, and How Remediation Programmes Actually Fail | Saleem Yousaf</title>
+<meta name="description" content="A practitioner's guide to Cyber Essentials Plus under the Danzell question set and Requirements v3.3. The certification pathway, the five test cases, sampling mechanics, the new auto-fail rules, and the gotchas that sink remediation programmes.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/cyber-essentials-plus-certification-pathway/">
 
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Cyber Essentials Plus Pathway: What Danzell Changed, and How Remediation Programmes Actually Fail">
+<meta property="og:description" content="The certification pathway, the five test cases, sampling mechanics, the new auto-fail rules, and the gotchas that sink remediation programmes.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/cyber-essentials-plus-certification-pathway/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/articles/cyber-essentials-plus-certification-pathway/og-cyber-essentials-plus.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Cyber Essentials Plus Pathway: What Danzell Changed">
+<meta name="twitter:description" content="The five test cases, sampling mechanics, the new auto-fail rules, and the gotchas that sink remediation programmes.">
+<meta name="twitter:image" content="https://saleemyousaf.co.uk/articles/cyber-essentials-plus-certification-pathway/og-cyber-essentials-plus.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "The Cyber Essentials Plus Pathway: What Danzell Changed, and How Remediation Programmes Actually Fail",
+  "description": "A practitioner's guide to Cyber Essentials Plus under the Danzell question set and Requirements for IT Infrastructure v3.3, covering the certification pathway, the five test cases, sampling mechanics, auto-fail rules and remediation programme delivery.",
+  "image": "https://saleemyousaf.co.uk/articles/cyber-essentials-plus-certification-pathway/og-cyber-essentials-plus.png",
+  "articleSection": "Governance and Compliance",
+  "datePublished": "2026-07-18",
+  "author": {
+    "@type": "Person",
+    "name": "Saleem Yousaf",
+    "url": "https://saleemyousaf.co.uk",
+    "sameAs": [
+      "https://www.linkedin.com/in/saleem-yousaf",
+      "https://github.com/saleem-yousaf",
+      "https://cyberspartans.co.uk"
+    ]
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Saleem Yousaf",
+    "url": "https://saleemyousaf.co.uk"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://saleemyousaf.co.uk/articles/cyber-essentials-plus-certification-pathway/"
+  }
+}
+</script>
+
+<style>
+:root{
+  --slate-0:#090c10; --slate-1:#0f1318; --slate-2:#161b22;
+  --teal:#2dd4bf; --bright:#5eead4; --amber:#f5b73c; --blue:#4aa8ff;
+  --purple:#a78bfa; --red:#f87171;
+  --ink:#f4f6f8; --muted:#aeb5bf; --faint:#6c7682; --line:rgba(255,255,255,.08);
+  --emerald:#2f9e6f; --cyan:#00d4ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--slate-0); color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif; font-size:19px; line-height:1.72;
+  -webkit-font-smoothing:antialiased;}
+.wrap{max-width:760px; margin:0 auto; padding:0 24px}
+a{color:var(--teal); text-decoration:none}
+a:hover{text-decoration:underline}
+
+.hero{padding:72px 0 8px}
+.eyebrow{font-family:"DM Mono",monospace; font-size:13px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--teal)}
+h1{font-family:"Syne",sans-serif; font-weight:800; font-size:clamp(30px,5.4vw,50px);
+  line-height:1.06; letter-spacing:-.01em; margin:18px 0 20px}
+.chips{display:flex; flex-wrap:wrap; gap:10px 18px; font-family:"DM Mono",monospace;
+  font-size:12.5px; color:var(--faint); letter-spacing:.03em}
+.chips span{display:inline-flex; align-items:center; gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal)}
+
+article{padding:20px 0 8px}
+article h2{font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(23px,3.6vw,30px);
+  line-height:1.16; margin:56px 0 14px; letter-spacing:-.01em}
+article h3{font-family:"Syne",sans-serif; font-weight:600; font-size:20px; margin:36px 0 10px}
+article p{margin:0 0 20px; color:#e7ebef}
+article ul,article ol{margin:0 0 22px; padding-left:22px; color:#e7ebef}
+article li{margin-bottom:10px}
+.lead{font-size:21px; color:#eef1f4}
+code{font-family:"DM Mono",monospace; font-size:.86em; background:var(--slate-2);
+  padding:2px 7px; border-radius:6px; color:var(--bright); word-break:break-word}
+strong{color:#fff; font-weight:600}
+
+.part{display:flex; align-items:center; gap:14px; margin:64px 0 6px}
+.part-num{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--teal); border:1px solid rgba(45,212,191,.35);
+  border-radius:999px; padding:5px 14px; white-space:nowrap}
+.part-rule{height:1px; background:linear-gradient(90deg,rgba(45,212,191,.4),transparent); flex:1}
+
+.callout{border:1px solid rgba(45,212,191,.32); background:linear-gradient(180deg,
+  rgba(45,212,191,.08),rgba(45,212,191,.02)); border-radius:14px; padding:22px 24px;
+  margin:30px 0; font-size:18px}
+.callout .k{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px}
+.callout.warn{border-color:rgba(248,113,113,.35);
+  background:linear-gradient(180deg,rgba(248,113,113,.09),rgba(248,113,113,.02))}
+.callout.warn .k{color:var(--red)}
+
+table{width:100%; border-collapse:collapse; margin:26px 0; font-size:15.5px}
+th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line)}
+th{font-family:"DM Mono",monospace; font-size:11.5px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--teal); font-weight:400}
+td{color:#e0e5ea}
+tbody tr:hover{background:rgba(255,255,255,.02)}
+
+figure{margin:38px 0}
+.figframe{border:1px solid var(--line); border-radius:16px; background:
+  radial-gradient(120% 140% at 80% 0%, rgba(45,212,191,.06), transparent 60%),var(--slate-1);
+  padding:20px; cursor:zoom-in; position:relative}
+.figframe::after{content:"click to expand"; position:absolute; top:12px; right:16px;
+  font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; color:var(--faint)}
+.figframe svg{width:100%; height:auto; display:block}
+figcaption{font-size:14px; color:var(--faint); margin-top:12px; text-align:center;
+  font-family:"DM Mono",monospace; letter-spacing:.02em}
+
+.d-box{fill:var(--slate-2); stroke:rgba(45,212,191,.45); stroke-width:1.4}
+.d-box-soft{fill:var(--slate-1); stroke:var(--line); stroke-width:1.2}
+.d-t{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:15px}
+.d-t-s{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:13px}
+.d-s{fill:var(--muted); font-family:"Inter",sans-serif; font-size:12px}
+.d-lab{fill:var(--teal); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-line{stroke:var(--teal); stroke-width:1.6; fill:none}
+.d-mono{fill:var(--bright); font-family:"DM Mono",monospace; font-size:11.5px}
+.d-red{fill:var(--red); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.06em}
+.d-amber{fill:var(--amber); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.06em}
+
+.lb{position:fixed; inset:0; background:rgba(4,6,9,.94); display:none;
+  align-items:center; justify-content:center; z-index:90; padding:2vh 2vw}
+.lb.open{display:flex}
+.lb svg{width:96vw; height:94vh}
+.lb-close{position:fixed; top:20px; right:26px; font-family:"DM Mono",monospace;
+  color:var(--muted); font-size:14px; cursor:pointer; letter-spacing:.1em}
+
+.related{margin:60px 0 20px}
+.related h2{font-size:20px; margin-bottom:18px}
+.rgrid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.rcard{border:1px solid var(--line); border-radius:14px; padding:18px 18px 20px;
+  background:var(--slate-1); transition:border-color .2s}
+.rcard:hover{border-color:rgba(45,212,191,.4)}
+.rcard .c{font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--teal)}
+.rcard .t{font-family:"Syne",sans-serif; font-weight:600; font-size:16px; margin-top:8px;
+  color:#fff; line-height:1.25}
+
+footer{border-top:1px solid var(--line); margin-top:60px; padding:40px 0 60px;
+  color:var(--faint); font-size:14px}
+.footer-links{display:flex; flex-wrap:wrap; gap:16px; margin-bottom:22px;
+  font-family:"DM Mono",monospace; font-size:13px}
+.pills{display:flex; gap:12px; margin:22px 0}
+.pill{border-radius:999px; padding:8px 16px; font-family:"DM Mono",monospace; font-size:12px;
+  letter-spacing:.04em; border:1px solid}
+.pill.cs{color:var(--emerald); border-color:rgba(47,158,111,.5)}
+.pill.bf{color:var(--cyan); border-color:rgba(0,212,255,.5)}
+.legal{font-size:12.5px; color:var(--faint)}
+@media(max-width:560px){.rgrid{grid-template-columns:1fr} table{font-size:14px} th,td{padding:9px 8px}}
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+<script src="/nav.js" defer></script>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">// governance and compliance</div>
+    <h1>The Cyber Essentials Plus pathway: what Danzell changed, and how remediation programmes actually fail</h1>
+    <div class="chips">
+      <span><span class="dot"></span>Saleem Yousaf</span>
+      <span>18 Jul 2026</span>
+      <span>16 min read</span>
+    </div>
+  </header>
+
+  <article>
+    <p class="lead">Most Cyber Essentials Plus programmes do not fail on the audit day. They fail about six weeks earlier, at the moment somebody decides the scope is "basically the corporate estate" and moves on to the next agenda item. Everything after that is the cost of that decision being discovered slowly.</p>
+
+    <p>The scheme changed materially in April 2026, and a good deal of the advice still circulating was written for the version before it. If you are running a remediation programme this year, the gap between the two is the difference between certifying and paying twice. This piece covers the pathway at a level a steering group can follow, then goes down into the test mechanics, then sets out the failure patterns I keep seeing.</p>
+
+    <div class="part"><span class="part-num">Part one</span><span class="part-rule"></span></div>
+    <h2>The pathway, at the level a steering group needs</h2>
+
+    <p>Cyber Essentials is the UK government scheme, owned by the NCSC and delivered through IASME as its partner. It has two tiers and they are frequently confused, including by people sponsoring the work.</p>
+
+    <p><strong>Cyber Essentials</strong> is a verified self-assessment. You answer a question set on the IASME portal, a director or board-level representative signs a declaration, and an assessor marks the answers. Nobody visits, nobody scans. It is an assertion that is checked for coherence.</p>
+
+    <p><strong>Cyber Essentials Plus</strong> is the audited tier. It does not add new controls. It takes the same five controls you already asserted and has a qualified assessor verify them technically against a sample of your real estate. This distinction matters more than any other single fact in this article, because it tells you what remediation is for. You are not building new controls to satisfy Plus. You are closing the distance between what the self-assessment claims and what the estate actually does.</p>
+
+    <p>The sequence is fixed. You certify at Cyber Essentials first, then the Plus technical audit must be completed within three months of the base certificate. If you have achieved the verified self-assessment less than three months before certifying to Plus, you do not need to repeat the self-assessment stage. Let that window lapse and the base certificate is no longer usable for Plus purposes, so you recertify before you can proceed. Both can be run as a single coordinated process, and on a remediation programme they usually should be.</p>
+
+    <h3>What changed in April 2026</h3>
+
+    <p>This is the part that invalidates older guidance. Cyber Essentials Danzell is the 2026 version of the question set, in force from 27 April 2026, replacing Willow and aligning with version 3.3 of the NCSC Requirements for IT Infrastructure. Willow itself only arrived in April 2025, so any organisation certifying annually is now on its second consecutive change of question set.</p>
+
+    <p>There is a transition path, and it is worth checking which side of it you are on. Organisations already working towards Willow have a grace period until 27 October 2026 to complete the Cyber Essentials application, and those also pursuing Plus get an additional three months, until 27 January 2027, to finish the Plus assessment. If your client opened an assessment account before the cutover, you may have a decision to make about which set to certify under. If they have not, the question is settled: it is Danzell.</p>
+
+    <p>Four changes carry real programme risk.</p>
+
+    <p><strong>Auto-fail rules now exist.</strong> From 26 April 2026, no multi-factor authentication on a cloud service that offers it, or high-risk security updates applied slower than 14 days, fails the assessment outright regardless of everything else. Previously these were serious findings among other findings. Now they are terminal on their own, which changes how you sequence remediation. Anything touching MFA or patch latency goes first, not into the general backlog.</p>
+
+    <p><strong>Cloud services cannot be scoped out.</strong> Cloud services now have a formal definition and can never be excluded from scope. The definition covers on-demand, scalable services accessible over the internet using shared infrastructure, and any cloud service used to store or process business data must be in scope. Every SaaS platform the business quietly adopted is now in the assessment, whether IT knows about it or not.</p>
+
+    <p><strong>You can no longer fix the paperwork after the audit.</strong> Organisations are not permitted to amend their verified self-assessment answers based on the outcome of the Plus assessment, so self-assessments must be complete and accurate before the technical audit stage. The old informal pattern, where the audit surfaced a discrepancy and the answer was quietly restated, is closed. If the self-assessment says something the estate does not do, that is now a finding rather than an edit.</p>
+
+    <p><strong>Sampling became adversarial.</strong> This is the change that catches experienced teams. Audits previously tested a defined sample, so organisations could focus remediation on the sample set and leave the rest of the estate untouched. Assessors can now randomly re-sample during remediation to verify fixes have been applied across the organisation rather than only on the devices originally tested. The consequence is specific and harsh: if an organisation fails an initial sampled device, the assessor tests an additional random device before remediation is permitted. If that additional device also fails, the organisation can fail Plus immediately, and this may also result in the loss of their existing Cyber Essentials certification.</p>
+
+    <div class="callout warn">
+      <span class="k">Read that last one twice</span>
+      A failed Plus audit can now cost you the base certificate you already hold. On a programme where the client has told customers or a framework body that they are certified, that is not a technical finding. That is a commercial incident, and it belongs on the risk register from day one.
+    </div>
+
+    <figure>
+      <div class="figframe">
+        <svg role="img" viewBox="0 0 1240 1020" xmlns="http://www.w3.org/2000/svg" aria-label="The Cyber Essentials Plus certification pathway under the Danzell question set, showing the self-assessment stage, the three month window, the five technical test cases, the auto-fail rules, sampling mechanics and the remediation loop.">
+          <text x="34" y="42" class="d-lab">// THE CE PLUS PATHWAY UNDER DANZELL (v3.3, FROM 27 APRIL 2026)</text>
+
+          <!-- STAGE 1 -->
+          <rect class="d-box-soft" x="34" y="70" width="270" height="120" rx="12"/>
+          <text x="52" y="104" class="d-t">1. Self-assessment</text>
+          <text x="52" y="128" class="d-s">Danzell question set on the</text>
+          <text x="52" y="146" class="d-s">IASME portal. Director-level</text>
+          <text x="52" y="164" class="d-s">declaration signed.</text>
+          <text x="52" y="184" class="d-mono">must be accurate before audit</text>
+
+          <path class="d-line" d="M304 130 H350" marker-end="url(#a)"/>
+
+          <!-- STAGE 2 -->
+          <rect class="d-box" x="350" y="70" width="250" height="120" rx="12"/>
+          <text x="368" y="104" class="d-t">2. CE certificate</text>
+          <text x="368" y="128" class="d-s">Marked by an IASME</text>
+          <text x="368" y="146" class="d-s">licensed certification body.</text>
+          <text x="368" y="176" class="d-lab">CLOCK STARTS HERE</text>
+
+          <path class="d-line" d="M600 130 H646" marker-end="url(#a)"/>
+
+          <!-- WINDOW -->
+          <rect x="646" y="70" width="234" height="120" rx="12" fill="rgba(245,183,60,.07)"
+                stroke="rgba(245,183,60,.4)" stroke-width="1.3"/>
+          <text x="664" y="104" class="d-t">3 month window</text>
+          <text x="664" y="130" class="d-s">Plus audit must complete</text>
+          <text x="664" y="148" class="d-s">within 3 months of the</text>
+          <text x="664" y="166" class="d-s">base certificate date.</text>
+          <text x="664" y="184" class="d-amber">LAPSES = RECERTIFY</text>
+
+          <path class="d-line" d="M880 130 H926" marker-end="url(#a)"/>
+
+          <rect class="d-box" x="926" y="70" width="280" height="120" rx="12"/>
+          <text x="944" y="104" class="d-t">3. Technical audit</text>
+          <text x="944" y="128" class="d-s">Assessor verifies the same</text>
+          <text x="944" y="146" class="d-s">five controls against real</text>
+          <text x="944" y="164" class="d-s">devices. Five test cases.</text>
+
+          <!-- AUTO FAIL BAND -->
+          <rect x="34" y="220" width="1172" height="86" rx="12" fill="rgba(248,113,113,.07)"
+                stroke="rgba(248,113,113,.36)" stroke-width="1.3"/>
+          <text x="54" y="252" class="d-red">AUTO-FAIL: TERMINAL ON ITS OWN, REGARDLESS OF EVERYTHING ELSE</text>
+          <text x="54" y="280" class="d-s">No MFA on a cloud service that offers it   ·   High or critical security updates not applied within 14 days</text>
+          <text x="54" y="298" class="d-s">Cloud services storing or processing business data can never be excluded from scope</text>
+
+          <!-- FIVE TEST CASES -->
+          <text x="34" y="352" class="d-lab">// THE FIVE TEST CASES</text>
+
+          <rect class="d-box-soft" x="34" y="370" width="228" height="150" rx="11"/>
+          <text x="50" y="400" class="d-t-s">1. External scan</text>
+          <text x="50" y="424" class="d-s">Unauthenticated scan of</text>
+          <text x="50" y="442" class="d-s">internet-facing services.</text>
+          <text x="50" y="460" class="d-s">Finds what an attacker</text>
+          <text x="50" y="478" class="d-s">sees first.</text>
+          <text x="50" y="502" class="d-mono">shadow IT surfaces here</text>
+
+          <rect class="d-box-soft" x="278" y="370" width="228" height="150" rx="11"/>
+          <text x="294" y="400" class="d-t-s">2. Authenticated scan</text>
+          <text x="294" y="424" class="d-s">Credentialed scan of</text>
+          <text x="294" y="442" class="d-s">sampled devices for missing</text>
+          <text x="294" y="460" class="d-s">patches and EOL software.</text>
+          <text x="294" y="502" class="d-mono">CVSS 7.0+ and 14 days = fail</text>
+
+          <rect class="d-box-soft" x="522" y="370" width="228" height="150" rx="11"/>
+          <text x="538" y="400" class="d-t-s">3. Malware protection</text>
+          <text x="538" y="424" class="d-s">Anti-malware active and</text>
+          <text x="538" y="442" class="d-s">current, or allow-listing,</text>
+          <text x="538" y="460" class="d-s">or a sandboxed profile.</text>
+          <text x="538" y="502" class="d-mono">per device, per build</text>
+
+          <rect class="d-box-soft" x="766" y="370" width="216" height="150" rx="11"/>
+          <text x="782" y="400" class="d-t-s">4. Malware by email</text>
+          <text x="782" y="424" class="d-s">Test files sent to a</text>
+          <text x="782" y="442" class="d-s">mailbox. Gateway, client</text>
+          <text x="782" y="460" class="d-s">and endpoint must block.</text>
+          <text x="782" y="502" class="d-mono">non-admin account only</text>
+
+          <rect class="d-box-soft" x="998" y="370" width="208" height="150" rx="11"/>
+          <text x="1014" y="400" class="d-t-s">5. Malware by web</text>
+          <text x="1014" y="424" class="d-s">Test files fetched through</text>
+          <text x="1014" y="442" class="d-s">every browser installed</text>
+          <text x="1014" y="460" class="d-s">on the device.</text>
+          <text x="1014" y="502" class="d-mono">every browser, not one</text>
+
+          <!-- plus MFA / accounts -->
+          <rect x="34" y="540" width="1172" height="64" rx="11" fill="rgba(74,168,255,.06)"
+                stroke="rgba(74,168,255,.32)" stroke-width="1.2"/>
+          <text x="54" y="568" class="d-lab">ALSO VERIFIED</text>
+          <text x="54" y="592" class="d-s">MFA enforcement on every declared cloud service   ·   Separation of administrative and standard accounts   ·   IP allow-listing is not MFA</text>
+
+          <!-- SAMPLING -->
+          <text x="34" y="656" class="d-lab">// SAMPLING MECHANICS</text>
+          <rect class="d-box" x="34" y="674" width="360" height="150" rx="12"/>
+          <text x="52" y="706" class="d-t">Per build, not per org</text>
+          <text x="52" y="732" class="d-s">The sample is drawn from each</text>
+          <text x="52" y="750" class="d-s">operating system build group.</text>
+          <text x="52" y="768" class="d-s">More builds means a bigger</text>
+          <text x="52" y="786" class="d-s">sample, longer audit, higher cost.</text>
+          <text x="52" y="812" class="d-mono">servers: tested in full</text>
+
+          <path class="d-line" d="M394 749 H440" marker-end="url(#a)"/>
+
+          <rect class="d-box" x="440" y="674" width="360" height="150" rx="12"/>
+          <text x="458" y="706" class="d-t">Random re-sampling</text>
+          <text x="458" y="732" class="d-s">A device fails, so the assessor</text>
+          <text x="458" y="750" class="d-s">pulls another at random before</text>
+          <text x="458" y="768" class="d-s">remediation is permitted.</text>
+          <text x="458" y="794" class="d-red">SECOND FAIL CAN END THE AUDIT</text>
+          <text x="458" y="814" class="d-s">and may cost the base certificate</text>
+
+          <path class="d-line" d="M800 749 H846" marker-end="url(#a)"/>
+
+          <rect x="846" y="674" width="360" height="150" rx="12" fill="rgba(45,212,191,.08)"
+                stroke="rgba(45,212,191,.4)" stroke-width="1.3"/>
+          <text x="864" y="706" class="d-t">Retest widens</text>
+          <text x="864" y="732" class="d-s">Where remediation is allowed,</text>
+          <text x="864" y="750" class="d-s">retesting covers the original</text>
+          <text x="864" y="768" class="d-s">sample plus a fresh random one.</text>
+          <text x="864" y="794" class="d-mono">fix the estate, not the sample</text>
+
+          <!-- OUTCOME -->
+          <path class="d-line" d="M620 824 V876" marker-end="url(#a)"/>
+          <rect class="d-box" x="220" y="876" width="800" height="94" rx="12" fill="rgba(45,212,191,.10)"/>
+          <text x="244" y="910" class="d-t">Point-in-time compliance is the whole game</text>
+          <text x="244" y="936" class="d-s">The estate must be genuinely compliant before the audit begins, not remediated during it. Audit-day fixes</text>
+          <text x="244" y="956" class="d-s">no longer survive a second random sample, and the self-assessment can no longer be amended to match.</text>
+
+          <defs>
+            <marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+              <path d="M0 0 L9 4.5 L0 9 Z" fill="#2dd4bf"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+      <figcaption>The pathway, the tests, and where programmes lose control of it. Click to expand.</figcaption>
+    </figure>
+
+    <div class="part"><span class="part-num">Part two</span><span class="part-rule"></span></div>
+    <h2>The technical detail that decides the outcome</h2>
+
+    <h3>Scoping, which is the whole programme in disguise</h3>
+
+    <p>Scope determines sample size, sample size determines audit duration, and audit duration determines cost and the odds of a random device embarrassing you. Treat scoping as an architectural decision made once, deliberately, with the assessor's methodology in mind.</p>
+
+    <p>Under Danzell the room to be vague has closed. The scope must be clearly defined, justified and based on network boundaries. All internet-connected organisational devices must be included unless their exclusion is explicitly justified, and cloud services that store or process business data, including SaaS platforms, are no longer eligible for exclusion. Exclusions now need genuine technical justification such as physical network segregation, not an assertion that a subnet is "out of scope for this exercise".</p>
+
+    <p>The practical consequence for a remediation lead is that you need a real inventory before you need anything else. Not the CMDB as maintained, the CMDB as verified. On every engagement I have seen, the delta between those two is where the programme's actual work lives.</p>
+
+    <h3>Sampling, and why build sprawl is a budget line</h3>
+
+    <p>Cyber Essentials Plus does not test everything. The audit covers a representative set of user devices, all internet gateways and all servers with services accessible to unauthenticated internet users, with the assessor testing a suitable random sample, typically around ten per cent, then deciding whether further testing is required.</p>
+
+    <p>The mechanic that surprises people is that sampling is applied per operating system build, not across the organisation as a whole. The IASME sampling methodology selects a representative sample from each build group, on the reasoning that if every device in a group is configured identically then testing a sample gives confidence about the rest. Servers are the exception and are tested in full, with no sampling applied. Fifty Windows 11 devices on one build might yield a sample of four, while ten macOS devices add a further three from their own group.</p>
+
+    <p>This gives you a lever most programmes never pull. Every additional build is another sample group, another set of tests, more assessor hours. Standardising devices and operating systems as far as possible is a direct method of reducing sample size, and therefore the time and cost of each assessment. If the estate carries four Windows builds because nobody retired the old images, consolidating them before the audit is cheaper than testing them. That is an argument you can take to a CIO in financial terms rather than security ones.</p>
+
+    <p>Bring your own device does not escape this. The sampling table applies to BYOD the same way it applies to corporate hardware, with the practical wrinkle that personal devices fragment into more build groups because the organisation does not control the operating system version.</p>
+
+    <h3>The five test cases</h3>
+
+    <p>The methodology derives from the NCSC and IASME test specification, which is published and which you should read in full before advising anyone. In outline:</p>
+
+    <p><strong>External vulnerability assessment.</strong> An unauthenticated scan of internet-facing infrastructure, looking at what is exposed and whether an internet-based attacker could realistically exploit it. This is where forgotten public services surface, and it is worth running yourself early because the findings are often organisational rather than technical.</p>
+
+    <p><strong>Authenticated vulnerability scan.</strong> A sample of end-user devices is scanned with credentialed access, enumerating installed software, missing patches and configuration weaknesses, with high or critical vulnerabilities counting as a fail. This is the test that most commonly catches organisations out, because it surfaces unpatched browser plug-ins, outdated PDF readers and older versions of office software that slip through informal patching processes. The threshold is specific: the assessment must not identify vulnerabilities rated CVSSv3 7.0 or above within the selected sample. And the timing rule is equally specific: where a patch has been available for more than 14 days prior to testing, the sub-test records a fail.</p>
+
+    <p>One detail worth carrying into design conversations: virtual patching is not accepted as a long-term mitigation for the vulnerabilities of legacy unsupported operating systems, and will not be recognised as a mechanism for compliance. If somebody is planning to put a WAF or an IPS signature in front of an unsupported system and call it handled, that conversation is better had in week one than in the audit.</p>
+
+    <p><strong>Malware protection on end user devices.</strong> Every in-scope device must run anti-malware software, application allow-listing, or operate in a sandboxed environment such as a managed mobile device profile. Mobile devices are included, and jailbreak or root detection may be checked.</p>
+
+    <p><strong>Malware delivered by email.</strong> The assessor sends a series of test files, a mix of harmless EICAR samples and password-protected archives containing inert payloads, to a user mailbox. The expectation is that the email gateway, the mail client and the endpoint engine combine to block or quarantine each one, and any file that reaches the inbox and can be executed counts as a fail. Critically, this test must be undertaken on a standard non-administrative account.</p>
+
+    <p><strong>Malware delivered through a browser.</strong> The assessor attempts to access pseudo-malware files through all browsers installed on the device, and a pass requires that the files cannot be opened. The word doing the work is "all".</p>
+
+    <h3>MFA, where the auto-fail lives</h3>
+
+    <p>MFA moved from important to terminal, so it deserves separate treatment. The assessor verifies MFA on all declared services where it is available, ideally evidenced through a global configuration that makes MFA mandatory for all users, or through single sign-on with MFA enforced. Where that cannot be shown centrally, MFA is verified for sampled users and administrators across all relevant services.</p>
+
+    <p>Two specifics catch people. First, location-based controls, including IP allow-listing, are no longer recognised as a compliant form of MFA. Any conditional access policy that trusts an office IP range in place of a second factor is now a finding, and given the auto-fail rule, potentially a terminal one. Second, the requirement extends to administration portals, not just the user-facing service. Tenant admin consoles, billing portals and vendor support portals all count.</p>
+
+    <p>On the positive side, passkeys are recognised, with FIDO2 authenticators regarded as MFA because user authentication is performed. If a client is already moving to passwordless, that work counts.</p>
+
+    <table>
+      <thead>
+        <tr><th>Control area</th><th>What gets verified</th><th>Common failure</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Firewalls and gateways</td><td>External scan, rule review</td><td>Forgotten public service, default admin interface exposed</td></tr>
+        <tr><td>Secure configuration</td><td>Device build, account separation</td><td>Admin rights on daily-driver accounts</td></tr>
+        <tr><td>Security update management</td><td>Authenticated scan, 14 day rule</td><td>Third-party software outside the patch pipeline</td></tr>
+        <tr><td>User access control</td><td>Account review, MFA enforcement</td><td>Service accounts and admin portals without MFA</td></tr>
+        <tr><td>Malware protection</td><td>EICAR by email and browser</td><td>Second browser nobody remembered was installed</td></tr>
+      </tbody>
+    </table>
+
+    <div class="part"><span class="part-num">Part three</span><span class="part-rule"></span></div>
+    <h2>The gotchas, in the order they usually bite</h2>
+
+    <p><strong>Scope agreed too late, or agreed verbally.</strong> If scope is still moving when remediation starts, you are remediating a moving target and your gap analysis has a shelf life measured in days. Fix scope in writing, with the assessor, before any remediation ticket is raised.</p>
+
+    <p><strong>Build sprawl nobody costed.</strong> Four Windows images, two macOS versions and a Linux estate is six sample groups. Nobody notices until the assessor's quote arrives or the audit runs into a second day.</p>
+
+    <p><strong>Third-party software outside the patch pipeline.</strong> The endpoint patching tool covers the operating system beautifully and does nothing about the PDF reader, the Java runtime, the old VPN client or the browser extension. This is the single most common authenticated-scan failure, and it is entirely predictable in advance.</p>
+
+    <p><strong>Unsupported software still in scope.</strong> You cannot attain Cyber Essentials at all if you are using unsupported software within scope. Not a finding, a blocker. Every programme needs an early sweep for end-of-life operating systems and applications, with a decision per item: upgrade, remove, or remove from scope through genuine segregation.</p>
+
+    <p><strong>MFA that exists but is not enforced.</strong> Available and enabled are different words. A tenant where MFA is configured but a conditional access exclusion group has thirty people in it will fail, and now fail terminally.</p>
+
+    <p><strong>The email test run on the wrong account.</strong> An administrative account may behave differently from a standard one. The test is specified against a standard non-administrative account, and if your dry run used an admin mailbox, you have tested the wrong thing.</p>
+
+    <p><strong>The forgotten second browser.</strong> Edge is fine because it is managed. Nobody remembered the Chrome installation from two years ago, or Firefox on the developer builds. The test covers every browser present.</p>
+
+    <p><strong>Remediating the sample rather than the estate.</strong> This used to work. It now actively triggers the failure mode, because the retest deliberately includes a fresh random device drawn from the wider population.</p>
+
+    <p><strong>Burning the three month window on remediation.</strong> The window is not remediation time. It is audit scheduling time. If you certify at base level and then start a twelve week remediation programme, you will be recertifying.</p>
+
+    <p><strong>Assuming last year's answers still apply.</strong> Danzell replaced Willow, which had replaced Montpellier the year before. Responses that passed under the previous set may not meet the current criteria, and reusing them is now a meaningful risk rather than a time saver.</p>
+
+    <div class="part"><span class="part-num">Part four</span><span class="part-rule"></span></div>
+    <h2>Running it as a programme, not an assessment</h2>
+
+    <p>The difference between an advisory engagement and a delivery one is that the second is judged on whether the certificate arrives. A few things follow from that.</p>
+
+    <p><strong>Sequence by auto-fail first.</strong> MFA coverage and patch latency are now terminal on their own. They go to the front of the plan regardless of how the risk register scores them, because everything else is irrelevant if either is unresolved on the day.</p>
+
+    <p><strong>Run a dry run of the actual tests.</strong> Not a policy review. Run an authenticated scan against a real sample, send EICAR files to a standard mailbox, fetch test files through every browser on the build. The tooling is not exotic and the test specification is public. A programme that has not rehearsed the tests is guessing, and the second-sample rule makes guessing expensive.</p>
+
+    <p><strong>Do not book the audit until the dry run passes.</strong> This is the single highest-value piece of programme discipline available, and it is usually the one under most pressure, because a booked date makes a steering group feel progress is happening. A booked date that arrives early converts a recoverable position into a failed audit and possibly a lost base certificate.</p>
+
+    <p><strong>Treat build consolidation as a cost saving.</strong> It shortens the audit, reduces the sample, and lowers the chance of a random device failing. It is also the one recommendation in this whole area that infrastructure teams tend to welcome, because they wanted to retire those images anyway.</p>
+
+    <p><strong>Own the inventory, and keep owning it.</strong> Point-in-time compliance means the estate has to be right on the day and demonstrably right afterwards, since the declaration now explicitly acknowledges an ongoing responsibility to maintain the controls. A programme that certifies and dissolves leaves the client worse off at renewal than they were at the start.</p>
+
+    <h2>The honest summary</h2>
+
+    <p>Cyber Essentials Plus is not technically difficult. Every control in it is something a competent infrastructure team already believes it does. What makes certification hard is that the audit measures the gap between belief and evidence, and the 2026 changes have removed most of the ways that gap used to be papered over. No amending answers afterwards. No excluding the awkward cloud service. No fixing the sample and hoping. No treating MFA and patch latency as things to get to.</p>
+
+    <p>For a remediation programme, that reframes the work. The deliverable is not a set of recommendations. It is a verified inventory, a scope somebody has signed, an auto-fail sweep completed first, a rehearsed set of tests, and an audit date chosen because the evidence supports it rather than because the quarter is ending. Get those five right and the certificate is a formality. Get the scope wrong in week one and you will be paying for the audit twice.</p>
+
+    <p class="lead">If you are working through a Cyber Essentials Plus programme and want a second opinion on scope or readiness, that is the kind of work I do through <a href="https://cyberspartans.co.uk">Cyber Spartans</a>.</p>
+  </article>
+
+  <section class="related">
+    <h2>Related reading</h2>
+    <div class="rgrid">
+      <a class="rcard" href="/articles/cloud-iam-blast-radius/">
+        <div class="c">Cloud</div>
+        <div class="t">Cloud IAM and the blast radius of one credential</div>
+      </a>
+      <a class="rcard" href="/articles/windows-cdp-gdid-attribution/">
+        <div class="c">Threat</div>
+        <div class="t">The identifier you never chose: Windows CDP and the GDID</div>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleem-yousaf">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf">GitHub</a>
+      <a href="https://saleemyousaf.medium.com">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf">Hashnode</a>
+      <a href="https://dev.to/saleemyousaf">Dev.to</a>
+      <a href="https://cyberspartans.co.uk">Cyber Spartans</a>
+    </div>
+    <div class="pills">
+      <span class="pill bf">breachforge.co.uk</span>
+      <span class="pill cs">cyberspartans.co.uk</span>
+    </div>
+    <div class="legal">
+      &copy; 2026 Saleem Yousaf. All rights reserved. &nbsp;·&nbsp;
+      <a href="/privacy/">Privacy</a>
+    </div>
+  </footer>
+
+</div>
+
+<div class="lb" id="lb"><span class="lb-close" id="lbClose">[ close ]</span></div>
+<script>
+(function(){
+  var lb=document.getElementById('lb'), closeBtn=document.getElementById('lbClose');
+  document.querySelectorAll('.figframe svg[role="img"]').forEach(function(svg){
+    svg.closest('.figframe').addEventListener('click',function(){
+      var clone=svg.cloneNode(true);
+      lb.querySelectorAll('svg').forEach(function(s){s.remove();});
+      lb.appendChild(clone); lb.classList.add('open');
+    });
+  });
+  function close(){lb.classList.remove('open');}
+  closeBtn.addEventListener('click',close);
+  lb.addEventListener('click',function(e){if(e.target===lb)close();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+})();
+</script>
+
+</body>
+</html>
