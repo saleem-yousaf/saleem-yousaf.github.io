@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Azure data platform security infographic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e14;--panel:#0f1419;--border:rgba(255,255,255,0.09);
+  --text:#e6eaf0;--muted:#8a96a8;--muted2:#5a6675;
+  --teal:#2dd4bf;--teal-b:#5eead4;--teal-dim:rgba(45,212,191,0.12);--teal-line:rgba(45,212,191,0.30);
+  --blue:#4aa8ff;--blue-dim:rgba(74,168,255,0.12);--blue-line:rgba(74,168,255,0.30);
+  --amber:#f5b73c;--amber-dim:rgba(245,183,60,0.12);--amber-line:rgba(245,183,60,0.32);
+  --purple:#a78bfa;--purple-dim:rgba(167,139,250,0.12);--purple-line:rgba(167,139,250,0.30);
+  --mono:'DM Mono',monospace;--display:'Syne',sans-serif;--body:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-weight:300;line-height:1.5;padding:46px 28px 40px;}
+.ig{max-width:900px;margin:0 auto;}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:16px;}
+h1{font-family:var(--display);font-weight:800;font-size:42px;line-height:1.08;letter-spacing:-1px;color:#fff;}
+h1 .g{color:var(--teal);}
+.sub{font-size:15px;color:var(--muted);margin:14px 0 6px;max-width:640px;}
+.rule{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin:38px 0 14px;}
+.rule.b{color:var(--blue);}.rule.a{color:var(--amber);}.rule.p{color:var(--purple);}
+.flow{display:flex;align-items:stretch;flex-wrap:wrap;border:1px solid var(--border);border-radius:11px;background:var(--panel);overflow:hidden;}
+.fnode{flex:1;min-width:150px;padding:18px;}
+.fnode + .fnode{border-left:1px solid var(--border);}
+.fnode .k{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted2);}
+.fnode b{display:block;font-family:var(--display);font-weight:700;font-size:16px;color:#fff;margin:5px 0 4px;}
+.fnode span{font-size:12px;color:var(--muted);}
+.fnote{font-family:var(--mono);font-size:11px;color:var(--teal);margin-top:9px;}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.card{border:1px solid var(--border);border-radius:11px;background:var(--panel);padding:18px 20px;}
+.card.a{border-top:2px solid var(--amber);}
+.card .tag{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);}
+.card h3{font-family:var(--display);font-weight:700;font-size:17px;color:#fff;margin:6px 0 6px;}
+.card p{font-size:13px;color:var(--muted);line-height:1.55;}
+.layers{display:flex;flex-direction:column;gap:8px;}
+.layer{display:flex;align-items:center;gap:16px;border:1px solid var(--border);border-radius:9px;background:var(--panel);padding:13px 18px;}
+.layer b{font-family:var(--display);font-weight:700;font-size:14px;color:#fff;min-width:180px;}
+.layer span{font-family:var(--mono);font-size:11.5px;color:var(--muted);}
+.layer.core{background:var(--teal-dim);border-color:var(--teal-line);}
+.layer.core b{color:var(--teal-b);}
+.layer.core span{color:#aeb5bf;}
+.warn{border:1px solid var(--amber-line);background:var(--amber-dim);border-radius:11px;padding:18px 22px;}
+.warn h3{font-family:var(--display);font-weight:700;font-size:16px;color:var(--amber);margin-bottom:10px;}
+.warn ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 22px;}
+.warn li{font-size:13px;color:var(--text);padding-left:16px;position:relative;line-height:1.45;}
+.warn li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--amber);}
+.q{display:flex;gap:14px;margin-bottom:10px;align-items:flex-start;}
+.q .num{flex-shrink:0;width:28px;height:28px;border-radius:7px;background:var(--purple-dim);border:1px solid var(--purple-line);color:var(--purple);font-family:var(--mono);font-size:13px;display:flex;align-items:center;justify-content:center;}
+.q p{font-size:14px;color:var(--text);padding-top:3px;}
+.foot{margin-top:36px;padding-top:18px;border-top:1px solid var(--border);text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted2);}
+.foot span{color:var(--teal);}
+@media(max-width:620px){h1{font-size:30px;}.cols,.warn ul{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="ig">
+
+  <div class="eyebrow">// azure data platform security</div>
+  <h1>Hard app,<br><span class="g">soft data platform.</span></h1>
+  <p class="sub">It holds the credentials to every source system, and it runs code against your data. And it is usually still on the getting-started defaults.</p>
+
+  <div class="rule">// the pipeline, and the control at each stage</div>
+  <div class="flow">
+    <div class="fnode"><div class="k">move + schedule</div><b>Data Factory</b><span>Linked services hold the keys to every source.</span><div class="fnote">Managed identity + Key Vault</div></div>
+    <div class="fnode"><div class="k">store</div><b>Data lake</b><span>ADLS Gen2, bronze to gold.</span><div class="fnote">Private endpoint + firewall on</div></div>
+    <div class="fnode"><div class="k">transform</div><b>Databricks</b><span>Runs arbitrary notebooks against your data.</span><div class="fnote">No public IP + Unity Catalog</div></div>
+  </div>
+
+  <div class="rule a">// why it is a different security problem</div>
+  <div class="cols">
+    <div class="card a"><div class="tag">Concentration</div><h3>It holds every key</h3><p>Compromise the platform and you inherit everything it can reach. The blast radius is the whole data estate, not one app.</p></div>
+    <div class="card a"><div class="tag">Execution</div><h3>It runs your code</h3><p>Notebooks, jobs, init scripts, libraries. All executing with the compute's identity and its data access. Treat it as untrusted.</p></div>
+  </div>
+
+  <div class="rule">// defense in depth</div>
+  <div class="layers">
+    <div class="layer"><b>Monitoring and audit</b><span>verbose audit logs · system tables · SAT · Sentinel</span></div>
+    <div class="layer"><b>Network</b><span>Private Link · VNet injection · NCC · no public IP</span></div>
+    <div class="layer"><b>Compute</b><span>cluster policies · governed init scripts · standard access mode</span></div>
+    <div class="layer"><b>Identity and secrets</b><span>Unity Catalog · managed identities · Key Vault</span></div>
+    <div class="layer core"><b>Your data</b><span>customer-managed keys · column masks · row filters</span></div>
+  </div>
+
+  <div class="rule a">// what actually causes the incidents</div>
+  <div class="warn">
+    <h3>The recurring failures</h3>
+    <ul>
+      <li>Inline credentials in linked services, committed to Git.</li>
+      <li>Hardcoded secrets in notebooks, pushed to a repo forever.</li>
+      <li>Legacy mounts and no-isolation clusters sharing one identity.</li>
+      <li>Long-lived personal access tokens, never revoked.</li>
+      <li>Public workspace or public storage, "to be fixed later".</li>
+      <li>Serverless egress left wide open to anywhere.</li>
+    </ul>
+  </div>
+
+  <div class="rule p">// two questions tell you how exposed you are</div>
+  <div class="q"><div class="num">1</div><p>Where are your credentials stored, and could they reach a Git history?</p></div>
+  <div class="q"><div class="num">2</div><p>Can your compute reach the public internet?</p></div>
+
+  <div class="foot"><span>saleemyousaf.co.uk</span> &nbsp;&middot;&nbsp; <span>cyberspartans.co.uk</span></div>
+
+</div>
+</body>
+</html>
