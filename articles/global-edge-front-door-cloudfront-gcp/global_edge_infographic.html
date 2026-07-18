@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global edge infographic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e14;--panel:#0f1419;--border:rgba(255,255,255,0.09);
+  --text:#e6eaf0;--muted:#8a96a8;--muted2:#5a6675;
+  --teal:#2dd4bf;--teal-b:#5eead4;--teal-dim:rgba(45,212,191,0.12);--teal-line:rgba(45,212,191,0.30);
+  --blue:#4aa8ff;--blue-dim:rgba(74,168,255,0.12);--blue-line:rgba(74,168,255,0.30);
+  --amber:#f5b73c;--amber-dim:rgba(245,183,60,0.12);--amber-line:rgba(245,183,60,0.32);
+  --purple:#a78bfa;--purple-dim:rgba(167,139,250,0.12);--purple-line:rgba(167,139,250,0.30);
+  --mono:'DM Mono',monospace;--display:'Syne',sans-serif;--body:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-weight:300;line-height:1.5;padding:46px 28px 40px;}
+.ig{max-width:900px;margin:0 auto;}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:16px;}
+h1{font-family:var(--display);font-weight:800;font-size:42px;line-height:1.08;letter-spacing:-1px;color:#fff;}
+h1 .g{color:var(--teal);}
+.sub{font-size:15px;color:var(--muted);margin:14px 0 6px;max-width:640px;}
+.rule{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin:38px 0 14px;}
+.rule.b{color:var(--blue);}.rule.a{color:var(--amber);}.rule.p{color:var(--purple);}
+.flow{display:flex;align-items:stretch;flex-wrap:wrap;border:1px solid var(--border);border-radius:11px;background:var(--panel);overflow:hidden;}
+.fnode{flex:1;min-width:150px;padding:18px;}
+.fnode + .fnode{border-left:1px solid var(--border);}
+.fnode .k{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted2);}
+.fnode b{display:block;font-family:var(--display);font-weight:700;font-size:16px;color:#fff;margin:5px 0 4px;}
+.fnode span{font-size:12px;color:var(--muted);}
+.fnote{font-family:var(--mono);font-size:11px;color:var(--teal);margin-top:9px;}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.cloud{border:1px solid var(--border);border-radius:11px;background:var(--panel);padding:16px 18px;border-top:2px solid var(--teal);}
+.cloud.aws{border-top-color:var(--amber);}
+.cloud.gcp{border-top-color:var(--blue);}
+.cloud .tag{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);}
+.cloud.aws .tag{color:var(--amber);}
+.cloud.gcp .tag{color:var(--blue);}
+.cloud h3{font-family:var(--display);font-weight:700;font-size:15px;color:#fff;margin:6px 0 8px;line-height:1.25;}
+.cloud ul{list-style:none;}
+.cloud li{font-family:var(--mono);font-size:11px;color:var(--muted);padding-left:12px;position:relative;margin-bottom:5px;line-height:1.45;}
+.cloud li::before{content:"";position:absolute;left:0;top:7px;width:4px;height:4px;border-radius:50%;background:var(--muted2);}
+.cloud .verdict{font-size:12px;color:var(--text);margin-top:10px;padding-top:10px;border-top:1px solid var(--border);line-height:1.45;}
+.warn{border:1px solid var(--amber-line);background:var(--amber-dim);border-radius:11px;padding:18px 22px;}
+.warn h3{font-family:var(--display);font-weight:700;font-size:16px;color:var(--amber);margin-bottom:10px;}
+.warn ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 22px;}
+.warn li{font-size:13px;color:var(--text);padding-left:16px;position:relative;line-height:1.45;}
+.warn li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--amber);}
+.q{display:flex;gap:14px;margin-bottom:10px;align-items:flex-start;}
+.q .num{flex-shrink:0;width:28px;height:28px;border-radius:7px;background:var(--purple-dim);border:1px solid var(--purple-line);color:var(--purple);font-family:var(--mono);font-size:13px;display:flex;align-items:center;justify-content:center;}
+.q p{font-size:14px;color:var(--text);padding-top:3px;}
+.foot{margin-top:36px;padding-top:18px;border-top:1px solid var(--border);text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted2);}
+.foot span{color:var(--teal);}
+@media(max-width:700px){h1{font-size:30px;}.three,.warn ul{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="ig">
+
+  <div class="eyebrow">// the global edge</div>
+  <h1>Impressive front door.<br><span class="g">Wide open back door.</span></h1>
+  <p class="sub">TLS terminates there. The WAF runs there. DDoS is absorbed there. It is the real perimeter, and it is the most underrated boundary in cloud architecture.</p>
+
+  <div class="rule">// what happens at the edge, before anything you own</div>
+  <div class="flow">
+    <div class="fnode"><div class="k">arrive</div><b>Anycast</b><span>One hostname, hundreds of points of presence.</span></div>
+    <div class="fnode"><div class="k">inspect</div><b>WAF + DDoS</b><span>The first hostile request of the day lands here.</span></div>
+    <div class="fnode"><div class="k">forward</div><b>Origin</b><span>Private path to your backend.</span><div class="fnote">And nothing else should reach it.</div></div>
+  </div>
+
+  <div class="rule b">// the three clouds do not map cleanly</div>
+  <div class="three">
+    <div class="cloud">
+      <div class="tag">Azure</div>
+      <h3>Front Door</h3>
+      <ul>
+        <li>anycast + TLS + cache</li>
+        <li>WAF + DDoS in one profile</li>
+        <li>Premium: managed rules</li>
+        <li>Premium: Private Link origins</li>
+      </ul>
+      <div class="verdict">Consolidates the most. Easiest to reason about.</div>
+    </div>
+    <div class="cloud aws">
+      <div class="tag">AWS</div>
+      <h3>No single equivalent</h3>
+      <ul>
+        <li>CloudFront: the edge</li>
+        <li>AWS WAF: the rules</li>
+        <li>Shield: the DDoS</li>
+        <li>Route 53, Global Accelerator</li>
+      </ul>
+      <div class="verdict">More parts to assemble. The most control.</div>
+    </div>
+    <div class="cloud gcp">
+      <div class="tag">GCP</div>
+      <h3>Global External ALB</h3>
+      <ul>
+        <li>one anycast IP</li>
+        <li>Cloud CDN: a flag</li>
+        <li>Cloud Armor: a policy</li>
+        <li>hybrid NEG for on-prem</li>
+      </ul>
+      <div class="verdict">The tidiest model. Best hybrid story.</div>
+    </div>
+  </div>
+
+  <div class="rule a">// the two failures I see most</div>
+  <div class="warn">
+    <h3>Where the edge quietly stops working</h3>
+    <ul>
+      <li><strong>Origin not locked down.</strong> The WAF is decorative if the origin still answers the internet.</li>
+      <li><strong>WAF still in detection mode.</strong> Detection logs an attack. Prevention stops one.</li>
+      <li>Caching a response that ignores the auth header.</li>
+      <li>Health probes that return healthy while the app is broken.</li>
+      <li>Confusing global with regional. Front Door is not App Gateway.</li>
+      <li>Forgetting the ACM cert and WAF ACL must live in us-east-1.</li>
+    </ul>
+  </div>
+
+  <div class="rule p">// two questions for your estate this week</div>
+  <div class="q"><div class="num">1</div><p>Can anyone reach your origin without going through the edge?</p></div>
+  <div class="q"><div class="num">2</div><p>Is your WAF actually blocking, or just taking notes?</p></div>
+
+  <div class="foot"><span>saleemyousaf.co.uk</span> &nbsp;&middot;&nbsp; <span>cyberspartans.co.uk</span></div>
+
+</div>
+</body>
+</html>
