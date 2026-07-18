@@ -1,1 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Global Edge: Azure Front Door, AWS CloudFront, and GCP Cloud Armor Compared | Saleem Yousaf</title>
+<meta name="description" content="The global edge is your real internet-facing perimeter, and it is underrated. Azure Front Door, the AWS equivalent, and the GCP equivalent compared: security features, cloud and hybrid models, and setup via Terraform and the portal.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/global-edge-front-door-cloudfront-gcp/">
 
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Global Edge: Azure Front Door, AWS CloudFront, and GCP Cloud Armor Compared">
+<meta property="og:description" content="TLS terminates here. The WAF runs here. DDoS is absorbed here. So why does nobody talk about the global edge? Azure, AWS, and GCP compared, with cloud and hybrid patterns and Terraform.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/global-edge-front-door-cloudfront-gcp/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/articles/global-edge-front-door-cloudfront-gcp/og-global-edge.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Global Edge: Azure Front Door, AWS CloudFront, and GCP Compared">
+<meta name="twitter:description" content="Your real internet-facing perimeter, and the most underrated security boundary in cloud architecture.">
+<meta name="twitter:image" content="https://saleemyousaf.co.uk/articles/global-edge-front-door-cloudfront-gcp/og-global-edge.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "The Global Edge: Azure Front Door, AWS CloudFront, and GCP Cloud Armor Compared",
+  "description": "A practitioner's comparison of the global edge across Azure, AWS, and GCP: security features, cloud and hybrid models, and setup via Terraform and the portal.",
+  "datePublished": "2026-07-16",
+  "dateModified": "2026-07-16",
+  "author": {
+    "@type": "Person",
+    "name": "Saleem Yousaf",
+    "url": "https://saleemyousaf.co.uk",
+    "sameAs": [
+      "https://www.linkedin.com/in/saleemyousaf",
+      "https://github.com/saleem-yousaf",
+      "https://cyberspartans.co.uk"
+    ]
+  },
+  "publisher": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://saleemyousaf.co.uk/articles/global-edge-front-door-cloudfront-gcp/" },
+  "image": "https://saleemyousaf.co.uk/articles/global-edge-front-door-cloudfront-gcp/og-global-edge.png",
+  "articleSection": "Cloud Security",
+  "keywords": "Azure Front Door, AWS CloudFront, Cloud Armor, global load balancer, WAF, DDoS, anycast, Private Link, origin access control, Terraform, hybrid cloud"
+}
+</script>
+
+<style>
+:root{
+  --bg:#090c10;--bg2:#0f1318;--bg3:#161b22;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --text:#e6eaf0;--muted:#8a96a8;--muted2:#5a6675;
+  --teal:#2dd4bf;--teal-bright:#5eead4;--teal-dim:rgba(45,212,191,0.12);--teal-line:rgba(45,212,191,0.30);
+  --amber:#f5b73c;--amber-dim:rgba(245,183,60,0.12);--amber-line:rgba(245,183,60,0.32);
+  --blue:#4aa8ff;--blue-line:rgba(74,168,255,0.32);
+  --bf:#00d4ff;--cs:#2f9e6f;
+  --mono:'DM Mono',monospace;--display:'Syne',sans-serif;--body:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-weight:300;line-height:1.75;font-size:17px;-webkit-font-smoothing:antialiased;}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px;}
+.hero{padding:70px 0 34px;}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:10px;margin-bottom:22px;}
+.eyebrow .line{width:30px;height:1px;background:var(--teal);}
+h1{font-family:var(--display);font-weight:800;font-size:40px;line-height:1.12;letter-spacing:-1px;color:#fff;margin-bottom:22px;}
+.meta{display:flex;flex-wrap:wrap;gap:10px 18px;font-family:var(--mono);font-size:12.5px;color:var(--muted);align-items:center;}
+.meta .who{color:var(--text);}
+.meta .dot{width:4px;height:4px;border-radius:50%;background:var(--muted2);}
+.hr{height:1px;background:var(--border);margin:34px 0;}
+article p{margin:0 0 22px;color:#d3dae4;}
+article p.lead{font-size:19px;color:var(--text);font-weight:400;}
+article h2{font-family:var(--display);font-weight:700;font-size:25px;letter-spacing:-.4px;color:#fff;margin:48px 0 16px;line-height:1.25;}
+article h3{font-family:var(--display);font-weight:700;font-size:18px;color:#fff;margin:32px 0 12px;}
+article strong{color:#fff;font-weight:600;}
+article a{color:var(--teal-bright);text-decoration:none;border-bottom:1px solid var(--teal-line);}
+article a:hover{border-color:var(--teal-bright);}
+.callout{border:1px solid var(--teal-line);border-left:3px solid var(--teal);background:var(--teal-dim);border-radius:0 10px 10px 0;padding:18px 22px;margin:30px 0;font-size:16px;color:var(--text);}
+.callout b{color:var(--teal-bright);font-weight:600;}
+article ol,article ul{margin:0 0 22px;padding-left:0;list-style:none;counter-reset:li;}
+article ol li,article ul li{position:relative;padding-left:34px;margin-bottom:14px;color:#d3dae4;}
+article ol li{counter-increment:li;}
+article ol li::before{content:counter(li);position:absolute;left:0;top:1px;width:22px;height:22px;border-radius:6px;background:var(--teal-dim);border:1px solid var(--teal-line);color:var(--teal-bright);font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;}
+article ul li::before{content:"";position:absolute;left:8px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--teal);}
+code{font-family:var(--mono);font-size:13.5px;color:var(--teal-bright);background:var(--teal-dim);border:1px solid var(--teal-line);border-radius:4px;padding:1px 6px;}
+pre{font-family:var(--mono);font-size:12.5px;line-height:1.6;color:#cdd6e2;background:#0a0e14;border:1px solid var(--border);border-radius:10px;padding:15px 17px;overflow-x:auto;margin:0 0 24px;}
+pre code{background:none;border:0;color:inherit;padding:0;}
+.tbl{width:100%;border-collapse:collapse;margin:0 0 26px;font-size:14px;}
+.tbl th,.tbl td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top;color:#d3dae4;}
+.tbl th{background:var(--bg3);color:#fff;font-family:var(--display);font-weight:700;font-size:13px;}
+.tbl td:first-child{font-family:var(--mono);font-size:12px;color:var(--muted);}
+.tbl-wrap{overflow-x:auto;}
+
+figure.fig{margin:30px 0;border:1px solid var(--border);border-radius:12px;background:var(--bg2);padding:22px 22px 16px;cursor:zoom-in;position:relative;transition:border-color .2s;}
+figure.fig:hover,figure.fig:focus-visible{border-color:var(--teal-line);outline:none;}
+figure.fig .zoom{position:absolute;top:12px;right:12px;width:24px;height:24px;border:1px solid var(--border2);border-radius:6px;color:var(--muted);display:flex;align-items:center;justify-content:center;}
+figure.fig svg{width:100%;height:auto;display:block;}
+figure.fig figcaption{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:14px;line-height:1.5;}
+.lb{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:3vh 2vw;background:rgba(5,7,10,0.9);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+.lb.open{display:flex;}
+.lb-inner{position:relative;width:96vw;max-width:1100px;max-height:94vh;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:30px;overflow:auto;}
+.lb-inner svg{width:100%;height:auto;}
+.lb-close{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;}
+.lb-close:hover,.lb-close:focus-visible{color:var(--teal);border-color:var(--teal);outline:none;}
+
+/* diagram tokens */
+.d-box{fill:var(--bg3);stroke:var(--teal-line);}
+.d-box-soft{fill:var(--bg);stroke:var(--border2);}
+.d-edge{fill:var(--teal-dim);stroke:var(--teal);}
+.d-hyb{fill:var(--bg);stroke:var(--blue-line);stroke-dasharray:5 4;}
+.d-t{fill:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;}
+.d-s{fill:#8a96a8;font-family:'DM Mono',monospace;font-size:10.5px;}
+.d-lab{fill:var(--teal);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.05em;}
+.d-lab-b{fill:var(--blue);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.05em;}
+.d-lab-a{fill:var(--amber);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.05em;}
+.d-line{stroke:var(--teal-line);stroke-width:1.5;fill:none;}
+.d-line-b{stroke:var(--blue-line);stroke-width:1.5;stroke-dasharray:5 4;fill:none;}
+.d-blocked{stroke:var(--amber);stroke-width:1.6;fill:none;}
+
+/* animated packets */
+.pkt{fill:var(--teal-bright);}
+.pkt-b{fill:var(--blue);}
+.p1{animation:run1 3.2s linear infinite;}
+.p2{animation:run2 3.2s linear infinite;animation-delay:.5s;}
+.p3{animation:run3 3.6s linear infinite;animation-delay:1s;}
+@keyframes run1{from{transform:translateX(0);opacity:0;}10%{opacity:1;}90%{opacity:1;}to{transform:translateX(150px);opacity:0;}}
+@keyframes run2{from{transform:translateX(0);opacity:0;}10%{opacity:1;}90%{opacity:1;}to{transform:translateX(170px);opacity:0;}}
+@keyframes run3{from{transform:translateX(0);opacity:0;}10%{opacity:1;}90%{opacity:1;}to{transform:translateX(190px);opacity:0;}}
+.pulse{animation:pulse 2.4s ease-in-out infinite;transform-origin:center;transform-box:fill-box;}
+@keyframes pulse{0%,100%{opacity:.25;}50%{opacity:.7;}}
+@media (prefers-reduced-motion:reduce){
+  .p1,.p2,.p3,.pulse{animation:none;}
+  .p1,.p2,.p3{opacity:1;}
+}
+
+footer{border-top:1px solid var(--border);margin-top:70px;background:var(--bg2);}
+.footer-inner{max-width:1100px;margin:0 auto;padding:42px 32px 10px;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;}
+.footer-logo{font-family:var(--display);font-weight:800;font-size:20px;color:var(--muted2);}
+.footer-logo span{color:var(--teal);}
+.footer-desc{font-size:13px;color:var(--muted);max-width:520px;margin-top:8px;line-height:1.6;}
+.footer-links{display:flex;flex-wrap:wrap;gap:18px;align-items:center;}
+.footer-links a{font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;}
+.footer-links a:hover{color:var(--teal);}
+.footer-bottom{max-width:1100px;margin:0 auto;padding:18px 32px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;border-top:1px solid var(--border);}
+.footer-copy{font-family:var(--mono);font-size:12px;color:var(--muted2);}
+.footer-cross{max-width:1100px;margin:0 auto;padding:20px 32px 34px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;border-top:1px solid rgba(255,255,255,0.07);}
+.footer-cross a{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;padding:6px 12px;border-radius:5px;text-decoration:none;letter-spacing:.03em;}
+.cross-bf{background:rgba(0,212,255,0.10);color:var(--bf);border:1px solid rgba(0,212,255,0.28);}
+.cross-cs{background:rgba(47,158,111,0.10);color:var(--cs);border:1px solid rgba(47,158,111,0.30);}
+.related{margin-top:58px;padding-top:30px;border-top:1px solid var(--border);}
+.related-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.related-eyebrow .line{width:24px;height:1px;background:var(--teal);}
+.related-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.related-card{display:block;border:1px solid var(--border);border-radius:11px;background:var(--bg2);padding:16px 18px;text-decoration:none;transition:border-color .2s,transform .2s;}
+.related-card:hover{border-color:var(--teal-line);transform:translateY(-2px);}
+.related-card .rc-cat{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2);}
+.related-card .rc-t{font-family:var(--display);font-weight:700;font-size:15px;color:#fff;margin-top:6px;line-height:1.3;}
+.related-card .rc-go{font-family:var(--mono);font-size:11px;color:var(--teal);margin-top:8px;display:inline-block;}
+@media (max-width:600px){h1{font-size:30px;}body{font-size:16px;}.hero{padding:48px 0 24px;}.related-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow"><span class="line"></span>Cloud Security</div>
+    <h1>The global edge: Azure Front Door, the AWS equivalent, and the GCP one, compared</h1>
+    <div class="meta">
+      <span class="who">Saleem Yousaf</span>
+      <span class="dot"></span><span>16 July 2026</span>
+      <span class="dot"></span><span>~18 min read</span>
+    </div>
+  </header>
+
+  <div class="hr"></div>
+
+  <article>
+    <p class="lead">TLS terminates there. The web application firewall runs there. DDoS is absorbed there. Every request your users make arrives there first. And yet the global edge gets a fraction of the attention we give to ingress controllers and service meshes.</p>
+
+    <p>For most internet-facing applications, the edge is the real perimeter. It is the first thing an attacker meets and the last thing that stands between a botnet and your origin. It deserves to be an architectural decision, not a checkbox someone ticked during a migration.</p>
+
+    <div class="callout"><b>The thesis:</b> the global edge is the most underrated security boundary in cloud architecture. Teams argue for weeks about mesh sidecars, then put a CDN in front of production, leave the WAF in detection mode, and forget to lock the origin. The door is impressive. The back door is wide open.</div>
+
+    <h2>What we are actually talking about</h2>
+    <p>The global edge is an anycast layer in front of your application. One hostname, one address, hundreds of points of presence. A user's request enters the provider's network at the nearest edge, gets inspected and possibly cached, then travels the provider's private backbone to your origin. You get latency and availability benefits, and, more importantly here, you get a place to enforce security before traffic reaches anything you own.</p>
+    <p>Three things get muddled constantly, so let us separate them:</p>
+    <ul>
+      <li><strong>Global versus regional.</strong> Azure Front Door is global and lives at the edge. Application Gateway is regional and lives in your virtual network. They are not alternatives; plenty of estates run both.</li>
+      <li><strong>CDN versus edge platform.</strong> Caching is one feature. Routing, TLS termination, WAF, DDoS absorption, and rules processing are the rest, and they matter more.</li>
+      <li><strong>Layer 7 versus layer 4.</strong> These services front HTTP and HTTPS. For raw TCP or UDP you need something else: Azure Load Balancer, AWS Global Accelerator, or a GCP network load balancer.</li>
+    </ul>
+
+    <h2>Azure Front Door</h2>
+    <p>Front Door is Microsoft's global entry point: anycast routing, TLS termination, caching, WAF, and DDoS protection in one profile, running on the same backbone that carries Microsoft 365, across roughly 190 or more points of presence.</p>
+    <p>Two tiers matter. <strong>Standard</strong> gives you global layer 7 load balancing and CDN. <strong>Premium</strong> adds the managed WAF rule sets, bot protection, and, the one that changes your architecture, <strong>Private Link origins</strong>, so Front Door reaches your backend privately and your origin never needs a public endpoint. Front Door Classic is the legacy generation and is closed to new deployments, so do not start there.</p>
+
+    <figure class="fig" tabindex="0" role="button" aria-label="Expand the Azure Front Door architecture diagram">
+      <span class="zoom" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></span>
+      <svg viewBox="0 0 800 330" role="img" aria-label="Azure Front Door: users hit the anycast edge where WAF and DDoS run, then traffic reaches Azure origins via Private Link, or on-premises origins over ExpressRoute in the hybrid model. Direct access to the origin is blocked.">
+        <text x="14" y="20" class="d-lab">azure</text>
+        <rect x="14" y="120" width="96" height="60" rx="9" class="d-box-soft"/>
+        <text x="32" y="146" class="d-t" style="font-size:12px">Users</text>
+        <text x="32" y="164" class="d-s">global</text>
+        <path class="d-line" d="M110 150 H186"/>
+        <circle class="pkt p1" cx="118" cy="150" r="3.4"/>
+        <rect x="186" y="86" width="150" height="128" rx="11" class="d-edge"/>
+        <circle class="pulse" cx="261" cy="112" r="14" fill="#2dd4bf" opacity=".3"/>
+        <text x="205" y="118" class="d-t" fill="#5eead4">Front Door</text>
+        <text x="205" y="140" class="d-s">anycast edge</text>
+        <text x="205" y="158" class="d-s">TLS + cache</text>
+        <text x="205" y="176" class="d-s">WAF + DDoS</text>
+        <text x="205" y="196" class="d-s">rules engine</text>
+        <path class="d-line" d="M336 122 H470"/>
+        <circle class="pkt p1" cx="344" cy="122" r="3.4"/>
+        <text x="352" y="112" class="d-lab">private link</text>
+        <rect x="470" y="90" width="150" height="64" rx="9" class="d-box"/>
+        <text x="490" y="116" class="d-t" style="font-size:12px">Azure origin</text>
+        <text x="490" y="134" class="d-s">App Service, AKS</text>
+        <path class="d-line-b" d="M336 186 H470"/>
+        <circle class="pkt-b p2" cx="344" cy="186" r="3.4"/>
+        <text x="352" y="176" class="d-lab-b">expressroute</text>
+        <rect x="470" y="156" width="150" height="64" rx="9" class="d-hyb"/>
+        <text x="490" y="182" class="d-t" style="font-size:12px" fill="#4aa8ff">On-premises</text>
+        <text x="490" y="200" class="d-s">hybrid origin</text>
+        <text x="640" y="120" class="d-lab">cloud</text>
+        <text x="640" y="188" class="d-lab-b">hybrid</text>
+        <rect x="14" y="248" width="606" height="56" rx="9" fill="none" stroke="rgba(245,183,60,0.32)"/>
+        <text x="34" y="270" class="d-lab-a">origin lockdown</text>
+        <text x="34" y="292" class="d-s">Private Link, or the AzureFrontDoor.Backend service tag plus the X-Azure-FDID header. Public origin access blocked.</text>
+        <path class="d-blocked" d="M120 236 H600" stroke-dasharray="4 5" opacity="0.5"/>
+      </svg>
+      <figcaption>Azure Front Door. Cloud origins over Private Link, hybrid origins over ExpressRoute, and the rule that matters most: nobody reaches the origin except through the front door. Click to enlarge.</figcaption>
+    </figure>
+
+    <p><strong>Cloud model.</strong> Front Door in front of App Service, AKS, Static Web Apps, or Azure Storage. With Premium, Private Link origins mean the backend has no public endpoint at all. This is the pattern to aim for.</p>
+    <p><strong>Hybrid model.</strong> Front Door will front any reachable HTTP endpoint, including a data centre, so it is a genuinely useful way to put a modern edge in front of a legacy on-premises application. Pair it with ExpressRoute for the private path, and treat the origin lockdown as mandatory rather than optional.</p>
+
+    <h3>Terraform</h3>
+    <p>The current provider uses the <code>cdn_frontdoor</code> resources. A minimal Premium profile with a WAF policy:</p>
+    <pre><code>resource "azurerm_cdn_frontdoor_profile" "fd" {
+  name                = "fd-prod"
+  resource_group_name = azurerm_resource_group.rg.name
+  sku_name            = "Premium_AzureFrontDoor"   # Premium for managed WAF + Private Link
+}
+
+resource "azurerm_cdn_frontdoor_firewall_policy" "waf" {
+  name                = "wafprod"
+  resource_group_name = azurerm_resource_group.rg.name
+  sku_name            = azurerm_cdn_frontdoor_profile.fd.sku_name
+  enabled             = true
+  mode                = "Prevention"              # not Detection. see the gotchas
+
+  managed_rule {
+    type    = "Microsoft_DefaultRuleSet"
+    version = "2.1"
+    action  = "Block"
+  }
+
+  custom_rule {
+    name     = "ratelimit"
+    type     = "RateLimitRule"
+    action   = "Block"
+    priority = 100
+    rate_limit_threshold = 1000
+    rate_limit_duration_in_minutes = 1
+    match_condition {
+      match_variable = "RemoteAddr"
+      operator       = "IPMatch"
+      match_values   = ["0.0.0.0/0"]
+    }
+  }
+}</code></pre>
+    <p>You then add an endpoint, an origin group with health probes, an origin, a route, and a security policy that binds the WAF to the domain. The shape is verbose but predictable.</p>
+
+    <h3>Portal</h3>
+    <p>Create a Front Door and CDN profile, choose Premium, add an endpoint, define an origin group with a health probe, add your origin (enable Private Link here), add a route mapping the domain and path to the origin group, then create a WAF policy and associate it with the domain. Then, and people forget this, go and close the origin's public access.</p>
+
+    <h2>AWS: there is no single equivalent, and that is the point</h2>
+    <p>Ask for "the AWS Front Door" and you get a shrug, because AWS splits the same job across several services. That is not a flaw, it is a different philosophy: purpose-built components you compose.</p>
+    <ul>
+      <li><strong>CloudFront</strong> is the CDN and edge: caching, TLS termination, edge compute through CloudFront Functions and Lambda@Edge.</li>
+      <li><strong>AWS WAF</strong> attaches to the CloudFront distribution and gives you managed rule groups, rate limiting, and Bot Control.</li>
+      <li><strong>AWS Shield</strong> is the DDoS layer. Standard is on by default; Advanced adds response team support and cost protection.</li>
+      <li><strong>Route 53</strong> handles DNS and global routing policies.</li>
+      <li><strong>Global Accelerator</strong> gives you anycast entry for traffic that is not HTTP, or where you want static IPs.</li>
+      <li><strong>Origin Access Control</strong> and <strong>Origin Shield</strong> protect and consolidate access to the origin.</li>
+    </ul>
+    <p>So Azure Front Door is roughly CloudFront plus AWS WAF plus Shield, with a bit of Route 53 and Global Accelerator depending on what you are doing.</p>
+
+    <figure class="fig" tabindex="0" role="button" aria-label="Expand the AWS edge architecture diagram">
+      <span class="zoom" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></span>
+      <svg viewBox="0 0 800 330" role="img" aria-label="AWS edge: Route 53 to CloudFront with AWS WAF and Shield, reaching S3 or an ALB via Origin Access Control, or an on-premises custom origin over Direct Connect.">
+        <text x="14" y="20" class="d-lab">aws</text>
+        <rect x="14" y="120" width="86" height="60" rx="9" class="d-box-soft"/>
+        <text x="30" y="146" class="d-t" style="font-size:12px">Users</text>
+        <text x="30" y="164" class="d-s">global</text>
+        <path class="d-line" d="M100 150 H150"/>
+        <circle class="pkt p1" cx="106" cy="150" r="3.4"/>
+        <rect x="150" y="122" width="76" height="56" rx="8" class="d-box-soft"/>
+        <text x="164" y="146" class="d-t" style="font-size:11px">Route 53</text>
+        <text x="164" y="164" class="d-s">DNS</text>
+        <path class="d-line" d="M226 150 H262"/>
+        <rect x="262" y="86" width="150" height="128" rx="11" class="d-edge"/>
+        <circle class="pulse" cx="337" cy="112" r="14" fill="#2dd4bf" opacity=".3"/>
+        <text x="281" y="118" class="d-t" fill="#5eead4">CloudFront</text>
+        <text x="281" y="140" class="d-s">edge + cache</text>
+        <text x="281" y="158" class="d-s">AWS WAF</text>
+        <text x="281" y="176" class="d-s">Shield DDoS</text>
+        <text x="281" y="196" class="d-s">Origin Shield</text>
+        <path class="d-line" d="M412 122 H540"/>
+        <circle class="pkt p1" cx="420" cy="122" r="3.4"/>
+        <text x="424" y="112" class="d-lab">OAC</text>
+        <rect x="540" y="90" width="150" height="64" rx="9" class="d-box"/>
+        <text x="560" y="116" class="d-t" style="font-size:12px">AWS origin</text>
+        <text x="560" y="134" class="d-s">S3, ALB, API GW</text>
+        <path class="d-line-b" d="M412 186 H540"/>
+        <circle class="pkt-b p2" cx="420" cy="186" r="3.4"/>
+        <text x="424" y="176" class="d-lab-b">direct connect</text>
+        <rect x="540" y="156" width="150" height="64" rx="9" class="d-hyb"/>
+        <text x="560" y="182" class="d-t" style="font-size:12px" fill="#4aa8ff">Custom origin</text>
+        <text x="560" y="200" class="d-s">on-premises</text>
+        <text x="706" y="120" class="d-lab">cloud</text>
+        <text x="706" y="188" class="d-lab-b">hybrid</text>
+        <rect x="14" y="248" width="676" height="56" rx="9" fill="none" stroke="rgba(245,183,60,0.32)"/>
+        <text x="34" y="270" class="d-lab-a">origin lockdown</text>
+        <text x="34" y="292" class="d-s">Origin Access Control for S3. For an ALB, restrict to the CloudFront prefix list and verify a shared secret header.</text>
+      </svg>
+      <figcaption>The AWS edge, assembled from parts. Same job as Front Door, more pieces, more control. Click to enlarge.</figcaption>
+    </figure>
+
+    <p><strong>Cloud model.</strong> CloudFront in front of S3 with Origin Access Control, or in front of an Application Load Balancer or API Gateway, with AWS WAF attached to the distribution.</p>
+    <p><strong>Hybrid model.</strong> CloudFront supports custom origins, so an on-premises web server works, typically reached over Direct Connect or a VPN. Global Accelerator is the option when the traffic is not HTTP, or you need fixed anycast IPs in front of on-premises endpoints.</p>
+
+    <h3>Terraform</h3>
+    <pre><code>resource "aws_wafv2_web_acl" "edge" {
+  name  = "edge-acl"
+  scope = "CLOUDFRONT"          # must be us-east-1 for CloudFront
+  default_action { allow {} }
+
+  rule {
+    name     = "common"
+    priority = 1
+    override_action { none {} }
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesCommonRuleSet"
+        vendor_name = "AWS"
+      }
+    }
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "common"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  visibility_config {
+    cloudwatch_metrics_enabled = true
+    metric_name                = "edge-acl"
+    sampled_requests_enabled   = true
+  }
+}
+
+resource "aws_cloudfront_origin_access_control" "oac" {
+  name                              = "s3-oac"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
+}
+
+resource "aws_cloudfront_distribution" "cdn" {
+  enabled     = true
+  web_acl_id  = aws_wafv2_web_acl.edge.arn
+
+  origin {
+    domain_name              = aws_s3_bucket.site.bucket_regional_domain_name
+    origin_id                = "s3origin"
+    origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
+  }
+
+  default_cache_behavior {
+    target_origin_id       = "s3origin"
+    viewer_protocol_policy = "redirect-to-https"
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
+    cache_policy_id        = data.aws_cloudfront_cache_policy.optimized.id
+  }
+
+  viewer_certificate {
+    acm_certificate_arn      = aws_acm_certificate.cert.arn
+    minimum_protocol_version = "TLSv1.2_2021"
+    ssl_support_method       = "sni-only"
+  }
+
+  restrictions { geo_restriction { restriction_type = "none" } }
+}</code></pre>
+    <p>Note the trap in that first block: a CloudFront web ACL must be created in <code>us-east-1</code>, whatever region the rest of your stack lives in.</p>
+
+    <h3>Console</h3>
+    <p>Create the distribution, set the origin (choose Origin Access Control for S3, and let the console update the bucket policy for you), attach a WAF web ACL, set the viewer protocol policy to redirect to HTTPS, set a minimum TLS version, and attach the ACM certificate from us-east-1.</p>
+
+    <h2>GCP: one product, fewer moving parts</h2>
+    <p>Google's answer is the <strong>Global External Application Load Balancer</strong>, and it is the tidiest of the three. One anycast IP, and Cloud CDN and Cloud Armor are configuration on the backend service rather than separate products to wire together. Traffic enters Google's network at the nearest point of presence and rides the private backbone from there.</p>
+    <ul>
+      <li><strong>Cloud CDN</strong> is effectively a switch on the backend service.</li>
+      <li><strong>Cloud Armor</strong> is the WAF and DDoS layer: preconfigured rules, rate limiting, geo restrictions, bot management, and adaptive protection.</li>
+      <li><strong>Identity-Aware Proxy</strong> puts identity in front of the application at the edge, which is the piece the other two do not have in quite the same way.</li>
+    </ul>
+
+    <figure class="fig" tabindex="0" role="button" aria-label="Expand the GCP global load balancer architecture diagram">
+      <span class="zoom" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></span>
+      <svg viewBox="0 0 800 330" role="img" aria-label="GCP: one anycast IP into the Global External Application Load Balancer with Cloud Armor and Cloud CDN, reaching GKE or Cloud Run backends, or on-premises via a hybrid network endpoint group over Cloud Interconnect.">
+        <text x="14" y="20" class="d-lab">gcp</text>
+        <rect x="14" y="120" width="96" height="60" rx="9" class="d-box-soft"/>
+        <text x="32" y="146" class="d-t" style="font-size:12px">Users</text>
+        <text x="32" y="164" class="d-s">global</text>
+        <path class="d-line" d="M110 150 H186"/>
+        <circle class="pkt p1" cx="118" cy="150" r="3.4"/>
+        <text x="118" y="140" class="d-lab">one anycast IP</text>
+        <rect x="186" y="86" width="160" height="128" rx="11" class="d-edge"/>
+        <circle class="pulse" cx="266" cy="112" r="14" fill="#2dd4bf" opacity=".3"/>
+        <text x="205" y="118" class="d-t" fill="#5eead4">Global ALB</text>
+        <text x="205" y="140" class="d-s">Google front end</text>
+        <text x="205" y="158" class="d-s">Cloud Armor WAF</text>
+        <text x="205" y="176" class="d-s">Cloud CDN</text>
+        <text x="205" y="196" class="d-s">IAP identity</text>
+        <path class="d-line" d="M346 122 H480"/>
+        <circle class="pkt p1" cx="354" cy="122" r="3.4"/>
+        <text x="360" y="112" class="d-lab">backend service</text>
+        <rect x="480" y="90" width="152" height="64" rx="9" class="d-box"/>
+        <text x="500" y="116" class="d-t" style="font-size:12px">GCP backend</text>
+        <text x="500" y="134" class="d-s">GKE, Cloud Run, MIG</text>
+        <path class="d-line-b" d="M346 186 H480"/>
+        <circle class="pkt-b p2" cx="354" cy="186" r="3.4"/>
+        <text x="360" y="176" class="d-lab-b">hybrid NEG</text>
+        <rect x="480" y="156" width="152" height="64" rx="9" class="d-hyb"/>
+        <text x="500" y="182" class="d-t" style="font-size:12px" fill="#4aa8ff">On-premises</text>
+        <text x="500" y="200" class="d-s">via Interconnect</text>
+        <text x="650" y="120" class="d-lab">cloud</text>
+        <text x="650" y="188" class="d-lab-b">hybrid</text>
+        <rect x="14" y="248" width="618" height="56" rx="9" fill="none" stroke="rgba(245,183,60,0.32)"/>
+        <text x="34" y="270" class="d-lab-a">origin lockdown</text>
+        <text x="34" y="292" class="d-s">Backends take traffic only from the Google front end ranges. Cloud Armor policy attaches to the backend service.</text>
+      </svg>
+      <figcaption>GCP keeps it in one place. CDN and WAF are settings on the backend service, not separate products to assemble. Click to enlarge.</figcaption>
+    </figure>
+
+    <p><strong>Cloud model.</strong> The global load balancer in front of GKE, Cloud Run, or managed instance groups, with Cloud Armor attached to the backend service and Cloud CDN enabled where caching helps.</p>
+    <p><strong>Hybrid model.</strong> This is GCP's neat trick: a <strong>hybrid network endpoint group</strong> lets the global load balancer treat an on-premises or even another cloud's endpoint as a backend, reached over Cloud Interconnect. It is the cleanest hybrid story of the three.</p>
+
+    <h3>Terraform</h3>
+    <pre><code>resource "google_compute_security_policy" "armor" {
+  name = "edge-armor"
+
+  rule {
+    action   = "throttle"
+    priority = 100
+    match {
+      versioned_expr = "SRC_IPS_V1"
+      config { src_ip_ranges = ["*"] }
+    }
+    rate_limit_options {
+      conform_action = "allow"
+      exceed_action  = "deny(429)"
+      enforce_on_key = "IP"
+      rate_limit_threshold {
+        count        = 1000
+        interval_sec = 60
+      }
+    }
+  }
+
+  rule {
+    action   = "deny(403)"
+    priority = 200
+    match {
+      expr { expression = "evaluatePreconfiguredExpr('xss-v33-stable')" }
+    }
+  }
+
+  rule {
+    action   = "allow"
+    priority = 2147483647
+    match {
+      versioned_expr = "SRC_IPS_V1"
+      config { src_ip_ranges = ["*"] }
+    }
+  }
+}
+
+resource "google_compute_backend_service" "be" {
+  name            = "web-backend"
+  protocol        = "HTTPS"
+  enable_cdn      = true                # Cloud CDN is a flag, not a product
+  security_policy = google_compute_security_policy.armor.id
+  health_checks   = [google_compute_health_check.hc.id]
+
+  backend {
+    group = google_compute_region_network_endpoint_group.neg.id
+  }
+}</code></pre>
+
+    <h3>Console</h3>
+    <p>Create a global external application load balancer, define the backend service, tick Cloud CDN, attach a Cloud Armor policy, add the URL map and host rules, then attach a Google-managed certificate to the HTTPS target proxy.</p>
+
+    <h2>Side by side</h2>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Capability</th><th>Azure</th><th>AWS</th><th>GCP</th></tr></thead>
+        <tbody>
+          <tr><td>global edge</td><td>Front Door (Standard, Premium)</td><td>CloudFront</td><td>Global External Application LB</td></tr>
+          <tr><td>waf</td><td>Front Door WAF (Premium for managed rules)</td><td>AWS WAF (attached to the distribution)</td><td>Cloud Armor (on the backend service)</td></tr>
+          <tr><td>ddos</td><td>Azure DDoS Protection, absorbed at the edge</td><td>Shield Standard, Shield Advanced</td><td>Cloud Armor, built in at the front end</td></tr>
+          <tr><td>cdn</td><td>Built into Front Door</td><td>CloudFront is the CDN</td><td>Cloud CDN, a flag on the backend</td></tr>
+          <tr><td>private origin</td><td>Private Link origins (Premium)</td><td>Origin Access Control, prefix list, VPC origins</td><td>Front end ranges plus firewall rules</td></tr>
+          <tr><td>regional waf</td><td>Application Gateway WAF v2</td><td>AWS WAF on an ALB</td><td>Regional external ALB with Cloud Armor</td></tr>
+          <tr><td>non-http</td><td>Azure Load Balancer</td><td>Global Accelerator, NLB</td><td>Network load balancer</td></tr>
+          <tr><td>hybrid origin</td><td>Any HTTP endpoint, ExpressRoute</td><td>Custom origin, Direct Connect</td><td>Hybrid NEG, Interconnect</td></tr>
+          <tr><td>edge compute</td><td>Rules engine</td><td>CloudFront Functions, Lambda@Edge</td><td>Limited, use Cloud Run</td></tr>
+          <tr><td>identity at edge</td><td>Entra ID upstream</td><td>Lambda@Edge or Cognito</td><td>Identity-Aware Proxy</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The honest summary: <strong>Azure</strong> consolidates the most into one product, which makes it the easiest to reason about and the easiest to get wrong if you pick Standard and then need Premium features. <strong>AWS</strong> gives you the most control and the most parts to assemble, so it rewards teams who like composing primitives. <strong>GCP</strong> has the cleanest model, one load balancer with security and caching as settings, and the best hybrid backend story.</p>
+
+    <h2>The security features people underuse</h2>
+    <ul>
+      <li><strong>Origin lockdown.</strong> The single most common failure. A WAF at the edge is decorative if your origin still answers requests from the internet. Use Private Link on Azure, Origin Access Control or the CloudFront prefix list on AWS, and front end ranges plus firewall rules on GCP. Then test it: curl the origin directly and confirm you are refused.</li>
+      <li><strong>Prevention mode.</strong> WAFs go into detection mode "just for a week" during rollout and quietly stay there for a year. Detection logs an attack. Prevention stops it. Put a date on the switch.</li>
+      <li><strong>Rate limiting.</strong> Cheap, effective, and skipped. It blunts credential stuffing and scraping before either reaches your application.</li>
+      <li><strong>Bot management.</strong> A large share of your traffic is automated. Some of it is welcome, most of it is not.</li>
+      <li><strong>Geo filtering.</strong> If you only serve the UK, saying so at the edge removes a lot of noise.</li>
+      <li><strong>TLS floor.</strong> Set a minimum version. The default is often more permissive than your compliance team assumes.</li>
+      <li><strong>Header verification.</strong> Belt and braces on origin lockdown: have the edge inject a secret header and have the origin reject anything without it.</li>
+      <li><strong>Logs into the SIEM.</strong> WAF logs are an attack feed. Send them to Sentinel, to CloudWatch, or to Cloud Logging, and alert on the blocks.</li>
+    </ul>
+
+    <h2>The gotchas</h2>
+    <ul>
+      <li><strong>Picking the wrong Azure tier.</strong> Standard has no managed WAF rule sets and no Private Link origins. Teams discover this after go-live.</li>
+      <li><strong>Confusing global with regional.</strong> Front Door is not Application Gateway, and CloudFront is not an ALB. They solve different problems and often coexist.</li>
+      <li><strong>The us-east-1 rule.</strong> CloudFront ACM certificates and CloudFront-scoped WAF ACLs must live in us-east-1, whatever region you actually run in.</li>
+      <li><strong>Caching what should never be cached.</strong> A cache key that ignores the auth header can serve one user's response to another. This is a real breach class, not a theoretical one.</li>
+      <li><strong>Health probes that lie.</strong> A probe hitting a static path returns healthy while the application is broken behind it. Probe something that exercises the app.</li>
+      <li><strong>Forgetting the layer 4 case.</strong> None of these front raw TCP or UDP. That is a different service.</li>
+      <li><strong>Cost surprises.</strong> Edge pricing is usage-based and, on Azure Premium, carries a meaningful base fee. Model it before you commit.</li>
+    </ul>
+
+    <h2>So why is it underrated?</h2>
+    <p>My honest theory: the edge is boring in the way that load-bearing walls are boring. It is provisioned once, usually during a migration, often by whoever was closest to the DNS. It does not get a conference track. Nobody gets promoted for tuning a WAF rule set. And because it works, quietly, from day one, nobody revisits it.</p>
+    <p>But it is where your TLS terminates, where your DDoS is absorbed, and where the first hostile request of the day arrives. If a service mesh deserves a design review, so does the thing standing between the entire internet and your application.</p>
+    <p>Two questions worth asking about your own estate this week. Can anyone reach your origin without going through the edge? And is your WAF actually blocking, or just taking notes?</p>
+  </article>
+
+  <div class="related">
+    <div class="related-eyebrow"><span class="line"></span>Related reading</div>
+    <div class="related-grid">
+      <a class="related-card" href="https://saleemyousaf.co.uk/articles/cloud-iam-blast-radius/">
+        <div class="rc-cat">Cloud Security</div>
+        <div class="rc-t">Cloud IAM and the blast-radius problem</div>
+        <div class="rc-go">Read &#8599;</div>
+      </a>
+      <a class="related-card" href="https://saleemyousaf.co.uk/articles/cryptographic-keys-pki-rotation/">
+        <div class="rc-cat">Cryptography</div>
+        <div class="rc-t">Cryptographic keys, key material and PKI</div>
+        <div class="rc-go">Read &#8599;</div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Saleem <span>Yousaf</span></div>
+      <div class="footer-desc">Cloud &amp; Cyber Security Architect &middot; AWS &middot; Azure &middot; Zero Trust &middot; AI Governance &middot; OT Security &middot; Enterprise Architecture</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
+      <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener">Cyber Spartans</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
+    <a href="https://saleemyousaf.co.uk/privacy-policy/" style="font-family:var(--mono);font-size:12px;color:var(--muted2);text-decoration:none;">Privacy Policy</a>
+  </div>
+  <div class="footer-cross">
+    <a class="cross-bf" href="https://breachforge.co.uk" target="_blank" rel="noopener">&#x2B61; breachforge.co.uk</a>
+    <a class="cross-cs" href="https://cyberspartans.co.uk" target="_blank" rel="noopener">&#x2B22; cyberspartans.co.uk</a>
+  </div>
+</footer>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged diagram">
+  <div class="lb-inner"><button class="lb-close" id="lbClose" type="button" aria-label="Close">&#10005;</button><div id="lbBody"></div></div>
+</div>
+
+<script src="/nav.js" defer></script>
+<script>
+(function(){
+  var lb=document.getElementById('lb'),body=document.getElementById('lbBody'),close=document.getElementById('lbClose'),last=null;
+  function open(fig){
+    var svg=fig.querySelector('svg[role="img"]'); if(!svg) return;
+    body.innerHTML=''; body.appendChild(svg.cloneNode(true));
+    last=document.activeElement; lb.classList.add('open'); document.body.style.overflow='hidden'; close.focus();
+  }
+  function shut(){ lb.classList.remove('open'); document.body.style.overflow=''; body.innerHTML=''; if(last&&last.focus)last.focus(); }
+  document.querySelectorAll('figure.fig').forEach(function(f){
+    f.addEventListener('click',function(){open(f);});
+    f.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){e.preventDefault();open(f);} });
+  });
+  close.addEventListener('click',shut);
+  lb.addEventListener('click',function(e){ if(e.target===lb) shut(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&lb.classList.contains('open')) shut(); });
+})();
+</script>
+</body>
+</html>
