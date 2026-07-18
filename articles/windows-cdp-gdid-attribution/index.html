@@ -1,1 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The identifier you never chose: Windows CDP, the GDID, and how Scattered Spider got named</title>
+<meta name="description" content="The Connected Devices Platform and the Global Device Identifier are convenience features that double as durable forensic evidence. How the GDID works, and how it helped name a Scattered Spider suspect.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/windows-cdp-gdid-attribution/">
 
+<meta property="og:type" content="article">
+<meta property="og:title" content="The identifier you never chose: Windows CDP, the GDID, and how Scattered Spider got named">
+<meta property="og:description" content="The Connected Devices Platform and the Global Device Identifier are convenience features that double as durable forensic evidence.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/windows-cdp-gdid-attribution/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/assets/og-windows-cdp-gdid-clean.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The identifier you never chose: Windows CDP, the GDID, and how Scattered Spider got named">
+<meta name="twitter:description" content="A convenience feature baked into Windows doubles as durable forensic evidence.">
+<meta name="twitter:image" content="https://saleemyousaf.co.uk/assets/og-windows-cdp-gdid-clean.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "The identifier you never chose: Windows CDP, the GDID, and how Scattered Spider got named",
+  "description": "The Connected Devices Platform and the Global Device Identifier are convenience features that double as durable forensic evidence, and part of how a Scattered Spider suspect was named.",
+  "image": "https://saleemyousaf.co.uk/assets/og-windows-cdp-gdid-clean.png",
+  "articleSection": "Threat",
+  "datePublished": "2026-07-31",
+  "author": {
+    "@type": "Person",
+    "name": "Saleem Yousaf",
+    "url": "https://saleemyousaf.co.uk",
+    "sameAs": [
+      "https://www.linkedin.com/in/saleem-yousaf",
+      "https://github.com/saleem-yousaf",
+      "https://cyberspartans.co.uk"
+    ]
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Saleem Yousaf",
+    "url": "https://saleemyousaf.co.uk"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://saleemyousaf.co.uk/articles/windows-cdp-gdid-attribution/"
+  }
+}
+</script>
+
+<style>
+:root{
+  --slate-0:#090c10; --slate-1:#0f1318; --slate-2:#161b22;
+  --teal:#2dd4bf; --bright:#5eead4; --amber:#f5b73c; --blue:#4aa8ff; --purple:#a78bfa;
+  --ink:#f4f6f8; --muted:#aeb5bf; --faint:#6c7682; --line:rgba(255,255,255,.08);
+  --emerald:#2f9e6f; --cyan:#00d4ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--slate-0); color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif; font-size:19px; line-height:1.72;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:760px; margin:0 auto; padding:0 24px}
+a{color:var(--teal); text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* hero */
+.hero{padding:72px 0 8px}
+.eyebrow{font-family:"DM Mono",monospace; font-size:13px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--teal)}
+h1{font-family:"Syne",sans-serif; font-weight:800; font-size:clamp(30px,5.4vw,50px);
+  line-height:1.06; letter-spacing:-.01em; margin:18px 0 20px}
+.chips{display:flex; flex-wrap:wrap; gap:10px 18px; font-family:"DM Mono",monospace;
+  font-size:12.5px; color:var(--faint); letter-spacing:.03em}
+.chips span{display:inline-flex; align-items:center; gap:7px}
+.dot{width:7px; height:7px; border-radius:50%; background:var(--teal);
+  box-shadow:0 0 10px var(--teal)}
+
+/* body */
+article{padding:20px 0 8px}
+article h2{font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(23px,3.6vw,30px);
+  line-height:1.16; margin:52px 0 14px; letter-spacing:-.01em}
+article h3{font-family:"Syne",sans-serif; font-weight:600; font-size:20px; margin:34px 0 10px}
+article p{margin:0 0 20px; color:#e7ebef}
+.lead{font-size:21px; color:#eef1f4}
+code{font-family:"DM Mono",monospace; font-size:.86em; background:var(--slate-2);
+  padding:2px 7px; border-radius:6px; color:var(--bright); word-break:break-word}
+strong{color:#fff; font-weight:600}
+
+/* teal callout */
+.callout{border:1px solid rgba(45,212,191,.32); background:linear-gradient(180deg,
+  rgba(45,212,191,.08),rgba(45,212,191,.02)); border-radius:14px; padding:22px 24px;
+  margin:30px 0; font-size:18px}
+.callout .k{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px}
+
+/* figure + lightbox trigger */
+figure{margin:38px 0}
+.figframe{border:1px solid var(--line); border-radius:16px; background:
+  radial-gradient(120% 140% at 80% 0%, rgba(45,212,191,.06), transparent 60%),var(--slate-1);
+  padding:20px; cursor:zoom-in; position:relative}
+.figframe::after{content:"click to expand"; position:absolute; top:12px; right:16px;
+  font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; color:var(--faint)}
+.figframe svg{width:100%; height:auto; display:block}
+figcaption{font-size:14px; color:var(--faint); margin-top:12px; text-align:center;
+  font-family:"DM Mono",monospace; letter-spacing:.02em}
+
+/* diagram helper classes */
+.d-box{fill:var(--slate-2); stroke:rgba(45,212,191,.45); stroke-width:1.4}
+.d-box-soft{fill:var(--slate-1); stroke:var(--line); stroke-width:1.2}
+.d-t{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:15px}
+.d-s{fill:var(--muted); font-family:"Inter",sans-serif; font-size:12.5px}
+.d-lab{fill:var(--teal); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-line{stroke:var(--teal); stroke-width:1.6; fill:none}
+.d-mono{fill:var(--bright); font-family:"DM Mono",monospace; font-size:12px}
+.d-amber{fill:var(--amber); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.06em}
+
+/* lightbox */
+.lb{position:fixed; inset:0; background:rgba(4,6,9,.94); display:none;
+  align-items:center; justify-content:center; z-index:90; padding:2vh 2vw}
+.lb.open{display:flex}
+.lb svg{width:96vw; height:94vh}
+.lb-close{position:fixed; top:20px; right:26px; font-family:"DM Mono",monospace;
+  color:var(--muted); font-size:14px; cursor:pointer; letter-spacing:.1em}
+
+/* related */
+.related{margin:60px 0 20px}
+.related h2{font-size:20px; margin-bottom:18px}
+.rgrid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.rcard{border:1px solid var(--line); border-radius:14px; padding:18px 18px 20px;
+  background:var(--slate-1); transition:border-color .2s}
+.rcard:hover{border-color:rgba(45,212,191,.4)}
+.rcard .c{font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--teal)}
+.rcard .t{font-family:"Syne",sans-serif; font-weight:600; font-size:16px; margin-top:8px;
+  color:#fff; line-height:1.25}
+
+/* footer */
+footer{border-top:1px solid var(--line); margin-top:60px; padding:40px 0 60px;
+  color:var(--faint); font-size:14px}
+.footer-links{display:flex; flex-wrap:wrap; gap:16px; margin-bottom:22px;
+  font-family:"DM Mono",monospace; font-size:13px}
+.pills{display:flex; gap:12px; margin:22px 0}
+.pill{border-radius:999px; padding:8px 16px; font-family:"DM Mono",monospace; font-size:12px;
+  letter-spacing:.04em; border:1px solid}
+.pill.cs{color:var(--emerald); border-color:rgba(47,158,111,.5)}
+.pill.bf{color:var(--cyan); border-color:rgba(0,212,255,.5)}
+.legal{font-size:12.5px; color:var(--faint)}
+@media(max-width:560px){.rgrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+<script src="/nav.js" defer></script>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">// device identity</div>
+    <h1>The identifier you never chose: Windows CDP, the GDID, and how Scattered Spider got named</h1>
+    <div class="chips">
+      <span><span class="dot"></span>Saleem Yousaf</span>
+      <span>31 Jul 2026</span>
+      <span>9 min read</span>
+    </div>
+  </header>
+
+  <article>
+    <p class="lead">A nineteen-year-old was stopped at Helsinki airport this year as he tried to board a flight to Japan. Finnish officers seized two two-terabyte drives. Part of what put his name on the US paperwork was a number sitting in his own Windows registry, one he almost certainly did not know existed. It had followed his machine across VPNs, proxy servers, and three countries.</p>
+
+    <p>That number is the Global Device Identifier, the GDID. It sits downstream of a Windows subsystem most people never think about: the Connected Devices Platform. If you build or defend Windows estates, both are worth understanding, because they are a clean example of something that is easy to forget when you are on the offensive side of a keyboard. The platform is designed to remember, and it does not forget just because you would like it to.</p>
+
+    <h2>What the Connected Devices Platform actually does</h2>
+    <p>CDP is the plumbing behind the cross-device features Microsoft has been adding since Windows 10. Phone Link, Nearby Sharing, the shared clipboard, cross-device notifications, and the Activity History timeline all sit on top of it. Two services carry the work, <code>CDPSvc</code> and <code>CDPUserSvc</code>, and they talk to Microsoft cloud services over the network to keep a device's relationships and activity in sync.</p>
+
+    <p>For a defender, the interesting part is the trail it leaves on disk. Under <code>%LOCALAPPDATA%\ConnectedDevicesPlatform\</code> you find a per-user folder, usually named <code>L.&lt;username&gt;</code>, containing an SQLite database called <code>ActivitiesCache.db</code>. Introduced in Windows 10 version 1803 and on by default, it records application and file activity, including how long something was open, and it holds roughly the last thirty days. It has been a staple of Windows forensics for years. Open-source tooling such as WxTCmd parses it straight into a timeline, and in an incident it answers plain questions: what ran, which files were touched, and when. If the account was set to sync, the associated <code>.cdp</code> file even records the last sync time and the account identifier tied to it.</p>
+
+    <p>None of that is exotic. It is the point, though. The convenience feature and the forensic artifact are the same thing.</p>
+
+    <h2>The GDID: a number the server hands you</h2>
+    <p>Until recently almost nobody outside Microsoft had heard of the GDID, and that is not an accident. Microsoft documents it in exactly one place: a single column, <code>GlobalDeviceId</code>, in the Azure Monitor reference for Delivery Optimization, described only as an identifier used internally. It reached daylight because it turned up in a federal criminal complaint, after which researchers took the identifier apart to work out where it comes from.</p>
+
+    <p>The chain they reconstructed, corroborated by reporting on the complaint, runs like this. When a Windows device is provisioned against a Microsoft account, the Microsoft account service, <code>wlidsvc</code>, contacts login.live.com and receives back a Device PUID, a Passport Unique ID. It is a 64-bit value. Windows does not compute it from your hardware or serial numbers. The server assigns it, and the machine stores it in plain text in the registry under <code>HKCU\SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties</code>. The Connected Devices Platform, running as <code>cdp.dll</code> inside CDPSvc, reads that value and registers the device into Microsoft's device directory graph. Delivery Optimization then reports it as <code>GlobalDeviceId</code>, written in the graph as <code>g:</code> followed by a long decimal.</p>
+
+    <figure>
+      <div class="figframe">
+        <svg role="img" viewBox="0 0 1200 660" xmlns="http://www.w3.org/2000/svg" aria-label="How the GDID is issued by Microsoft's servers, registered by the Connected Devices Platform, and later used as forensic evidence to attribute activity to a suspect.">
+          <rect x="0" y="0" width="1200" height="660" fill="none"/>
+          <text x="34" y="46" class="d-lab">// FROM CONVENIENCE FEATURE TO COURT EXHIBIT</text>
+
+          <!-- stage boxes -->
+          <g>
+            <rect class="d-box-soft" x="34" y="80" width="250" height="118" rx="12"/>
+            <text x="52" y="116" class="d-t">Microsoft account</text>
+            <text x="52" y="140" class="d-s">wlidsvc contacts</text>
+            <text x="52" y="160" class="d-s">login.live.com at sign-in</text>
+            <text x="52" y="184" class="d-lab">SERVER ASSIGNS PUID</text>
+          </g>
+
+          <path class="d-line" d="M284 139 H330" marker-end="url(#ar)"/>
+
+          <g>
+            <rect class="d-box" x="330" y="80" width="250" height="118" rx="12"/>
+            <text x="348" y="116" class="d-t">Device PUID</text>
+            <text x="348" y="140" class="d-s">64-bit value, not derived</text>
+            <text x="348" y="160" class="d-s">from your hardware</text>
+            <text x="348" y="184" class="d-mono">HKCU\...\IdentityCRL</text>
+          </g>
+
+          <path class="d-line" d="M580 139 H626" marker-end="url(#ar)"/>
+
+          <g>
+            <rect class="d-box" x="626" y="80" width="250" height="118" rx="12"/>
+            <text x="644" y="116" class="d-t">CDP registers it</text>
+            <text x="644" y="140" class="d-s">cdp.dll in CDPSvc reads</text>
+            <text x="644" y="160" class="d-s">the value, syncs it to the</text>
+            <text x="644" y="180" class="d-s">device directory graph</text>
+          </g>
+
+          <path class="d-line" d="M876 139 H922" marker-end="url(#ar)"/>
+
+          <g>
+            <rect class="d-box" x="922" y="80" width="244" height="118" rx="12"/>
+            <text x="940" y="116" class="d-t">Reported out</text>
+            <text x="940" y="140" class="d-s">Delivery Optimization</text>
+            <text x="940" y="160" class="d-s">surfaces GlobalDeviceId</text>
+            <text x="940" y="184" class="d-mono">g:6755467234350028</text>
+          </g>
+
+          <!-- persistence band -->
+          <rect x="34" y="248" width="1132" height="96" rx="12" fill="rgba(245,183,60,.06)"
+                stroke="rgba(245,183,60,.35)" stroke-width="1.2"/>
+          <text x="54" y="284" class="d-amber">PERSISTS THROUGH</text>
+          <text x="54" y="312" class="d-s">Monthly updates  ·  deletion of the local ConnectedDevicesPlatform folder  ·  a switch to a local account  ·  a fresh reinstall re-binds on re-registration</text>
+
+          <!-- downward arrow -->
+          <path class="d-line" d="M600 344 V400" marker-end="url(#ar)"/>
+
+          <!-- anonymity layer -->
+          <g>
+            <rect class="d-box-soft" x="230" y="400" width="360" height="104" rx="12"/>
+            <text x="250" y="436" class="d-t">Suspect's anonymity layer</text>
+            <text x="250" y="462" class="d-s">VPN, proxy chains, movement</text>
+            <text x="250" y="482" class="d-s">across three countries</text>
+          </g>
+
+          <g>
+            <rect class="d-box-soft" x="610" y="400" width="360" height="104" rx="12"/>
+            <text x="630" y="436" class="d-t">Stable identifier underneath</text>
+            <text x="630" y="462" class="d-s">the same GDID reported the</text>
+            <text x="630" y="482" class="d-s">whole time, tied to the account</text>
+          </g>
+
+          <path class="d-line" d="M590 452 H610"/>
+
+          <!-- outcome -->
+          <path class="d-line" d="M780 504 V556" marker-end="url(#ar)"/>
+          <rect class="d-box" x="430" y="556" width="700" height="72" rx="12"
+                fill="rgba(45,212,191,.10)"/>
+          <text x="452" y="590" class="d-t">Correlated in the complaint, activity attributed to a person</text>
+          <text x="452" y="614" class="d-s">United States v. Peter Stokes: the GDID, alongside other telemetry, links one machine to the accounts behind it</text>
+
+          <defs>
+            <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+              <path d="M0 0 L9 4.5 L0 9 Z" fill="#2dd4bf"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+      <figcaption>How a convenience identifier becomes evidence. Click to expand.</figcaption>
+    </figure>
+
+    <p>The awkward property, for anyone hoping to stay anonymous, is how durable it is. It survives monthly Windows updates unchanged. Deleting the local <code>ConnectedDevicesPlatform</code> folder does not remove it, because the value is restored from the identity store. Signing in with a local account rather than a Microsoft account does not reliably avoid it either, because CDP has an anonymous device path that still produces an identifier. A clean reinstall issues a new GDID, but the device is bound to that fresh one the moment it registers again. It is not a bug or a novel vulnerability. It is a structural identifier baked into how Windows talks to Microsoft's cloud, and it reports through CDP and Delivery Optimization even when the classic telemetry service is switched off.</p>
+
+    <div class="callout">
+      <span class="k">The tension worth naming</span>
+      This is a persistent, server-side identifier that ordinary settings toggles do not fully sever, tied to an account by default, and most people have never heard of it. That deserves scrutiny on its own privacy terms. But it is exactly that durability that turns it into evidence.
+    </div>
+
+    <h2>Why that durability became a court exhibit</h2>
+    <p>In the case of Peter Stokes, filed in the Northern District of Illinois, the complaint reportedly used the GDID, alongside other telemetry, to follow one Windows machine across VPNs and proxies and three countries, and to link that machine to the accounts the suspect logged into. Stokes, known online as Bouquet, is accused of being an active member of Scattered Spider, tied to at least four intrusions including a 2025 attack on a luxury jewellery retailer with an eight-million-dollar demand. The affidavit is said to correlate the identifier's IP and browsing history with the accounts he used. He was stopped at Helsinki airport with those two drives, and the US is seeking his extradition.</p>
+
+    <p>Strip the technology away and the lesson is old. He trusted a VPN to make his location a mystery, and the operating system underneath the VPN was quietly maintaining a stable name for the machine the whole time. The anonymity layer he chose sat on top of an identifier he did not choose and could not easily remove.</p>
+
+    <h2>Scattered Spider, and the run of arrests</h2>
+    <p>Scattered Spider is a useful worked example because it is not a classic malware crew. Tracked by vendors as UNC3944, Octo Tempest, and 0ktapus, and part of the loose English-speaking network known as The Com, the group made its name on social engineering rather than exploits. The signature move, documented in a joint CISA and FBI advisory back in 2023, is a phone call to a help desk, posing as an employee who needs a password or MFA method reset, backed by adversary-in-the-middle phishing pages and SIM swapping to intercept codes. Once inside, they enrol their own device for MFA and operate as a legitimate user with valid credentials, which is precisely why they are hard to catch in the logs. They blend in.</p>
+
+    <p>The victim list is not small. MGM Resorts in 2023, with losses reported north of a hundred million dollars and casino systems down for days. Caesars, which reportedly paid around fifteen million. Clorox, which suffered months of product shortages. In 2025 a run through UK retail: Marks and Spencer, Harrods, and the Co-op. Then US insurers and airlines, one sector at a time. Prosecutors put the collective total at more than a hundred and fifteen million dollars in ransom payments across roughly a hundred and twenty intrusions.</p>
+
+    <p>And yet the names kept arriving. Noah Urban, known as Sosa and King Bob, was arrested in Florida in early 2024, convicted, and handed a ten-year sentence with thirteen million dollars in restitution ordered. Tyler Buchanan, an alleged leader, was picked up at Palma de Mallorca airport in June 2024 with twenty-seven million dollars in Bitcoin traced to him, then extradited to the US. In November 2024 the DOJ charged five members over the group's initial spree, which ran from September 2021 to April 2023 across dozens of companies. In July 2025 the UK's National Crime Agency arrested four people over the retail attacks and seized a large trove of equipment to work through.</p>
+
+    <p>The most recent UK case is the sharpest illustration. Thalha Jubair and Owen Flowers were each sentenced to five and a half years for the 2024 vishing attack that disabled 148 Transport for London systems and exposed data on an estimated ten million passengers, the largest cybercrime prosecution the UK has run. In chat logs entered as evidence, Flowers is recorded acknowledging that hitting hospital systems "might kill some 90-year-old on life support." His arrest halted intrusions against two US healthcare providers before they landed. Jubair, meanwhile, faces a separate US complaint that alleges he moved roughly eight and a half million dollars in cryptocurrency out of a server wallet while agents were executing a seizure warrant, which is not the act of someone who was ever truly invisible.</p>
+
+    <h2>The mistakes are always the same mistakes</h2>
+    <p>Pull back from the specifics and the same handful of failures recur across the whole group, and across cybercrime generally. Investigators reportedly linked members through hardware tied to their SIM-swapping activity and through Telegram handles that were not anonymised as carefully as their owners believed. Cryptocurrency, treated as untouchable by people who have not read a blockchain, gets followed to the point where it lands at a regulated exchange and meets a know-your-customer record. Infrastructure gets reused. Personal accounts get accessed from criminal machines. And now, a device identifier gets registered into a cloud graph before the first VPN even connects.</p>
+
+    <p>The theatrics at the end tell you how the group itself understood the position. In September 2025 an offshoot styling itself "scattered LAPSUS$ hunters 4.0" posted a run of apologies on Telegram, promising to give up ransomware, delete stolen data, and, in one member's phrasing, work toward using their skills for good. One said he was heading to rehab for sixty days. People who are winning do not issue press releases about going straight.</p>
+
+    <h2>Why the takedowns are the right outcome, honestly caveated</h2>
+    <p>It is worth being direct about the "good outcome" claim rather than sloganeering it. The harm here was real and specific: ten million people's data at TfL, months of shortages at Clorox, hospital systems that a participant openly discussed as potentially lethal, and hundreds of millions extracted from businesses that then spent millions more cleaning up. Putting young men in prison, seizing their drives at airports, and freezing their crypto is a proportionate response to that, and the deterrent value of naming people who spent years as handles in a chat room is not nothing.</p>
+
+    <p>The honest caveat is that attribution winning against individuals is not the same as the threat ending. Scattered Spider is a diffuse collective, not a company with a headquarters, and the playbook outlived the arrests. Within months of the retail-attack arrests, Mandiant was already tracking an identical help-desk vishing methodology under different branding. You can jail the people and the technique survives, because the technique was never the scarce resource. So the correct read is narrow and true: for the individuals, the trail is closing, and the platforms are getting better at remembering, not worse. For the ecosystem, this stays whack-a-mole for the foreseeable future.</p>
+
+    <h2>What defenders take from it</h2>
+    <p>Two things, and neither is a surprise. The first is that identity is the perimeter now. Scattered Spider barely touched an exploit; they talked their way past help desks and enrolled their own MFA. Phishing-resistant MFA, tighter help-desk verification for resets, and monitoring for new device enrolments do more against this group than another endpoint agent will.</p>
+
+    <p>The second is quieter. The same telemetry and cross-device machinery that makes Windows convenient is also, from the defender's chair, a rich and durable record. In an incident, the CDP artifacts and identity logs are often where the timeline actually lives. On the offensive side, that same permanence is why sustained cybercrime remains a losing position over a long enough window. The device keeps a diary, and increasingly it keeps one you cannot easily edit.</p>
+  </article>
+
+  <section class="related">
+    <h2>Related reading</h2>
+    <div class="rgrid">
+      <a class="rcard" href="/articles/cloud-iam-blast-radius/">
+        <div class="c">Cloud</div>
+        <div class="t">Cloud IAM and the blast radius of one credential</div>
+      </a>
+      <a class="rcard" href="/articles/cryptographic-keys-pki-rotation/">
+        <div class="c">Crypto</div>
+        <div class="t">Strong ciphers, weak keys</div>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleem-yousaf">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf">GitHub</a>
+      <a href="https://saleemyousaf.medium.com">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf">Hashnode</a>
+      <a href="https://dev.to/saleemyousaf">Dev.to</a>
+      <a href="https://cyberspartans.co.uk">Cyber Spartans</a>
+    </div>
+    <div class="pills">
+      <span class="pill bf">breachforge.co.uk</span>
+      <span class="pill cs">cyberspartans.co.uk</span>
+    </div>
+    <div class="legal">
+      &copy; 2026 Saleem Yousaf. All rights reserved. &nbsp;·&nbsp;
+      <a href="/privacy/">Privacy</a>
+    </div>
+  </footer>
+
+</div>
+
+<!-- lightbox -->
+<div class="lb" id="lb"><span class="lb-close" id="lbClose">[ close ]</span></div>
+<script>
+(function(){
+  var lb=document.getElementById('lb'), closeBtn=document.getElementById('lbClose');
+  document.querySelectorAll('.figframe svg[role="img"]').forEach(function(svg){
+    svg.closest('.figframe').addEventListener('click',function(){
+      var clone=svg.cloneNode(true);
+      lb.querySelectorAll('svg').forEach(function(s){s.remove();});
+      lb.appendChild(clone); lb.classList.add('open');
+    });
+  });
+  function close(){lb.classList.remove('open');}
+  closeBtn.addEventListener('click',close);
+  lb.addEventListener('click',function(e){if(e.target===lb)close();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+})();
+</script>
+
+</body>
+</html>
