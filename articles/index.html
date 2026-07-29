@@ -694,7 +694,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
         <div class="hcard-inner">
           <div class="hcard-label">// articles</div>
           <div class="hcard-stat">
-            <div class="hcard-num">25<span>+</span></div>
+            <div class="hcard-num">30<span>+</span></div>
             <div class="hcard-desc">Articles published</div>
           </div>
           <div class="hcard-stat">
@@ -758,20 +758,20 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
     <div class="latest-strip-inner">
       <div class="latest-label">// Latest</div>
       <div class="latest-divider"></div>
-      <a href="https://saleemyousaf.co.uk/articles/windows-cdp-gdid-attribution/" class="latest-card">
+      <a href="https://saleemyousaf.co.uk/articles/software-supply-chain-sbom-provenance/" class="latest-card">
         <div class="latest-card-left">
           <span class="latest-new">New</span>
-          <div class="latest-title">The Identifier You Never Chose: Windows CDP, the GDID, and How Scattered Spider Got Named</div>
+          <div class="latest-title">You Shipped It. Can You Prove It? SBOM, Signing and Provenance That Actually Verify</div>
         </div>
         <div class="latest-tags">
-          <span class="ac-tag red">Threat Intelligence</span>
-          <span class="ac-tag red">Digital Forensics</span>
-          <span class="ac-tag teal">Windows</span>
+          <span class="ac-tag teal">Supply Chain</span>
+          <span class="ac-tag teal">DevSecOps</span>
+          <span class="ac-tag purple">Provenance</span>
         </div>
         <div class="latest-meta">
-          <span>18 July 2026</span>
+          <span>21 July 2026</span>
           <div class="af-meta-dot"></div>
-          <span>~9 min read</span>
+          <span>~15 min read</span>
         </div>
       </a>
     </div>
@@ -793,12 +793,76 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
         <button class="filter-btn" onclick="filterArticles('crypto', this)">Cryptography</button>
         <button class="filter-btn" onclick="filterArticles('grc', this)">Governance &amp; Compliance</button>
       </div>
-      <div class="article-count" id="article-count">29 articles</div>
+      <div class="article-count" id="article-count">33 articles</div>
     </div>
 
     <div class="articles-grid" id="articles-grid">
 
-      <!-- Article: Windows CDP / GDID attribution (latest) -->
+      <!-- Article: Software supply chain (latest) -->
+      <a href="https://saleemyousaf.co.uk/articles/software-supply-chain-sbom-provenance/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag teal">Supply Chain</span>
+          <span class="ac-tag teal">DevSecOps</span>
+          <span class="ac-tag purple">Provenance</span>
+        </div>
+        <div class="ac-title">You Shipped It. Can You Prove It? SBOM, Signing and Provenance That Actually Verify</div>
+        <div class="ac-excerpt">An SBOM nobody queries is a receipt. Inventory, signing, provenance and the enforcing admission policy that turns all of it into a control, plus the delivery sequence that gets you there.</div>
+        <div class="ac-meta">
+          <span>21 July 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~15 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: Physical layer / Flipper -->
+      <a href="https://saleemyousaf.co.uk/articles/physical-layer-rf-tools-and-the-law/" class="article-card" data-cat="threat">
+        <div class="ac-tags">
+          <span class="ac-tag red">Physical Security</span>
+          <span class="ac-tag amber">RF &amp; Access Control</span>
+          <span class="ac-tag purple">Legal</span>
+        </div>
+        <div class="ac-title">The Badge Still Works: Flipper Zero, RF Cloning, and the Law That Actually Applies</div>
+        <div class="ac-excerpt">What handheld RF tools genuinely do, why legacy access credentials keep failing, the UK legal position on possession versus conduct, and how to run physical testing under proper authorisation.</div>
+        <div class="ac-meta">
+          <span>20 July 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~14 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: M365 and Workspace hardening -->
+      <a href="https://saleemyousaf.co.uk/articles/m365-google-workspace-hardening/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag teal">Cloud Security</span>
+          <span class="ac-tag teal">M365</span>
+          <span class="ac-tag teal">Google Workspace</span>
+        </div>
+        <div class="ac-title">Licensed, Not Configured: Hardening Microsoft 365 and Google Workspace</div>
+        <div class="ac-excerpt">The tenant is the perimeter, and both platforms ship configured for adoption rather than defence. Identity, application consent, mail forwarding, sharing defaults, and the delivery plan that closes the gaps.</div>
+        <div class="ac-meta">
+          <span>19 July 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~15 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: CI/CD pipeline security -->
+      <a href="https://saleemyousaf.co.uk/articles/securing-the-cicd-pipeline/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag teal">Cloud Security</span>
+          <span class="ac-tag teal">DevSecOps</span>
+          <span class="ac-tag amber">CI/CD</span>
+        </div>
+        <div class="ac-title">Securing the CI/CD Pipeline: The Highest-Privilege System Nobody Threat Models</div>
+        <div class="ac-excerpt">The pipeline deploys to production, holds every cloud credential, and runs code from anyone who can open a pull request. Trust boundaries, OIDC federation, runner isolation, SHA pinning, artefact provenance, and the delivery plan that closes the gaps.</div>
+        <div class="ac-meta">
+          <span>18 July 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~17 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: Windows CDP / GDID attribution -->
       <a href="https://saleemyousaf.co.uk/articles/windows-cdp-gdid-attribution/" class="article-card" data-cat="threat">
         <div class="ac-tags">
           <span class="ac-tag red">Threat Intelligence</span>
