@@ -35,7 +35,7 @@
     "name": "Saleem Yousaf",
     "url": "https://saleemyousaf.co.uk",
     "sameAs": [
-      "https://www.linkedin.com/in/saleem-yousaf",
+      "https://www.linkedin.com/in/saleemyousaf",
       "https://github.com/saleem-yousaf",
       "https://cyberspartans.co.uk"
     ]
@@ -137,9 +137,9 @@ figcaption{font-size:14px; color:var(--faint); margin-top:12px; text-align:cente
 .lb{position:fixed; inset:0; background:rgba(4,6,9,.94); display:none;
   align-items:center; justify-content:center; z-index:90; padding:2vh 2vw}
 .lb.open{display:flex}
-.lb svg{width:96vw; height:94vh}
-.lb-close{position:fixed; top:20px; right:26px; font-family:"DM Mono",monospace;
-  color:var(--muted); font-size:14px; cursor:pointer; letter-spacing:.1em}
+.lb svg{width:94vw; height:90vh; z-index:10}
+.lb-close{position:fixed; top:18px; right:22px; z-index:120; font-family:"DM Mono",monospace; color:var(--ink); font-size:14px; cursor:pointer; letter-spacing:.08em; background:var(--slate-2); border:1px solid var(--line); border-radius:999px; padding:9px 18px; user-select:none; -webkit-user-select:none}
+.lb-close:hover{border-color:var(--teal); color:var(--teal)}
 
 .related{margin:60px 0 20px}
 .related h2{font-size:20px; margin-bottom:18px}
@@ -480,11 +480,11 @@ footer{border-top:1px solid var(--line); margin-top:60px; padding:40px 0 60px;
 
   <footer>
     <div class="footer-links">
-      <a href="https://www.linkedin.com/in/saleem-yousaf">LinkedIn</a>
+      <a href="https://www.linkedin.com/in/saleemyousaf">LinkedIn</a>
       <a href="https://github.com/saleem-yousaf">GitHub</a>
       <a href="https://saleemyousaf.medium.com">Medium</a>
       <a href="https://hashnode.com/@saleemyousaf">Hashnode</a>
-      <a href="https://dev.to/saleemyousaf">Dev.to</a>
+      <a href="https://dev.to/saleem_yousaf">Dev.to</a>
       <a href="https://cyberspartans.co.uk">Cyber Spartans</a>
     </div>
     <div class="pills">
@@ -493,13 +493,13 @@ footer{border-top:1px solid var(--line); margin-top:60px; padding:40px 0 60px;
     </div>
     <div class="legal">
       &copy; 2026 Saleem Yousaf. All rights reserved. &nbsp;·&nbsp;
-      <a href="/privacy/">Privacy</a>
+      <a href="https://saleemyousaf.co.uk/privacy-policy/">Privacy</a>
     </div>
   </footer>
 
 </div>
 
-<div class="lb" id="lb"><span class="lb-close" id="lbClose">[ close ]</span></div>
+<div class="lb" id="lb"><span class="lb-close" id="lbClose">✕ close</span></div>
 <script>
 (function(){
   var lb=document.getElementById('lb'), closeBtn=document.getElementById('lbClose');
