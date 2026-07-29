@@ -163,6 +163,18 @@ footer{border-top:1px solid var(--line); margin-top:60px; padding:40px 0 60px;
 .pill.bf{color:var(--cyan); border-color:rgba(0,212,255,.5)}
 .legal{font-size:12.5px; color:var(--faint)}
 @media(max-width:560px){.rgrid{grid-template-columns:1fr} table{font-size:14px} th,td{padding:9px 8px}}
+
+/* collision-proof lightbox (syx- prefix, extreme z-index, click-anywhere-to-close) */
+.syx-lb{position:fixed; inset:0; z-index:2147483000; background:rgba(4,6,9,.95);
+  display:none; align-items:center; justify-content:center; padding:64px 3vw 3vw; cursor:zoom-out}
+.syx-lb.syx-open{display:flex}
+.syx-lb-stage{max-width:96vw; max-height:88vh; display:flex; align-items:center; justify-content:center}
+.syx-lb-stage svg{width:96vw; max-height:88vh; height:auto}
+.syx-lb-x{position:fixed; top:16px; right:16px; z-index:2147483001;
+  font-family:"DM Mono",monospace; font-size:14px; letter-spacing:.08em; color:var(--ink);
+  background:var(--slate-2); border:1px solid var(--line); border-radius:999px;
+  padding:10px 18px; cursor:pointer}
+.syx-lb-x:hover{border-color:var(--teal); color:var(--teal)}
 </style>
 </head>
 <body>
@@ -220,7 +232,7 @@ footer{border-top:1px solid var(--line); margin-top:60px; padding:40px 0 60px;
     </div>
 
     <figure>
-      <div class="figframe">
+      <div class="figframe" onclick="syxLbOpen(this)">
         <svg role="img" viewBox="0 0 1240 1020" xmlns="http://www.w3.org/2000/svg" aria-label="The Cyber Essentials Plus certification pathway under the Danzell question set, showing the self-assessment stage, the three month window, the five technical test cases, the auto-fail rules, sampling mechanics and the remediation loop.">
           <text x="34" y="42" class="d-lab">// THE CE PLUS PATHWAY UNDER DANZELL (v3.3, FROM 27 APRIL 2026)</text>
 
@@ -499,22 +511,16 @@ footer{border-top:1px solid var(--line); margin-top:60px; padding:40px 0 60px;
 
 </div>
 
-<div class="lb" id="lb"><span class="lb-close" id="lbClose">✕ close</span></div>
+<div class="syx-lb" id="syxLb" onclick="syxLbClose()">
+  <button type="button" class="syx-lb-x" onclick="event.stopPropagation();syxLbClose();">✕ close</button>
+  <div class="syx-lb-stage" id="syxLbStage"></div>
+</div>
 <script>
-(function(){
-  var lb=document.getElementById('lb'), closeBtn=document.getElementById('lbClose');
-  document.querySelectorAll('.figframe svg[role="img"]').forEach(function(svg){
-    svg.closest('.figframe').addEventListener('click',function(){
-      var clone=svg.cloneNode(true);
-      lb.querySelectorAll('svg').forEach(function(s){s.remove();});
-      lb.appendChild(clone); lb.classList.add('open');
-    });
-  });
-  function close(){lb.classList.remove('open');}
-  closeBtn.addEventListener('click',close);
-  lb.addEventListener('click',function(e){if(e.target===lb)close();});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
-})();
+function syxLbOpen(fr){var s=fr.querySelector('svg[role="img"]');if(!s)return;
+  var st=document.getElementById('syxLbStage');st.innerHTML='';
+  st.appendChild(s.cloneNode(true));document.getElementById('syxLb').classList.add('syx-open');}
+function syxLbClose(){document.getElementById('syxLb').classList.remove('syx-open');}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'||e.key==='Esc')syxLbClose();});
 </script>
 
 </body>
