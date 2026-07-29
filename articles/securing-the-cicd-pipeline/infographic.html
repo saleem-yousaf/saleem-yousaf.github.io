@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CI/CD pipeline security infographic</title>
+<style>
+:root{
+  --bg:#0a0e14;--panel:#0f1419;--border:rgba(255,255,255,0.09);
+  --text:#e6eaf0;--muted:#8a96a8;--muted2:#5a6675;
+  --teal:#2dd4bf;--teal-b:#5eead4;--teal-dim:rgba(45,212,191,0.12);--teal-line:rgba(45,212,191,0.30);
+  --blue:#4aa8ff;--blue-dim:rgba(74,168,255,0.12);--blue-line:rgba(74,168,255,0.30);
+  --amber:#f5b73c;--amber-dim:rgba(245,183,60,0.12);--amber-line:rgba(245,183,60,0.32);
+  --purple:#a78bfa;--purple-dim:rgba(167,139,250,0.12);--purple-line:rgba(167,139,250,0.30);
+  --mono:'DM Mono',monospace;--display:'Syne',sans-serif;--body:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-weight:300;
+  line-height:1.5;width:1920px;height:2920px;overflow:hidden;}
+.zoom{transform:scale(2);transform-origin:top left;width:960px;padding:52px 34px 40px;}
+.ig{max-width:900px;margin:0 auto;}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--teal);margin-bottom:16px;}
+h1{font-family:var(--display);font-weight:800;font-size:42px;line-height:1.08;
+  letter-spacing:-1px;color:#fff;}
+h1 .g{color:var(--teal);}
+.sub{font-size:15px;color:var(--muted);margin:14px 0 6px;max-width:660px;}
+.rule{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--teal);margin:36px 0 14px;}
+.rule.b{color:var(--blue);}.rule.a{color:var(--amber);}.rule.p{color:var(--purple);}
+.flow{display:flex;align-items:stretch;border:1px solid var(--border);border-radius:11px;
+  background:var(--panel);overflow:hidden;}
+.fnode{flex:1;padding:18px;}
+.fnode + .fnode{border-left:1px solid var(--border);}
+.fnode .k{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--muted2);}
+.fnode b{display:block;font-family:var(--display);font-weight:700;font-size:16px;color:#fff;
+  margin:5px 0 4px;}
+.fnode span{font-size:12px;color:var(--muted);}
+.fnote{font-family:var(--mono);font-size:11px;color:var(--teal);margin-top:9px;}
+.cols{display:flex;gap:14px;}
+.card{flex:1;border:1px solid var(--border);border-radius:11px;background:var(--panel);
+  padding:18px 20px;border-top:2px solid var(--amber);}
+.card .tag{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--amber);}
+.card h3{font-family:var(--display);font-weight:700;font-size:17px;color:#fff;margin:6px 0 6px;}
+.card p{font-size:13px;color:var(--muted);line-height:1.55;}
+.layers{display:flex;flex-direction:column;gap:8px;}
+.layer{display:flex;align-items:center;gap:16px;border:1px solid var(--border);border-radius:9px;
+  background:var(--panel);padding:13px 18px;}
+.layer b{font-family:var(--display);font-weight:700;font-size:14px;color:#fff;min-width:190px;}
+.layer span{font-family:var(--mono);font-size:11.5px;color:var(--muted);}
+.layer.core{background:var(--teal-dim);border-color:var(--teal-line);}
+.layer.core b{color:var(--teal-b);}
+.layer.core span{color:#aeb5bf;}
+.warn{border:1px solid var(--amber-line);background:var(--amber-dim);border-radius:11px;
+  padding:18px 22px;}
+.warn h3{font-family:var(--display);font-weight:700;font-size:16px;color:var(--amber);
+  margin-bottom:10px;}
+.warn ul{list-style:none;display:flex;flex-wrap:wrap;}
+.warn li{width:50%;font-size:13px;color:var(--text);padding-left:16px;padding-right:18px;
+  margin-bottom:8px;position:relative;line-height:1.45;}
+.warn li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;
+  border-radius:50%;background:var(--amber);}
+.q{display:flex;gap:14px;margin-bottom:10px;align-items:flex-start;}
+.q .num{flex-shrink:0;width:28px;height:28px;border-radius:7px;background:var(--purple-dim);
+  border:1px solid var(--purple-line);color:var(--purple);font-family:var(--mono);font-size:13px;
+  text-align:center;line-height:26px;}
+.q p{font-size:14px;color:var(--text);padding-top:3px;}
+.foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--border);text-align:center;
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted2);}
+.foot span{color:var(--teal);}
+</style>
+</head>
+<body>
+<div class="zoom"><div class="ig">
+
+  <div class="eyebrow">// ci/cd pipeline security</div>
+  <h1>Trusted by default,<br><span class="g">privileged by design.</span></h1>
+  <p class="sub">It can deploy to production, it holds the credentials to every environment, and it executes code written by anyone who can open a pull request.</p>
+
+  <div class="rule">// the pipeline, and the control at each stage</div>
+  <div class="flow">
+    <div class="fnode"><div class="k">source</div><b>The repository</b><span>Anyone with write access can change what gets built.</span><div class="fnote">Branch protection + CODEOWNERS</div></div>
+    <div class="fnode"><div class="k">build</div><b>The runner</b><span>Executes untrusted code from pull requests and dependencies.</span><div class="fnote">Ephemeral + isolated</div></div>
+    <div class="fnode"><div class="k">deploy</div><b>The cloud role</b><span>Holds the permissions to change production.</span><div class="fnote">OIDC, no static keys</div></div>
+  </div>
+
+  <div class="rule a">// why it is a different security problem</div>
+  <div class="cols">
+    <div class="card"><div class="tag">Concentration</div><h3>It reaches every environment</h3><p>Compromise the pipeline and you inherit everything it can deploy to. The blast radius is the estate, not the repository.</p></div>
+    <div class="card"><div class="tag">Execution</div><h3>It runs code from strangers</h3><p>A fork pull request, a new transitive dependency, a build plugin. All executing with the runner's identity and its cloud access.</p></div>
+  </div>
+
+  <div class="rule">// defence in depth</div>
+  <div class="layers">
+    <div class="layer"><b>Monitoring and audit</b><span>build provenance &middot; runner telemetry &middot; alert on out-of-hours deploy</span></div>
+    <div class="layer"><b>Network</b><span>egress allow-list &middot; private runners &middot; no inbound path</span></div>
+    <div class="layer"><b>Build isolation</b><span>ephemeral runners &middot; no shared cache &middot; no reuse across teams</span></div>
+    <div class="layer"><b>Identity and secrets</b><span>OIDC federation &middot; short-lived tokens &middot; secret scanning</span></div>
+    <div class="layer core"><b>Your artefacts</b><span>signing &middot; SBOM &middot; verified provenance at deploy</span></div>
+  </div>
+
+  <div class="rule a">// what actually causes the incidents</div>
+  <div class="warn">
+    <h3>The recurring failures</h3>
+    <ul>
+      <li>Long-lived cloud access keys stored as CI secrets, never rotated.</li>
+      <li>Fork pull requests running with access to real secrets.</li>
+      <li>Third-party actions pinned to a mutable tag, not a commit SHA.</li>
+      <li>Self-hosted runners reused across jobs, teams and environments.</li>
+      <li>Secrets echoed into build logs, retained for months.</li>
+      <li>One deploy identity shared between staging and production.</li>
+    </ul>
+  </div>
+
+  <div class="rule p">// two questions tell you how exposed you are</div>
+  <div class="q"><div class="num">1</div><p>Can a pull request from a fork reach your cloud credentials?</p></div>
+  <div class="q"><div class="num">2</div><p>If a runner were compromised at 3am, what could it deploy, and who would know?</p></div>
+
+  <div class="foot"><span>saleemyousaf.co.uk</span> &nbsp;&middot;&nbsp; <span>cyberspartans.co.uk</span></div>
+
+</div>
+</div>
+</body>
+</html>

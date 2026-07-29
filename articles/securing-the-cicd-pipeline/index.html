@@ -1,1 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Securing the CI/CD Pipeline: The Highest-Privilege System Nobody Threat Models | Saleem Yousaf</title>
+<meta name="description" content="The pipeline deploys to production, holds every cloud credential, and executes code from anyone who can open a pull request. Trust boundaries, OIDC federation, runner isolation, SHA pinning, artefact provenance, and the delivery plan that closes the gaps.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/securing-the-cicd-pipeline/">
 
+<meta property="og:type" content="article">
+<meta property="og:title" content="Securing the CI/CD Pipeline: The Highest-Privilege System Nobody Threat Models">
+<meta property="og:description" content="Trust boundaries, OIDC federation, runner isolation, SHA pinning, artefact provenance, and the delivery plan that closes the gaps.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/securing-the-cicd-pipeline/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/articles/securing-the-cicd-pipeline/og-cicd-pipeline.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Securing the CI/CD Pipeline">
+<meta name="twitter:description" content="The highest-privilege system nobody threat models. Trust boundaries, OIDC, runner isolation, and artefact provenance.">
+<meta name="twitter:image" content="https://saleemyousaf.co.uk/articles/securing-the-cicd-pipeline/og-cicd-pipeline.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Securing the CI/CD Pipeline: The Highest-Privilege System Nobody Threat Models",
+  "description": "A practitioner's guide to CI/CD pipeline security covering trust boundaries, OIDC federation, runner isolation, action pinning, secrets handling, artefact provenance and remediation delivery.",
+  "image": "https://saleemyousaf.co.uk/articles/securing-the-cicd-pipeline/og-cicd-pipeline.png",
+  "articleSection": "Cloud Security",
+  "datePublished": "2026-07-18",
+  "author": {
+    "@type": "Person",
+    "name": "Saleem Yousaf",
+    "url": "https://saleemyousaf.co.uk",
+    "sameAs": [
+      "https://www.linkedin.com/in/saleemyousaf",
+      "https://github.com/saleem-yousaf",
+      "https://cyberspartans.co.uk"
+    ]
+  },
+  "publisher": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk" },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://saleemyousaf.co.uk/articles/securing-the-cicd-pipeline/"
+  }
+}
+</script>
+
+<style>
+:root{
+  --slate-0:#090c10; --slate-1:#0f1318; --slate-2:#161b22;
+  --teal:#2dd4bf; --bright:#5eead4; --amber:#f5b73c; --blue:#4aa8ff;
+  --purple:#a78bfa; --red:#f87171;
+  --ink:#f4f6f8; --muted:#aeb5bf; --faint:#6c7682; --line:rgba(255,255,255,.08);
+  --emerald:#2f9e6f; --cyan:#00d4ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--slate-0); color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif; font-size:19px; line-height:1.72;
+  -webkit-font-smoothing:antialiased;}
+.wrap{max-width:760px; margin:0 auto; padding:0 24px}
+a{color:var(--teal); text-decoration:none}
+a:hover{text-decoration:underline}
+.hero{padding:72px 0 8px}
+.eyebrow{font-family:"DM Mono",monospace; font-size:13px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--teal)}
+h1{font-family:"Syne",sans-serif; font-weight:800; font-size:clamp(30px,5.4vw,50px);
+  line-height:1.06; letter-spacing:-.01em; margin:18px 0 20px}
+.chips{display:flex; flex-wrap:wrap; gap:10px 18px; font-family:"DM Mono",monospace;
+  font-size:12.5px; color:var(--faint); letter-spacing:.03em}
+.chips span{display:inline-flex; align-items:center; gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal)}
+article{padding:20px 0 8px}
+article h2{font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(23px,3.6vw,30px);
+  line-height:1.16; margin:56px 0 14px; letter-spacing:-.01em}
+article h3{font-family:"Syne",sans-serif; font-weight:600; font-size:20px; margin:36px 0 10px}
+article p{margin:0 0 20px; color:#e7ebef}
+article ul,article ol{margin:0 0 22px; padding-left:22px; color:#e7ebef}
+article li{margin-bottom:10px}
+.lead{font-size:21px; color:#eef1f4}
+code{font-family:"DM Mono",monospace; font-size:.86em; background:var(--slate-2);
+  padding:2px 7px; border-radius:6px; color:var(--bright); word-break:break-word}
+pre{background:var(--slate-2); border:1px solid var(--line); border-radius:12px;
+  padding:18px 20px; overflow-x:auto; margin:24px 0}
+pre code{background:none; padding:0; font-size:14px; line-height:1.65; color:#dbe3ea}
+strong{color:#fff; font-weight:600}
+.part{display:flex; align-items:center; gap:14px; margin:64px 0 6px}
+.part-num{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--teal); border:1px solid rgba(45,212,191,.35);
+  border-radius:999px; padding:5px 14px; white-space:nowrap}
+.part-rule{height:1px; background:linear-gradient(90deg,rgba(45,212,191,.4),transparent); flex:1}
+.callout{border:1px solid rgba(45,212,191,.32); background:linear-gradient(180deg,
+  rgba(45,212,191,.08),rgba(45,212,191,.02)); border-radius:14px; padding:22px 24px;
+  margin:30px 0; font-size:18px}
+.callout .k{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px}
+.callout.warn{border-color:rgba(248,113,113,.35);
+  background:linear-gradient(180deg,rgba(248,113,113,.09),rgba(248,113,113,.02))}
+.callout.warn .k{color:var(--red)}
+table{width:100%; border-collapse:collapse; margin:26px 0; font-size:15.5px}
+th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line)}
+th{font-family:"DM Mono",monospace; font-size:11.5px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--teal); font-weight:400}
+td{color:#e0e5ea}
+figure{margin:38px 0}
+.figframe{border:1px solid var(--line); border-radius:16px; background:
+  radial-gradient(120% 140% at 80% 0%, rgba(45,212,191,.06), transparent 60%),var(--slate-1);
+  padding:20px; cursor:zoom-in; position:relative}
+.figframe::after{content:"click to expand"; position:absolute; top:12px; right:16px;
+  font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; color:var(--faint)}
+.figframe svg{width:100%; height:auto; display:block}
+figcaption{font-size:14px; color:var(--faint); margin-top:12px; text-align:center;
+  font-family:"DM Mono",monospace; letter-spacing:.02em}
+.d-box{fill:var(--slate-2); stroke:rgba(45,212,191,.45); stroke-width:1.4}
+.d-box-soft{fill:var(--slate-1); stroke:var(--line); stroke-width:1.2}
+.d-t{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:15px}
+.d-t-s{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:13.5px}
+.d-s{fill:var(--muted); font-family:"Inter",sans-serif; font-size:12px}
+.d-lab{fill:var(--teal); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-a{fill:var(--amber); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-p{fill:var(--purple); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-line{stroke:var(--teal); stroke-width:1.6; fill:none}
+.d-mono{fill:var(--bright); font-family:"DM Mono",monospace; font-size:11.5px}
+.d-red{fill:var(--red); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.06em}
+.lb{position:fixed; inset:0; background:rgba(4,6,9,.94); display:none;
+  align-items:center; justify-content:center; z-index:90; padding:2vh 2vw}
+.lb.open{display:flex}
+.lb svg{width:96vw; height:94vh}
+.lb-close{position:fixed; top:20px; right:26px; font-family:"DM Mono",monospace;
+  color:var(--muted); font-size:14px; cursor:pointer; letter-spacing:.1em}
+.related{margin:60px 0 20px}
+.related h2{font-size:20px; margin-bottom:18px}
+.rgrid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.rcard{border:1px solid var(--line); border-radius:14px; padding:18px 18px 20px;
+  background:var(--slate-1); transition:border-color .2s}
+.rcard:hover{border-color:rgba(45,212,191,.4)}
+.rcard .c{font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--teal)}
+.rcard .t{font-family:"Syne",sans-serif; font-weight:600; font-size:16px; margin-top:8px;
+  color:#fff; line-height:1.25}
+footer{border-top:1px solid var(--line); margin-top:60px; padding:40px 0 60px;
+  color:var(--faint); font-size:14px}
+.footer-links{display:flex; flex-wrap:wrap; gap:16px; margin-bottom:22px;
+  font-family:"DM Mono",monospace; font-size:13px}
+.pills{display:flex; gap:12px; margin:22px 0}
+.pill{border-radius:999px; padding:8px 16px; font-family:"DM Mono",monospace; font-size:12px;
+  letter-spacing:.04em; border:1px solid}
+.pill.cs{color:var(--emerald); border-color:rgba(47,158,111,.5)}
+.pill.bf{color:var(--cyan); border-color:rgba(0,212,255,.5)}
+.legal{font-size:12.5px; color:var(--faint)}
+@media(max-width:560px){.rgrid{grid-template-columns:1fr} table{font-size:14px} th,td{padding:9px 8px}}
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+<script src="/nav.js" defer></script>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">// ci/cd pipeline security</div>
+    <h1>Securing the CI/CD pipeline: the highest-privilege system nobody threat models</h1>
+    <div class="chips">
+      <span><span class="dot"></span>Saleem Yousaf</span>
+      <span>18 Jul 2026</span>
+      <span>17 min read</span>
+    </div>
+  </header>
+
+  <article>
+    <p class="lead">Ask a security team to name the most privileged system they own and you will hear about the domain controller, the jump box, maybe the hypervisor. Almost nobody says the build pipeline. Yet the pipeline can deploy to production, it holds the credentials to every environment, and it executes code written by anyone who can open a pull request. It is the only system in most estates that combines all three properties, and it is usually governed by a YAML file nobody has reviewed since it was copied from a blog post.</p>
+
+    <p>That gap is not theoretical. In March 2025 an attacker repointed every version tag of a widely used GitHub Action, from v1 through v45.0.7, at a single malicious commit, and every build that ran it dumped its secrets into the logs. More than 23,000 repositories referenced that action. The teams who had pinned to an immutable commit SHA were unaffected. The teams who had written <code>@v35</code> because it looked tidier were not.</p>
+
+    <div class="part"><span class="part-num">Part one</span><span class="part-rule"></span></div>
+    <h2>Why the pipeline is a different security problem</h2>
+
+    <p>Two properties make CI/CD unlike the systems your controls were designed around.</p>
+
+    <p><strong>Concentration.</strong> The pipeline holds, or can mint, the credentials for every environment it deploys to. Compromise it and you do not inherit a repository, you inherit the estate. This is the same argument as blast radius in cloud IAM, which I have written about separately, except the pipeline is usually excluded from the identity programme entirely because it is considered developer tooling rather than infrastructure.</p>
+
+    <p><strong>Execution of untrusted code.</strong> A build runner exists to fetch code from the internet and run it. A pull request from a fork, a new transitive dependency, a third-party action, a build plugin: all of it executes with the runner's identity and whatever access that identity carries. Most organisations would never allow an unreviewed binary to run on a production server, then allow exactly that to happen on a runner that can deploy to one.</p>
+
+    <p>Put those together and you get the failure pattern behind essentially every pipeline incident: attacker code executes inside a runner, reads whatever secrets the workflow has access to, exfiltrates them, and then uses them to publish a package, deploy an image, or move into the cloud account. The tooling changes, the chain does not.</p>
+
+    <figure>
+      <div class="figframe">
+        <svg role="img" viewBox="0 0 1240 1080" xmlns="http://www.w3.org/2000/svg" aria-label="CI/CD pipeline security: the three trust boundaries from repository to runner to cloud, why the pipeline concentrates privilege and executes untrusted code, a defence in depth stack, the recurring failures that cause incidents, and two diagnostic questions.">
+          <text x="34" y="42" class="d-lab">// TRUSTED BY DEFAULT, PRIVILEGED BY DESIGN</text>
+
+          <rect class="d-box-soft" x="34" y="70" width="378" height="132" rx="12"/>
+          <text x="52" y="100" class="d-lab">SOURCE</text>
+          <text x="52" y="128" class="d-t">The repository</text>
+          <text x="52" y="152" class="d-s">Anyone with write access changes</text>
+          <text x="52" y="170" class="d-s">what gets built.</text>
+          <text x="52" y="192" class="d-mono">branch protection + CODEOWNERS</text>
+
+          <path class="d-line" d="M412 136 H452" marker-end="url(#a)"/>
+
+          <rect class="d-box" x="452" y="70" width="378" height="132" rx="12"/>
+          <text x="470" y="100" class="d-lab">BUILD</text>
+          <text x="470" y="128" class="d-t">The runner</text>
+          <text x="470" y="152" class="d-s">Executes untrusted code from pull</text>
+          <text x="470" y="170" class="d-s">requests and dependencies.</text>
+          <text x="470" y="192" class="d-mono">ephemeral + isolated</text>
+
+          <path class="d-line" d="M830 136 H870" marker-end="url(#a)"/>
+
+          <rect class="d-box" x="870" y="70" width="336" height="132" rx="12"/>
+          <text x="888" y="100" class="d-lab">DEPLOY</text>
+          <text x="888" y="128" class="d-t">The cloud role</text>
+          <text x="888" y="152" class="d-s">Holds permission to change</text>
+          <text x="888" y="170" class="d-s">production.</text>
+          <text x="888" y="192" class="d-mono">OIDC, no static keys</text>
+
+          <text x="34" y="248" class="d-lab-a">// WHY IT IS A DIFFERENT SECURITY PROBLEM</text>
+          <rect x="34" y="266" width="580" height="112" rx="12" fill="rgba(245,183,60,.06)"
+                stroke="rgba(245,183,60,.34)" stroke-width="1.3"/>
+          <text x="54" y="296" class="d-lab-a">CONCENTRATION</text>
+          <text x="54" y="324" class="d-t-s">It reaches every environment</text>
+          <text x="54" y="348" class="d-s">Compromise the pipeline and you inherit everything it</text>
+          <text x="54" y="366" class="d-s">deploys to. The blast radius is the estate, not the repo.</text>
+
+          <rect x="626" y="266" width="580" height="112" rx="12" fill="rgba(245,183,60,.06)"
+                stroke="rgba(245,183,60,.34)" stroke-width="1.3"/>
+          <text x="646" y="296" class="d-lab-a">EXECUTION</text>
+          <text x="646" y="324" class="d-t-s">It runs code from strangers</text>
+          <text x="646" y="348" class="d-s">A fork pull request, a transitive dependency, a build</text>
+          <text x="646" y="366" class="d-s">plugin. All running with the runner's identity.</text>
+
+          <text x="34" y="424" class="d-lab">// DEFENCE IN DEPTH</text>
+          <rect class="d-box-soft" x="34" y="442" width="1172" height="52" rx="9"/>
+          <text x="54" y="474" class="d-t-s">Monitoring and audit</text>
+          <text x="330" y="474" class="d-s">build provenance  ·  runner telemetry  ·  alert on out-of-hours deploy</text>
+          <rect class="d-box-soft" x="34" y="502" width="1172" height="52" rx="9"/>
+          <text x="54" y="534" class="d-t-s">Network</text>
+          <text x="330" y="534" class="d-s">egress allow-list  ·  private runners  ·  no inbound path</text>
+          <rect class="d-box-soft" x="34" y="562" width="1172" height="52" rx="9"/>
+          <text x="54" y="594" class="d-t-s">Build isolation</text>
+          <text x="330" y="594" class="d-s">ephemeral runners  ·  no shared cache  ·  no reuse across teams</text>
+          <rect class="d-box-soft" x="34" y="622" width="1172" height="52" rx="9"/>
+          <text x="54" y="654" class="d-t-s">Identity and secrets</text>
+          <text x="330" y="654" class="d-s">OIDC federation  ·  short-lived tokens  ·  secret scanning</text>
+          <rect x="34" y="682" width="1172" height="52" rx="9" fill="rgba(45,212,191,.11)"
+                stroke="rgba(45,212,191,.4)" stroke-width="1.3"/>
+          <text x="54" y="714" class="d-t-s" style="fill:#5eead4">Your artefacts</text>
+          <text x="330" y="714" class="d-s">signing  ·  SBOM  ·  verified provenance at deploy</text>
+
+          <text x="34" y="782" class="d-lab-a">// WHAT ACTUALLY CAUSES THE INCIDENTS</text>
+          <rect x="34" y="800" width="1172" height="150" rx="12" fill="rgba(248,113,113,.07)"
+                stroke="rgba(248,113,113,.34)" stroke-width="1.3"/>
+          <text x="56" y="832" class="d-red">THE RECURRING FAILURES</text>
+          <text x="56" y="862" class="d-s">Long-lived cloud access keys stored as CI secrets, never rotated.</text>
+          <text x="56" y="886" class="d-s">Fork pull requests running with access to real secrets.</text>
+          <text x="56" y="910" class="d-s">Third-party actions pinned to a mutable tag, not a commit SHA.</text>
+          <text x="640" y="862" class="d-s">Self-hosted runners reused across jobs, teams and environments.</text>
+          <text x="640" y="886" class="d-s">Secrets echoed into build logs and retained for months.</text>
+          <text x="640" y="910" class="d-s">One deploy identity shared between staging and production.</text>
+
+          <text x="34" y="1000" class="d-lab-p">// TWO QUESTIONS TELL YOU HOW EXPOSED YOU ARE</text>
+          <rect x="34" y="1016" width="30" height="30" rx="7" fill="rgba(167,139,250,.12)"
+                stroke="rgba(167,139,250,.4)" stroke-width="1.2"/>
+          <text x="44" y="1037" class="d-lab-p">1</text>
+          <text x="80" y="1037" class="d-s">Can a pull request from a fork reach your cloud credentials?</text>
+          <rect x="640" y="1016" width="30" height="30" rx="7" fill="rgba(167,139,250,.12)"
+                stroke="rgba(167,139,250,.4)" stroke-width="1.2"/>
+          <text x="650" y="1037" class="d-lab-p">2</text>
+          <text x="686" y="1037" class="d-s">If a runner were compromised at 3am, what could it deploy?</text>
+
+          <defs>
+            <marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+              <path d="M0 0 L9 4.5 L0 9 Z" fill="#2dd4bf"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+      <figcaption>The three trust boundaries, the control stack, and where pipelines actually break. Click to expand.</figcaption>
+    </figure>
+
+    <div class="part"><span class="part-num">Part two</span><span class="part-rule"></span></div>
+    <h2>The technical detail</h2>
+
+    <h3>Kill the static credential first</h3>
+
+    <p>If a pipeline holds a long-lived cloud access key in its secret store, nothing else you do matters much. That key is a bearer token with no expiry, sitting in a system that runs untrusted code, readable by any workflow that can reference it, and reproducible in any log line that echoes the environment.</p>
+
+    <p>The replacement is workload identity federation. The CI platform issues a short-lived OIDC token describing the workflow, the cloud trusts that issuer, and the workflow exchanges the token for temporary credentials scoped to a role. Nothing durable is stored anywhere. On AWS that is an IAM OIDC identity provider plus a role with a trust policy; on Azure a federated credential on an app registration; on GCP a workload identity pool.</p>
+
+    <p>The detail that matters, and the one most often wrong, is the subject condition on the trust policy. A trust policy that accepts any workflow from the whole organisation gives every repository the ability to assume the deploy role. Constrain it to the repository, and to the specific branch or environment.</p>
+
+    <pre><code>"Condition": {
+  "StringEquals": {
+    "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+    "token.actions.githubusercontent.com:sub":
+      "repo:my-org/my-repo:environment:production"
+  }
+}</code></pre>
+
+    <p>Using <code>environment:production</code> rather than a wildcard on <code>ref</code> means the role can only be assumed by a job running against the protected environment, which is also where you attach required reviewers. That single condition turns the deploy role from something any branch can use into something that requires a human approval to reach.</p>
+
+    <h3>The fork pull request problem</h3>
+
+    <p>The most reliable way to get code execution in someone else's pipeline is to open a pull request. Platforms know this, which is why pull requests from forks normally run without access to secrets. The exposure comes from the trigger that deliberately reverses this.</p>
+
+    <p>In GitHub Actions, <code>pull_request_target</code> runs in the context of the base repository, with access to secrets, specifically so that workflows can label or comment on external contributions. If such a workflow then checks out the pull request head and runs anything from it, a build script, a lint config, a dependency install, the attacker's code executes with your secrets in scope. This is not an edge case. The compromise chain behind the March 2025 action incident reportedly began months earlier with exactly this pattern being used to steal a maintainer's personal access token.</p>
+
+    <p>The rule is simple to state and worth auditing for directly: a workflow may have secrets, or it may check out untrusted code, but never both. If you need to build a fork's code, do it in a job with no secrets and read-only permissions, and post results from a separate, privileged job that only consumes the output.</p>
+
+    <div class="callout warn">
+      <span class="k">One grep worth running today</span>
+      Search every repository for <code>pull_request_target</code> and then check whether the workflow checks out <code>github.event.pull_request.head.sha</code>. That combination is the single highest-yield finding in a pipeline review, and it takes about ten minutes across an estate.
+    </div>
+
+    <h3>Pin actions to commit SHAs, not tags</h3>
+
+    <p>A Git tag is a mutable pointer. Anyone who controls the upstream repository can move <code>v4</code> to different code at any time, and consumers referencing that tag silently execute the new version on the next run. A commit SHA cannot be repointed. This is precisely the mechanism that made the March 2025 incident so broad: the attacker moved every tag to one malicious commit, and organisations pinned to SHAs were not affected.</p>
+
+    <p>So <code>actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683</code>, not <code>actions/checkout@v4</code>. The obvious objection is maintenance, and the answer is that Dependabot raises pull requests for pinned SHAs, so updates become a reviewed change rather than an invisible one. GitHub has since added the ability to enforce SHA pinning through the allowed actions policy, which is worth turning on at organisation level rather than relying on every team to remember.</p>
+
+    <p>Pinning is a structural control that stops the attacker getting in through a moved tag. It does nothing once code is already executing, which is why it belongs alongside runner isolation and egress control rather than instead of them.</p>
+
+    <h3>Runner isolation, and the self-hosted trap</h3>
+
+    <p>Hosted runners are ephemeral by default: fresh machine per job, destroyed afterwards. Self-hosted runners frequently are not. They persist between jobs, retain caches and credentials on disk, and are often shared across teams to save cost. That combination turns a single compromised build into persistence, and gives an attacker access to whatever the next team's job brings with it.</p>
+
+    <p>If you run self-hosted, the non-negotiables are one job per runner instance with the instance destroyed afterwards, no shared filesystem or Docker cache between jobs, no self-hosted runners attached to public repositories, and an egress allow-list so a compromised job cannot post your secrets to an arbitrary endpoint. Egress control is the one most often skipped and the one that most reliably converts a total compromise into a contained one.</p>
+
+    <h3>Secrets, logs, and the retention problem</h3>
+
+    <p>Platforms mask known secret values in log output, but masking is string matching. Base64 the value, split it across variables, or transform it and the mask does not apply. The March 2025 attack worked exactly this way, printing encoded credentials into logs that were public on many repositories.</p>
+
+    <p>The controls that hold up are structural: set <code>permissions</code> explicitly to read-only at workflow level and grant write scopes only on the specific job that needs them; prefer OIDC so there is no durable secret to print; scope secrets to environments rather than the repository so a test job cannot reference a production value; keep log retention short; and run secret scanning with push protection so a leaked credential is caught at commit time rather than in an incident.</p>
+
+    <h3>Artefact integrity, which is where this is heading</h3>
+
+    <p>Everything above protects the process. The last layer protects the output. Signing build artefacts and generating provenance attestation lets the deploy step verify that an image was built by the pipeline you expect, from the commit you expect, rather than uploaded by someone with registry credentials. Paired with an SBOM, it also answers the question every incident raises within an hour: where else is this dependency running.</p>
+
+    <p>This matters more each year because the regulatory direction is the same across jurisdictions, and because provenance verification at deploy is the only control on the list that catches an artefact substituted after the build succeeded.</p>
+
+    <table>
+      <thead><tr><th>Boundary</th><th>Primary control</th><th>What it stops</th></tr></thead>
+      <tbody>
+        <tr><td>Source</td><td>Branch protection, CODEOWNERS, signed commits</td><td>Unreviewed change reaching the build</td></tr>
+        <tr><td>Trigger</td><td>No secrets on untrusted-code workflows</td><td>Fork pull request stealing credentials</td></tr>
+        <tr><td>Dependencies</td><td>SHA pinning, allowed-actions policy</td><td>Moved tag executing new code</td></tr>
+        <tr><td>Runner</td><td>Ephemeral instances, egress allow-list</td><td>Persistence and exfiltration</td></tr>
+        <tr><td>Credentials</td><td>OIDC federation, scoped subject condition</td><td>Long-lived key reuse</td></tr>
+        <tr><td>Artefact</td><td>Signing, SBOM, provenance verification</td><td>Substituted image at deploy</td></tr>
+      </tbody>
+    </table>
+
+    <div class="part"><span class="part-num">Part three</span><span class="part-rule"></span></div>
+    <h2>Delivering it: who, what, when, deliverables, lineage</h2>
+
+    <p><strong>Who.</strong> This lands between platform engineering, who own the pipelines, and security, who usually do not have access to them. Neither can deliver it alone, and the common failure is a security team issuing findings against YAML they cannot change. Get a named platform engineer accountable for the workflow estate before you start.</p>
+
+    <p><strong>What.</strong> An inventory of pipelines and their identities first. Not repositories, identities: what can each pipeline deploy to, and with what credential. Most organisations cannot answer that on day one, and the answer usually reveals two or three pipelines with far more access than anyone intended.</p>
+
+    <p><strong>When.</strong> Sequence by irreversibility. Static cloud keys and secret-bearing fork triggers come first because both hand an external party your credentials. SHA pinning next, because it is cheap and broad. Runner isolation and egress after that, because it needs infrastructure work. Signing and provenance last, because it is the layer that assumes the rest already holds.</p>
+
+    <p><strong>Deliverables.</strong> A pipeline identity register, a workflow hardening standard teams can be measured against, the OIDC trust policies with scoped subject conditions, an organisation-level allowed-actions policy with SHA pinning enforced, and a runner build standard. Those are artefacts a client keeps, which is the difference between a review and a programme.</p>
+
+    <p><strong>Lineage.</strong> This work descends directly from cloud IAM. The pipeline is a non-human identity with production access, and every argument about blast radius and least privilege applies to it unchanged. It also runs upstream of software supply chain assurance: signing and SBOM only mean something if the pipeline producing them is itself trustworthy.</p>
+
+    <h2>The honest summary</h2>
+
+    <p>Pipeline security is not difficult in the way cryptography is difficult. Every control here is a configuration change someone could make this week. What makes it hard is ownership: the pipeline sits in the gap between the team that runs it and the team responsible for what it can reach, and gaps of that shape are where estates accumulate the sort of privilege nobody would have granted deliberately.</p>
+
+    <p>If you do nothing else after reading this, do two things. Grep for secret-bearing workflows that check out untrusted code, and list every long-lived cloud credential in a CI secret store. Both take an afternoon. Between them they cover the two failure modes that turn a build system into an incident.</p>
+
+    <p class="lead">If you want a second opinion on a pipeline estate or help running the remediation, that is the kind of work I do through <a href="https://cyberspartans.co.uk">Cyber Spartans</a>.</p>
+  </article>
+
+  <section class="related">
+    <h2>Related reading</h2>
+    <div class="rgrid">
+      <a class="rcard" href="/articles/cloud-iam-blast-radius/">
+        <div class="c">Cloud</div>
+        <div class="t">Cloud IAM and the blast radius of one credential</div>
+      </a>
+      <a class="rcard" href="/articles/cyber-essentials-plus-certification-pathway/">
+        <div class="c">Governance</div>
+        <div class="t">The Cyber Essentials Plus pathway</div>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf">GitHub</a>
+      <a href="https://saleemyousaf.medium.com">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf">Dev.to</a>
+      <a href="https://cyberspartans.co.uk">Cyber Spartans</a>
+    </div>
+    <div class="pills">
+      <span class="pill bf">breachforge.co.uk</span>
+      <span class="pill cs">cyberspartans.co.uk</span>
+    </div>
+    <div class="legal">
+      &copy; 2026 Saleem Yousaf. All rights reserved. &nbsp;·&nbsp;
+      <a href="https://saleemyousaf.co.uk/privacy-policy/">Privacy</a>
+    </div>
+  </footer>
+
+</div>
+
+<div class="lb" id="lb"><span class="lb-close" id="lbClose">[ close ]</span></div>
+<script>
+(function(){
+  var lb=document.getElementById('lb'), closeBtn=document.getElementById('lbClose');
+  document.querySelectorAll('.figframe svg[role="img"]').forEach(function(svg){
+    svg.closest('.figframe').addEventListener('click',function(){
+      var clone=svg.cloneNode(true);
+      lb.querySelectorAll('svg').forEach(function(s){s.remove();});
+      lb.appendChild(clone); lb.classList.add('open');
+    });
+  });
+  function close(){lb.classList.remove('open');}
+  closeBtn.addEventListener('click',close);
+  lb.addEventListener('click',function(e){if(e.target===lb)close();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+})();
+</script>
+
+</body>
+</html>
