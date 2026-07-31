@@ -1,8 +1,10 @@
 # saleemyousaf.co.uk
-# Allow all crawlers everywhere except the BreachForge redirect stubs
 
+# Allow all crawlers to access everything.
+# BreachForge has moved to breachforge.co.uk. The pages under /breachforge/
+# must stay crawlable so Google can see the noindex + redirect on the stub
+# and drop the old URLs from its index. Blocking them here would prevent that.
 User-agent: *
 Allow: /
-Disallow: /breachforge/
 
 Sitemap: https://saleemyousaf.co.uk/sitemap.xml
