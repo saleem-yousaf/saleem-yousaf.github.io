@@ -1,1 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CISO 3.0: From Defender to Accountable Executive, and Where the Shift Came From | Saleem Yousaf</title>
+<meta name="description" content="CISO 3.0 explained without the hype: the real lineage from 1.0 to 3.0, where the term is derived from, and the two forces behind it, board-level accountability and autonomous AI. What the mandate now owns, and the responsibility-versus-authority gap nobody has solved.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/ciso-3-0-accountable-executive/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CISO 3.0: From Defender to Accountable Executive, and Where the Shift Came From">
+<meta property="og:description" content="The real lineage from 1.0 to 3.0, the two forces behind the shift, what the mandate now owns, and the responsibility-versus-authority gap nobody has solved.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/ciso-3-0-accountable-executive/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/articles/ciso-3-0-accountable-executive/og-ciso-3-0.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CISO 3.0: From Defender to Accountable Executive">
+<meta name="twitter:description" content="The real lineage, the two forces behind the shift, and the responsibility-versus-authority gap nobody has solved.">
+<meta name="twitter:image" content="https://saleemyousaf.co.uk/articles/ciso-3-0-accountable-executive/og-ciso-3-0.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "CISO 3.0: From Defender to Accountable Executive, and Where the Shift Came From",
+  "description": "A practitioner's account of the CISO role's evolution from 1.0 to 3.0, its derivation, the two forces of accountability and autonomous AI, the modern mandate, and the responsibility-versus-authority gap.",
+  "image": "https://saleemyousaf.co.uk/articles/ciso-3-0-accountable-executive/og-ciso-3-0.png",
+  "articleSection": "Governance and Compliance",
+  "datePublished": "2026-08-02",
+  "author": {
+    "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk",
+    "sameAs": ["https://www.linkedin.com/in/saleemyousaf","https://github.com/saleem-yousaf","https://cyberspartans.co.uk"]
+  },
+  "publisher": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://saleemyousaf.co.uk/articles/ciso-3-0-accountable-executive/" }
+}
+</script>
+<style>
+:root{
+  --slate-0:#090c10; --slate-1:#0f1318; --slate-2:#161b22;
+  --teal:#2dd4bf; --bright:#5eead4; --amber:#f5b73c; --blue:#4aa8ff;
+  --purple:#a78bfa; --red:#f87171;
+  --ink:#f4f6f8; --muted:#aeb5bf; --faint:#6c7682; --line:rgba(255,255,255,.08);
+  --emerald:#2f9e6f; --cyan:#00d4ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--slate-0); color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif; font-size:19px; line-height:1.72; -webkit-font-smoothing:antialiased;}
+.wrap{max-width:760px; margin:0 auto; padding:0 24px}
+a{color:var(--teal); text-decoration:none}
+a:hover{text-decoration:underline}
+.hero{padding:72px 0 8px}
+.eyebrow{font-family:"DM Mono",monospace; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal)}
+h1{font-family:"Syne",sans-serif; font-weight:800; font-size:clamp(30px,5.4vw,50px); line-height:1.06; letter-spacing:-.01em; margin:18px 0 20px}
+.chips{display:flex; flex-wrap:wrap; gap:10px 18px; font-family:"DM Mono",monospace; font-size:12.5px; color:var(--faint); letter-spacing:.03em}
+.chips span{display:inline-flex; align-items:center; gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal)}
+article{padding:20px 0 8px}
+article h2{font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(23px,3.6vw,30px); line-height:1.16; margin:56px 0 14px; letter-spacing:-.01em}
+article h3{font-family:"Syne",sans-serif; font-weight:600; font-size:20px; margin:36px 0 10px}
+article p{margin:0 0 20px; color:#e7ebef}
+article ul{margin:0 0 22px; padding-left:22px; color:#e7ebef}
+article li{margin-bottom:10px}
+.lead{font-size:21px; color:#eef1f4}
+code{font-family:"DM Mono",monospace; font-size:.86em; background:var(--slate-2); padding:2px 7px; border-radius:6px; color:var(--bright); word-break:break-word}
+strong{color:#fff; font-weight:600}
+.part{display:flex; align-items:center; gap:14px; margin:64px 0 6px}
+.part-num{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); border:1px solid rgba(45,212,191,.35); border-radius:999px; padding:5px 14px; white-space:nowrap}
+.part-rule{height:1px; background:linear-gradient(90deg,rgba(45,212,191,.4),transparent); flex:1}
+.callout{border:1px solid rgba(45,212,191,.32); background:linear-gradient(180deg, rgba(45,212,191,.08),rgba(45,212,191,.02)); border-radius:14px; padding:22px 24px; margin:30px 0; font-size:18px}
+.callout .k{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px}
+.callout.warn{border-color:rgba(245,183,60,.35); background:linear-gradient(180deg,rgba(245,183,60,.09),rgba(245,183,60,.02))}
+.callout.warn .k{color:var(--amber)}
+table{width:100%; border-collapse:collapse; margin:26px 0; font-size:15.5px}
+th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-family:"DM Mono",monospace; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal); font-weight:400}
+td{color:#e0e5ea}
+figure{margin:38px 0}
+.figframe{border:1px solid var(--line); border-radius:16px; background: radial-gradient(120% 140% at 80% 0%, rgba(45,212,191,.06), transparent 60%),var(--slate-1); padding:20px; cursor:zoom-in; position:relative}
+.figframe::after{content:"click to expand"; position:absolute; top:12px; right:16px; font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; color:var(--faint)}
+.figframe svg{width:100%; height:auto; display:block}
+figcaption{font-size:14px; color:var(--faint); margin-top:12px; text-align:center; font-family:"DM Mono",monospace; letter-spacing:.02em}
+.d-box{fill:var(--slate-2); stroke:rgba(45,212,191,.45); stroke-width:1.4}
+.d-box-soft{fill:var(--slate-1); stroke:var(--line); stroke-width:1.2}
+.d-t{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:15px}
+.d-t-s{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:13.5px}
+.d-s{fill:var(--muted); font-family:"Inter",sans-serif; font-size:12px}
+.d-lab{fill:var(--teal); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-a{fill:var(--amber); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-p{fill:var(--purple); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-b{fill:var(--blue); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-mono{fill:var(--bright); font-family:"DM Mono",monospace; font-size:11.5px}
+.related{margin:60px 0 20px}
+.related h2{font-size:20px; margin-bottom:18px}
+.rgrid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.rcard{border:1px solid var(--line); border-radius:14px; padding:18px 18px 20px; background:var(--slate-1); transition:border-color .2s}
+.rcard:hover{border-color:rgba(45,212,191,.4)}
+.rcard .c{font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal)}
+.rcard .t{font-family:"Syne",sans-serif; font-weight:600; font-size:16px; margin-top:8px; color:#fff; line-height:1.25}
+footer{border-top:1px solid var(--line); margin-top:60px; padding:40px 0 60px; color:var(--faint); font-size:14px}
+.footer-links{display:flex; flex-wrap:wrap; gap:16px; margin-bottom:22px; font-family:"DM Mono",monospace; font-size:13px}
+.pills{display:flex; gap:12px; margin:22px 0}
+.pill{border-radius:999px; padding:8px 16px; font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.04em; border:1px solid}
+.pill.cs{color:var(--emerald); border-color:rgba(47,158,111,.5)}
+.pill.bf{color:var(--cyan); border-color:rgba(0,212,255,.5)}
+.legal{font-size:12.5px; color:var(--faint)}
+/* collision-proof lightbox */
+.syx-lb{position:fixed; inset:0; z-index:2147483000; background:rgba(4,6,9,.95); display:none; align-items:center; justify-content:center; padding:64px 3vw 3vw; cursor:zoom-out}
+.syx-lb.syx-open{display:flex}
+.syx-lb-stage{max-width:96vw; max-height:88vh; display:flex; align-items:center; justify-content:center}
+.syx-lb-stage svg{width:96vw; max-height:88vh; height:auto}
+.syx-lb-x{position:fixed; top:16px; right:16px; z-index:2147483001; font-family:"DM Mono",monospace; font-size:14px; letter-spacing:.08em; color:var(--ink); background:var(--slate-2); border:1px solid var(--line); border-radius:999px; padding:10px 18px; cursor:pointer}
+.syx-lb-x:hover{border-color:var(--teal); color:var(--teal)}
+@media(max-width:560px){.rgrid{grid-template-columns:1fr} table{font-size:14px} th,td{padding:9px 8px}}
+</style>
+</head>
+<body>
 
+<div id="site-nav"></div>
+<script src="/nav.js" defer></script>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">// security leadership</div>
+    <h1>CISO 3.0: from defender to accountable executive, and where the shift came from</h1>
+    <div class="chips">
+      <span><span class="dot"></span>Saleem Yousaf</span>
+      <span>2 Aug 2026</span>
+      <span>15 min read</span>
+    </div>
+  </header>
+
+  <article>
+    <p class="lead">Every few years the industry ships a new version number for the CISO, and most of them are marketing. This one is worth taking seriously, but not for the reason the vendors selling it usually give. CISO 3.0 is not a new title or a new tool. It is the point at which the job stopped being about owning security controls and started being about personally answering for cyber as an enterprise risk. The number matters less than the shift underneath it.</p>
+
+    <p>It's also a contested term, which is the honest place to start. One camp defines CISO 3.0 as the security leader who governs autonomous AI. Another defines it as the executive who treats cyber risk as a financial and board-level problem. Both are describing real changes, and the interesting argument is that they are the same change seen from two angles. Let me lay out the lineage first, then the derivation, then what the role actually owns now.</p>
+
+    <div class="part"><span class="part-num">Part one</span><span class="part-rule"></span></div>
+    <h2>The lineage, and where it started</h2>
+
+    <p>The role has a birthday. In 1995, after a significant breach, Steve Katz became the first person to hold the CISO title, at Citicorp. He reported to the CIO, and for most of the role's life since, that reporting line told you everything: this was a senior technical post, an IT function with a security label. Understanding that origin matters, because the 3.0 shift is the first time the job has been defined by something other than the technology it defends.</p>
+
+    <p>Read against that origin, the versions become clear rather than arbitrary.</p>
+
+    <p><strong>CISO 1.0, roughly 1995 to the mid-2010s: the defender.</strong> Cybersecurity emerged as a function distinct from general IT. The mandate was controls, compliance, and keeping the company out of the headlines. The CISO reported to the CIO, spoke in threats and vulnerabilities, and was measured on whether anything bad happened on their watch. The rest of the organisation largely treated security as a technical cost centre.</p>
+
+    <p><strong>CISO 2.0, roughly the mid-2010s to 2022: the business translator.</strong> As breaches became board-visible and expensive, the good CISOs learned to translate technical risk into business impact. They started appearing in executive conversations, framing security as risk management rather than firewalls. But the structural position was unresolved: more visibility, more expectation, and still, in most organisations, responsibility without real authority. The CISO could describe the risk but rarely owned the decision to accept or fund it.</p>
+
+    <p><strong>CISO 3.0, 2023 onward: the accountable executive.</strong> This is the version where the job is defined by accountability. Cyber risk is treated as a financial and enterprise risk with a seat, or at least a hearing, at the board. The language shifts again, from risk and resilience to loss, liability, disclosure and capital. And crucially, the accountability became personal in a way it never was before.</p>
+
+    <figure>
+      <div class="figframe" onclick="syxLbOpen(this)">
+        <svg role="img" viewBox="0 0 1240 760" xmlns="http://www.w3.org/2000/svg" aria-label="The evolution of the CISO role from 1.0 the defender, through 2.0 the business translator, to 3.0 the accountable executive, showing focus, reporting line and language for each era, the 1995 origin, and the two forces behind the 3.0 shift.">
+          <text x="34" y="42" class="d-lab">// THE CISO, FROM 1995 TO NOW</text>
+
+          <rect class="d-box-soft" x="34" y="66" width="376" height="188" rx="12"/>
+          <text x="52" y="104" class="d-t" style="font-size:24px">1.0</text>
+          <text x="120" y="104" class="d-lab">~1995 TO 2015</text>
+          <text x="52" y="132" class="d-t">The defender</text>
+          <text x="52" y="160" class="d-s">Focus: controls, compliance, no headlines</text>
+          <text x="52" y="182" class="d-s">Reports to: the CIO, seen as an IT job</text>
+          <text x="52" y="204" class="d-s">Speaks: threats, vulnerabilities, patches</text>
+          <text x="52" y="234" class="d-mono">a technical cost centre</text>
+
+          <path class="d-line" d="M410 160 H452" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+
+          <rect class="d-box-soft" x="452" y="66" width="376" height="188" rx="12"/>
+          <text x="470" y="104" class="d-t" style="font-size:24px">2.0</text>
+          <text x="538" y="104" class="d-lab">~2015 TO 2022</text>
+          <text x="470" y="132" class="d-t">The business translator</text>
+          <text x="470" y="160" class="d-s">Focus: technical risk as business impact</text>
+          <text x="470" y="182" class="d-s">Reports to: CIO or CEO, in the room</text>
+          <text x="470" y="204" class="d-s">Speaks: risk, resilience, programmes</text>
+          <text x="470" y="234" class="d-mono">responsibility without authority</text>
+
+          <path class="d-line" d="M828 160 H870" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+
+          <rect x="870" y="66" width="336" height="188" rx="12" fill="rgba(45,212,191,.10)" stroke="rgba(45,212,191,.4)" stroke-width="1.4"/>
+          <text x="888" y="104" class="d-t" style="font-size:24px;fill:#5eead4">3.0</text>
+          <text x="946" y="104" class="d-lab">2023 ONWARD</text>
+          <text x="888" y="132" class="d-t" style="fill:#5eead4">The accountable executive</text>
+          <text x="888" y="160" class="d-s">Focus: cyber as financial risk</text>
+          <text x="888" y="182" class="d-s">Reports to: the board, personally liable</text>
+          <text x="888" y="204" class="d-s">Speaks: loss, liability, disclosure</text>
+          <text x="888" y="234" class="d-mono">answers for the risk</text>
+
+          <rect x="34" y="278" width="1172" height="52" rx="9" fill="none" stroke="rgba(255,255,255,.14)" stroke-dasharray="4 4"/>
+          <text x="54" y="309" class="d-s">Origin: the role began in 1995 when Steve Katz became the first CISO at Citicorp, after a major breach. A technical post for its first three decades.</text>
+
+          <text x="34" y="384" class="d-lab-p">// TWO FORCES DERIVE 3.0, ARRIVING TOGETHER</text>
+          <rect x="34" y="402" width="580" height="150" rx="12" fill="rgba(167,139,250,.08)" stroke="rgba(167,139,250,.32)" stroke-width="1.3"/>
+          <text x="54" y="432" class="d-lab-p">FORCE ONE &#183; ACCOUNTABILITY</text>
+          <text x="54" y="460" class="d-t-s">Cyber became a board and legal problem</text>
+          <text x="54" y="484" class="d-s">Regulators moved the CISO from adviser to signatory.</text>
+          <text x="54" y="504" class="d-s">SEC disclosure within four business days; NIS2 and DORA</text>
+          <text x="54" y="524" class="d-s">in Europe. SolarWinds and Uber made it personal.</text>
+
+          <rect x="626" y="402" width="580" height="150" rx="12" fill="rgba(74,168,255,.07)" stroke="rgba(74,168,255,.30)" stroke-width="1.3"/>
+          <text x="646" y="432" class="d-lab-b">FORCE TWO &#183; AUTONOMY</text>
+          <text x="646" y="460" class="d-t-s">Machines became operators, not tools</text>
+          <text x="646" y="484" class="d-s">AI agents hold keys and tokens, change infrastructure,</text>
+          <text x="646" y="504" class="d-s">and act without a prompt. Non-human identity is now the</text>
+          <text x="646" y="524" class="d-s">largest privileged population a CISO must govern.</text>
+
+          <text x="34" y="606" class="d-lab-a">// THE GAP NOBODY HAS SOLVED</text>
+          <rect x="34" y="624" width="1172" height="104" rx="12" fill="rgba(245,183,60,.08)" stroke="rgba(245,183,60,.30)" stroke-width="1.3"/>
+          <text x="54" y="656" class="d-t-s" style="fill:#f5b73c">Responsibility rose faster than authority</text>
+          <text x="54" y="682" class="d-s">Accountable to the board, and at moments to a court, yet rarely controlling the budget, the disclosure call, or the risk appetite.</text>
+          <text x="54" y="706" class="d-s">CISOs on boards rose from 14% to 30% between 2022 and 2023. Gartner expects 45% of CISO remits to extend beyond security by 2027.</text>
+
+          <defs>
+            <marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#2dd4bf"/></marker>
+          </defs>
+        </svg>
+      </div>
+      <figcaption>Three eras, the 1995 origin, the two forces, and the unsolved gap. Click to expand.</figcaption>
+    </figure>
+
+    <div class="part"><span class="part-num">Part two</span><span class="part-rule"></span></div>
+    <h2>Where 3.0 is derived from: two forces, arriving together</h2>
+
+    <p>The reason 3.0 feels like a genuine break rather than another vendor slide is that two independent forces landed on the role at the same time. Either alone would have changed the job. Together they redefined it.</p>
+
+    <h3>Force one: cyber became a board and legal problem</h3>
+
+    <p>For most of its history the CISO advised on risk and someone else owned the consequences. Regulation ended that. In the United States, the SEC now requires a public company to disclose a material cyber incident within four business days of determining it is material, which turns an operational judgement into a securities-disclosure judgement with the CISO's fingerprints on it. In Europe, NIS2 and, for financial services, DORA push in the same direction: faster reporting, named accountability, board-level ownership.</p>
+
+    <p>Then it became personal, and this is the part worth getting exactly right rather than repeating the scary version. In 2022 the former Uber security chief, Joe Sullivan, was convicted over the handling and non-disclosure of a breach, the first criminal conviction of its kind for a security leader, and that conviction stands. In 2023 the SEC brought a civil action against SolarWinds and, unusually, against its CISO Tim Brown personally, alleging the company misled investors about its security. That case is the one everyone cites, but its ending is instructive: most claims were dismissed in 2024, and in November 2025 the SEC's remaining claims against SolarWinds and Brown were dismissed with prejudice, with no finding against him.</p>
+
+    <p>So the honest reading is not "CISOs are going to prison." It is subtler and more durable. The most aggressive theory, that a CISO's internal risk judgements amount to securities fraud, did not survive a federal court. But the accountability shift is real and has not reversed: the CISO is now a named, answerable party in how an organisation discloses and governs cyber risk. In one survey, seven in ten CISOs said the wave of personal-liability cases had worsened their view of the job, and nearly half agreed that liability would improve accountability. Both things are true at once, which is exactly why the role feels different.</p>
+
+    <h3>Force two: machines became operators, not tools</h3>
+
+    <p>The second force is newer and moving faster. For thirty years the systems a CISO governed were operated by people. That assumption is breaking. AI agents now hold API keys and tokens, file tickets, spin up infrastructure, write and run scripts, and interact with production systems without waiting for a human prompt. A single misaligned workflow can cascade, and an agent with standing privileges is, functionally, a super-privileged insider that never sleeps and never resigns.</p>
+
+    <p>This connects directly to a theme I have written about separately: non-human identity is becoming the largest privileged population in the estate, and most identity programmes were built for humans. CISO 3.0 inherits the governance of a workforce that is increasingly not a workforce. Whoever framed 3.0 as "the agentic-era CISO" is pointing at this force, and they are right that it is transformative in scale. They are just describing one of the two forces, not the whole shift.</p>
+
+    <div class="callout">
+      <span class="k">Why the two definitions are really one</span>
+      The accountability camp and the agentic-AI camp look like they disagree. They do not. Autonomous systems massively expand the surface the CISO is accountable for, at exactly the moment accountability became personal and regulated. The financial-risk framing is the "what you answer for", and the AI framing is a large part of the "what there is to answer for". CISO 3.0 is the collision of the two.
+    </div>
+
+    <div class="part"><span class="part-num">Part three</span><span class="part-rule"></span></div>
+    <h2>What the 3.0 mandate actually owns</h2>
+
+    <p>Strip away the version number and the practical question is: what is on the desk now that was not there before. Five things.</p>
+
+    <table>
+      <thead><tr><th>Domain</th><th>What it now means for the CISO</th></tr></thead>
+      <tbody>
+        <tr><td>Board and disclosure</td><td>Owning or co-owning the materiality call on an incident, and being able to defend it. Communicating in the board's language, which is loss and probability, not packets.</td></tr>
+        <tr><td>Quantified risk</td><td>Expressing cyber exposure in currency, not heat maps. Insurance strategy and capital allocation become part of the remit.</td></tr>
+        <tr><td>Regulatory posture</td><td>SEC, NIS2 and DORA obligations, and a clear-eyed personal-liability position agreed with legal and the board.</td></tr>
+        <tr><td>AI and non-human identity</td><td>Governing autonomous agents: what they can access, what they can do unsupervised, and how their privileges are issued and revoked.</td></tr>
+        <tr><td>The evidence trail</td><td>A timestamped, tamper-evident record of every risk raised and every decision the business made about it. In a 3.0 world, documentation is the defence.</td></tr>
+      </tbody>
+    </table>
+
+    <p>That last row is the one experienced CISOs have quietly converged on since SolarWinds, and it is the most actionable thing in this whole piece. When you escalate a risk and the business decides not to fund the fix, the thing that protects both you and the organisation is a clear record that the risk was raised, quantified, and consciously accepted by someone with the authority to accept it. Not to build a paper trail for its own sake, but because in a world of personal accountability, an undocumented verbal "we're comfortable with that" is a liability with your name on it.</p>
+
+    <div class="part"><span class="part-num">Part four</span><span class="part-rule"></span></div>
+    <h2>The gap nobody has solved</h2>
+
+    <p>Here is the strain that defines the role today, and that no framework has fixed. The 3.0 CISO's responsibility has risen far faster than their authority. They are accountable to the board, and in the sharpest cases to a court, yet in most organisations they still do not control the security budget, do not make the final disclosure decision, and do not set the risk appetite. As one security leader put it plainly, we have a lot of the responsibility and very little of the authority; the organisation manages the risk, and the CISO's job is to present it and then manage whatever the organisation chooses to accept.</p>
+
+    <p>The numbers show the direction of travel without closing the gap. The share of CISOs sitting on corporate boards roughly doubled from 14% to 30% between 2022 and 2023, and Gartner expects 45% of CISO remits to extend beyond cybersecurity by 2027. The seat is arriving. The authority to match the accountability, mostly, is not yet.</p>
+
+    <p>This is why the healthiest reading of CISO 3.0 is not aspirational hype about "the CISO as business leader". It is a warning about an imbalance. If your organisation is going to hold a person accountable at board and regulatory level for cyber outcomes, it has to give that person commensurate authority over budget, disclosure and risk decisions, or it is setting up a role designed to fail and a person designed to take the blame.</p>
+
+    <h2>The honest summary</h2>
+
+    <p>CISO 1.0 defended the network. CISO 2.0 translated the risk. CISO 3.0 answers for it, in financial terms, at board level, sometimes in front of a regulator, while governing a growing population of machines that act on their own. That is the shift, and it is real, even though "3.0" is a label the market attached after the fact.</p>
+
+    <p>If you are stepping into or already holding one of these roles, the two moves that matter most are unglamorous. Build the evidence trail now, so that the risks you raise and the decisions the business makes about them are documented, quantified and owned by name. And get an honest inventory of the autonomous agents and non-human identities already holding privilege in your estate, because that is the part of the 3.0 mandate most organisations cannot yet answer, and the part growing fastest.</p>
+
+    <p class="lead">If you want help closing the responsibility-versus-authority gap, quantifying cyber risk for a board, or getting non-human identity under control, that is the kind of work I do through <a href="https://cyberspartans.co.uk">Cyber Spartans</a>.</p>
+  </article>
+
+  <section class="related">
+    <h2>Related reading</h2>
+    <div class="rgrid">
+      <a class="rcard" href="/articles/cyber-essentials-plus-certification-pathway/">
+        <div class="c">Governance</div>
+        <div class="t">The Cyber Essentials Plus pathway</div>
+      </a>
+      <a class="rcard" href="/articles/cloud-iam-blast-radius/">
+        <div class="c">Cloud</div>
+        <div class="t">Cloud IAM and the blast radius of one credential</div>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf">GitHub</a>
+      <a href="https://saleemyousaf.medium.com">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf">Dev.to</a>
+      <a href="https://cyberspartans.co.uk">Cyber Spartans</a>
+    </div>
+    <div class="pills">
+      <span class="pill bf">breachforge.co.uk</span>
+      <span class="pill cs">cyberspartans.co.uk</span>
+    </div>
+    <div class="legal">&copy; 2026 Saleem Yousaf. All rights reserved. &nbsp;&middot;&nbsp;
+      <a href="https://saleemyousaf.co.uk/privacy-policy/">Privacy</a></div>
+  </footer>
+</div>
+
+<div class="syx-lb" id="syxLb" onclick="syxLbClose()">
+  <button type="button" class="syx-lb-x" onclick="event.stopPropagation();syxLbClose();">&#10005; close</button>
+  <div class="syx-lb-stage" id="syxLbStage"></div>
+</div>
+<script>
+function syxLbOpen(fr){var s=fr.querySelector('svg[role="img"]');if(!s)return;
+  var st=document.getElementById('syxLbStage');st.innerHTML='';
+  st.appendChild(s.cloneNode(true));document.getElementById('syxLb').classList.add('syx-open');}
+function syxLbClose(){document.getElementById('syxLb').classList.remove('syx-open');}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'||e.key==='Esc')syxLbClose();});
+</script>
+
+</body>
+</html>
