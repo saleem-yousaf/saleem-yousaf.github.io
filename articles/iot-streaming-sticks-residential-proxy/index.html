@@ -1,1 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Streaming, Rented Address: What the Cheap TV Box Teaches Enterprise Security | Saleem Yousaf</title>
+<meta name="description" content="Preinfected Android TV boxes run as residential proxies while you stream and as ad-fraud bots while you don't. The consumer story is only half of it. What it means for network trust, fraud controls, IoT procurement and home-office risk.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/iot-streaming-sticks-residential-proxy/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Free Streaming, Rented Address: What the Cheap TV Box Teaches Enterprise Security">
+<meta property="og:description" content="Preinfected TV boxes as residential proxies and ad-fraud bots. The enterprise tail of the story: network trust, fraud controls, IoT procurement, home-office risk.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/iot-streaming-sticks-residential-proxy/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/articles/iot-streaming-sticks-residential-proxy/og-iot-streaming-stick.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Free Streaming, Rented Address">
+<meta name="twitter:description" content="The cheap TV box runs two side businesses on your network. What it means for enterprise security.">
+<meta name="twitter:image" content="https://saleemyousaf.co.uk/articles/iot-streaming-sticks-residential-proxy/og-iot-streaming-stick.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Free Streaming, Rented Address: What the Cheap TV Box Teaches Enterprise Security",
+  "description": "An analysis of preinfected Android TV boxes operating as residential proxies and ad-fraud bots, and the enterprise implications for network trust, fraud controls and IoT procurement.",
+  "image": "https://saleemyousaf.co.uk/articles/iot-streaming-sticks-residential-proxy/og-iot-streaming-stick.png",
+  "articleSection": "Threat",
+  "datePublished": "2026-08-03",
+  "author": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk",
+    "sameAs": ["https://www.linkedin.com/in/saleemyousaf","https://github.com/saleem-yousaf","https://cyberspartans.co.uk"] },
+  "publisher": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://saleemyousaf.co.uk/articles/iot-streaming-sticks-residential-proxy/" }
+}
+</script>
+<style>
 
+:root{
+  --slate-0:#090c10; --slate-1:#0f1318; --slate-2:#161b22;
+  --teal:#2dd4bf; --bright:#5eead4; --amber:#f5b73c; --blue:#4aa8ff;
+  --purple:#a78bfa; --red:#f87171;
+  --ink:#f4f6f8; --muted:#aeb5bf; --faint:#6c7682; --line:rgba(255,255,255,.08);
+  --emerald:#2f9e6f; --cyan:#00d4ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--slate-0); color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif; font-size:19px; line-height:1.72; -webkit-font-smoothing:antialiased;}
+.wrap{max-width:760px; margin:0 auto; padding:0 24px}
+a{color:var(--teal); text-decoration:none}
+a:hover{text-decoration:underline}
+.hero{padding:72px 0 8px}
+.eyebrow{font-family:"DM Mono",monospace; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal)}
+h1{font-family:"Syne",sans-serif; font-weight:800; font-size:clamp(30px,5.4vw,50px); line-height:1.06; letter-spacing:-.01em; margin:18px 0 20px}
+.chips{display:flex; flex-wrap:wrap; gap:10px 18px; font-family:"DM Mono",monospace; font-size:12.5px; color:var(--faint); letter-spacing:.03em}
+.chips span{display:inline-flex; align-items:center; gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal)}
+article{padding:20px 0 8px}
+article h2{font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(23px,3.6vw,30px); line-height:1.16; margin:56px 0 14px; letter-spacing:-.01em}
+article h3{font-family:"Syne",sans-serif; font-weight:600; font-size:20px; margin:36px 0 10px}
+article p{margin:0 0 20px; color:#e7ebef}
+article ul{margin:0 0 22px; padding-left:22px; color:#e7ebef}
+article li{margin-bottom:10px}
+.lead{font-size:21px; color:#eef1f4}
+code{font-family:"DM Mono",monospace; font-size:.86em; background:var(--slate-2); padding:2px 7px; border-radius:6px; color:var(--bright); word-break:break-word}
+strong{color:#fff; font-weight:600}
+.part{display:flex; align-items:center; gap:14px; margin:64px 0 6px}
+.part-num{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); border:1px solid rgba(45,212,191,.35); border-radius:999px; padding:5px 14px; white-space:nowrap}
+.part-rule{height:1px; background:linear-gradient(90deg,rgba(45,212,191,.4),transparent); flex:1}
+.callout{border:1px solid rgba(45,212,191,.32); background:linear-gradient(180deg, rgba(45,212,191,.08),rgba(45,212,191,.02)); border-radius:14px; padding:22px 24px; margin:30px 0; font-size:18px}
+.callout .k{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px}
+.callout.warn{border-color:rgba(245,183,60,.35); background:linear-gradient(180deg,rgba(245,183,60,.09),rgba(245,183,60,.02))}
+.callout.warn .k{color:var(--amber)}
+table{width:100%; border-collapse:collapse; margin:26px 0; font-size:15.5px}
+th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-family:"DM Mono",monospace; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal); font-weight:400}
+td{color:#e0e5ea}
+figure{margin:38px 0}
+.figframe{border:1px solid var(--line); border-radius:16px; background: radial-gradient(120% 140% at 80% 0%, rgba(45,212,191,.06), transparent 60%),var(--slate-1); padding:20px; cursor:zoom-in; position:relative}
+.figframe::after{content:"click to expand"; position:absolute; top:12px; right:16px; font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; color:var(--faint)}
+.figframe svg{width:100%; height:auto; display:block}
+figcaption{font-size:14px; color:var(--faint); margin-top:12px; text-align:center; font-family:"DM Mono",monospace; letter-spacing:.02em}
+.d-box{fill:var(--slate-2); stroke:rgba(45,212,191,.45); stroke-width:1.4}
+.d-box-soft{fill:var(--slate-1); stroke:var(--line); stroke-width:1.2}
+.d-t{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:15px}
+.d-t-s{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:13.5px}
+.d-s{fill:var(--muted); font-family:"Inter",sans-serif; font-size:12px}
+.d-lab{fill:var(--teal); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-a{fill:var(--amber); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-p{fill:var(--purple); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-b{fill:var(--blue); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-mono{fill:var(--bright); font-family:"DM Mono",monospace; font-size:11.5px}
+.related{margin:60px 0 20px}
+.related h2{font-size:20px; margin-bottom:18px}
+.rgrid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.rcard{border:1px solid var(--line); border-radius:14px; padding:18px 18px 20px; background:var(--slate-1); transition:border-color .2s}
+.rcard:hover{border-color:rgba(45,212,191,.4)}
+.rcard .c{font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal)}
+.rcard .t{font-family:"Syne",sans-serif; font-weight:600; font-size:16px; margin-top:8px; color:#fff; line-height:1.25}
+footer{border-top:1px solid var(--line); margin-top:60px; padding:40px 0 60px; color:var(--faint); font-size:14px}
+.footer-links{display:flex; flex-wrap:wrap; gap:16px; margin-bottom:22px; font-family:"DM Mono",monospace; font-size:13px}
+.pills{display:flex; gap:12px; margin:22px 0}
+.pill{border-radius:999px; padding:8px 16px; font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.04em; border:1px solid}
+.pill.cs{color:var(--emerald); border-color:rgba(47,158,111,.5)}
+.pill.bf{color:var(--cyan); border-color:rgba(0,212,255,.5)}
+.legal{font-size:12.5px; color:var(--faint)}
+/* collision-proof lightbox */
+.syx-lb{position:fixed; inset:0; z-index:2147483000; background:rgba(4,6,9,.95); display:none; align-items:center; justify-content:center; padding:64px 3vw 3vw; cursor:zoom-out}
+.syx-lb.syx-open{display:flex}
+.syx-lb-stage{max-width:96vw; max-height:88vh; display:flex; align-items:center; justify-content:center}
+.syx-lb-stage svg{width:96vw; max-height:88vh; height:auto}
+.syx-lb-x{position:fixed; top:16px; right:16px; z-index:2147483001; font-family:"DM Mono",monospace; font-size:14px; letter-spacing:.08em; color:var(--ink); background:var(--slate-2); border:1px solid var(--line); border-radius:999px; padding:10px 18px; cursor:pointer}
+.syx-lb-x:hover{border-color:var(--teal); color:var(--teal)}
+@media(max-width:560px){.rgrid{grid-template-columns:1fr} table{font-size:14px} th,td{padding:9px 8px}}
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+<script src="/nav.js" defer></script>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">// iot and network security</div>
+    <h1>Free streaming, rented address: what the cheap TV box teaches enterprise security</h1>
+    <div class="chips">
+      <span><span class="dot"></span>Saleem Yousaf</span>
+      <span>3 Aug 2026</span>
+      <span>13 min read</span>
+    </div>
+  </header>
+
+  <article>
+    <p class="lead">There is a category of consumer gadget that gets written off as somebody else's problem: the twenty-pound Android TV box that promises every channel for a one-off fee. It is a home entertainment story, filed under things you warn your relatives about. New research this month is a good reminder that it is also a security-architecture story, and the enterprise half of it is the part nobody covers.</p>
+
+    <p>The short version of the reporting, from KrebsOnSecurity and the security firm Bitsight, is this. A researcher registered an expired domain that a popular family of these boxes, sold under the H96 name, used to phone home. Through it he watched tens of thousands of devices doing two jobs that have nothing to do with streaming. While the television is on, the box rents your home internet connection out to paying strangers as a residential proxy. While the television is off, the same box pretends to be a mobile phone and clicks on advertisements across a network of machine-generated junk websites, defrauding advertisers at an estimated scale of tens of thousands of dollars a day.</p>
+
+    <p>That is a neat piece of research and a genuine consumer warning. But if you run security for an organisation, four things in it should stop you, and none of them are about your relatives' televisions.</p>
+
+    <div class="part"><span class="part-num">Part one</span><span class="part-rule"></span></div>
+    <h2>Residential IP addresses just stopped being trustworthy</h2>
+
+    <p>A large amount of fraud and abuse tooling rests on a quiet assumption: traffic from a residential internet address is probably a real person, and traffic from a data centre is probably a bot. Risk engines score it that way. Login defences weight it that way. Bot mitigation, credential-stuffing defences and geofencing all lean on the idea that a home broadband address carries a human on the end of it.</p>
+
+    <p>Residential proxy malware breaks that assumption at scale. When tens of thousands of TV boxes, and as the reporting notes, other cheap devices like digital photo frames, are quietly reselling their home connections, an attacker can route account-takeover attempts, scraping, scalping and fraud through a clean-looking residential address in the right city. The traffic inherits the trust of the household it is passing through. Your controls see a suburban broadband line. Behind it is a criminal renting that line by the hour.</p>
+
+    <p>The practical consequence for a defender is that "residential, therefore low risk" is a weakening signal, and anywhere you rely on it, you are now inheriting the reputation of every compromised device on that address space. This is not a reason to panic-block residential ranges, which would break legitimate users. It is a reason to stop treating the residential label as a proxy for trust, and to lean harder on signals that describe behaviour rather than origin.</p>
+
+    <div class="callout warn">
+      <span class="k">The uncomfortable implication</span>
+      If your fraud model gives a meaningful trust bonus to residential IP space, a growing slice of that space is now for hire by the people you are trying to keep out. The address looks like a customer. The session behind it may be anything.
+    </div>
+
+    <figure>
+      <div class="figframe" onclick="syxLbOpen(this)">
+        <svg role="img" viewBox="0 0 1240 720" xmlns="http://www.w3.org/2000/svg" aria-label="How a cheap streaming box behaves: preinfected on arrival, a residential proxy while the TV is on, an ad-fraud bot while the TV is off, why that is an enterprise problem, and how to contain untrusted IoT.">
+          <text x="34" y="42" class="d-lab">// FREE STREAMING, RENTED ADDRESS</text>
+
+          <rect class="d-box-soft" x="34" y="66" width="378" height="118" rx="12"/>
+          <text x="52" y="94" class="d-lab">SHIPS</text>
+          <text x="52" y="122" class="d-t">Preinfected</text>
+          <text x="52" y="146" class="d-s">Residential proxy and fraud apps</text>
+          <text x="52" y="164" class="d-s">already installed on arrival.</text>
+
+          <path d="M412 125 H452" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+          <rect class="d-box" x="452" y="66" width="378" height="118" rx="12"/>
+          <text x="470" y="94" class="d-lab">TV ON</text>
+          <text x="470" y="122" class="d-t">Your IP for hire</text>
+          <text x="470" y="146" class="d-s">Rents your home address out to</text>
+          <text x="470" y="164" class="d-s">paying strangers as a proxy.</text>
+
+          <path d="M830 125 H870" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+          <rect class="d-box" x="870" y="66" width="336" height="118" rx="12"/>
+          <text x="888" y="94" class="d-lab">TV OFF</text>
+          <text x="888" y="122" class="d-t">Your device, their bot</text>
+          <text x="888" y="146" class="d-s">Spoofs a phone and clicks ads</text>
+          <text x="888" y="164" class="d-s">on machine-generated sites.</text>
+
+          <text x="34" y="230" class="d-lab-a">// WHY IT IS AN ENTERPRISE PROBLEM</text>
+          <rect x="34" y="248" width="580" height="118" rx="12" fill="rgba(245,183,60,.06)" stroke="rgba(245,183,60,.34)" stroke-width="1.3"/>
+          <text x="54" y="278" class="d-lab-a">TRUST</text>
+          <text x="54" y="306" class="d-t-s">Residential IP is no longer clean</text>
+          <text x="54" y="330" class="d-s">Fraud controls treat home addresses as low risk.</text>
+          <text x="54" y="348" class="d-s">Proxy malware turns them into laundered exit nodes.</text>
+
+          <rect x="626" y="248" width="580" height="118" rx="12" fill="rgba(245,183,60,.06)" stroke="rgba(245,183,60,.34)" stroke-width="1.3"/>
+          <text x="646" y="278" class="d-lab-a">EXPOSURE</text>
+          <text x="646" y="306" class="d-t-s">An unmanaged Linux box on the LAN</text>
+          <text x="646" y="330" class="d-s">No authentication, an unofficial OS, a flat network.</text>
+          <text x="646" y="348" class="d-s">One in a meeting room is an open door with a plug.</text>
+
+          <text x="34" y="414" class="d-lab">// HOW TO CONTAIN UNTRUSTED IOT</text>
+          <rect class="d-box-soft" x="34" y="432" width="1172" height="48" rx="9"/>
+          <text x="54" y="461" class="d-t-s">Procurement</text>
+          <text x="330" y="461" class="d-s">certified Android TV OS only  ·  no generic boxes  ·  verify Play Protect</text>
+          <rect class="d-box-soft" x="34" y="488" width="1172" height="48" rx="9"/>
+          <text x="54" y="517" class="d-t-s">Network</text>
+          <text x="330" y="517" class="d-s">separate VLAN or guest SSID  ·  no lateral trust  ·  block inter-device</text>
+          <rect class="d-box-soft" x="34" y="544" width="1172" height="48" rx="9"/>
+          <text x="54" y="573" class="d-t-s">Egress</text>
+          <text x="330" y="573" class="d-s">filter and log outbound  ·  alert on proxy and telemetry traffic</text>
+          <rect x="34" y="600" width="1172" height="48" rx="9" fill="rgba(45,212,191,.11)" stroke="rgba(45,212,191,.4)" stroke-width="1.3"/>
+          <text x="54" y="629" class="d-t-s" style="fill:#5eead4">The default stance</text>
+          <text x="330" y="629" class="d-s">treat every uncertified IoT device as hostile until proven otherwise</text>
+
+          <text x="34" y="694" class="d-lab-p">// ask: what unmanaged IoT shares a network with your work devices, and do your controls still trust a residential IP?</text>
+
+          <defs><marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#2dd4bf"/></marker></defs>
+        </svg>
+      </div>
+      <figcaption>What the box does, why it matters, and how to contain it. Click to expand.</figcaption>
+    </figure>
+
+    <div class="part"><span class="part-num">Part two</span><span class="part-rule"></span></div>
+    <h2>Shadow IoT is now shadow infrastructure</h2>
+
+    <p>The second thing worth sitting with is what one of these devices actually is once it is plugged in. It is a cheap Linux computer running an unofficial build of Android, with no authentication, poor or no update integrity, and, in these cases, malware installed before it left the factory. It is designed to talk to the internet constantly, and it is designed to be invisible on your network because that is exactly what a media player looks like.</p>
+
+    <p>Now place that device somewhere it plausibly ends up. A television in a reception area. A screen in a meeting room that someone kitted out on a budget. A break room. And, most importantly in 2026, a home office, on the same flat network as the laptop that connects to your corporate systems over a VPN or a SASE agent. The remote-work shift quietly dissolved the boundary between the home LAN and the corporate one, and most home networks are a single flat segment where the work laptop, the smart TV, the doorbell and the preinfected streaming stick all sit together with full line of sight to each other.</p>
+
+    <p>An unauthenticated device with known-bad software on the same segment as a corporate endpoint is a lateral-movement opportunity that your security programme never assessed, because it never knew the device existed. This is the same shadow-IT problem the industry has chased for a decade, except the shadow asset is not an unsanctioned SaaS app, it is a physical computer with a network cable, and it arrived hostile.</p>
+
+    <div class="part"><span class="part-num">Part three</span><span class="part-rule"></span></div>
+    <h2>This is a hardware supply-chain problem wearing a consumer costume</h2>
+
+    <p>The detail that elevates this from "cheap gadgets are insecure" to something structural is that the malware was preinstalled. The devices did not get compromised in the field by a clever attacker. They shipped that way, through legitimate retail, with the residential proxy and fraud software baked into the firmware and, in the reporting, an app store that reinstalls the vendor's own components even after a user removes them.</p>
+
+    <p>That is a hardware supply-chain integrity failure, and it rhymes exactly with the software supply-chain arguments I have made elsewhere about provenance and signing. There, the question is whether you can prove an artefact was built by the pipeline you expect. Here, the question is whether you can trust the operating system on a device you bought, and for an uncertified box the answer is that you cannot, because there is no chain of provenance for the firmware at all. The certification schemes exist precisely to provide that chain: a device carrying official Android TV OS and Play Protect certification has passed a process the generic box has bypassed entirely.</p>
+
+    <p>The uncomfortable part is that legitimacy of the retailer tells you nothing. These devices sell through the same large, trusted marketplaces as everything else. The trust you place in the storefront does not extend to the provenance of the firmware inside the product, and treating "sold by a reputable retailer" as assurance is the consumer-grade version of trusting an unsigned artefact because it came from a familiar registry.</p>
+
+    <div class="part"><span class="part-num">Part four</span><span class="part-rule"></span></div>
+    <h2>What to actually do about it</h2>
+
+    <p>The response splits by who you are protecting, but the principle is one line: treat any uncertified IoT device as hostile until proven otherwise, and design the network so that being hostile does not get it anywhere.</p>
+
+    <h3>For the organisation</h3>
+    <ul>
+      <li><strong>Procurement.</strong> Put a line in the device policy: screens and media players must run certified Android TV OS, or an equivalent with a real provenance chain. No generic boxes, whatever the price. This is cheaper than any incident and it is a purchasing decision, not a project.</li>
+      <li><strong>Segmentation.</strong> Every IoT and AV device belongs on a separate VLAN or SSID with no lateral path to corporate systems and no inter-device trust. If a compromised screen can only see the internet and not your file server, most of the risk evaporates.</li>
+      <li><strong>Egress control.</strong> These devices betray themselves in their outbound traffic: constant telemetry, proxy relays, connections to destinations a television has no business reaching. Filter and log egress on the segments that hold them, and alert on the patterns rather than trying to enumerate every bad device.</li>
+    </ul>
+
+    <h3>For the remote workforce</h3>
+    <ul>
+      <li><strong>Guidance, not a ban you cannot enforce.</strong> You will not police what people plug in at home. You can tell them plainly why the cheap streaming box is a bad idea on the network their work laptop uses, and you can give the ones who want the convenience a safe alternative, which is a certified device.</li>
+      <li><strong>Assume the home LAN is hostile.</strong> This is the honest end state, and it is just zero trust applied to the place most of your workforce now operates. The corporate endpoint should not trust the network it sits on, at home any more than in a coffee shop. Host-based controls, a properly configured client, and access that depends on device and identity rather than network location are what make the preinfected stick down the hall irrelevant.</li>
+    </ul>
+
+    <div class="callout">
+      <span class="k">The one-line policy</span>
+      Uncertified IoT is hostile until proven otherwise, and the network is designed so that hostile gets it nowhere. Everything above is an application of that sentence.
+    </div>
+
+    <h2>The honest summary</h2>
+
+    <p>The streaming-stick story is entertaining because it is vivid: your television, quietly clicking fake adverts in the small hours and renting your address to criminals while you watch a film. But the reason it belongs on a security blog rather than only a consumer one is that it compresses three serious themes into one twenty-pound object. Residential IP reputation is eroding. The home network is now part of your attack surface. And hardware provenance is as real a problem as software provenance, with far less tooling to address it.</p>
+
+    <p>None of the fixes are exotic. Certified devices, segmented networks, controlled egress, and a corporate endpoint that does not trust the LAN it sits on. What the cheap TV box does is make abstract advice concrete, by giving you a specific, cheap, widely sold example of exactly the device your architecture should already assume is present and hostile.</p>
+
+    <p class="lead">If you want help getting IoT and home-office risk under control, or building the segmentation and zero-trust access that makes an untrusted network safe to sit on, that is the kind of work I do through <a href="https://cyberspartans.co.uk">Cyber Spartans</a>.</p>
+  </article>
+
+  <section class="related">
+    <h2>Related reading</h2>
+    <div class="rgrid">
+      <a class="rcard" href="/articles/physical-layer-rf-tools-and-the-law/"><div class="c">Threat</div><div class="t">The badge still works: RF tools and the law</div></a>
+      <a class="rcard" href="/articles/software-supply-chain-sbom-provenance/"><div class="c">Cloud</div><div class="t">You shipped it. Can you prove it?</div></a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf">GitHub</a>
+      <a href="https://saleemyousaf.medium.com">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf">Dev.to</a>
+      <a href="https://cyberspartans.co.uk">Cyber Spartans</a>
+    </div>
+    <div class="pills">
+      <span class="pill bf">breachforge.co.uk</span>
+      <span class="pill cs">cyberspartans.co.uk</span>
+    </div>
+    <div class="legal">&copy; 2026 Saleem Yousaf. All rights reserved. &nbsp;&middot;&nbsp;
+      <a href="https://saleemyousaf.co.uk/privacy-policy/">Privacy</a></div>
+  </footer>
+</div>
+
+<div class="syx-lb" id="syxLb" onclick="syxLbClose()">
+  <button type="button" class="syx-lb-x" onclick="event.stopPropagation();syxLbClose();">&#10005; close</button>
+  <div class="syx-lb-stage" id="syxLbStage"></div>
+</div>
+<script>
+function syxLbOpen(fr){var s=fr.querySelector('svg[role="img"]');if(!s)return;
+  var st=document.getElementById('syxLbStage');st.innerHTML='';
+  st.appendChild(s.cloneNode(true));document.getElementById('syxLb').classList.add('syx-open');}
+function syxLbClose(){document.getElementById('syxLb').classList.remove('syx-open');}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'||e.key==='Esc')syxLbClose();});
+</script>
+
+</body>
+</html>
