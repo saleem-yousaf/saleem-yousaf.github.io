@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Saleem Yousaf</title>
+    <link>https://saleemyousaf.co.uk/articles/</link>
+    <atom:link href="https://saleemyousaf.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>Cloud and cyber security architecture, threat analysis and governance by Saleem Yousaf.</description>
+    <language>en-gb</language>
+    <lastBuildDate>Thu, 13 Aug 2026 10:44:00 +0000</lastBuildDate>
+    <item>
+      <title>Free Streaming, Rented Address: What the Cheap TV Box Teaches Enterprise Security</title>
+      <link>https://saleemyousaf.co.uk/articles/iot-streaming-sticks-residential-proxy/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/iot-streaming-sticks-residential-proxy/</guid>
+      <pubDate>Mon, 03 Aug 2026 09:00:00 +0000</pubDate>
+      <category>Threat</category>
+      <description>Preinfected Android TV boxes run as residential proxies while you stream and as ad-fraud bots while you don&#x27;t. The consumer story is only half of it. What it means for network trust, fraud controls, IoT procurement and home-office risk.</description>
+    </item>
+    <item>
+      <title>CISO 3.0: From Defender to Accountable Executive, and Where the Shift Came From</title>
+      <link>https://saleemyousaf.co.uk/articles/ciso-3-0-accountable-executive/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/ciso-3-0-accountable-executive/</guid>
+      <pubDate>Sun, 02 Aug 2026 09:00:00 +0000</pubDate>
+      <category>Governance and Compliance</category>
+      <description>CISO 3.0 explained without the hype: the real lineage from 1.0 to 3.0, where the term is derived from, and the two forces behind it, board-level accountability and autonomous AI. What the mandate now owns, and the responsibility-versus-authority gap nobody has solved.</description>
+    </item>
+    <item>
+      <title>The Badge Still Works: Flipper Zero, RF Cloning, and the Law That Actually Applies</title>
+      <link>https://saleemyousaf.co.uk/articles/physical-layer-rf-tools-and-the-law/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/physical-layer-rf-tools-and-the-law/</guid>
+      <pubDate>Sun, 02 Aug 2026 09:00:00 +0000</pubDate>
+      <category>Threat</category>
+      <description>What handheld RF tools genuinely do, why legacy access credentials keep failing, the UK legal position on possession versus conduct, and how to run physical testing under proper authorisation.</description>
+    </item>
+    <item>
+      <title>You Shipped It. Can You Prove It? SBOM, Signing and Provenance That Actually Verify</title>
+      <link>https://saleemyousaf.co.uk/articles/software-supply-chain-sbom-provenance/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/software-supply-chain-sbom-provenance/</guid>
+      <pubDate>Sat, 01 Aug 2026 09:00:00 +0000</pubDate>
+      <category>Cloud Security</category>
+      <description>An SBOM nobody queries is a receipt. Inventory, signing, provenance and the enforcing admission policy that turns all of it into a control, plus the delivery sequence that gets you there.</description>
+    </item>
+    <item>
+      <title>Licensed, Not Configured: Hardening Microsoft 365 and Google Workspace</title>
+      <link>https://saleemyousaf.co.uk/articles/m365-google-workspace-hardening/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/m365-google-workspace-hardening/</guid>
+      <pubDate>Sat, 01 Aug 2026 09:00:00 +0000</pubDate>
+      <category>Cloud Security</category>
+      <description>The tenant is the perimeter, and both platforms ship configured for adoption rather than defence. Identity, application consent, mail forwarding, sharing defaults, and the delivery plan that closes the gaps.</description>
+    </item>
+    <item>
+      <title>Securing the CI/CD Pipeline: The Highest-Privilege System Nobody Threat Models</title>
+      <link>https://saleemyousaf.co.uk/articles/securing-the-cicd-pipeline/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/securing-the-cicd-pipeline/</guid>
+      <pubDate>Sat, 01 Aug 2026 09:00:00 +0000</pubDate>
+      <category>Cloud Security</category>
+      <description>The pipeline deploys to production, holds every cloud credential, and executes code from anyone who can open a pull request. Trust boundaries, OIDC federation, runner isolation, SHA pinning, artefact provenance, and the delivery plan that closes the gaps.</description>
+    </item>
+    <item>
+      <title>The identifier you never chose: Windows CDP, the GDID, and how Scattered Spider got named</title>
+      <link>https://saleemyousaf.co.uk/articles/windows-cdp-gdid-attribution/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/windows-cdp-gdid-attribution/</guid>
+      <pubDate>Sat, 18 Jul 2026 09:00:00 +0000</pubDate>
+      <category>Threat</category>
+      <description>The Connected Devices Platform and the Global Device Identifier are convenience features that double as durable forensic evidence. How the GDID works, and how it helped name a Scattered Spider suspect.</description>
+    </item>
+    <item>
+      <title>The Global Edge: Azure Front Door, AWS CloudFront, and GCP Cloud Armor Compared</title>
+      <link>https://saleemyousaf.co.uk/articles/global-edge-front-door-cloudfront-gcp/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/global-edge-front-door-cloudfront-gcp/</guid>
+      <pubDate>Thu, 16 Jul 2026 09:00:00 +0000</pubDate>
+      <category>Cloud Security</category>
+      <description>The global edge is your real internet-facing perimeter, and it is underrated. Azure Front Door, the AWS equivalent, and the GCP equivalent compared: security features, cloud and hybrid models, and setup via Terraform and the portal.</description>
+    </item>
+    <item>
+      <title>Azure Databricks and Data Factory: Use Cases and the Security Controls That Matter</title>
+      <link>https://saleemyousaf.co.uk/articles/azure-databricks-data-factory-security/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/azure-databricks-data-factory-security/</guid>
+      <pubDate>Tue, 14 Jul 2026 09:00:00 +0000</pubDate>
+      <category>Cloud Security</category>
+      <description>A practitioner&#x27;s guide to securing Azure Data Factory and Azure Databricks. Real use cases, why the data platform is a top-tier security boundary, and the identity, secrets, network, data, compute, and monitoring controls required in production.</description>
+    </item>
+    <item>
+      <title>AI Security Field Guide: Securing the LLM Stack with Open Source</title>
+      <link>https://saleemyousaf.co.uk/articles/ai-security-field-guide/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/ai-security-field-guide/</guid>
+      <pubDate>Sat, 11 Jul 2026 09:00:00 +0000</pubDate>
+      <category>AI Security</category>
+      <description>A practitioner&#x27;s map of the OWASP LLM Top 10 and the open source tools to test, guard, and govern the LLM stack. Prompt injection, red-teaming with garak and PyRIT, runtime guardrails, and continuous evaluation.</description>
+    </item>
+    <item>
+      <title>Post-Quantum Migration: Inventory First, Agility Second, Algorithms Last</title>
+      <link>https://saleemyousaf.co.uk/articles/post-quantum-migration/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/post-quantum-migration/</guid>
+      <pubDate>Thu, 09 Jul 2026 09:00:00 +0000</pubDate>
+      <category>Cryptography</category>
+      <description>What a post-quantum cryptography migration actually is, why harvest-now-decrypt-later makes it urgent, and the order that works: inventory first, crypto-agility second, algorithms last.</description>
+    </item>
+    <item>
+      <title>Cloud IAM and Blast Radius: Over-Privileged Roles, Least Privilege, and What Holds Up in Production</title>
+      <link>https://saleemyousaf.co.uk/articles/cloud-iam-blast-radius/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/cloud-iam-blast-radius/</guid>
+      <pubDate>Tue, 07 Jul 2026 09:00:00 +0000</pubDate>
+      <category>Cloud Security</category>
+      <description>Most cloud breaches are not clever. They are an over-privileged identity doing exactly what it was allowed to do. A practitioner&#x27;s take on cloud IAM, blast radius, least privilege and the guardrails that hold up in production.</description>
+    </item>
+    <item>
+      <title>Cryptographic Keys and PKI: Key Material, Rotation, and What Holds Up in Production</title>
+      <link>https://saleemyousaf.co.uk/articles/cryptographic-keys-pki-rotation/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/cryptographic-keys-pki-rotation/</guid>
+      <pubDate>Tue, 30 Jun 2026 09:00:00 +0000</pubDate>
+      <category>Cryptography</category>
+      <description>A practitioner&#x27;s take on cryptographic keys, key material, key rotation and PKI. Why key management, not the algorithm, decides whether encryption protects anything, and the best practices that hold up in production.</description>
+    </item>
+    <item>
+      <title>FinOps: The Accountability Problem Nobody Wants to Name</title>
+      <link>https://saleemyousaf.co.uk/articles/finops/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/finops/</guid>
+      <pubDate>Tue, 23 Jun 2026 09:00:00 +0000</pubDate>
+      <category>Security</category>
+      <description>FinOps programmes stall because the engineer who deploys the infrastructure never sees the bill. The tooling is fine. The accountability structure is broken. A cloud security architect&#x27;s view on fixing it.</description>
+    </item>
+    <item>
+      <title>Cloud HSM: What the Vendor Documentation Skips Over</title>
+      <link>https://saleemyousaf.co.uk/articles/cloud-hsm/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/cloud-hsm/</guid>
+      <pubDate>Tue, 16 Jun 2026 09:00:00 +0000</pubDate>
+      <category>Security</category>
+      <description>Cloud HSM gets specified for the wrong reasons. Saleem Yousaf breaks down AWS KMS, custom key store and CloudHSM direct: the real costs, and when each is right.</description>
+    </item>
+    <item>
+      <title>The Cyber Essentials Plus Pathway: What Danzell Changed, and How Remediation Programmes Actually Fail</title>
+      <link>https://saleemyousaf.co.uk/articles/cyber-essentials-plus-certification-pathway/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/cyber-essentials-plus-certification-pathway/</guid>
+      <pubDate>Mon, 27 Apr 2026 09:00:00 +0000</pubDate>
+      <category>Governance and Compliance</category>
+      <description>A practitioner&#x27;s guide to Cyber Essentials Plus under the Danzell question set and Requirements v3.3. The certification pathway, the five test cases, sampling mechanics, the new auto-fail rules, and the gotchas that sink remediation programmes.</description>
+    </item>
+  </channel>
+</rss>
