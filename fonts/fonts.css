@@ -1,0 +1,31 @@
+/* Self-hosted fonts for saleemyousaf.co.uk.
+   Replaces the Google Fonts <link> to remove the only third-party resource on
+   the site: fixes the Subresource Integrity finding (nothing external left to
+   hash) and stops sending every visitor's IP to Google. Variable fonts carry a
+   font-weight range and cover all weights the site uses from one file.
+   @font-face rules do not download until a family is actually rendered, so the
+   two pages using the extra families (BAS infographic, AI field guide) pull
+   only their own fonts, and every other page pulls only Syne, Inter, DM Mono. */
+
+/* Core families, used across the site */
+@font-face{font-family:'Syne';src:url('/fonts/Syne-var.woff2') format('woff2');font-weight:400 800;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('/fonts/Inter-var.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap;}
+@font-face{font-family:'DM Mono';src:url('/fonts/DMMono-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'DM Mono';src:url('/fonts/DMMono-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+
+/* BAS infographic page */
+@font-face{font-family:'Share Tech Mono';src:url('/fonts/ShareTechMono-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Barlow';src:url('/fonts/Barlow-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap;}
+@font-face{font-family:'Barlow';src:url('/fonts/Barlow-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Barlow';src:url('/fonts/Barlow-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'Barlow Condensed';src:url('/fonts/BarlowCondensed-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap;}
+@font-face{font-family:'Barlow Condensed';src:url('/fonts/BarlowCondensed-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Barlow Condensed';src:url('/fonts/BarlowCondensed-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+@font-face{font-family:'Barlow Condensed';src:url('/fonts/BarlowCondensed-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'Barlow Condensed';src:url('/fonts/BarlowCondensed-900.woff2') format('woff2');font-weight:900;font-style:normal;font-display:swap;}
+
+/* AI security field guide page */
+@font-face{font-family:'IBM Plex Mono';src:url('/fonts/IBMPlexMono-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Mono';src:url('/fonts/IBMPlexMono-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Sans';src:url('/fonts/IBMPlexSans-var.woff2') format('woff2');font-weight:100 700;font-style:normal;font-display:swap;}
+@font-face{font-family:'Space Grotesk';src:url('/fonts/SpaceGrotesk-var.woff2') format('woff2');font-weight:300 700;font-style:normal;font-display:swap;}
