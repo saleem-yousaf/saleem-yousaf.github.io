@@ -1,1 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Curtain, Not a Cloak: What a VPN Actually Hides, and What It Leaves Wide Open | Saleem Yousaf</title>
+<meta name="description" content="A VPN covers the network layer and nothing else. Using the Scattered Spider GDID case and the GTA 6 leaker subpoenas, a practitioner's breakdown of the three layers of identity, why Tor has the same blind spot, and what real separation would take.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/vpn-anonymity-network-account-device/">
+<link rel="alternate" type="application/rss+xml" title="Saleem Yousaf articles" href="https://saleemyousaf.co.uk/feed.xml">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A Curtain, Not a Cloak: What a VPN Actually Hides">
+<meta property="og:description" content="A VPN covers the network layer and nothing else. The three layers of identity, why Tor shares the blind spot, and what real separation takes.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/vpn-anonymity-network-account-device/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/articles/vpn-anonymity-network-account-device/og-vpn-anonymity.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="A Curtain, Not a Cloak: What a VPN Actually Hides">
+<meta name="twitter:description" content="A VPN covers the network layer and nothing else. The account and device layers name you anyway.">
+<meta name="twitter:image" content="https://saleemyousaf.co.uk/articles/vpn-anonymity-network-account-device/og-vpn-anonymity.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "A Curtain, Not a Cloak: What a VPN Actually Hides, and What It Leaves Wide Open",
+  "description": "An analysis of the three layers of online identity (network, account, device), why a VPN only covers the first, and what recent attribution cases reveal about the account and device layers.",
+  "image": "https://saleemyousaf.co.uk/articles/vpn-anonymity-network-account-device/og-vpn-anonymity.png",
+  "articleSection": "Threat",
+  "datePublished": "2026-08-23",
+  "author": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk",
+    "sameAs": ["https://www.linkedin.com/in/saleemyousaf","https://github.com/saleem-yousaf","https://cyberspartans.co.uk"] },
+  "publisher": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://saleemyousaf.co.uk/articles/vpn-anonymity-network-account-device/" }
+}
+</script>
+<style>
 
+:root{
+  --slate-0:#090c10; --slate-1:#0f1318; --slate-2:#161b22;
+  --teal:#2dd4bf; --bright:#5eead4; --amber:#f5b73c; --blue:#4aa8ff;
+  --purple:#a78bfa; --red:#f87171;
+  --ink:#f4f6f8; --muted:#aeb5bf; --faint:#6c7682; --line:rgba(255,255,255,.08);
+  --emerald:#2f9e6f; --cyan:#00d4ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--slate-0); color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif; font-size:19px; line-height:1.72; -webkit-font-smoothing:antialiased;}
+.wrap{max-width:760px; margin:0 auto; padding:0 24px}
+a{color:var(--teal); text-decoration:none}
+a:hover{text-decoration:underline}
+.hero{padding:72px 0 8px}
+.eyebrow{font-family:"DM Mono",monospace; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal)}
+h1{font-family:"Syne",sans-serif; font-weight:800; font-size:clamp(30px,5.4vw,50px); line-height:1.06; letter-spacing:-.01em; margin:18px 0 20px}
+.chips{display:flex; flex-wrap:wrap; gap:10px 18px; font-family:"DM Mono",monospace; font-size:12.5px; color:var(--faint); letter-spacing:.03em}
+.chips span{display:inline-flex; align-items:center; gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal)}
+article{padding:20px 0 8px}
+article h2{font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(23px,3.6vw,30px); line-height:1.16; margin:56px 0 14px; letter-spacing:-.01em}
+article h3{font-family:"Syne",sans-serif; font-weight:600; font-size:20px; margin:36px 0 10px}
+article p{margin:0 0 20px; color:#e7ebef}
+article ul{margin:0 0 22px; padding-left:22px; color:#e7ebef}
+article li{margin-bottom:10px}
+.lead{font-size:21px; color:#eef1f4}
+code{font-family:"DM Mono",monospace; font-size:.86em; background:var(--slate-2); padding:2px 7px; border-radius:6px; color:var(--bright); word-break:break-word}
+strong{color:#fff; font-weight:600}
+.part{display:flex; align-items:center; gap:14px; margin:64px 0 6px}
+.part-num{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); border:1px solid rgba(45,212,191,.35); border-radius:999px; padding:5px 14px; white-space:nowrap}
+.part-rule{height:1px; background:linear-gradient(90deg,rgba(45,212,191,.4),transparent); flex:1}
+.callout{border:1px solid rgba(45,212,191,.32); background:linear-gradient(180deg, rgba(45,212,191,.08),rgba(45,212,191,.02)); border-radius:14px; padding:22px 24px; margin:30px 0; font-size:18px}
+.callout .k{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px}
+.callout.warn{border-color:rgba(245,183,60,.35); background:linear-gradient(180deg,rgba(245,183,60,.09),rgba(245,183,60,.02))}
+.callout.warn .k{color:var(--amber)}
+table{width:100%; border-collapse:collapse; margin:26px 0; font-size:15.5px}
+th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-family:"DM Mono",monospace; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal); font-weight:400}
+td{color:#e0e5ea}
+figure{margin:38px 0}
+.figframe{border:1px solid var(--line); border-radius:16px; background: radial-gradient(120% 140% at 80% 0%, rgba(45,212,191,.06), transparent 60%),var(--slate-1); padding:20px; cursor:zoom-in; position:relative}
+.figframe::after{content:"click to expand"; position:absolute; top:12px; right:16px; font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; color:var(--faint)}
+.figframe svg{width:100%; height:auto; display:block}
+figcaption{font-size:14px; color:var(--faint); margin-top:12px; text-align:center; font-family:"DM Mono",monospace; letter-spacing:.02em}
+.d-box{fill:var(--slate-2); stroke:rgba(45,212,191,.45); stroke-width:1.4}
+.d-box-soft{fill:var(--slate-1); stroke:var(--line); stroke-width:1.2}
+.d-t{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:15px}
+.d-t-s{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:13.5px}
+.d-s{fill:var(--muted); font-family:"Inter",sans-serif; font-size:12px}
+.d-lab{fill:var(--teal); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-a{fill:var(--amber); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-p{fill:var(--purple); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-b{fill:var(--blue); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-mono{fill:var(--bright); font-family:"DM Mono",monospace; font-size:11.5px}
+.related{margin:60px 0 20px}
+.related h2{font-size:20px; margin-bottom:18px}
+.rgrid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.rcard{border:1px solid var(--line); border-radius:14px; padding:18px 18px 20px; background:var(--slate-1); transition:border-color .2s}
+.rcard:hover{border-color:rgba(45,212,191,.4)}
+.rcard .c{font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal)}
+.rcard .t{font-family:"Syne",sans-serif; font-weight:600; font-size:16px; margin-top:8px; color:#fff; line-height:1.25}
+footer{border-top:1px solid var(--line); margin-top:60px; padding:40px 0 60px; color:var(--faint); font-size:14px}
+.footer-links{display:flex; flex-wrap:wrap; gap:16px; margin-bottom:22px; font-family:"DM Mono",monospace; font-size:13px}
+.pills{display:flex; gap:12px; margin:22px 0}
+.pill{border-radius:999px; padding:8px 16px; font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.04em; border:1px solid}
+.pill.cs{color:var(--emerald); border-color:rgba(47,158,111,.5)}
+.pill.bf{color:var(--cyan); border-color:rgba(0,212,255,.5)}
+.legal{font-size:12.5px; color:var(--faint)}
+/* collision-proof lightbox */
+.syx-lb{position:fixed; inset:0; z-index:2147483000; background:rgba(4,6,9,.95); display:none; align-items:center; justify-content:center; padding:64px 3vw 3vw; cursor:zoom-out}
+.syx-lb.syx-open{display:flex}
+.syx-lb-stage{max-width:96vw; max-height:88vh; display:flex; align-items:center; justify-content:center}
+.syx-lb-stage svg{width:96vw; max-height:88vh; height:auto}
+.syx-lb-x{position:fixed; top:16px; right:16px; z-index:2147483001; font-family:"DM Mono",monospace; font-size:14px; letter-spacing:.08em; color:var(--ink); background:var(--slate-2); border:1px solid var(--line); border-radius:999px; padding:10px 18px; cursor:pointer}
+.syx-lb-x:hover{border-color:var(--teal); color:var(--teal)}
+@media(max-width:560px){.rgrid{grid-template-columns:1fr} table{font-size:14px} th,td{padding:9px 8px}}
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+<script src="/nav.js" defer></script>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">// anonymity and attribution</div>
+    <h1>A curtain, not a cloak: what a VPN actually hides, and what it leaves wide open</h1>
+    <div class="chips">
+      <span><span class="dot"></span>Saleem Yousaf</span>
+      <span>23 Aug 2026</span>
+      <span>13 min read</span>
+    </div>
+  </header>
+
+  <article>
+    <p class="lead">There is a comforting story people tell themselves about the VPN icon in the menu bar: that it makes them anonymous. It is one of the most widely held and most wrong beliefs in everyday security. A VPN is not an invisibility cloak that removes you from view. It is a curtain across one window, and anyone who can get a court to ask what is behind it just has to ask. Two recent cases show exactly where the curtain ends, and they are worth understanding whether you are defending a network or simply trying to grasp what these tools do and do not do.</p>
+
+    <p>The core idea is simple once you see it. Your identity online is not one thing, it is three layers stacked on top of each other, and a VPN only touches the top one. Miss that, and you can do everything the privacy guides tell you and still be named.</p>
+
+    <div class="part"><span class="part-num">Part one</span><span class="part-rule"></span></div>
+    <h2>Three layers, and a VPN only covers one</h2>
+
+    <p>Picture your presence on a network as three layers. The <strong>network layer</strong> is where your traffic comes from and where it goes: your IP address, the route your packets take, what your internet provider can see. The <strong>account layer</strong> is who you are signed in as: the Microsoft, Google, Apple or Discord accounts logged in on that same machine. The <strong>device layer</strong> is the machine itself: the persistent identifiers your operating system and hardware generate and report home, quietly, as a matter of routine.</p>
+
+    <p>A VPN operates entirely on the first layer. It genuinely does useful things there: it hides your IP address from the websites you visit, and it hides the content and destination of your traffic from your internet provider. If your goal is to stop a website seeing your home IP, or to stop your ISP building a profile of the sites you browse, a VPN is the right tool and it works.</p>
+
+    <p>But it does nothing for the other two layers, and this is the part the marketing never mentions. If you are logged into your Google account while using a VPN, you are still logged into your Google account. The tunnel changes the address your traffic appears to come from; it does not log you out, and it does not stop the service knowing exactly who you are. And underneath both, the device carries on reporting the identifiers baked into it, over that same VPN connection, to whichever vendor built the operating system. The curtain covers the window. It does not cover the nameplate on the door, or the device broadcasting its serial number through the wall.</p>
+
+    <figure>
+      <div class="figframe" onclick="syxLbOpen(this)">
+        <svg role="img" viewBox="0 0 1240 760" xmlns="http://www.w3.org/2000/svg" aria-label="The three layers of online identity: network covered by a VPN, account and device left exposed; two real cases; why Tor shares the blind spot.">
+          <text x="34" y="42" class="d-lab">// A VPN COVERS ONE LAYER OF THREE</text>
+
+          <rect x="34" y="66" width="1172" height="80" rx="11" fill="rgba(45,212,191,.10)" stroke="rgba(45,212,191,.4)" stroke-width="1.4"/>
+          <text x="54" y="98" class="d-lab">NETWORK</text>
+          <text x="54" y="124" class="d-t-s">Your IP and traffic: hidden from sites, hidden from your ISP</text>
+          <text x="1080" y="112" class="d-mono" style="fill:#5eead4">COVERED</text>
+
+          <rect x="34" y="158" width="1172" height="80" rx="11" fill="rgba(248,113,113,.08)" stroke="rgba(248,113,113,.34)" stroke-width="1.3"/>
+          <text x="54" y="190" class="d-lab-a" style="fill:#f87171">ACCOUNT</text>
+          <text x="54" y="216" class="d-t-s">Who you are signed in as: Microsoft, Google, Discord, untouched</text>
+          <text x="1076" y="204" class="d-mono" style="fill:#f87171">EXPOSED</text>
+
+          <rect x="34" y="250" width="1172" height="80" rx="11" fill="rgba(248,113,113,.08)" stroke="rgba(248,113,113,.34)" stroke-width="1.3"/>
+          <text x="54" y="282" class="d-lab-a" style="fill:#f87171">DEVICE</text>
+          <text x="54" y="308" class="d-t-s">What the machine reports home: persistent IDs ride the tunnel too</text>
+          <text x="1076" y="296" class="d-mono" style="fill:#f87171">EXPOSED</text>
+
+          <text x="34" y="384" class="d-lab">// TWO CASES</text>
+          <rect class="d-box-soft" x="34" y="402" width="580" height="150" rx="12"/>
+          <text x="54" y="432" class="d-lab" style="fill:#f87171">DEVICE LAYER</text>
+          <text x="54" y="460" class="d-t-s">Ran a VPN the whole time</text>
+          <text x="54" y="484" class="d-s">An alleged Scattered Spider operator hid behind a VPN and</text>
+          <text x="54" y="504" class="d-s">proxies. A persistent Windows device ID tied one install to</text>
+          <text x="54" y="524" class="d-s">his personal accounts. The VPN rotated the IP; the ID did not.</text>
+
+          <rect class="d-box-soft" x="626" y="402" width="580" height="150" rx="12"/>
+          <text x="646" y="432" class="d-lab-b">ACCOUNT LAYER</text>
+          <text x="646" y="460" class="d-t-s">The subpoena asks anyway</text>
+          <text x="646" y="484" class="d-s">Chasing a game leaker, a publisher subpoenaed Microsoft</text>
+          <text x="646" y="504" class="d-s">and Discord for device IDs, IPs, phone numbers, linked</text>
+          <text x="646" y="524" class="d-s">accounts and cloud files. The VPN was never the point.</text>
+
+          <text x="34" y="606" class="d-lab-a">// TOR SHARES THE BLIND SPOT</text>
+          <rect x="34" y="624" width="1172" height="104" rx="12" fill="rgba(245,183,60,.07)" stroke="rgba(245,183,60,.3)" stroke-width="1.3"/>
+          <text x="54" y="656" class="d-t-s" style="fill:#f5b73c">Watching both ends beats the encryption</text>
+          <text x="54" y="682" class="d-s">An observer at both ends correlates timing and packet size without breaking the crypto. And a named account logged in over</text>
+          <text x="54" y="702" class="d-s">Tor still names you, while the device underneath still reports its identifiers. Anonymity fails at the layer the tool never covered.</text>
+        </svg>
+      </div>
+      <figcaption>Three layers, two cases, and the shared blind spot. Click to expand.</figcaption>
+    </figure>
+
+    <div class="part"><span class="part-num">Part two</span><span class="part-rule"></span></div>
+    <h2>The device layer: ran a VPN, still got named</h2>
+
+    <p>The clearest illustration this year came from the case of a 19-year-old accused of belonging to Scattered Spider, the social-engineering crew behind a long run of high-profile intrusions. By the standards of operational security, the alleged operator did the textbook things. He used a VPN during the intrusion. He used proxy and tunnelling tools. He operated across several countries. On paper, a ghost.</p>
+
+    <p>According to the unsealed US complaint, none of that mattered, because investigators did not need to defeat the VPN. Every Windows installation generates a persistent identifier that Microsoft calls a Global Device Identifier, or GDID, used for telemetry, licensing and update services. It is tied to the operating-system install rather than to any account or IP address, and critically, it does not change when you switch IP addresses or turn on a VPN. Microsoft records reportedly showed the device carrying that identifier hitting a tunnelling-service signup page at the exact minute the attack account was created, and then the same identifier surfacing alongside personal accounts, on home IP addresses in the cities his own travel records placed him in. The VPN rotated the address the traffic came from. The device identifier stitched every session back to one machine anyway, and legal process to Microsoft did the rest.</p>
+
+    <p>I have written separately about the mechanics of this kind of Windows device identifier and how it rides along on telemetry, so I will not repeat the plumbing here. The point for this article is the layer it operates on. The VPN did exactly what a VPN does, at the network layer, faithfully. The identifier that named him lived a layer below, at the device, where the VPN has no reach and never claimed to.</p>
+
+    <div class="callout warn">
+      <span class="k">The uncomfortable version</span>
+      The VPN did not fail. It worked perfectly, and it was still irrelevant, because the thing that identified the machine was never travelling through the tunnel in the first place. It sat underneath, at the layer where the operating system talks to its vendor.
+    </div>
+
+    <div class="part"><span class="part-num">Part three</span><span class="part-rule"></span></div>
+    <h2>The account layer: they do not break it, they subpoena it</h2>
+
+    <p>The second case, unfolding as I write this, comes from the hunt for the person behind a wave of Grand Theft Auto 6 gameplay leaks, operating under the name Cyberleek. Rather than attempt any technical de-anonymisation, the publisher went to a federal court and filed subpoenas compelling Microsoft and Discord to hand over identifying records. Reading what was reportedly requested is the fastest education in what the account layer actually holds: account IDs, registration and login IP addresses, phone numbers, linked Google and Xbox connections, Windows device identifiers, and the contents of cloud storage referencing the leaked material.</p>
+
+    <p>Notice what is absent from that list. Nobody is trying to crack the VPN. They do not need to. If the person behind the alias logged into a Microsoft or Discord account from the machine that handled the leaked files, the link between the account and the device already exists in a company's logs, and a lawful order turns it over. A VPN changes none of this, because the VPN was protecting the network layer, and the request is aimed squarely at the account and device layers, where the tunnel offers nothing.</p>
+
+    <p>This is the pattern worth internalising, and it generalises well beyond hackers and game leakers. Serious de-anonymisation, the kind that ends in a courtroom, rarely involves breaking encryption. It involves correlation and legal process: matching a persistent identifier across sessions, then compelling the company that holds the records to connect that identifier to a person. The encryption is left standing. It was never the obstacle.</p>
+
+    <div class="part"><span class="part-num">Part four</span><span class="part-rule"></span></div>
+    <h2>Tor has the same blind spot, one layer up</h2>
+
+    <p>It is tempting to conclude that Tor, or a decentralised VPN, closes the gap. It raises the bar at the network layer, but it does not change the shape of the problem, and it is important to be honest about why.</p>
+
+    <p>Tor's own well-documented weakness is traffic correlation. An adversary who can observe both ends of a connection, the traffic entering the network near you and leaving it near the destination, does not need to break any encryption. They line up the timing and the size of the packets at each end and match them. That is a network-layer attack that sidesteps the cryptography entirely. But even setting that aside, Tor does nothing for the two layers a VPN also misses. Log into a named account over Tor and the account still names you. Run it on a device that reports persistent identifiers and the device still reports them. You have hardened the layer that was already the strongest and left the two weaker layers exactly as exposed as before.</p>
+
+    <p>Encryption, whether from a VPN or Tor, protects the content of your traffic and, to a degree, its destination. It does not protect the fact of who is talking, which is precisely what account logins and device identifiers give away.</p>
+
+    <div class="part"><span class="part-num">Part five</span><span class="part-rule"></span></div>
+    <h2>What real separation would take, and why almost nobody achieves it</h2>
+
+    <p>If the three layers are the problem, then real anonymity means covering all three at once, and that is far harder than installing an app. It means a separate device that has never touched your everyday identity, signed into separate accounts created and only ever used for the separate activity, over a network path that cannot be correlated back to you, with the discipline never to cross the streams even once. A single login to a personal account on the anonymous device, a single reuse of a phone number, one session where the timing lines up, and the separation collapses. The identifiers are persistent and the correlation is cumulative; you have to get it right every time, and the investigator only has to find one crossing.</p>
+
+    <p>Almost nobody sustains that, which is the honest reason the cases above end in arrests and subpoenas rather than dead ends. Most people install a VPN and consider the matter closed, and for the everyday threat they actually face, a website tracking them or an ISP profiling them, that is a reasonable and sufficient choice. The failure is not the tool. It is the belief that the tool does more than it does.</p>
+
+    <div class="callout">
+      <span class="k">The question that sorts it out</span>
+      Before reaching for a VPN, decide who you are hiding from. From the website you are visiting? From your internet provider? Or from someone with the legal power to compel records from the companies you are logged into? A VPN answers the first well, the second well, and the third not at all. Knowing which one you mean is the whole game.
+    </div>
+
+    <h2>The honest summary</h2>
+
+    <p>A VPN is a genuinely useful tool aimed at one layer of a three-layer problem. It hides your IP and shields your traffic from your ISP, and for the ordinary privacy most people want, that is enough. What it does not do is log you out of your accounts or silence the identifiers your device reports home, and those two layers are where serious attribution actually happens, not by breaking encryption but by correlating identifiers and asking a company, with a court order, to connect the dots. The two cases this year, one resting on a device identifier that outlived every VPN the operator used, the other on subpoenas aimed straight at account records, are the same lesson from two directions.</p>
+
+    <p>It is not an invisibility cloak. It is a curtain, and anyone with a subpoena just has to ask what is behind it.</p>
+
+    <p class="lead">If your organisation is thinking about attribution, insider risk, or what your own endpoints and accounts reveal, that is the kind of work I do through <a href="https://cyberspartans.co.uk">Cyber Spartans</a>.</p>
+  </article>
+
+  <section class="related">
+    <h2>Related reading</h2>
+    <div class="rgrid">
+      <a class="rcard" href="/articles/windows-cdp-gdid-attribution/"><div class="c">Threat</div><div class="t">The identifier you never chose: Windows CDP and the GDID</div></a>
+      <a class="rcard" href="/articles/iot-streaming-sticks-residential-proxy/"><div class="c">Threat</div><div class="t">Free streaming, rented address</div></a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf">GitHub</a>
+      <a href="https://saleemyousaf.medium.com">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf">Dev.to</a>
+      <a href="https://cyberspartans.co.uk">Cyber Spartans</a>
+    </div>
+    <div class="pills">
+      <span class="pill bf">breachforge.co.uk</span>
+      <span class="pill cs">cyberspartans.co.uk</span>
+    </div>
+    <div class="legal">&copy; 2026 Saleem Yousaf. All rights reserved. &nbsp;&middot;&nbsp;
+      <a href="https://saleemyousaf.co.uk/privacy-policy/">Privacy</a></div>
+  </footer>
+</div>
+
+<div class="syx-lb" id="syxLb" onclick="syxLbClose()">
+  <button type="button" class="syx-lb-x" onclick="event.stopPropagation();syxLbClose();">&#10005; close</button>
+  <div class="syx-lb-stage" id="syxLbStage"></div>
+</div>
+<script>
+function syxLbOpen(fr){var s=fr.querySelector('svg[role="img"]');if(!s)return;
+  var st=document.getElementById('syxLbStage');st.innerHTML='';
+  st.appendChild(s.cloneNode(true));document.getElementById('syxLb').classList.add('syx-open');}
+function syxLbClose(){document.getElementById('syxLb').classList.remove('syx-open');}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'||e.key==='Esc')syxLbClose();});
+</script>
+
+</body>
+</html>
