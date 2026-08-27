@@ -6,7 +6,23 @@
     <atom:link href="https://saleemyousaf.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Cloud and cyber security architecture, threat analysis and governance by Saleem Yousaf.</description>
     <language>en-gb</language>
-    <lastBuildDate>Thu, 13 Aug 2026 10:44:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 27 Aug 2026 09:37:00 +0000</lastBuildDate>
+    <item>
+      <title>A Curtain, Not a Cloak: What a VPN Actually Hides, and What It Leaves Wide Open</title>
+      <link>https://saleemyousaf.co.uk/articles/vpn-anonymity-network-account-device/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/vpn-anonymity-network-account-device/</guid>
+      <pubDate>Sun, 23 Aug 2026 09:00:00 +0000</pubDate>
+      <category>Threat</category>
+      <description>A VPN covers the network layer and nothing else. Using the Scattered Spider GDID case and the GTA 6 leaker subpoenas, a practitioner&#x27;s breakdown of the three layers of identity, why Tor has the same blind spot, and what real separation would take.</description>
+    </item>
+    <item>
+      <title>Open the Door, Not the Floodgates: Running a Bug Bounty as a Defender</title>
+      <link>https://saleemyousaf.co.uk/articles/bug-bounty-programme-defender-guide/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/bug-bounty-programme-defender-guide/</guid>
+      <pubDate>Tue, 04 Aug 2026 09:00:00 +0000</pubDate>
+      <category>Threat</category>
+      <description>A bug bounty is an intake pipe you have to staff, not a control you buy. Safe harbour, scope, triage capacity, reward rubrics, and when a bounty is the right tool versus a pentest, from the programme owner&#x27;s seat.</description>
+    </item>
     <item>
       <title>Free Streaming, Rented Address: What the Cheap TV Box Teaches Enterprise Security</title>
       <link>https://saleemyousaf.co.uk/articles/iot-streaming-sticks-residential-proxy/</link>
