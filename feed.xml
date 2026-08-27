@@ -6,7 +6,7 @@
     <atom:link href="https://saleemyousaf.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Cloud and cyber security architecture, threat analysis and governance by Saleem Yousaf.</description>
     <language>en-gb</language>
-    <lastBuildDate>Thu, 27 Aug 2026 09:37:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 27 Aug 2026 09:52:00 +0000</lastBuildDate>
     <item>
       <title>A Curtain, Not a Cloak: What a VPN Actually Hides, and What It Leaves Wide Open</title>
       <link>https://saleemyousaf.co.uk/articles/vpn-anonymity-network-account-device/</link>
@@ -22,6 +22,22 @@
       <pubDate>Tue, 04 Aug 2026 09:00:00 +0000</pubDate>
       <category>Threat</category>
       <description>A bug bounty is an intake pipe you have to staff, not a control you buy. Safe harbour, scope, triage capacity, reward rubrics, and when a bounty is the right tool versus a pentest, from the programme owner&#x27;s seat.</description>
+    </item>
+    <item>
+      <title>The Plan Meets the Day It Broke: The First Hour of an Incident</title>
+      <link>https://saleemyousaf.co.uk/articles/incident-response-first-hour/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/incident-response-first-hour/</guid>
+      <pubDate>Tue, 04 Aug 2026 09:00:00 +0000</pubDate>
+      <category>Governance and Compliance</category>
+      <description>Most organisations have an incident response plan and have never run it. Declaring the incident, containing without destroying evidence, the disclosure clock, the roles and the retainer, and the tabletop that tests it all.</description>
+    </item>
+    <item>
+      <title>Their Breach, Your Incident: Managing Third-Party and Vendor Risk</title>
+      <link>https://saleemyousaf.co.uk/articles/third-party-vendor-risk-management/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/third-party-vendor-risk-management/</guid>
+      <pubDate>Tue, 04 Aug 2026 09:00:00 +0000</pubDate>
+      <category>Governance and Compliance</category>
+      <description>You can outsource the service, not the risk. Why the security questionnaire is theatre, and what a real programme covers: inventory, tiering, independent assurance, contract clauses, concentration risk and exit planning.</description>
     </item>
     <item>
       <title>Free Streaming, Rented Address: What the Cheap TV Box Teaches Enterprise Security</title>
