@@ -1,1 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Plan Meets the Day It Broke: The First Hour of an Incident | Saleem Yousaf</title>
+<meta name="description" content="Most organisations have an incident response plan and have never run it. Declaring an incident, containing without destroying evidence, the disclosure clock, the roles and the retainer, and the tabletop that tests it all.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/incident-response-first-hour/">
+<link rel="alternate" type="application/rss+xml" title="Saleem Yousaf articles" href="https://saleemyousaf.co.uk/feed.xml">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Plan Meets the Day It Broke: The First Hour of an Incident">
+<meta property="og:description" content="Declaring the incident, containing without destroying evidence, the disclosure clock, and the retainer. What makes the first hour survivable.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/incident-response-first-hour/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/articles/incident-response-first-hour/og-ir-first-hour.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The First Hour of an Incident">
+<meta name="twitter:description" content="Declaring the incident, containing without destroying evidence, the disclosure clock, and the retainer. What makes the first hour survivable.">
+<meta name="twitter:image" content="https://saleemyousaf.co.uk/articles/incident-response-first-hour/og-ir-first-hour.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "The Plan Meets the Day It Broke: The First Hour of an Incident",
+  "description": "Most organisations have an incident response plan and have never run it. Declaring an incident, containing without destroying evidence, the disclosure clock, the roles and the retainer, and the tabletop that tests it all.",
+  "image": "https://saleemyousaf.co.uk/articles/incident-response-first-hour/og-ir-first-hour.png",
+  "articleSection": "Governance and Compliance",
+  "datePublished": "2026-08-04",
+  "author": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk",
+    "sameAs": ["https://www.linkedin.com/in/saleemyousaf","https://github.com/saleem-yousaf","https://cyberspartans.co.uk"] },
+  "publisher": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://saleemyousaf.co.uk/articles/incident-response-first-hour/" }
+}
+</script>
+<style>
 
+:root{
+  --slate-0:#090c10; --slate-1:#0f1318; --slate-2:#161b22;
+  --teal:#2dd4bf; --bright:#5eead4; --amber:#f5b73c; --blue:#4aa8ff;
+  --purple:#a78bfa; --red:#f87171;
+  --ink:#f4f6f8; --muted:#aeb5bf; --faint:#6c7682; --line:rgba(255,255,255,.08);
+  --emerald:#2f9e6f; --cyan:#00d4ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--slate-0); color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif; font-size:19px; line-height:1.72; -webkit-font-smoothing:antialiased;}
+.wrap{max-width:760px; margin:0 auto; padding:0 24px}
+a{color:var(--teal); text-decoration:none}
+a:hover{text-decoration:underline}
+.hero{padding:72px 0 8px}
+.eyebrow{font-family:"DM Mono",monospace; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal)}
+h1{font-family:"Syne",sans-serif; font-weight:800; font-size:clamp(30px,5.4vw,50px); line-height:1.06; letter-spacing:-.01em; margin:18px 0 20px}
+.chips{display:flex; flex-wrap:wrap; gap:10px 18px; font-family:"DM Mono",monospace; font-size:12.5px; color:var(--faint); letter-spacing:.03em}
+.chips span{display:inline-flex; align-items:center; gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal)}
+article{padding:20px 0 8px}
+article h2{font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(23px,3.6vw,30px); line-height:1.16; margin:56px 0 14px; letter-spacing:-.01em}
+article h3{font-family:"Syne",sans-serif; font-weight:600; font-size:20px; margin:36px 0 10px}
+article p{margin:0 0 20px; color:#e7ebef}
+article ul{margin:0 0 22px; padding-left:22px; color:#e7ebef}
+article li{margin-bottom:10px}
+.lead{font-size:21px; color:#eef1f4}
+code{font-family:"DM Mono",monospace; font-size:.86em; background:var(--slate-2); padding:2px 7px; border-radius:6px; color:var(--bright); word-break:break-word}
+strong{color:#fff; font-weight:600}
+.part{display:flex; align-items:center; gap:14px; margin:64px 0 6px}
+.part-num{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); border:1px solid rgba(45,212,191,.35); border-radius:999px; padding:5px 14px; white-space:nowrap}
+.part-rule{height:1px; background:linear-gradient(90deg,rgba(45,212,191,.4),transparent); flex:1}
+.callout{border:1px solid rgba(45,212,191,.32); background:linear-gradient(180deg, rgba(45,212,191,.08),rgba(45,212,191,.02)); border-radius:14px; padding:22px 24px; margin:30px 0; font-size:18px}
+.callout .k{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px}
+.callout.warn{border-color:rgba(245,183,60,.35); background:linear-gradient(180deg,rgba(245,183,60,.09),rgba(245,183,60,.02))}
+.callout.warn .k{color:var(--amber)}
+table{width:100%; border-collapse:collapse; margin:26px 0; font-size:15.5px}
+th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-family:"DM Mono",monospace; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal); font-weight:400}
+td{color:#e0e5ea}
+figure{margin:38px 0}
+.figframe{border:1px solid var(--line); border-radius:16px; background: radial-gradient(120% 140% at 80% 0%, rgba(45,212,191,.06), transparent 60%),var(--slate-1); padding:20px; cursor:zoom-in; position:relative}
+.figframe::after{content:"click to expand"; position:absolute; top:12px; right:16px; font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; color:var(--faint)}
+.figframe svg{width:100%; height:auto; display:block}
+figcaption{font-size:14px; color:var(--faint); margin-top:12px; text-align:center; font-family:"DM Mono",monospace; letter-spacing:.02em}
+.d-box{fill:var(--slate-2); stroke:rgba(45,212,191,.45); stroke-width:1.4}
+.d-box-soft{fill:var(--slate-1); stroke:var(--line); stroke-width:1.2}
+.d-t{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:15px}
+.d-t-s{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:13.5px}
+.d-s{fill:var(--muted); font-family:"Inter",sans-serif; font-size:12px}
+.d-lab{fill:var(--teal); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-a{fill:var(--amber); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-p{fill:var(--purple); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-b{fill:var(--blue); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-mono{fill:var(--bright); font-family:"DM Mono",monospace; font-size:11.5px}
+.related{margin:60px 0 20px}
+.related h2{font-size:20px; margin-bottom:18px}
+.rgrid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.rcard{border:1px solid var(--line); border-radius:14px; padding:18px 18px 20px; background:var(--slate-1); transition:border-color .2s}
+.rcard:hover{border-color:rgba(45,212,191,.4)}
+.rcard .c{font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal)}
+.rcard .t{font-family:"Syne",sans-serif; font-weight:600; font-size:16px; margin-top:8px; color:#fff; line-height:1.25}
+footer{border-top:1px solid var(--line); margin-top:60px; padding:40px 0 60px; color:var(--faint); font-size:14px}
+.footer-links{display:flex; flex-wrap:wrap; gap:16px; margin-bottom:22px; font-family:"DM Mono",monospace; font-size:13px}
+.pills{display:flex; gap:12px; margin:22px 0}
+.pill{border-radius:999px; padding:8px 16px; font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.04em; border:1px solid}
+.pill.cs{color:var(--emerald); border-color:rgba(47,158,111,.5)}
+.pill.bf{color:var(--cyan); border-color:rgba(0,212,255,.5)}
+.legal{font-size:12.5px; color:var(--faint)}
+/* collision-proof lightbox */
+.syx-lb{position:fixed; inset:0; z-index:2147483000; background:rgba(4,6,9,.95); display:none; align-items:center; justify-content:center; padding:64px 3vw 3vw; cursor:zoom-out}
+.syx-lb.syx-open{display:flex}
+.syx-lb-stage{max-width:96vw; max-height:88vh; display:flex; align-items:center; justify-content:center}
+.syx-lb-stage svg{width:96vw; max-height:88vh; height:auto}
+.syx-lb-x{position:fixed; top:16px; right:16px; z-index:2147483001; font-family:"DM Mono",monospace; font-size:14px; letter-spacing:.08em; color:var(--ink); background:var(--slate-2); border:1px solid var(--line); border-radius:999px; padding:10px 18px; cursor:pointer}
+.syx-lb-x:hover{border-color:var(--teal); color:var(--teal)}
+@media(max-width:560px){.rgrid{grid-template-columns:1fr} table{font-size:14px} th,td{padding:9px 8px}}
+
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+<script src="/nav.js" defer></script>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">// incident response</div>
+    <h1>The plan meets the day it broke: the first hour of an incident</h1>
+    <div class="chips">
+      <span><span class="dot"></span>Saleem Yousaf</span>
+      <span>4 Aug 2026</span>
+      <span>14 min read</span>
+    </div>
+  </header>
+
+  <article>
+    <p class="lead">Almost every organisation has an incident response plan. A meaningful fraction have never once run it. The plan is a document that was written to pass an audit, filed, and not opened since, and the first time anyone reads it properly is at the worst possible moment, with production down and a clock running. The gap between having a plan and having practised it is where the first hour of a real incident is won or lost.</p>
+
+    <p>This is about that first hour specifically, because it is disproportionately important. The decisions made in the first sixty minutes, who is in charge, whether to contain or observe, when the regulatory clock started, shape everything that follows. Get them right and a bad day stays a bad day. Get them wrong and you destroy the evidence, miss the disclosure deadline, or spend the hour with ten people improvising in a group chat.</p>
+
+    <div class="part"><span class="part-num">Part one</span><span class="part-rule"></span></div>
+    <h2>Declaring it, which is harder than it sounds</h2>
+
+    <p>The first failure is often the simplest: nobody actually declares an incident. An alert fires, an engineer starts poking at it, a second engineer joins, an hour passes, and it is still being treated as a curious technical problem rather than a security incident with a process attached. The transition from "something is odd" to "this is an incident, we are running the plan" needs to be an explicit act performed by a named person, because until it happens, none of the rest of the machinery starts.</p>
+
+    <p>So the first thing your plan needs is unglamorous: a clear answer to who can declare an incident, and permission for them to do it on incomplete information. The instinct to wait until you are certain is the enemy here. Declaring an incident and standing it down twenty minutes later because it was benign costs almost nothing. Failing to declare for an hour because nobody felt authorised costs you the hour, which is the one part of an incident you can never get back.</p>
+
+    <p>Declaring it also starts the clock, and there is more than one clock. There is your own response timeline, and there is the regulatory one, which may have started at the moment of detection rather than when you finish cleaning up. That distinction is why declaration is not just an internal nicety.</p>
+
+    <figure>
+      <div class="figframe" onclick="syxLbOpen(this)">
+        <svg role="img" viewBox="0 0 1240 720" xmlns="http://www.w3.org/2000/svg" aria-label="The first hour of an incident: declare, contain and coordinate, the two decisions that dominate the hour, what makes the hour survivable, common failures, and two diagnostic questions.">
+          <text x="34" y="42" class="d-lab">// THE PLAN MEETS THE DAY IT BROKE</text>
+          <rect class="d-box-soft" x="34" y="66" width="378" height="118" rx="12"/>
+          <text x="52" y="94" class="d-lab">DETECT</text><text x="52" y="122" class="d-t">Declare it</text>
+          <text x="52" y="146" class="d-s">Someone calls it an incident,</text><text x="52" y="164" class="d-s">out loud, and starts the clock.</text>
+          <path d="M412 125 H452" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+          <rect class="d-box" x="452" y="66" width="378" height="118" rx="12"/>
+          <text x="470" y="94" class="d-lab">CONTAIN</text><text x="470" y="122" class="d-t">Stop the spread</text>
+          <text x="470" y="146" class="d-s">Isolate before you investigate.</text><text x="470" y="164" class="d-s">Preserve evidence as you go.</text>
+          <path d="M830 125 H870" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+          <rect class="d-box" x="870" y="66" width="336" height="118" rx="12"/>
+          <text x="888" y="94" class="d-lab">COORDINATE</text><text x="888" y="122" class="d-t">Run the room</text>
+          <text x="888" y="146" class="d-s">One lead, defined roles,</text><text x="888" y="164" class="d-s">a single source of truth.</text>
+
+          <text x="34" y="230" class="d-lab-a">// THE TWO DECISIONS THAT DOMINATE THE HOUR</text>
+          <rect x="34" y="248" width="580" height="112" rx="12" fill="rgba(245,183,60,.06)" stroke="rgba(245,183,60,.34)" stroke-width="1.3"/>
+          <text x="54" y="278" class="d-lab-a">CONTAINMENT</text><text x="54" y="306" class="d-t-s">Isolate without blinding yourself</text>
+          <text x="54" y="330" class="d-s">Pulling the plug can destroy the logs and</text><text x="54" y="348" class="d-s">evidence you will need. Contain, preserve.</text>
+          <rect x="626" y="248" width="580" height="112" rx="12" fill="rgba(245,183,60,.06)" stroke="rgba(245,183,60,.34)" stroke-width="1.3"/>
+          <text x="646" y="278" class="d-lab-a">DISCLOSURE</text><text x="646" y="306" class="d-t-s">The regulatory clock is running</text>
+          <text x="646" y="330" class="d-s">Some duties start at detection, not fix.</text><text x="646" y="348" class="d-s">Legal and comms belong in the room now.</text>
+
+          <text x="34" y="414" class="d-lab">// WHAT MAKES THE FIRST HOUR SURVIVABLE</text>
+          <rect class="d-box-soft" x="34" y="432" width="1172" height="46" rx="9"/><text x="54" y="460" class="d-t-s">Roles and authority</text><text x="380" y="460" class="d-s">named incident lead  ·  who can take systems offline  ·  who speaks</text>
+          <rect class="d-box-soft" x="34" y="486" width="1172" height="46" rx="9"/><text x="54" y="514" class="d-t-s">Communications</text><text x="380" y="514" class="d-s">internal bridge  ·  holding statement  ·  legal and comms engaged</text>
+          <rect class="d-box-soft" x="34" y="540" width="1172" height="46" rx="9"/><text x="54" y="568" class="d-t-s">Evidence</text><text x="380" y="568" class="d-s">preserve logs and images  ·  timeline from minute one</text>
+          <rect class="d-box-soft" x="34" y="594" width="1172" height="46" rx="9"/><text x="54" y="622" class="d-t-s">Decision rules</text><text x="380" y="622" class="d-s">ransomware stance agreed in advance  ·  escalation thresholds</text>
+          <rect x="34" y="648" width="1172" height="46" rx="9" fill="rgba(45,212,191,.11)" stroke="rgba(45,212,191,.4)" stroke-width="1.3"/><text x="54" y="676" class="d-t-s" style="fill:#5eead4">The retainer</text><text x="380" y="676" class="d-s">an IR firm on call before you need them, not during</text>
+
+          <defs><marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#2dd4bf"/></marker></defs>
+        </svg>
+      </div>
+      <figcaption>The first hour, the two dominating decisions, and what makes it survivable. Click to expand.</figcaption>
+    </figure>
+
+    <div class="part"><span class="part-num">Part two</span><span class="part-rule"></span></div>
+    <h2>The two decisions that dominate the hour</h2>
+
+    <h3>Containment without destroying the evidence</h3>
+
+    <p>The instinct when you find a compromised machine is to pull it off the network, or worse, to shut it down. Isolation is usually right. Shutting down is often wrong, because a powered-off machine loses everything that was in memory, and memory is frequently where the most useful evidence of a live intrusion lives. Rebooting, re-imaging, or hastily cleaning a box can wipe the very logs and artefacts you will need to understand what happened and to prove what did and did not leave.</p>
+
+    <p>The discipline is to contain in a way that stops the spread while preserving the state. Isolate the host at the network level rather than powering it off. Capture volatile data before you change anything. Take images before you remediate. This is the moment where the interests of getting back to normal and understanding what happened pull against each other, and in the first hour, preservation usually has to win, because you can restore service from a preserved system but you cannot recover evidence you have already destroyed.</p>
+
+    <h3>The disclosure clock you may not know is running</h3>
+
+    <p>This is the decision most technical teams underweight, and it connects directly to the accountability shift I have written about in the context of the modern CISO role. Regulatory reporting obligations increasingly start at the point of detection or determination, not at the point of resolution. That means the first hour is not only a technical event, it is potentially the start of a legally significant countdown, and the people who understand those obligations, legal and communications, need to be in the room from the beginning rather than discovering three days later that a deadline passed on day one.</p>
+
+    <p>You do not need to have disclosed anything in the first hour. You need to know, in the first hour, that the clock exists and when it started, so that the disclosure decision is made deliberately and on time rather than missed. An organisation that treats disclosure as a thing to worry about once the technical work is done has already taken on avoidable regulatory and reputational risk.</p>
+
+    <div class="callout warn">
+      <span class="k">The decision you cannot make well under pressure</span>
+      The ransomware pay-or-do-not-pay question should never be decided for the first time at 3am with systems down. Agree the organisation's stance, the legal and regulatory constraints, and who has authority to decide, in advance and in calm. A position reached under live pressure is a position reached badly.
+    </div>
+
+    <div class="part"><span class="part-num">Part three</span><span class="part-rule"></span></div>
+    <h2>What makes the first hour survivable</h2>
+
+    <p>Everything that makes the first hour go well is prepared before it starts. Five things in particular.</p>
+
+    <table>
+      <thead><tr><th>Element</th><th>What it means in practice</th></tr></thead>
+      <tbody>
+        <tr><td>Roles and authority</td><td>A named incident lead, and explicit answers to who may take a system offline and who is allowed to speak externally.</td></tr>
+        <tr><td>Communications</td><td>An internal bridge that everyone knows to join, a pre-drafted holding statement, and legal and comms engaged from the start.</td></tr>
+        <tr><td>Evidence</td><td>The habit of preserving logs and images and keeping a timeline from the first minute, not reconstructing it afterwards.</td></tr>
+        <tr><td>Decision rules</td><td>The ransomware stance and escalation thresholds agreed in advance, so the hard calls are policy, not improvisation.</td></tr>
+        <tr><td>The retainer</td><td>An incident response firm contracted before you need them, so hour one is a phone call, not a procurement exercise.</td></tr>
+      </tbody>
+    </table>
+
+    <p>That last row deserves emphasis because it is the one organisations most often skip and most regret. Sourcing an incident response firm during an incident means negotiating a contract while under attack, which is slow, expensive and weak. A retainer arranged in advance turns the worst hour into a single phone call to people who already know your environment and can start immediately. It is cheap insurance against the most expensive kind of delay.</p>
+
+    <div class="part"><span class="part-num">Part four</span><span class="part-rule"></span></div>
+    <h2>The thing that actually makes this work</h2>
+
+    <p>All of the above is necessary and none of it is sufficient, because a plan that has only ever been read is not a capability. The single highest-value thing an organisation can do for its incident response is to run the plan as a drill before a real incident forces it. A tabletop exercise, where the leadership and technical teams walk through a realistic scenario and actually make the decisions, surfaces every gap the document hides: the authority nobody has, the contact detail that is out of date, the assumption that someone else was handling comms.</p>
+
+    <p>The first time you run your plan should not be the day it broke. It should be a Tuesday afternoon in a meeting room, with coffee, where the cost of discovering that no one is sure who can declare an incident is a slightly awkward conversation rather than a lost hour during a live breach. Organisations that drill are visibly calmer and faster when the real thing happens, and the difference is almost entirely in that first hour.</p>
+
+    <h2>The honest summary</h2>
+
+    <p>The first hour of an incident is decided long before the incident, by whether the plan is a document or a practised drill. The declaration has to happen and someone has to be authorised to make it. Containment has to stop the spread without destroying the evidence. The disclosure clock has to be understood while it is still early enough to matter. And the roles, the comms, the decision rules and the retainer all have to exist before the alert fires, because the first hour is not when you build them, it is when you find out whether you did.</p>
+
+    <p>If you do one thing after reading this, book a tabletop exercise. Not a plan review, a drill, where real people make the real decisions against a real scenario. It is the cheapest way to find your gaps while finding them is still free.</p>
+
+    <p class="lead">If you want help building an incident response capability that holds up in the first hour, or running the tabletop that tests it, that is the kind of work I do through <a href="https://cyberspartans.co.uk">Cyber Spartans</a>.</p>
+
+  </article>
+
+  <section class="related">
+    <h2>Related reading</h2>
+    <div class="rgrid">
+      <a class="rcard" href="/articles/ciso-3-0-accountable-executive/"><div class="c">Governance</div><div class="t">CISO 3.0: from defender to accountable executive</div></a>
+      <a class="rcard" href="/articles/windows-cdp-gdid-attribution/"><div class="c">Threat</div><div class="t">The identifier you never chose: Windows CDP and the GDID</div></a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf">GitHub</a>
+      <a href="https://saleemyousaf.medium.com">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf">Dev.to</a>
+      <a href="https://cyberspartans.co.uk">Cyber Spartans</a>
+    </div>
+    <div class="pills">
+      <span class="pill bf">breachforge.co.uk</span>
+      <span class="pill cs">cyberspartans.co.uk</span>
+    </div>
+    <div class="legal">&copy; 2026 Saleem Yousaf. All rights reserved. &nbsp;&middot;&nbsp;
+      <a href="https://saleemyousaf.co.uk/privacy-policy/">Privacy</a></div>
+  </footer>
+</div>
+
+<div class="syx-lb" id="syxLb" onclick="syxLbClose()">
+  <button type="button" class="syx-lb-x" onclick="event.stopPropagation();syxLbClose();">&#10005; close</button>
+  <div class="syx-lb-stage" id="syxLbStage"></div>
+</div>
+<script>
+function syxLbOpen(fr){var s=fr.querySelector('svg[role="img"]');if(!s)return;
+  var st=document.getElementById('syxLbStage');st.innerHTML='';
+  st.appendChild(s.cloneNode(true));document.getElementById('syxLb').classList.add('syx-open');}
+function syxLbClose(){document.getElementById('syxLb').classList.remove('syx-open');}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'||e.key==='Esc')syxLbClose();});
+</script>
+</body>
+</html>
