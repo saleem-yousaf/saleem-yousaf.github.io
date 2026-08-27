@@ -1,1 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Their Breach, Your Incident: Managing Third-Party and Vendor Risk | Saleem Yousaf</title>
+<meta name="description" content="You can outsource the service, not the risk. Why the security questionnaire is theatre, and what a real programme covers: inventory, tiering, independent assurance, contract clauses, concentration risk and exit planning.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/third-party-vendor-risk-management/">
+<link rel="alternate" type="application/rss+xml" title="Saleem Yousaf articles" href="https://saleemyousaf.co.uk/feed.xml">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Their Breach, Your Incident: Managing Third-Party and Vendor Risk">
+<meta property="og:description" content="You can outsource the service, not the risk. Why questionnaires are theatre, and what a real vendor risk programme actually covers.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/third-party-vendor-risk-management/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/articles/third-party-vendor-risk-management/og-vendor-risk.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Managing Third-Party and Vendor Risk">
+<meta name="twitter:description" content="You can outsource the service, not the risk. Why questionnaires are theatre, and what a real vendor risk programme actually covers.">
+<meta name="twitter:image" content="https://saleemyousaf.co.uk/articles/third-party-vendor-risk-management/og-vendor-risk.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Their Breach, Your Incident: Managing Third-Party and Vendor Risk",
+  "description": "You can outsource the service, not the risk. Why the security questionnaire is theatre, and what a real programme covers: inventory, tiering, independent assurance, contract clauses, concentration risk and exit planning.",
+  "image": "https://saleemyousaf.co.uk/articles/third-party-vendor-risk-management/og-vendor-risk.png",
+  "articleSection": "Governance and Compliance",
+  "datePublished": "2026-08-04",
+  "author": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk",
+    "sameAs": ["https://www.linkedin.com/in/saleemyousaf","https://github.com/saleem-yousaf","https://cyberspartans.co.uk"] },
+  "publisher": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://saleemyousaf.co.uk/articles/third-party-vendor-risk-management/" }
+}
+</script>
+<style>
 
+:root{
+  --slate-0:#090c10; --slate-1:#0f1318; --slate-2:#161b22;
+  --teal:#2dd4bf; --bright:#5eead4; --amber:#f5b73c; --blue:#4aa8ff;
+  --purple:#a78bfa; --red:#f87171;
+  --ink:#f4f6f8; --muted:#aeb5bf; --faint:#6c7682; --line:rgba(255,255,255,.08);
+  --emerald:#2f9e6f; --cyan:#00d4ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--slate-0); color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif; font-size:19px; line-height:1.72; -webkit-font-smoothing:antialiased;}
+.wrap{max-width:760px; margin:0 auto; padding:0 24px}
+a{color:var(--teal); text-decoration:none}
+a:hover{text-decoration:underline}
+.hero{padding:72px 0 8px}
+.eyebrow{font-family:"DM Mono",monospace; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal)}
+h1{font-family:"Syne",sans-serif; font-weight:800; font-size:clamp(30px,5.4vw,50px); line-height:1.06; letter-spacing:-.01em; margin:18px 0 20px}
+.chips{display:flex; flex-wrap:wrap; gap:10px 18px; font-family:"DM Mono",monospace; font-size:12.5px; color:var(--faint); letter-spacing:.03em}
+.chips span{display:inline-flex; align-items:center; gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal)}
+article{padding:20px 0 8px}
+article h2{font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(23px,3.6vw,30px); line-height:1.16; margin:56px 0 14px; letter-spacing:-.01em}
+article h3{font-family:"Syne",sans-serif; font-weight:600; font-size:20px; margin:36px 0 10px}
+article p{margin:0 0 20px; color:#e7ebef}
+article ul{margin:0 0 22px; padding-left:22px; color:#e7ebef}
+article li{margin-bottom:10px}
+.lead{font-size:21px; color:#eef1f4}
+code{font-family:"DM Mono",monospace; font-size:.86em; background:var(--slate-2); padding:2px 7px; border-radius:6px; color:var(--bright); word-break:break-word}
+strong{color:#fff; font-weight:600}
+.part{display:flex; align-items:center; gap:14px; margin:64px 0 6px}
+.part-num{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); border:1px solid rgba(45,212,191,.35); border-radius:999px; padding:5px 14px; white-space:nowrap}
+.part-rule{height:1px; background:linear-gradient(90deg,rgba(45,212,191,.4),transparent); flex:1}
+.callout{border:1px solid rgba(45,212,191,.32); background:linear-gradient(180deg, rgba(45,212,191,.08),rgba(45,212,191,.02)); border-radius:14px; padding:22px 24px; margin:30px 0; font-size:18px}
+.callout .k{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px}
+.callout.warn{border-color:rgba(245,183,60,.35); background:linear-gradient(180deg,rgba(245,183,60,.09),rgba(245,183,60,.02))}
+.callout.warn .k{color:var(--amber)}
+table{width:100%; border-collapse:collapse; margin:26px 0; font-size:15.5px}
+th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-family:"DM Mono",monospace; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal); font-weight:400}
+td{color:#e0e5ea}
+figure{margin:38px 0}
+.figframe{border:1px solid var(--line); border-radius:16px; background: radial-gradient(120% 140% at 80% 0%, rgba(45,212,191,.06), transparent 60%),var(--slate-1); padding:20px; cursor:zoom-in; position:relative}
+.figframe::after{content:"click to expand"; position:absolute; top:12px; right:16px; font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; color:var(--faint)}
+.figframe svg{width:100%; height:auto; display:block}
+figcaption{font-size:14px; color:var(--faint); margin-top:12px; text-align:center; font-family:"DM Mono",monospace; letter-spacing:.02em}
+.d-box{fill:var(--slate-2); stroke:rgba(45,212,191,.45); stroke-width:1.4}
+.d-box-soft{fill:var(--slate-1); stroke:var(--line); stroke-width:1.2}
+.d-t{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:15px}
+.d-t-s{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:13.5px}
+.d-s{fill:var(--muted); font-family:"Inter",sans-serif; font-size:12px}
+.d-lab{fill:var(--teal); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-a{fill:var(--amber); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-p{fill:var(--purple); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-b{fill:var(--blue); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-mono{fill:var(--bright); font-family:"DM Mono",monospace; font-size:11.5px}
+.related{margin:60px 0 20px}
+.related h2{font-size:20px; margin-bottom:18px}
+.rgrid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.rcard{border:1px solid var(--line); border-radius:14px; padding:18px 18px 20px; background:var(--slate-1); transition:border-color .2s}
+.rcard:hover{border-color:rgba(45,212,191,.4)}
+.rcard .c{font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal)}
+.rcard .t{font-family:"Syne",sans-serif; font-weight:600; font-size:16px; margin-top:8px; color:#fff; line-height:1.25}
+footer{border-top:1px solid var(--line); margin-top:60px; padding:40px 0 60px; color:var(--faint); font-size:14px}
+.footer-links{display:flex; flex-wrap:wrap; gap:16px; margin-bottom:22px; font-family:"DM Mono",monospace; font-size:13px}
+.pills{display:flex; gap:12px; margin:22px 0}
+.pill{border-radius:999px; padding:8px 16px; font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.04em; border:1px solid}
+.pill.cs{color:var(--emerald); border-color:rgba(47,158,111,.5)}
+.pill.bf{color:var(--cyan); border-color:rgba(0,212,255,.5)}
+.legal{font-size:12.5px; color:var(--faint)}
+/* collision-proof lightbox */
+.syx-lb{position:fixed; inset:0; z-index:2147483000; background:rgba(4,6,9,.95); display:none; align-items:center; justify-content:center; padding:64px 3vw 3vw; cursor:zoom-out}
+.syx-lb.syx-open{display:flex}
+.syx-lb-stage{max-width:96vw; max-height:88vh; display:flex; align-items:center; justify-content:center}
+.syx-lb-stage svg{width:96vw; max-height:88vh; height:auto}
+.syx-lb-x{position:fixed; top:16px; right:16px; z-index:2147483001; font-family:"DM Mono",monospace; font-size:14px; letter-spacing:.08em; color:var(--ink); background:var(--slate-2); border:1px solid var(--line); border-radius:999px; padding:10px 18px; cursor:pointer}
+.syx-lb-x:hover{border-color:var(--teal); color:var(--teal)}
+@media(max-width:560px){.rgrid{grid-template-columns:1fr} table{font-size:14px} th,td{padding:9px 8px}}
+
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+<script src="/nav.js" defer></script>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">// third-party risk</div>
+    <h1>Their breach, your incident: managing third-party and vendor risk</h1>
+    <div class="chips">
+      <span><span class="dot"></span>Saleem Yousaf</span>
+      <span>4 Aug 2026</span>
+      <span>13 min read</span>
+    </div>
+  </header>
+
+  <article>
+    <p class="lead">Most organisations can tell you more about their software dependencies than about their suppliers. They have a software bill of materials, or at least a dependency tree, but ask which third parties hold their customer data, which ones can reach inside their network, and what would happen if the biggest of them fell over on a Tuesday, and the answers get vague. That gap matters, because the breach that takes you down increasingly is not yours. It is a supplier's, and it becomes your incident the moment it happens.</p>
+
+    <p>This is the organisational half of supply chain risk. I have written separately about the technical side, the artefacts and provenance and signing that tell you whether the software you ship is what you think it is. This is the other side: the suppliers, the SaaS platforms, the processors and the sub-processors who hold your data and touch your systems, and the discipline of managing the risk you handed them along with the work.</p>
+
+    <div class="part"><span class="part-num">Part one</span><span class="part-rule"></span></div>
+    <h2>You can outsource the service, not the risk</h2>
+
+    <p>The core principle is one sentence and it is the whole article: you can delegate the work to a third party, but you cannot delegate the consequences. When a supplier who processes your customer data is breached, your customers are affected, your name is in the story, and in most jurisdictions your regulatory obligations apply, because you chose that supplier and remain accountable for the data you entrusted to them. The contract can move liability around at the margins, but it cannot move the incident, the headlines or the loss of trust.</p>
+
+    <p>That reframes vendor risk from a procurement checkbox into a real part of your attack surface. Every supplier with access to your data or your systems is a path into your organisation that you do not directly control, and the sum of those paths is often larger and less visible than your own perimeter, which you at least monitor.</p>
+
+    <figure>
+      <div class="figframe" onclick="syxLbOpen(this)">
+        <svg role="img" viewBox="0 0 1240 720" xmlns="http://www.w3.org/2000/svg" aria-label="Where third-party risk lives: data and access, concentration and exit; why questionnaires do not save you; what a real programme covers; where vendor risk bites; and two diagnostic questions.">
+          <text x="34" y="42" class="d-lab">// THEIR BREACH, YOUR INCIDENT</text>
+          <rect class="d-box-soft" x="34" y="66" width="378" height="118" rx="12"/>
+          <text x="52" y="94" class="d-lab">ACCESS</text><text x="52" y="122" class="d-t">Data and access</text>
+          <text x="52" y="146" class="d-s">Who holds your data, and what</text><text x="52" y="164" class="d-s">they can reach in your estate.</text>
+          <path d="M412 125 H452" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+          <rect class="d-box" x="452" y="66" width="378" height="118" rx="12"/>
+          <text x="470" y="94" class="d-lab">CONCENTRATION</text><text x="470" y="122" class="d-t">Shared fate</text>
+          <text x="470" y="146" class="d-s">Many services quietly resting</text><text x="470" y="164" class="d-s">on one provider or region.</text>
+          <path d="M830 125 H870" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+          <rect class="d-box" x="870" y="66" width="336" height="118" rx="12"/>
+          <text x="888" y="94" class="d-lab">EXIT</text><text x="888" y="122" class="d-t">The way out</text>
+          <text x="888" y="146" class="d-s">What happens to your data</text><text x="888" y="164" class="d-s">and operation when it ends.</text>
+
+          <text x="34" y="230" class="d-lab-a">// WHY THE QUESTIONNAIRE DOES NOT SAVE YOU</text>
+          <rect x="34" y="248" width="580" height="112" rx="12" fill="rgba(245,183,60,.06)" stroke="rgba(245,183,60,.34)" stroke-width="1.3"/>
+          <text x="54" y="278" class="d-lab-a">THEATRE</text><text x="54" y="306" class="d-t-s">A questionnaire is a snapshot</text>
+          <text x="54" y="330" class="d-s">A form answered once at onboarding says</text><text x="54" y="348" class="d-s">little about the supplier after a breach.</text>
+          <rect x="626" y="248" width="580" height="112" rx="12" fill="rgba(245,183,60,.06)" stroke="rgba(245,183,60,.34)" stroke-width="1.3"/>
+          <text x="646" y="278" class="d-lab-a">CONCENTRATION</text><text x="646" y="306" class="d-t-s">Shared fate you did not price</text>
+          <text x="646" y="330" class="d-s">When half your suppliers sit on one</text><text x="646" y="348" class="d-s">platform, one outage is many at once.</text>
+
+          <text x="34" y="414" class="d-lab">// WHAT A REAL PROGRAMME COVERS</text>
+          <rect class="d-box-soft" x="34" y="432" width="1172" height="46" rx="9"/><text x="54" y="460" class="d-t-s">Inventory</text><text x="360" y="460" class="d-s">every supplier with data or access  ·  not just the contracted ones</text>
+          <rect class="d-box-soft" x="34" y="486" width="1172" height="46" rx="9"/><text x="54" y="514" class="d-t-s">Tiering</text><text x="360" y="514" class="d-s">risk-rank by data and access  ·  effort follows impact</text>
+          <rect class="d-box-soft" x="34" y="540" width="1172" height="46" rx="9"/><text x="54" y="568" class="d-t-s">Evidence</text><text x="360" y="568" class="d-s">independent assurance  ·  not a self-graded form</text>
+          <rect class="d-box-soft" x="34" y="594" width="1172" height="46" rx="9"/><text x="54" y="622" class="d-t-s">Contract</text><text x="360" y="622" class="d-s">breach-notification clock  ·  right to audit  ·  data return</text>
+          <rect x="34" y="648" width="1172" height="46" rx="9" fill="rgba(45,212,191,.11)" stroke="rgba(45,212,191,.4)" stroke-width="1.3"/><text x="54" y="676" class="d-t-s" style="fill:#5eead4">Exit and concentration</text><text x="360" y="676" class="d-s">an exit plan, and a map of who shares one fate</text>
+
+          <defs><marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#2dd4bf"/></marker></defs>
+        </svg>
+      </div>
+      <figcaption>Where the risk lives, why forms miss it, and what a real programme covers. Click to expand.</figcaption>
+    </figure>
+
+    <div class="part"><span class="part-num">Part two</span><span class="part-rule"></span></div>
+    <h2>Why the security questionnaire does not save you</h2>
+
+    <p>The dominant tool in third-party risk is the questionnaire: a spreadsheet of security questions sent to a supplier at onboarding, answered by them, filed by you. It is not useless, but it is widely mistaken for assurance when it is closer to theatre, for three reasons worth being honest about.</p>
+
+    <p>It is a snapshot, and a self-graded one. The supplier answers once, at the start, describing themselves in the best light, and the form is rarely revisited. The company that answered well at onboarding is a different company six months and one acquisition later, and the form does not know that. It is also self-assessment, which means you are trusting the party with the incentive to look good to mark their own homework, with no independent check.</p>
+
+    <p>And it measures the wrong thing. A completed questionnaire tells you a supplier can fill in a questionnaire. It does not tell you whether the controls described are real, operating, and effective, which is what independent assurance, a recognised audit report or certification, actually speaks to. The questionnaire has its place as a first filter, but treating a returned spreadsheet as evidence that a supplier is secure is the third-party equivalent of trusting an unsigned artefact because it arrived with a nice label.</p>
+
+    <div class="part"><span class="part-num">Part three</span><span class="part-rule"></span></div>
+    <h2>What a real programme covers</h2>
+
+    <h3>Inventory, because you cannot manage what you cannot see</h3>
+
+    <p>The foundation is a list of every supplier that holds your data or can reach your systems, and most organisations do not have one. Procurement has a list of who gets paid, which is not the same thing, because it misses the free tools, the departmentally expensed SaaS, the sub-processors your suppliers use, and the integrations someone connected two years ago. The inventory is unglamorous and it is the single highest-value artefact in the whole discipline, because every control downstream depends on knowing who is actually on the list.</p>
+
+    <h3>Tiering, so effort follows impact</h3>
+
+    <p>Not every supplier warrants the same scrutiny. A vendor that processes your entire customer database is a different risk from one that supplies office plants, and treating them identically wastes effort on the trivial and under-examines the critical. Risk-rank suppliers by the data they hold and the access they have, and concentrate your real assurance effort on the tier that could actually hurt you. This is how a programme stays proportionate rather than collapsing under the weight of assessing everyone equally.</p>
+
+    <h3>Evidence, contract, and the exit</h3>
+
+    <p>For the suppliers that matter, ask for independent assurance rather than a self-assessment, and read it rather than filing it. Put the things you actually need into the contract: a breach-notification clock that obliges them to tell you quickly, a right to audit, and clear terms for the return or destruction of your data when the relationship ends. And plan the exit at the beginning, because the time to work out how you would leave a critical supplier is before you depend on them, not during the crisis that makes you want to.</p>
+
+    <div class="callout warn">
+      <span class="k">The risk everyone forgets to price</span>
+      Concentration is the silent one. When many of your suppliers quietly run on the same underlying cloud provider or region, a single outage there is not one vendor failing, it is a dozen of your services failing at once, in a way your per-vendor assessments never showed because each looked fine alone. Map the shared fate, or discover it on the day.
+    </div>
+
+    <div class="part"><span class="part-num">Part four</span><span class="part-rule"></span></div>
+    <h2>Delivering it: who, what, when</h2>
+
+    <p><strong>Who.</strong> Third-party risk sits awkwardly between procurement, security, legal and the business owners who actually chose the suppliers. It needs a clear owner, usually in security or risk, with the authority to say no to a supplier and the cooperation of procurement to enforce it at the point of purchase, which is the only point where saying no is cheap.</p>
+
+    <p><strong>What.</strong> The inventory first, always, because nothing else works without it. Then tiering, then real assurance on the top tier, then the contractual terms, then the concentration map and exit plans for the suppliers you could not easily live without.</p>
+
+    <p><strong>When.</strong> Assess before you sign, because your bargaining position is strongest before the contract exists and near zero afterwards. Then reassess the critical tier on a cycle, not once, because a supplier's security is a moving state and a point-in-time check ages badly. Build the reassessment into the calendar or it will not happen.</p>
+
+    <h2>The honest summary</h2>
+
+    <p>Vendor risk is the part of your attack surface you do not run and cannot see by default, and the tooling most organisations use to manage it, the onboarding questionnaire, is the part most mistaken for assurance. The work that actually reduces the risk is less glamorous and more durable: know who holds your data, rank them by what they could cost you, demand real evidence from the ones that matter, write the clock and the exit into the contract, and map the concentration that your per-vendor view hides.</p>
+
+    <p>If you do one thing, build the inventory. Not the procurement list, the real one, every party with your data or access to your systems. Almost no organisation has it, everything else depends on it, and the exercise of building it usually finds two or three suppliers holding far more than anyone remembered granting them.</p>
+
+    <p class="lead">If you want help building a third-party risk programme that is proportionate rather than performative, that is the kind of work I do through <a href="https://cyberspartans.co.uk">Cyber Spartans</a>.</p>
+
+  </article>
+
+  <section class="related">
+    <h2>Related reading</h2>
+    <div class="rgrid">
+      <a class="rcard" href="/articles/software-supply-chain-sbom-provenance/"><div class="c">Cloud</div><div class="t">You shipped it. Can you prove it?</div></a>
+      <a class="rcard" href="/articles/cyber-essentials-plus-certification-pathway/"><div class="c">Governance</div><div class="t">The Cyber Essentials Plus pathway</div></a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf">GitHub</a>
+      <a href="https://saleemyousaf.medium.com">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf">Dev.to</a>
+      <a href="https://cyberspartans.co.uk">Cyber Spartans</a>
+    </div>
+    <div class="pills">
+      <span class="pill bf">breachforge.co.uk</span>
+      <span class="pill cs">cyberspartans.co.uk</span>
+    </div>
+    <div class="legal">&copy; 2026 Saleem Yousaf. All rights reserved. &nbsp;&middot;&nbsp;
+      <a href="https://saleemyousaf.co.uk/privacy-policy/">Privacy</a></div>
+  </footer>
+</div>
+
+<div class="syx-lb" id="syxLb" onclick="syxLbClose()">
+  <button type="button" class="syx-lb-x" onclick="event.stopPropagation();syxLbClose();">&#10005; close</button>
+  <div class="syx-lb-stage" id="syxLbStage"></div>
+</div>
+<script>
+function syxLbOpen(fr){var s=fr.querySelector('svg[role="img"]');if(!s)return;
+  var st=document.getElementById('syxLbStage');st.innerHTML='';
+  st.appendChild(s.cloneNode(true));document.getElementById('syxLb').classList.add('syx-open');}
+function syxLbClose(){document.getElementById('syxLb').classList.remove('syx-open');}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'||e.key==='Esc')syxLbClose();});
+</script>
+</body>
+</html>
