@@ -1,1 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Open the Door, Not the Floodgates: Running a Bug Bounty as a Defender | Saleem Yousaf</title>
+<meta name="description" content="A bug bounty is an intake pipe you have to staff, not a control you buy. Safe harbour, scope, triage capacity, reward rubrics, and when a bounty is the right tool versus a pentest, from the programme owner's seat.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/bug-bounty-programme-defender-guide/">
+<link rel="alternate" type="application/rss+xml" title="Saleem Yousaf articles" href="https://saleemyousaf.co.uk/feed.xml">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Open the Door, Not the Floodgates: Running a Bug Bounty as a Defender">
+<meta property="og:description" content="A bounty is an intake pipe you have to staff, not a control you buy. Safe harbour, scope, triage, rewards, and when it beats a pentest.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/bug-bounty-programme-defender-guide/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/articles/bug-bounty-programme-defender-guide/og-bug-bounty.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Running a Bug Bounty as a Defender">
+<meta name="twitter:description" content="A bounty is an intake pipe you have to staff, not a control you buy. Safe harbour, scope, triage, rewards, and when it beats a pentest.">
+<meta name="twitter:image" content="https://saleemyousaf.co.uk/articles/bug-bounty-programme-defender-guide/og-bug-bounty.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Open the Door, Not the Floodgates: Running a Bug Bounty as a Defender",
+  "description": "A bug bounty is an intake pipe you have to staff, not a control you buy. Safe harbour, scope, triage capacity, reward rubrics, and when a bounty is the right tool versus a pentest, from the programme owner's seat.",
+  "image": "https://saleemyousaf.co.uk/articles/bug-bounty-programme-defender-guide/og-bug-bounty.png",
+  "articleSection": "Threat",
+  "datePublished": "2026-08-04",
+  "author": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk",
+    "sameAs": ["https://www.linkedin.com/in/saleemyousaf","https://github.com/saleem-yousaf","https://cyberspartans.co.uk"] },
+  "publisher": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://saleemyousaf.co.uk/articles/bug-bounty-programme-defender-guide/" }
+}
+</script>
+<style>
 
+:root{
+  --slate-0:#090c10; --slate-1:#0f1318; --slate-2:#161b22;
+  --teal:#2dd4bf; --bright:#5eead4; --amber:#f5b73c; --blue:#4aa8ff;
+  --purple:#a78bfa; --red:#f87171;
+  --ink:#f4f6f8; --muted:#aeb5bf; --faint:#6c7682; --line:rgba(255,255,255,.08);
+  --emerald:#2f9e6f; --cyan:#00d4ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--slate-0); color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif; font-size:19px; line-height:1.72; -webkit-font-smoothing:antialiased;}
+.wrap{max-width:760px; margin:0 auto; padding:0 24px}
+a{color:var(--teal); text-decoration:none}
+a:hover{text-decoration:underline}
+.hero{padding:72px 0 8px}
+.eyebrow{font-family:"DM Mono",monospace; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal)}
+h1{font-family:"Syne",sans-serif; font-weight:800; font-size:clamp(30px,5.4vw,50px); line-height:1.06; letter-spacing:-.01em; margin:18px 0 20px}
+.chips{display:flex; flex-wrap:wrap; gap:10px 18px; font-family:"DM Mono",monospace; font-size:12.5px; color:var(--faint); letter-spacing:.03em}
+.chips span{display:inline-flex; align-items:center; gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal)}
+article{padding:20px 0 8px}
+article h2{font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(23px,3.6vw,30px); line-height:1.16; margin:56px 0 14px; letter-spacing:-.01em}
+article h3{font-family:"Syne",sans-serif; font-weight:600; font-size:20px; margin:36px 0 10px}
+article p{margin:0 0 20px; color:#e7ebef}
+article ul{margin:0 0 22px; padding-left:22px; color:#e7ebef}
+article li{margin-bottom:10px}
+.lead{font-size:21px; color:#eef1f4}
+code{font-family:"DM Mono",monospace; font-size:.86em; background:var(--slate-2); padding:2px 7px; border-radius:6px; color:var(--bright); word-break:break-word}
+strong{color:#fff; font-weight:600}
+.part{display:flex; align-items:center; gap:14px; margin:64px 0 6px}
+.part-num{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); border:1px solid rgba(45,212,191,.35); border-radius:999px; padding:5px 14px; white-space:nowrap}
+.part-rule{height:1px; background:linear-gradient(90deg,rgba(45,212,191,.4),transparent); flex:1}
+.callout{border:1px solid rgba(45,212,191,.32); background:linear-gradient(180deg, rgba(45,212,191,.08),rgba(45,212,191,.02)); border-radius:14px; padding:22px 24px; margin:30px 0; font-size:18px}
+.callout .k{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px}
+.callout.warn{border-color:rgba(245,183,60,.35); background:linear-gradient(180deg,rgba(245,183,60,.09),rgba(245,183,60,.02))}
+.callout.warn .k{color:var(--amber)}
+table{width:100%; border-collapse:collapse; margin:26px 0; font-size:15.5px}
+th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-family:"DM Mono",monospace; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal); font-weight:400}
+td{color:#e0e5ea}
+figure{margin:38px 0}
+.figframe{border:1px solid var(--line); border-radius:16px; background: radial-gradient(120% 140% at 80% 0%, rgba(45,212,191,.06), transparent 60%),var(--slate-1); padding:20px; cursor:zoom-in; position:relative}
+.figframe::after{content:"click to expand"; position:absolute; top:12px; right:16px; font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; color:var(--faint)}
+.figframe svg{width:100%; height:auto; display:block}
+figcaption{font-size:14px; color:var(--faint); margin-top:12px; text-align:center; font-family:"DM Mono",monospace; letter-spacing:.02em}
+.d-box{fill:var(--slate-2); stroke:rgba(45,212,191,.45); stroke-width:1.4}
+.d-box-soft{fill:var(--slate-1); stroke:var(--line); stroke-width:1.2}
+.d-t{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:15px}
+.d-t-s{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:13.5px}
+.d-s{fill:var(--muted); font-family:"Inter",sans-serif; font-size:12px}
+.d-lab{fill:var(--teal); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-a{fill:var(--amber); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-p{fill:var(--purple); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-b{fill:var(--blue); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-mono{fill:var(--bright); font-family:"DM Mono",monospace; font-size:11.5px}
+.related{margin:60px 0 20px}
+.related h2{font-size:20px; margin-bottom:18px}
+.rgrid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.rcard{border:1px solid var(--line); border-radius:14px; padding:18px 18px 20px; background:var(--slate-1); transition:border-color .2s}
+.rcard:hover{border-color:rgba(45,212,191,.4)}
+.rcard .c{font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal)}
+.rcard .t{font-family:"Syne",sans-serif; font-weight:600; font-size:16px; margin-top:8px; color:#fff; line-height:1.25}
+footer{border-top:1px solid var(--line); margin-top:60px; padding:40px 0 60px; color:var(--faint); font-size:14px}
+.footer-links{display:flex; flex-wrap:wrap; gap:16px; margin-bottom:22px; font-family:"DM Mono",monospace; font-size:13px}
+.pills{display:flex; gap:12px; margin:22px 0}
+.pill{border-radius:999px; padding:8px 16px; font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.04em; border:1px solid}
+.pill.cs{color:var(--emerald); border-color:rgba(47,158,111,.5)}
+.pill.bf{color:var(--cyan); border-color:rgba(0,212,255,.5)}
+.legal{font-size:12.5px; color:var(--faint)}
+/* collision-proof lightbox */
+.syx-lb{position:fixed; inset:0; z-index:2147483000; background:rgba(4,6,9,.95); display:none; align-items:center; justify-content:center; padding:64px 3vw 3vw; cursor:zoom-out}
+.syx-lb.syx-open{display:flex}
+.syx-lb-stage{max-width:96vw; max-height:88vh; display:flex; align-items:center; justify-content:center}
+.syx-lb-stage svg{width:96vw; max-height:88vh; height:auto}
+.syx-lb-x{position:fixed; top:16px; right:16px; z-index:2147483001; font-family:"DM Mono",monospace; font-size:14px; letter-spacing:.08em; color:var(--ink); background:var(--slate-2); border:1px solid var(--line); border-radius:999px; padding:10px 18px; cursor:pointer}
+.syx-lb-x:hover{border-color:var(--teal); color:var(--teal)}
+@media(max-width:560px){.rgrid{grid-template-columns:1fr} table{font-size:14px} th,td{padding:9px 8px}}
+
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+<script src="/nav.js" defer></script>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">// bug bounty programmes</div>
+    <h1>Open the door, not the floodgates: running a bug bounty as a defender</h1>
+    <div class="chips">
+      <span><span class="dot"></span>Saleem Yousaf</span>
+      <span>4 Aug 2026</span>
+      <span>14 min read</span>
+    </div>
+  </header>
+
+  <article>
+    <p class="lead">There is a particular kind of security decision that looks like buying a control and is actually taking on an operational commitment, and a bug bounty programme is the clearest example. The pitch is seductive: pay only for results, get the whole internet testing your systems, catch what your pentest missed. All of that can be true. It is also true that a bounty programme is an intake pipe, and if you open it without the plumbing behind it, what arrives is not a stream of clean findings. It is noise, arguments, and a queue nobody is staffed to clear.</p>
+
+    <p>This is written from the side most articles skip. Not how to hunt bugs, but how to run the programme that receives them, because that is where the money is spent and where the failures happen.</p>
+
+    <div class="part"><span class="part-num">Part one</span><span class="part-rule"></span></div>
+    <h2>What a bounty is, and what it is not</h2>
+
+    <p>A bug bounty is a standing offer: report a genuine security flaw in our defined scope, and we will reward you according to a published schedule. It is continuous, it is open to people you have never met, and the quality of what arrives varies enormously, from a beautifully written exploit chain to a screenshot of a scanner output with a demand for payment.</p>
+
+    <p>It is worth separating it from two things it gets confused with. A vulnerability disclosure programme, or VDP, is the no-money version: a safe, legal channel for people to tell you about problems, with no reward. Every organisation of any size should have a VDP, because people will find issues whether you invite them or not, and the alternative to a reporting channel is disclosure on social media. A bounty adds money on top, which changes the volume and the incentives significantly.</p>
+
+    <p>And a bounty is not a penetration test. A pentest is scoped, time-boxed, methodical, and gives you assurance that someone competent looked systematically at a defined thing and reported what they found and what they did not. A bounty is opportunistic and unsystematic: you learn about the bugs someone happened to find and chose to report, and silence tells you nothing. The two answer different questions, and a bounty that is quiet does not mean you are secure, it means nobody with the skill and inclination looked this week. Using one as a substitute for the other is the most expensive mistake in this area.</p>
+
+    <figure>
+      <div class="figframe" onclick="syxLbOpen(this)">
+        <svg role="img" viewBox="0 0 1240 720" xmlns="http://www.w3.org/2000/svg" aria-label="How a bug bounty report travels: intake, triage and reward, why it is harder than it looks, what must exist before launch, where programmes go wrong, and two diagnostic questions.">
+          <text x="34" y="42" class="d-lab">// OPEN THE DOOR, NOT THE FLOODGATES</text>
+          <rect class="d-box-soft" x="34" y="66" width="378" height="118" rx="12"/>
+          <text x="52" y="94" class="d-lab">INTAKE</text><text x="52" y="122" class="d-t">The report</text>
+          <text x="52" y="146" class="d-s">A stranger says something is</text><text x="52" y="164" class="d-s">broken, in varying quality.</text>
+          <path d="M412 125 H452" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+          <rect class="d-box" x="452" y="66" width="378" height="118" rx="12"/>
+          <text x="470" y="94" class="d-lab">TRIAGE</text><text x="470" y="122" class="d-t">The judgement</text>
+          <text x="470" y="146" class="d-s">Real, duplicate, out of scope,</text><text x="470" y="164" class="d-s">or already known.</text>
+          <path d="M830 125 H870" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+          <rect class="d-box" x="870" y="66" width="336" height="118" rx="12"/>
+          <text x="888" y="94" class="d-lab">REWARD</text><text x="888" y="122" class="d-t">The payout</text>
+          <text x="888" y="146" class="d-s">Paid on validated impact,</text><text x="888" y="164" class="d-s">not on noise.</text>
+
+          <text x="34" y="230" class="d-lab-a">// WHY IT IS HARDER THAN IT LOOKS</text>
+          <rect x="34" y="248" width="580" height="112" rx="12" fill="rgba(245,183,60,.06)" stroke="rgba(245,183,60,.34)" stroke-width="1.3"/>
+          <text x="54" y="278" class="d-lab-a">VOLUME</text><text x="54" y="306" class="d-t-s">Triage is the real cost</text>
+          <text x="54" y="330" class="d-s">The bounty is cheap. The human hours to sort</text><text x="54" y="348" class="d-s">signal from noise, week after week, are not.</text>
+          <rect x="626" y="248" width="580" height="112" rx="12" fill="rgba(245,183,60,.06)" stroke="rgba(245,183,60,.34)" stroke-width="1.3"/>
+          <text x="646" y="278" class="d-lab-a">SCOPE</text><text x="646" y="306" class="d-t-s">Undefined scope is a fight</text>
+          <text x="646" y="330" class="d-s">Without explicit in and out of scope, every</text><text x="646" y="348" class="d-s">payout becomes an argument.</text>
+
+          <text x="34" y="414" class="d-lab">// WHAT MUST EXIST BEFORE YOU LAUNCH</text>
+          <rect class="d-box-soft" x="34" y="432" width="1172" height="46" rx="9"/><text x="54" y="460" class="d-t-s">Safe harbour</text><text x="360" y="460" class="d-s">written authorisation  ·  no legal action for good-faith research</text>
+          <rect class="d-box-soft" x="34" y="486" width="1172" height="46" rx="9"/><text x="54" y="514" class="d-t-s">Scope and rules</text><text x="360" y="514" class="d-s">assets in and out  ·  disallowed methods  ·  data handling</text>
+          <rect class="d-box-soft" x="34" y="540" width="1172" height="46" rx="9"/><text x="54" y="568" class="d-t-s">Triage capacity</text><text x="360" y="568" class="d-s">a named owner  ·  response SLA  ·  a path to engineering</text>
+          <rect class="d-box-soft" x="34" y="594" width="1172" height="46" rx="9"/><text x="54" y="622" class="d-t-s">Reward rubric</text><text x="360" y="622" class="d-s">severity to payout  ·  duplicate policy  ·  no moving goalposts</text>
+          <rect x="34" y="648" width="1172" height="46" rx="9" fill="rgba(45,212,191,.11)" stroke="rgba(45,212,191,.4)" stroke-width="1.3"/><text x="54" y="676" class="d-t-s" style="fill:#5eead4">The fix pipeline</text><text x="360" y="676" class="d-s">a report is only closed when the vulnerability is fixed</text>
+
+          <defs><marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#2dd4bf"/></marker></defs>
+        </svg>
+      </div>
+      <figcaption>The pipeline, the cost, and what must exist first. Click to expand.</figcaption>
+    </figure>
+
+    <div class="part"><span class="part-num">Part two</span><span class="part-rule"></span></div>
+    <h2>The four things that have to exist before you open the door</h2>
+
+    <h3>Safe harbour, or nobody good reports</h3>
+
+    <p>The single most important clause in a bounty programme is the one that promises you will not pursue legal action against someone who tests you in good faith within the rules. Without it, the researchers you most want, the careful, professional ones with reputations to protect, will read your terms, see the legal exposure, and quietly move on to a programme that has done this properly. The people undeterred by the absence of safe harbour are not the ones you want defining your relationship with the security community.</p>
+
+    <p>The wording matters and it is worth having a lawyer who understands the space draft it, because it has to authorise the testing clearly enough to sit against the computer misuse laws that would otherwise make that testing an offence. This is the same authorisation principle that governs any security testing: the act is identical, and what separates permitted from criminal is the written scope and permission. A vague or grudging safe harbour is worse than none, because it looks like protection and is not.</p>
+
+    <h3>Scope, in writing, in and out</h3>
+
+    <p>Scope is where programmes turn into arguments. State explicitly which assets are in scope and, just as importantly, which are out. Name the domains, the applications, the APIs. List the things you do not want touched, the methods you will not accept, such as social engineering of your staff or physical intrusion or denial of service, and the data-handling rules for anything a researcher stumbles into. Every gap in the scope document is a future dispute over a payout, conducted in public, with your programme's reputation as the stake.</p>
+
+    <h3>Triage capacity, which is the actual expense</h3>
+
+    <p>Here is the number nobody quotes in the business case. The reward budget is not the cost of a bounty programme. The cost is the human hours to look at every submission, reproduce it, decide whether it is real, novel, in scope and worth paying, and do that consistently, at volume, indefinitely. A public programme on a well-known brand can generate a flood, much of it low-quality or duplicate, and every item still has to be looked at, because the one you dismiss unread is the one that was real.</p>
+
+    <p>If you do not have a named owner with a response service level and a real path into engineering to get things fixed, do not open a public programme. Start with a VDP, or run a private, invite-only bounty with a handful of researchers and a volume you can actually handle. Scale the openness to the triage capacity, never the reverse.</p>
+
+    <h3>A reward rubric that does not move</h3>
+
+    <p>Publish how severity maps to payment, how you handle duplicates, the first valid report generally being the one that pays, and then hold to it. The fastest way to lose the community's trust is to appear to move the goalposts, to downgrade a severity to reduce a payout, or to sit on a report and then call it a duplicate when someone else reports it later. Researchers talk to each other, and a programme that is seen to pay unfairly develops a reputation that is very hard to repair.</p>
+
+    <div class="callout warn">
+      <span class="k">The test before you launch</span>
+      Ask who triages a report that lands at 2am on a Sunday, and what their response time is. If the answer is a shrug, you have a reward budget and no programme. Close the door until you can answer it, because an ignored researcher is a disclosed vulnerability waiting to happen.
+    </div>
+
+    <div class="part"><span class="part-num">Part three</span><span class="part-rule"></span></div>
+    <h2>When a bounty is the right tool, and when it is not</h2>
+
+    <p>A bounty earns its place once you have a reasonable security baseline and you want continuous, opportunistic coverage on top of it, from a wider pool of skills than you employ, paying only for what they find. It is genuinely good at surfacing the creative, chained, real-world issues that a time-boxed test can miss, and at giving you a legitimate channel that turns a finder into a collaborator rather than a leaker.</p>
+
+    <p>It is the wrong tool if you are using it to find the issues a first pentest or basic hardening would have caught, because you will pay bounty prices for low-hanging fruit and attract low-effort submissions. It is wrong if you cannot fix what it finds, since an unactioned finding is money spent to document a risk you then carry anyway. And it is wrong as a substitute for assurance, because its silence is not evidence of security. Get the baseline and the pentest first. The bounty is the layer on top, not the foundation.</p>
+
+    <table>
+      <thead><tr><th>Question</th><th>Bug bounty</th><th>Penetration test</th></tr></thead>
+      <tbody>
+        <tr><td>Coverage</td><td>Opportunistic, whatever someone finds</td><td>Systematic, against a defined scope</td></tr>
+        <tr><td>Assurance from silence</td><td>None, silence means nothing</td><td>Meaningful, a clean report is a result</td></tr>
+        <tr><td>Cost shape</td><td>Per finding, plus heavy triage</td><td>Fixed, per engagement</td></tr>
+        <tr><td>Best for</td><td>Continuous cover on a mature baseline</td><td>Assurance and finding the known classes</td></tr>
+      </tbody>
+    </table>
+
+    <div class="part"><span class="part-num">Part four</span><span class="part-rule"></span></div>
+    <h2>Delivering it: who, what, when</h2>
+
+    <p><strong>Who.</strong> A bounty needs a named programme owner who can triage or route triage, and a real line into the engineering teams who will fix what comes in. Without the second, findings pile up validated and unactioned, which is the worst of both worlds.</p>
+
+    <p><strong>What.</strong> Start with the VDP and safe harbour, which every organisation should have regardless. Then, if the baseline justifies it, a private invite-only bounty with a bounded researcher pool. Public and open is the last step, taken only when triage capacity is proven, not the first.</p>
+
+    <p><strong>When.</strong> Sequence by control, not enthusiasm. Baseline hardening and a pentest first, so the bounty is not paying to find what should already be fixed. Then VDP, then private bounty, then public. Each stage should be comfortable before the next opens, because you cannot easily close a programme you have opened without damaging the reputation you were building.</p>
+
+    <h2>The honest summary</h2>
+
+    <p>A bug bounty is one of the few security investments that can genuinely turn strangers into an extension of your defence, and it is also one of the few that punishes you immediately for treating it as a purchase rather than a practice. The reward budget is the visible, minor cost. The triage, the scope discipline, the safe harbour and the fix pipeline are the real programme, and they are all work you do before a single valid report arrives.</p>
+
+    <p>If you take one thing from this, let it be the sequence. Reporting channel and safe harbour first, capacity before openness, and never a bounty in the place where a pentest and basic hardening belong. Get that order right and the programme is a genuine asset. Get it wrong and you have paid to build a queue that shames you in public.</p>
+
+    <p class="lead">If you want help standing up a disclosure or bounty programme, or deciding whether you are ready for one, that is the kind of work I do through <a href="https://cyberspartans.co.uk">Cyber Spartans</a>.</p>
+
+  </article>
+
+  <section class="related">
+    <h2>Related reading</h2>
+    <div class="rgrid">
+      <a class="rcard" href="/articles/physical-layer-rf-tools-and-the-law/"><div class="c">Threat</div><div class="t">The badge still works: RF tools and the law</div></a>
+      <a class="rcard" href="/articles/securing-the-cicd-pipeline/"><div class="c">Cloud</div><div class="t">Securing the CI/CD pipeline</div></a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf">GitHub</a>
+      <a href="https://saleemyousaf.medium.com">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf">Dev.to</a>
+      <a href="https://cyberspartans.co.uk">Cyber Spartans</a>
+    </div>
+    <div class="pills">
+      <span class="pill bf">breachforge.co.uk</span>
+      <span class="pill cs">cyberspartans.co.uk</span>
+    </div>
+    <div class="legal">&copy; 2026 Saleem Yousaf. All rights reserved. &nbsp;&middot;&nbsp;
+      <a href="https://saleemyousaf.co.uk/privacy-policy/">Privacy</a></div>
+  </footer>
+</div>
+
+<div class="syx-lb" id="syxLb" onclick="syxLbClose()">
+  <button type="button" class="syx-lb-x" onclick="event.stopPropagation();syxLbClose();">&#10005; close</button>
+  <div class="syx-lb-stage" id="syxLbStage"></div>
+</div>
+<script>
+function syxLbOpen(fr){var s=fr.querySelector('svg[role="img"]');if(!s)return;
+  var st=document.getElementById('syxLbStage');st.innerHTML='';
+  st.appendChild(s.cloneNode(true));document.getElementById('syxLb').classList.add('syx-open');}
+function syxLbClose(){document.getElementById('syxLb').classList.remove('syx-open');}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'||e.key==='Esc')syxLbClose();});
+</script>
+</body>
+</html>
