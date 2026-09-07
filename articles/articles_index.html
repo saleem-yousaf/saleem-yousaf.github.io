@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloud Security &amp; Architecture Articles | Saleem Yousaf</title>
+<meta name="description" content="Articles by Saleem Yousaf covering AWS, Azure, Zero Trust, AI governance, OT security, threat modelling, and enterprise security architecture.">
+<meta name="author" content="Saleem Yousaf">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cloud Security &amp; Architecture Articles | Saleem Yousaf">
+<meta property="og:description" content="Articles by Saleem Yousaf covering AWS, Azure, Zero Trust, AI governance, OT security, threat modelling, and enterprise security architecture.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/">
+
+<!-- Twitter card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cloud Security &amp; Architecture Articles | Saleem Yousaf">
+<meta name="twitter:description" content="Articles by Saleem Yousaf covering AWS, Azure, Zero Trust, AI governance, OT security, threat modelling, and enterprise security architecture.">
+
+<!-- Person schema: identifies this page as belonging to Saleem Yousaf -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Saleem Yousaf",
+  "url": "https://saleemyousaf.co.uk",
+  "jobTitle": "Cloud Security Architect",
+  "description": "Cloud Security Architect securing UK government, critical national infrastructure, and global enterprise across AWS and Azure. Founder of BreachForge. Director at Cyber Spartans Ltd.",
+  "knowsAbout": [
+    "Cloud Security",
+    "Security Architecture",
+    "Critical National Infrastructure",
+    "AWS Security",
+    "Azure Security",
+    "RAG Pipeline Security",
+    "AI Security",
+    "OT Security",
+    "Threat Modelling",
+    "Zero Trust",
+    "MITRE ATT&CK"
+  ],
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Cyber Spartans Ltd",
+    "url": "https://cyberspartans.co.uk"
+  },
+  "owns": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "BreachForge",
+      "url": "https://breachforge.co.uk",
+      "applicationCategory": "SecurityApplication",
+      "description": "Breach and Attack Simulation platform mapped to MITRE ATT&CK."
+    }
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "addressRegion": "Lancashire",
+    "addressCountry": "GB"
+  },
+  "sameAs": [
+    "https://www.linkedin.com/in/saleemyousaf",
+    "https://github.com/saleem-yousaf",
+    "https://saleemyousaf.medium.com",
+    "https://hashnode.com/@saleemyousaf",
+    "https://dev.to/saleem_yousaf",
+    "https://about.me/saleemyousaf",
+    "https://cyberspartans.co.uk",
+    "https://breachforge.co.uk"
+  ]
+}
+</script>
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+<style>
+/* ── TOKENS ─────────────────────────────────────────── */
+:root {
+  --bg:         #090c10;
+  --bg2:        #0f1318;
+  --bg3:        #161b22;
+  --border:     rgba(255,255,255,0.07);
+  --border2:    rgba(255,255,255,0.12);
+  --text:       #e6eaf0;
+  --muted:      #7a8694;
+  --muted2:     #4a5568;
+  --teal:       #2dd4bf;
+  --teal-dim:   rgba(45,212,191,0.12);
+  --amber:      #f59e0b;
+  --amber-dim:  rgba(245,158,11,0.10);
+  --purple:     #a78bfa;
+  --purple-dim: rgba(167,139,250,0.10);
+  --red:        #f87171;
+  --red-dim:    rgba(248,113,113,0.10);
+  --mono:       'DM Mono', monospace;
+  --display:    'Syne', sans-serif;
+  --body:       'Inter', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(45,212,191,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45,212,191,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── LAYOUT ─────────────────────────────────────────── */
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+section { position: relative; z-index: 1; }
+
+/* ── NAV ─────────────────────────────────────────────── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(9,12,16,0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+.nav-logo span { color: var(--teal); }
+.nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+.nav-links a {
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a.active { color: var(--teal); }
+.nav-dropdown { position: relative; }
+.nav-dropdown-toggle {
+  font-size: 13px; color: var(--muted); background: none; border: none;
+  cursor: pointer; letter-spacing: 0.03em; display: flex; align-items: center; gap: 5px;
+  font-family: var(--body); padding: 0; transition: color 0.2s;
+}
+.nav-dropdown-toggle:hover { color: var(--teal); }
+.nav-dropdown:hover .nav-dropdown-toggle { color: var(--teal); }
+.nav-dropdown-toggle svg { transition: transform 0.2s; }
+.nav-dropdown:hover .nav-dropdown-toggle svg { transform: rotate(180deg); }
+.nav-dropdown-menu {
+  position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  padding-top: 12px; opacity: 0; pointer-events: none;
+  transition: opacity 0.15s; z-index: 200;
+}
+.nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: all; }
+.nav-dropdown-menu-inner {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+  padding: 8px; min-width: 220px;
+}
+.nav-dropdown-menu a {
+  display: block; padding: 9px 14px; font-size: 13px; color: var(--muted);
+  text-decoration: none; border-radius: 5px; transition: background 0.15s, color 0.15s; white-space: nowrap;
+}
+.nav-dropdown-menu a:hover { background: var(--bg3); color: var(--text); }
+.nav-dropdown-menu a.active { color: var(--teal); }
+.nav-cta {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--teal) !important;
+  border: 1px solid rgba(45,212,191,0.3);
+  padding: 6px 16px;
+  border-radius: 4px;
+  transition: background 0.2s, border-color 0.2s !important;
+}
+.nav-cta:hover { background: var(--teal-dim); border-color: var(--teal) !important; }
+
+/* ── PAGE HEADER ─────────────────────────────────────── */
+.page-header { padding: 100px 0 0; position: relative; overflow: hidden; border-bottom: 1px solid var(--border); }
+.page-header-glow {
+  position: absolute;
+  top: -150px; right: -100px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(45,212,191,0.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.eyebrow-line { width: 24px; height: 1px; background: var(--teal); }
+.eyebrow-text {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--teal);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+h1 {
+  font-family: var(--display);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 20px;
+}
+h1 em { font-style: normal; color: var(--teal); }
+.page-sub { font-size: 17px; color: var(--muted); line-height: 1.7; margin-bottom: 36px; }
+.header-stats {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.header-stat {
+  display: flex;
+  flex-direction: column;
+}
+.header-stat-num {
+  font-family: var(--display);
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+.header-stat-num span { color: var(--teal); font-size: 18px; }
+.header-stat-label {
+  font-size: 12px;
+  color: var(--muted2);
+  margin-top: 4px;
+  font-family: var(--mono);
+  letter-spacing: 0.04em;
+}
+
+/* ── FEATURED ARTICLE ────────────────────────────────── */
+.featured { padding: 80px 0 0; }
+
+.article-featured {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 44px 48px;
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 48px;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.article-featured::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--teal), transparent);
+}
+.article-featured:hover { border-color: var(--border2); }
+
+.af-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.af-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--teal);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.af-new {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 2px 8px;
+  background: var(--teal-dim);
+  color: var(--teal);
+  border-radius: 3px;
+  letter-spacing: 0.06em;
+}
+.af-title {
+  font-family: var(--display);
+  font-size: 24px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+.af-excerpt {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+.af-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.af-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 4px 10px;
+  background: var(--teal-dim);
+  color: var(--teal);
+  border-radius: 3px;
+}
+.af-meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted2);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.af-meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--muted2); }
+
+.af-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.af-aside-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.af-topic {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.af-topic-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
+
+/* ── REFERENCE ARCHITECTURE BADGE ───────────────────── */
+.af-ref-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 4px 10px;
+  background: rgba(167,139,250,0.12);
+  color: var(--purple);
+  border: 1px solid rgba(167,139,250,0.25);
+  border-radius: 3px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-left: 4px;
+}
+
+/* ── LATEST STRIP ────────────────────────────────────── */
+.latest-strip {
+  padding: 0 0 48px;
+}
+.latest-strip-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.latest-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.latest-card {
+  flex: 1;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s;
+}
+.latest-card:hover { border-color: var(--border2); }
+.latest-card-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+.latest-new {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 3px 8px;
+  background: var(--teal-dim);
+  color: var(--teal);
+  border-radius: 3px;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+.latest-title {
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.latest-meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted2);
+  white-space: nowrap;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.latest-tags {
+  display: flex;
+  gap: 5px;
+  flex-shrink: 0;
+}
+.latest-tags .ac-tag {
+  font-size: 10px;
+}
+.latest-divider {
+  width: 1px;
+  height: 32px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+/* ── FILTER + GRID ───────────────────────────────────── */
+.articles-section { padding: 64px 0 88px; }
+
+.articles-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+.filter-bar { display: flex; gap: 8px; flex-wrap: wrap; }
+.filter-btn {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 7px 16px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-btn:hover { border-color: var(--border2); color: var(--text); }
+.filter-btn.active { background: var(--teal-dim); border-color: rgba(45,212,191,0.3); color: var(--teal); }
+
+.article-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted2);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+/* ── ARTICLE GRID ────────────────────────────────────── */
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.article-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s, background 0.2s;
+}
+.article-card:hover { border-color: var(--border2); background: var(--bg3); }
+.article-card.hidden { display: none; }
+
+.ac-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.ac-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  letter-spacing: 0.04em;
+}
+.ac-tag.teal   { background: var(--teal-dim);   color: var(--teal); }
+.ac-tag.amber  { background: var(--amber-dim);  color: var(--amber); }
+.ac-tag.purple { background: var(--purple-dim); color: var(--purple); }
+.ac-tag.red    { background: var(--red-dim);    color: var(--red); }
+
+.ac-title {
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.35;
+}
+.ac-excerpt {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+  flex: 1;
+}
+.ac-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted2);
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.ac-meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--muted2); }
+
+/* no-results state */
+.no-results {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 48px 0;
+  color: var(--muted2);
+  font-size: 14px;
+  font-family: var(--mono);
+  display: none;
+}
+
+/* ── CTA STRIP ───────────────────────────────────────── */
+.cta-strip {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 80px 0;
+}
+.cta-inner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: center;
+}
+.cta-heading {
+  font-family: var(--display);
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10px;
+}
+.cta-sub { font-size: 15px; color: var(--muted); line-height: 1.6; }
+.cta-actions { display: flex; gap: 12px; flex-shrink: 0; align-items: center; }
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--teal);
+  color: #090c10;
+  font-family: var(--body);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 4px;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  font-size: 14px;
+  padding: 11px 24px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-outline:hover { border-color: var(--teal); color: var(--teal); }
+
+
+/* FOOTER */
+footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
+.footer-inner { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: start; }
+.footer-logo { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.footer-logo span { color: var(--teal); }
+.footer-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-top: 4px; }
+.footer-col-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted2); margin-bottom: 12px; }
+.footer-properties { display: flex; flex-direction: column; gap: 10px; }
+.footer-prop-link { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; padding: 8px 14px; border-radius: 5px; text-decoration: none; letter-spacing: 0.04em; transition: background 0.2s; }
+.footer-prop-link.bf { background: rgba(0,212,255,0.1); color: #00d4ff; border: 1px solid rgba(0,212,255,0.25); }
+.footer-prop-link.cs { background: rgba(47,158,111,0.1); color: #2f9e6f; border: 1px solid rgba(47,158,111,0.25); }
+.footer-social { display: flex; gap: 24px; align-items: center; flex-wrap: nowrap; padding: 20px 0; border-top: 1px solid var(--border); }
+.footer-social a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-social a:hover { color: var(--teal); }
+.footer-bottom { padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.footer-copy { font-size: 12px; color: var(--muted2); }
+@media(max-width:720px){.footer-inner{grid-template-columns:1fr;}.footer-social{flex-wrap:wrap;}}
+
+
+/* Hero card animation */
+.hero-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 24px; position: relative; overflow: hidden; }
+.hero-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--teal), transparent); }
+.hero-card .ztc{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
+.hero-card .ztc-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%, rgba(9,12,16,0.82) 0%, rgba(9,12,16,0.48) 55%, rgba(9,12,16,0.04) 100%);}
+.hero-card .hcard-inner{position:relative;z-index:2;}
+.hcard-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); margin-bottom: 14px; }
+.hcard-stat { display: flex; flex-direction: column; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.hcard-stat:last-of-type { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.hcard-num { font-family: var(--display); font-size: 24px; font-weight: 800; color: #fff; line-height: 1; margin-bottom: 4px; }
+.hcard-num span { color: var(--teal); font-size: 16px; }
+.hcard-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.hcard-inner{position:relative;z-index:2;}
+.ztc{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
+.ztc-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%, rgba(9,12,16,0.82) 0%, rgba(9,12,16,0.48) 55%, rgba(9,12,16,0.04) 100%);}
+</style>
+  <link rel="alternate" type="application/rss+xml" title="Saleem Yousaf articles" href="https://saleemyousaf.co.uk/feed.xml">
+</head>
+<body>
+
+<!-- ═══ NAV ═══════════════════════════════════════════ -->
+<!-- Shared nav: rendered by /nav.js. Edit NAV_CONFIG in nav.js to change site-wide. -->
+<div id="site-nav"></div>
+
+<!-- ═══ PAGE HEADER ════════════════════════════════════ -->
+<div class="page-header">
+  <div class="page-header-glow"></div>
+  <div class="wrap">
+    <div class="page-header-inner">
+      <div>
+        <div class="eyebrow">
+          <div class="eyebrow-line"></div>
+          <span class="eyebrow-text">Articles &amp; Insights</span>
+        </div>
+        <h1>Security architecture<br><em>written to be used.</em></h1>
+        <p class="page-sub">Practical articles covering cloud security, AI governance, Zero Trust, OT security, and enterprise architecture. Written for architects, engineers, and security leaders.</p>
+      </div>
+      <div class="hero-card">
+        <canvas class="ztc" id="ztc" aria-hidden="true"></canvas>
+        <div class="ztc-scrim"></div>
+        <div class="hcard-inner">
+          <div class="hcard-label">// articles</div>
+          <div class="hcard-stat">
+            <div class="hcard-num">40<span>+</span></div>
+            <div class="hcard-desc">Articles published</div>
+          </div>
+          <div class="hcard-stat">
+            <div class="hcard-num">6</div>
+            <div class="hcard-desc">Topic areas</div>
+          </div>
+          <div class="hcard-stat">
+            <div class="hcard-num">2026</div>
+            <div class="hcard-desc">Actively publishing</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FEATURED ARTICLE (PINNED REFERENCE ARCHITECTURE) ═ -->
+<section class="featured">
+  <div class="wrap">
+    <a href="https://saleemyousaf.co.uk/articles/zero-trust-landing-zone/" class="article-featured">
+      <div>
+        <div class="af-eyebrow">
+          <span class="af-label">// Reference architecture</span>
+          <span class="af-ref-badge">7,296 words · 19 diagrams</span>
+        </div>
+        <div class="af-title">Enterprise Zero Trust Secure Landing Zone Reference Architecture</div>
+        <div class="af-excerpt">A technical deep dive into enterprise Zero Trust landing zone design across AWS and Azure. Covers network segmentation, Palo Alto and Fortinet firewall engineering, Zscaler SSE, Microsoft Sentinel SIEM, XSOAR orchestration, and IaC policy enforcement. A complete blueprint for organisations building security-first cloud foundations.</div>
+        <div class="af-tags">
+          <span class="af-tag">Zero Trust</span>
+          <span class="af-tag">AWS</span>
+          <span class="af-tag">Azure</span>
+          <span class="af-tag">Firewall Engineering</span>
+          <span class="af-tag">SIEM</span>
+          <span class="af-tag">Zscaler SSE</span>
+          <span class="af-tag">Landing Zone</span>
+        </div>
+        <div class="af-meta">
+          <span>14 May 2026</span>
+          <div class="af-meta-dot"></div>
+          <span>~30 min read</span>
+          <div class="af-meta-dot"></div>
+          <span>Reference Architecture</span>
+        </div>
+      </div>
+      <div class="af-aside">
+        <div class="af-aside-label">// Architecture coverage</div>
+        <div class="af-topic"><div class="af-topic-dot"></div>Zero Trust network segmentation design</div>
+        <div class="af-topic"><div class="af-topic-dot"></div>Palo Alto and Fortinet firewall engineering</div>
+        <div class="af-topic"><div class="af-topic-dot"></div>Zscaler ZIA and ZPA SSE integration</div>
+        <div class="af-topic"><div class="af-topic-dot"></div>Sentinel SIEM and XSOAR orchestration</div>
+        <div class="af-topic"><div class="af-topic-dot"></div>IaC policy enforcement and guardrails</div>
+        <div class="af-topic"><div class="af-topic-dot"></div>Firewall rule standards and operational outcomes</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ═══ LATEST ARTICLE STRIP ════════════════════════════ -->
+<section class="latest-strip">
+  <div class="wrap">
+    <div class="latest-strip-inner">
+      <div class="latest-label">// Latest</div>
+      <div class="latest-divider"></div>
+      <a href="https://saleemyousaf.co.uk/articles/aws-security-agent-vs-pen-test/" class="latest-card">
+        <div class="latest-card-left">
+          <span class="latest-new">New</span>
+          <div class="latest-title">AWS Security Agent, Explained: What It Does, How to Deploy It, and How It Compares to a Pen Test</div>
+        </div>
+        <div class="latest-tags">
+          <span class="ac-tag blue">AWS</span>
+          <span class="ac-tag amber">Pen Test</span>
+          <span class="ac-tag teal">Agentic Security</span>
+        </div>
+        <div class="latest-meta">
+          <span>24 August 2026</span>
+          <div class="af-meta-dot"></div>
+          <span>~18 min read</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ARTICLES GRID ═══════════════════════════════════ -->
+<section class="articles-section">
+  <div class="wrap">
+
+    <div class="articles-controls">
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterArticles('all', this)">All</button>
+        <button class="filter-btn" onclick="filterArticles('cloud', this)">Cloud Security</button>
+        <button class="filter-btn" onclick="filterArticles('ai', this)">AI &amp; Governance</button>
+        <button class="filter-btn" onclick="filterArticles('ot', this)">OT Security</button>
+        <button class="filter-btn" onclick="filterArticles('zerotrust', this)">Zero Trust</button>
+        <button class="filter-btn" onclick="filterArticles('threat', this)">Threat Modelling</button>
+        <button class="filter-btn" onclick="filterArticles('crypto', this)">Cryptography</button>
+        <button class="filter-btn" onclick="filterArticles('grc', this)">Governance &amp; Compliance</button>
+      </div>
+      <div class="article-count" id="article-count">40 articles</div>
+    </div>
+
+    <div class="articles-grid" id="articles-grid">
+
+      <!-- Article: AWS Security Agent (latest) -->
+      <a href="https://saleemyousaf.co.uk/articles/aws-security-agent-vs-pen-test/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag blue">AWS</span>
+          <span class="ac-tag amber">Pen Test</span>
+          <span class="ac-tag teal">Agentic Security</span>
+        </div>
+        <div class="ac-title">AWS Security Agent, Explained: What It Does, How to Deploy It, and How It Compares to a Pen Test</div>
+        <div class="ac-excerpt">What the autonomous pen-testing service does, where and how to deploy it, costs, limitations and roadmap, with high-level and low-level design diagrams, and an honest comparison to human penetration testing versus what breach and attack simulation answers instead.</div>
+        <div class="ac-meta">
+          <span>24 August 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~18 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: VPN anonymity -->
+      <a href="https://saleemyousaf.co.uk/articles/vpn-anonymity-network-account-device/" class="article-card" data-cat="threat">
+        <div class="ac-tags">
+          <span class="ac-tag red">Attribution</span>
+          <span class="ac-tag amber">VPN &amp; Tor</span>
+          <span class="ac-tag teal">Privacy</span>
+        </div>
+        <div class="ac-title">A Curtain, Not a Cloak: What a VPN Actually Hides, and What It Leaves Wide Open</div>
+        <div class="ac-excerpt">Your identity online is three layers, and a VPN only covers one. Using the Scattered Spider GDID case and the GTA 6 leaker subpoenas, why the account and device layers name you anyway, and what real separation would take.</div>
+        <div class="ac-meta">
+          <span>23 August 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~13 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: Bug bounty programme -->
+      <a href="https://saleemyousaf.co.uk/articles/bug-bounty-programme-defender-guide/" class="article-card" data-cat="threat">
+        <div class="ac-tags">
+          <span class="ac-tag red">Bug Bounty</span>
+          <span class="ac-tag amber">Disclosure</span>
+          <span class="ac-tag teal">Programme</span>
+        </div>
+        <div class="ac-title">Open the Door, Not the Floodgates: Running a Bug Bounty as a Defender</div>
+        <div class="ac-excerpt">A bug bounty is an intake pipe you have to staff, not a control you buy. Safe harbour, scope, the triage cost nobody budgets for, reward rubrics, and when a bounty is the right tool versus a pentest, from the programme owner's seat.</div>
+        <div class="ac-meta">
+          <span>4 August 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~14 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: Incident response first hour -->
+      <a href="https://saleemyousaf.co.uk/articles/incident-response-first-hour/" class="article-card" data-cat="grc">
+        <div class="ac-tags">
+          <span class="ac-tag purple">Incident Response</span>
+          <span class="ac-tag amber">Disclosure</span>
+          <span class="ac-tag teal">Governance</span>
+        </div>
+        <div class="ac-title">The Plan Meets the Day It Broke: The First Hour of an Incident</div>
+        <div class="ac-excerpt">Most organisations have an incident response plan and have never run it. Declaring an incident, containing without destroying evidence, the disclosure clock, the roles and the retainer, and the tabletop that tests it all.</div>
+        <div class="ac-meta">
+          <span>4 August 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~14 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: Third-party vendor risk -->
+      <a href="https://saleemyousaf.co.uk/articles/third-party-vendor-risk-management/" class="article-card" data-cat="grc">
+        <div class="ac-tags">
+          <span class="ac-tag purple">Vendor Risk</span>
+          <span class="ac-tag amber">Third-Party</span>
+          <span class="ac-tag teal">Governance</span>
+        </div>
+        <div class="ac-title">Their Breach, Your Incident: Managing Third-Party and Vendor Risk</div>
+        <div class="ac-excerpt">You can outsource the service, not the risk. Why the security questionnaire is theatre, and what a real programme covers: inventory, tiering, independent assurance, contract clauses, concentration risk and exit planning.</div>
+        <div class="ac-meta">
+          <span>4 August 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~13 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: IoT streaming sticks -->
+      <a href="https://saleemyousaf.co.uk/articles/iot-streaming-sticks-residential-proxy/" class="article-card" data-cat="threat">
+        <div class="ac-tags">
+          <span class="ac-tag red">IoT</span>
+          <span class="ac-tag amber">Network Security</span>
+          <span class="ac-tag teal">Zero Trust</span>
+        </div>
+        <div class="ac-title">Free Streaming, Rented Address: What the Cheap TV Box Teaches Enterprise Security</div>
+        <div class="ac-excerpt">Preinfected Android TV boxes run as residential proxies while you stream and ad-fraud bots while you don't. The enterprise tail of the story: eroding IP trust, shadow IoT on the home LAN, hardware provenance, and the segmentation that contains it.</div>
+        <div class="ac-meta">
+          <span>3 August 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~13 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: CISO 3.0 -->
+      <a href="https://saleemyousaf.co.uk/articles/ciso-3-0-accountable-executive/" class="article-card" data-cat="grc">
+        <div class="ac-tags">
+          <span class="ac-tag purple">Security Leadership</span>
+          <span class="ac-tag teal">Governance</span>
+          <span class="ac-tag amber">Board &amp; Risk</span>
+        </div>
+        <div class="ac-title">CISO 3.0: From Defender to Accountable Executive, and Where the Shift Came From</div>
+        <div class="ac-excerpt">The real lineage from 1.0 to 3.0, where the term is derived from, and the two forces behind it: board-level accountability and autonomous AI. What the mandate now owns, and the responsibility-versus-authority gap nobody has solved.</div>
+        <div class="ac-meta">
+          <span>2 August 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~15 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: Physical layer / Flipper -->
+      <a href="https://saleemyousaf.co.uk/articles/physical-layer-rf-tools-and-the-law/" class="article-card" data-cat="threat">
+        <div class="ac-tags">
+          <span class="ac-tag red">Physical Security</span>
+          <span class="ac-tag amber">RF &amp; Access Control</span>
+          <span class="ac-tag purple">Legal</span>
+        </div>
+        <div class="ac-title">The Badge Still Works: Flipper Zero, RF Cloning, and the Law That Actually Applies</div>
+        <div class="ac-excerpt">What handheld RF tools genuinely do, why legacy access credentials keep failing, the UK legal position on possession versus conduct, and how to run physical testing under proper authorisation.</div>
+        <div class="ac-meta">
+          <span>2 August 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~14 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: Software supply chain -->
+      <a href="https://saleemyousaf.co.uk/articles/software-supply-chain-sbom-provenance/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag teal">New</span>
+          <span class="ac-tag teal">Supply Chain</span>
+          <span class="ac-tag purple">Provenance</span>
+        </div>
+        <div class="ac-title">You Shipped It. Can You Prove It? SBOM, Signing and Provenance That Actually Verify</div>
+        <div class="ac-excerpt">An SBOM nobody queries is a receipt. Inventory, signing, provenance and the enforcing admission policy that turns all of it into a control, plus the delivery sequence that gets you there.</div>
+        <div class="ac-meta">
+          <span>1 August 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~15 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: M365 and Workspace hardening -->
+      <a href="https://saleemyousaf.co.uk/articles/m365-google-workspace-hardening/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag teal">New</span>
+          <span class="ac-tag teal">M365</span>
+          <span class="ac-tag teal">Google Workspace</span>
+        </div>
+        <div class="ac-title">Licensed, Not Configured: Hardening Microsoft 365 and Google Workspace</div>
+        <div class="ac-excerpt">The tenant is the perimeter, and both platforms ship configured for adoption rather than defence. Identity, application consent, mail forwarding, sharing defaults, and the delivery plan that closes the gaps.</div>
+        <div class="ac-meta">
+          <span>1 August 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~15 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: CI/CD pipeline security -->
+      <a href="https://saleemyousaf.co.uk/articles/securing-the-cicd-pipeline/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag teal">New</span>
+          <span class="ac-tag teal">DevSecOps</span>
+          <span class="ac-tag amber">CI/CD</span>
+        </div>
+        <div class="ac-title">Securing the CI/CD Pipeline: The Highest-Privilege System Nobody Threat Models</div>
+        <div class="ac-excerpt">The pipeline deploys to production, holds every cloud credential, and runs code from anyone who can open a pull request. Trust boundaries, OIDC federation, runner isolation, SHA pinning, artefact provenance, and the delivery plan that closes the gaps.</div>
+        <div class="ac-meta">
+          <span>1 August 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~17 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: Windows CDP / GDID attribution -->
+      <a href="https://saleemyousaf.co.uk/articles/windows-cdp-gdid-attribution/" class="article-card" data-cat="threat">
+        <div class="ac-tags">
+          <span class="ac-tag red">Threat Intelligence</span>
+          <span class="ac-tag red">Digital Forensics</span>
+          <span class="ac-tag teal">Windows</span>
+        </div>
+        <div class="ac-title">The Identifier You Never Chose: Windows CDP, the GDID, and How Scattered Spider Got Named</div>
+        <div class="ac-excerpt">A suspect was stopped at Helsinki airport, and part of what put his name on a US complaint was a number in his own Windows registry. How the Connected Devices Platform issues and persists the Global Device Identifier, why deleting the local folder does not clear it, and what the run of Scattered Spider arrests tells defenders about identity as the perimeter.</div>
+        <div class="ac-meta">
+          <span>18 July 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~9 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: Global Edge (Front Door / CloudFront / Cloud Armor) -->
+      <a href="https://saleemyousaf.co.uk/articles/global-edge-front-door-cloudfront-gcp/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag teal">Cloud Security</span>
+          <span class="ac-tag teal">Edge &amp; WAF</span>
+          <span class="ac-tag amber">Multi-Cloud</span>
+        </div>
+        <div class="ac-title">The Global Edge: Azure Front Door, AWS CloudFront, and GCP Cloud Armor Compared</div>
+        <div class="ac-excerpt">The global edge is your real internet-facing perimeter, and it is underrated. Azure Front Door, the AWS equivalent, and the GCP equivalent compared: security features, cloud and hybrid models, and setup via Terraform and the portal.</div>
+        <div class="ac-meta">
+          <span>16 July 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~12 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: Azure Databricks and Data Factory -->
+      <a href="https://saleemyousaf.co.uk/articles/azure-databricks-data-factory-security/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag teal">Cloud Security</span>
+          <span class="ac-tag teal">Azure</span>
+          <span class="ac-tag purple">Data Platform</span>
+        </div>
+        <div class="ac-title">Azure Databricks and Data Factory: Use Cases and the Security Controls That Matter</div>
+        <div class="ac-excerpt">A practitioner's guide to securing Azure Data Factory and Azure Databricks. Real use cases, why the data platform is a top-tier security boundary, and the identity, secrets, network, data, compute, and monitoring controls required in production.</div>
+        <div class="ac-meta">
+          <span>14 July 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~14 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: AI Security Field Guide -->
+      <a href="https://saleemyousaf.co.uk/articles/ai-security-field-guide/" class="article-card" data-cat="ai">
+        <div class="ac-tags">
+          <span class="ac-tag amber">AI Security</span>
+          <span class="ac-tag amber">LLM</span>
+          <span class="ac-tag amber">OWASP</span>
+        </div>
+        <div class="ac-title">AI Security Field Guide: Securing the LLM Stack with Open Source</div>
+        <div class="ac-excerpt">Every team shipping AI now owns a new attack surface. A practitioner's map of the OWASP LLM Top 10 and the open source tools that let you test, guard, and govern your models, without a single vendor licence. Prompt injection, red-teaming with garak and PyRIT, runtime guardrails, and continuous evaluation.</div>
+        <div class="ac-meta">
+          <span>11 July 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~9 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: Post-Quantum Migration -->
+      <a href="https://saleemyousaf.co.uk/articles/post-quantum-migration/" class="article-card" data-cat="crypto">
+        <div class="ac-tags">
+          <span class="ac-tag teal">Cryptography</span>
+          <span class="ac-tag teal">Post-Quantum</span>
+          <span class="ac-tag amber">Migration</span>
+        </div>
+        <div class="ac-title">Post-Quantum Migration: Inventory First, Agility Second, Algorithms Last</div>
+        <div class="ac-excerpt">A post-quantum migration is inventory first, agility second, and algorithms last. What a quantum computer actually breaks, why harvest-now-decrypt-later makes it urgent, the NIST standards, and the order that works in practice.</div>
+        <div class="ac-meta">
+          <span>9 July 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~13 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: Cloud IAM and Blast Radius -->
+      <a href="https://saleemyousaf.co.uk/articles/cloud-iam-blast-radius/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag teal">Cloud Security</span>
+          <span class="ac-tag teal">IAM</span>
+          <span class="ac-tag red">Blast Radius</span>
+        </div>
+        <div class="ac-title">Cloud IAM and Blast Radius: Over-Privileged Roles and Least Privilege</div>
+        <div class="ac-excerpt">Most cloud breaches are not clever. They are an over-privileged identity doing exactly what it was allowed to do. Blast radius, why least privilege is hard, the escalation paths people miss, and the guardrails that contain a single compromised identity.</div>
+        <div class="ac-meta">
+          <span>7 July 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~14 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: Cryptographic Keys and PKI -->
+      <a href="https://saleemyousaf.co.uk/articles/cryptographic-keys-pki-rotation/" class="article-card" data-cat="crypto">
+        <div class="ac-tags">
+          <span class="ac-tag teal">Cryptography</span>
+          <span class="ac-tag teal">PKI</span>
+          <span class="ac-tag teal">Key Rotation</span>
+        </div>
+        <div class="ac-title">Cryptographic Keys and PKI: Key Material, Rotation, and What Holds Up in Production</div>
+        <div class="ac-excerpt">Most cryptography failures are not broken algorithms. They are mismanaged keys. Key material, HSMs and KMS, envelope encryption, PKI and the trust chain, and why rotating a key does not re-encrypt your data. Plus the certificate lifetime changes coming through 2029.</div>
+        <div class="ac-meta">
+          <span>30 June 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~15 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: Threat Intelligence -->
+      <a href="https://saleemyousaf.co.uk/articles/threat-intel/" class="article-card" data-cat="threat">
+        <div class="ac-tags">
+          <span class="ac-tag red">Threat Intelligence</span>
+          <span class="ac-tag red">SOC</span>
+          <span class="ac-tag teal">MITRE ATT&amp;CK</span>
+        </div>
+        <div class="ac-title">Threat Intelligence Platforms: The Honest Conversation</div>
+        <div class="ac-excerpt">Most threat intelligence platforms become shelfware within 18 months, and it is rarely the platform's fault. The honest version: the three types of intelligence, the integration work vendors gloss over, open source versus commercial, and the three questions to answer before you buy.</div>
+        <div class="ac-meta">
+          <span>30 June 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~13 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: FinOps -->
+      <a href="https://saleemyousaf.co.uk/articles/finops/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag amber">Cloud Governance</span>
+          <span class="ac-tag amber">FinOps</span>
+          <span class="ac-tag teal">AWS</span>
+        </div>
+        <div class="ac-title">FinOps: The Accountability Problem Nobody Wants to Name</div>
+        <div class="ac-excerpt">The tooling is not the problem. Apptio, CloudHealth and Cost Explorer all solve visibility. FinOps stalls because the engineer who deploys the infrastructure never sees the bill, and security controls like NAT gateways and CloudTrail quietly drive the spend.</div>
+        <div class="ac-meta">
+          <span>23 June 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~11 min read</span>
+        </div>
+      </a>
+
+      <!-- Article 2: Cloud HSM -->
+      <a href="https://saleemyousaf.co.uk/articles/cloud-hsm/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag teal">Cloud Security</span>
+          <span class="ac-tag teal">AWS</span>
+          <span class="ac-tag teal">Key Management</span>
+        </div>
+        <div class="ac-title">Cloud HSM: What the Vendor Documentation Skips Over</div>
+        <div class="ac-excerpt">Three paths, one decision. The honest comparison of AWS KMS, CloudHSM custom key store, and CloudHSM direct, including the operational costs that never appear on the pricing page.</div>
+        <div class="ac-meta">
+          <span>16 June 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~12 min read</span>
+        </div>
+      </a>
+
+      <!-- Article 2 -->
+      <a href="https://saleemyousaf.co.uk/articles/broken-rag-vs-governed-rag/" class="article-card" data-cat="ai">
+        <div class="ac-tags">
+          <span class="ac-tag amber">AI Security</span>
+          <span class="ac-tag amber">RAG</span>
+          <span class="ac-tag amber">Governance</span>
+        </div>
+        <div class="ac-title">Broken RAG vs Governed RAG Pipelines</div>
+        <div class="ac-excerpt">Why AI security starts before the prompt. Comparing ungoverned and well-governed retrieval-augmented generation architectures and what goes wrong when governance is missing.</div>
+        <div class="ac-meta">
+          <span>12 May 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~8 min read</span>
+        </div>
+      </a>
+
+      <!-- Article 3 -->
+      <a href="https://saleemyousaf.co.uk/articles/enterprise-ot-security/" class="article-card" data-cat="ot">
+        <div class="ac-tags">
+          <span class="ac-tag purple">OT Security</span>
+          <span class="ac-tag purple">Segmentation</span>
+          <span class="ac-tag purple">CNI</span>
+        </div>
+        <div class="ac-title">Enterprise OT Security &amp; Network Segmentation Frameworks</div>
+        <div class="ac-excerpt">Building cyber resilience across modern industrial environments undergoing rapid digital transformation, covering OT/IT integration risks and segmentation strategy.</div>
+        <div class="ac-meta">
+          <span>12 May 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~12 min read</span>
+        </div>
+      </a>
+
+      <!-- Article 4 -->
+      <a href="https://saleemyousaf.co.uk/articles/ot-cybersecurity-manufacturing/" class="article-card" data-cat="ot">
+        <div class="ac-tags">
+          <span class="ac-tag purple">OT Security</span>
+          <span class="ac-tag purple">Manufacturing</span>
+          <span class="ac-tag red">Identity Risk</span>
+        </div>
+        <div class="ac-title">OT Cybersecurity in Manufacturing: One Compromised Identity Can Stop an Entire Business</div>
+        <div class="ac-excerpt">How weak identity controls and legacy OT security can halt manufacturing operations. Lessons from Honda, JLR, and real-world automotive industry experience.</div>
+        <div class="ac-meta">
+          <span>12 May 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~10 min read</span>
+        </div>
+      </a>
+
+      <!-- Article 5 -->
+      <a href="https://saleemyousaf.co.uk/articles/mitre-attck-vs-atlas/" class="article-card" data-cat="threat">
+        <div class="ac-tags">
+          <span class="ac-tag red">MITRE ATT&amp;CK</span>
+          <span class="ac-tag red">ATLAS</span>
+          <span class="ac-tag red">Threat Intel</span>
+        </div>
+        <div class="ac-title">MITRE ATT&amp;CK vs MITRE ATLAS: Understanding Modern Threat-Informed Defence</div>
+        <div class="ac-excerpt">A structured breakdown of both frameworks, covering how to map detection capabilities, improve security controls, and build a threat-informed defence posture.</div>
+        <div class="ac-meta">
+          <span>12 May 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~10 min read</span>
+        </div>
+      </a>
+
+      <!-- Article 6 -->
+      <a href="https://saleemyousaf.co.uk/articles/ai-security-blueprint-sabsa/" class="article-card" data-cat="ai">
+        <div class="ac-tags">
+          <span class="ac-tag amber">AI Security</span>
+          <span class="ac-tag amber">SABSA</span>
+          <span class="ac-tag teal">AWS</span>
+        </div>
+        <div class="ac-title">AI Security Assessment Blueprint (SABSA-Aligned for AWS &amp; Enterprise AI)</div>
+        <div class="ac-excerpt">A practical AI security assessment blueprint aligned to SABSA, demonstrating how to secure AI systems using AWS secure RAG design patterns.</div>
+        <div class="ac-meta">
+          <span>5 May 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~11 min read</span>
+        </div>
+      </a>
+
+      <!-- Article 7 -->
+      <a href="https://saleemyousaf.co.uk/articles/secure-landing-zone-private-apis/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag teal">Cloud Security</span>
+          <span class="ac-tag teal">AWS</span>
+          <span class="ac-tag teal">Azure</span>
+        </div>
+        <div class="ac-title">Secure Cloud Landing Zone Architecture: Private APIs, ECS, and Compliance Controls</div>
+        <div class="ac-excerpt">Exploring a secure cloud landing zone architecture across AWS and Azure, covering private APIs, ECS workloads, and compliance-led design principles.</div>
+        <div class="ac-meta">
+          <span>4 May 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~10 min read</span>
+        </div>
+      </a>
+
+      <!-- Article 8 -->
+      <a href="https://saleemyousaf.co.uk/articles/grc-age-of-ai/" class="article-card" data-cat="ai">
+        <div class="ac-tags">
+          <span class="ac-tag amber">GRC</span>
+          <span class="ac-tag amber">AI Governance</span>
+          <span class="ac-tag amber">Risk</span>
+        </div>
+        <div class="ac-title">GRC in the Age of AI: Why Governance Matters More Than Ever</div>
+        <div class="ac-excerpt">How traditional GRC frameworks must evolve to keep pace with the speed and opacity of AI adoption across enterprise environments.</div>
+        <div class="ac-meta">
+          <span>3 May 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~9 min read</span>
+        </div>
+      </a>
+
+      <!-- Article 9 -->
+      <a href="https://saleemyousaf.co.uk/articles/assume-breach-continuous-validation/" class="article-card" data-cat="threat">
+        <div class="ac-tags">
+          <span class="ac-tag red">Assume Breach</span>
+          <span class="ac-tag red">BAS</span>
+          <span class="ac-tag red">Validation</span>
+        </div>
+        <div class="ac-title">Assume Breach and Continuous Security Validation</div>
+        <div class="ac-excerpt">Why pen tests and vulnerability scans are not enough. The case for continuous security validation and how Breach Attack Simulation changes the assurance model.</div>
+        <div class="ac-meta">
+          <span>30 Apr 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~11 min read</span>
+        </div>
+      </a>
+
+      <!-- Article 10 -->
+      <a href="https://saleemyousaf.co.uk/articles/zero-trust-zscaler/" class="article-card" data-cat="zerotrust">
+        <div class="ac-tags">
+          <span class="ac-tag teal">Zero Trust</span>
+          <span class="ac-tag teal">Zscaler</span>
+          <span class="ac-tag teal">SSE</span>
+        </div>
+        <div class="ac-title">Zero Trust in Practice: Where Does Zscaler Fit Within a Modern Security Architecture?</div>
+        <div class="ac-excerpt">Zero Trust is failing in many organisations not because the strategy is wrong, but because the trust model never really changed. How Zscaler SSE addresses the gap.</div>
+        <div class="ac-meta">
+          <span>29 Apr 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~9 min read</span>
+        </div>
+      </a>
+
+      <!-- Article 11 -->
+      <a href="https://saleemyousaf.co.uk/articles/public-vs-private-llms/" class="article-card" data-cat="ai">
+        <div class="ac-tags">
+          <span class="ac-tag amber">LLM</span>
+          <span class="ac-tag amber">AI Governance</span>
+          <span class="ac-tag amber">Architecture</span>
+        </div>
+        <div class="ac-title">Public vs Private LLMs: Security, Governance and Architecture Considerations</div>
+        <div class="ac-excerpt">Understanding the security and governance trade-offs between public and private LLMs, and how to adopt AI responsibly within regulated enterprise environments.</div>
+        <div class="ac-meta">
+          <span>28 Apr 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~9 min read</span>
+        </div>
+      </a>
+
+      <!-- Article: Cyber Essentials Plus pathway -->
+      <a href="https://saleemyousaf.co.uk/articles/cyber-essentials-plus-certification-pathway/" class="article-card" data-cat="grc">
+        <div class="ac-tags">
+          <span class="ac-tag purple">Governance</span>
+          <span class="ac-tag purple">Cyber Essentials</span>
+          <span class="ac-tag amber">Compliance</span>
+        </div>
+        <div class="ac-title">The Cyber Essentials Plus Pathway: What Danzell Changed, and How Remediation Programmes Actually Fail</div>
+        <div class="ac-excerpt">The Danzell question set landed with auto-fail rules, cloud services that can no longer be scoped out, and random re-sampling that can cost you the base certificate. The certification pathway, the five test cases, sampling mechanics, and the ten gotchas that sink remediation programmes.</div>
+        <div class="ac-meta">
+          <span>27 Apr 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~16 min read</span>
+        </div>
+      </a>
+
+      <!-- Article 12 -->
+      <a href="https://saleemyousaf.co.uk/articles/socs-evolving/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag teal">SOC</span>
+          <span class="ac-tag amber">AI</span>
+          <span class="ac-tag teal">Detection</span>
+        </div>
+        <div class="ac-title">Security Operations Centres Are Evolving</div>
+        <div class="ac-excerpt">How AI is transforming the SOC, enhancing detection, reducing noise, and improving response times across modern enterprise security operations.</div>
+        <div class="ac-meta">
+          <span>24 Apr 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~8 min read</span>
+        </div>
+      </a>
+
+      <!-- Article 13 -->
+      <a href="https://saleemyousaf.co.uk/articles/stride-cloud-detection/" class="article-card" data-cat="threat">
+        <div class="ac-tags">
+          <span class="ac-tag red">STRIDE</span>
+          <span class="ac-tag red">Threat Modelling</span>
+          <span class="ac-tag teal">Cloud</span>
+        </div>
+        <div class="ac-title">From Threat Modelling to Threat Detection: Making STRIDE Work in Cloud Environments</div>
+        <div class="ac-excerpt">A practical guide to using STRIDE in cloud environments, moving from early threat modelling to stronger threat detection and response at enterprise scale.</div>
+        <div class="ac-meta">
+          <span>22 Apr 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~10 min read</span>
+        </div>
+      </a>
+
+      <!-- Article 14 -->
+      <a href="https://saleemyousaf.co.uk/articles/secure-by-design-aws/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag teal">AWS</span>
+          <span class="ac-tag teal">Secure by Design</span>
+          <span class="ac-tag teal">Architecture</span>
+        </div>
+        <div class="ac-title">Secure by Design for Consultancy-Led AWS Architecture</div>
+        <div class="ac-excerpt">A practical AWS secure-by-design reference architecture for consultancy teams delivering cloud transformation programmes in regulated and enterprise environments.</div>
+        <div class="ac-meta">
+          <span>21 Apr 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~8 min read</span>
+        </div>
+      </a>
+
+      <!-- Article 15 -->
+      <a href="https://saleemyousaf.co.uk/articles/cloud-landing-zone-accelerators/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag teal">Landing Zone</span>
+          <span class="ac-tag teal">AWS</span>
+          <span class="ac-tag teal">Azure</span>
+        </div>
+        <div class="ac-title">Cloud Landing Zone Accelerators: Secure-by-Design Architectures for AWS, Azure and GCP</div>
+        <div class="ac-excerpt">Most cloud projects rebuild the same foundations repeatedly. A set of landing zone accelerators to establish networking, identity, logging, and security controls from day one.</div>
+        <div class="ac-meta">
+          <span>21 Apr 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~10 min read</span>
+        </div>
+      </a>
+
+      <!-- Article 16 -->
+      <a href="https://saleemyousaf.co.uk/articles/cloud-service-mapping/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag teal">AWS</span>
+          <span class="ac-tag teal">Azure</span>
+          <span class="ac-tag teal">Multi-cloud</span>
+        </div>
+        <div class="ac-title">Cloud Service Mapping: AWS vs Azure vs GCP</div>
+        <div class="ac-excerpt">How core services align across AWS, Azure, and GCP covering compute, storage, networking, security, and more. Useful for multi-cloud environments and platform transitions.</div>
+        <div class="ac-meta">
+          <span>16 Apr 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~7 min read</span>
+        </div>
+      </a>
+
+      <!-- Article 17 -->
+      <a href="https://saleemyousaf.co.uk/articles/common-cloud-security-mistakes/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag teal">Cloud Security</span>
+          <span class="ac-tag red">Risk</span>
+          <span class="ac-tag teal">AWS</span>
+        </div>
+        <div class="ac-title">Common Security Mistakes in Cloud Architecture</div>
+        <div class="ac-excerpt">A practical look at common cloud security mistakes and how to avoid them, based on real-world experience designing secure AWS and enterprise cloud architectures.</div>
+        <div class="ac-meta">
+          <span>15 Apr 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~8 min read</span>
+        </div>
+      </a>
+
+      <!-- Article 18 -->
+      <a href="https://saleemyousaf.co.uk/articles/api-security-stride/" class="article-card" data-cat="threat">
+        <div class="ac-tags">
+          <span class="ac-tag red">API Security</span>
+          <span class="ac-tag red">STRIDE</span>
+          <span class="ac-tag red">Threat Modelling</span>
+        </div>
+        <div class="ac-title">API Security and STRIDE Threat Modelling in Modern Architectures</div>
+        <div class="ac-excerpt">An introduction to API security using STRIDE threat modelling, highlighting how to identify and mitigate risks early in the design lifecycle.</div>
+        <div class="ac-meta">
+          <span>12 Apr 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~8 min read</span>
+        </div>
+      </a>
+
+      <!-- Article 19 -->
+      <a href="https://saleemyousaf.co.uk/articles/designing-aws-landing-zones/" class="article-card" data-cat="cloud">
+        <div class="ac-tags">
+          <span class="ac-tag teal">AWS</span>
+          <span class="ac-tag teal">Landing Zone</span>
+          <span class="ac-tag teal">Enterprise</span>
+        </div>
+        <div class="ac-title">Designing Secure AWS Landing Zones for Enterprise</div>
+        <div class="ac-excerpt">A practical overview of designing secure AWS landing zones, covering multi-account architecture, governance controls, and security guardrails for enterprise deployments.</div>
+        <div class="ac-meta">
+          <span>12 Apr 2026</span>
+          <div class="ac-meta-dot"></div>
+          <span>~9 min read</span>
+        </div>
+      </a>
+
+      <div class="no-results" id="no-results">No articles match this filter.</div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA STRIP ═════════════════════════════════════════ -->
+<div class="cta-strip">
+  <div class="wrap">
+    <div class="cta-inner">
+      <div>
+        <div class="cta-heading">Want these insights in your feed?</div>
+        <div class="cta-sub">Follow on LinkedIn or Medium for new articles on cloud security, AI governance, and enterprise architecture.</div>
+      </div>
+      <div class="cta-actions">
+        <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener" class="btn-primary">
+          Follow on LinkedIn
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+        <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener" class="btn-outline">Read on Medium</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Saleem <span>Yousaf</span></div>
+        <div class="footer-desc">Cloud &amp; Cyber Security Architect<br>Founder of BreachForge · Director at Cyber Spartans<br>AWS · Azure · Zero Trust · AI Governance · OT Security</div>
+      </div>
+      <div>
+        <div class="footer-col-label">// Properties</div>
+        <div class="footer-properties">
+          <a href="https://breachforge.co.uk" target="_blank" rel="noopener" class="footer-prop-link bf">⬡ breachforge.co.uk</a>
+          <a href="https://cyberspartans.co.uk" target="_blank" rel="noopener" class="footer-prop-link cs">⬢ cyberspartans.co.uk</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-social">
+      <a href="https://www.linkedin.com/in/saleemyousaf" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://saleemyousaf.medium.com/" target="_blank" rel="noopener">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf" target="_blank" rel="noopener">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf" target="_blank" rel="noopener">Dev.to</a>
+      <a href="https://saleemyousaf.co.uk/feed.xml">RSS</a>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Saleem Yousaf. All rights reserved.</span>
+      <a href="https://saleemyousaf.co.uk/privacy-policy/" style="font-size:12px;color:var(--muted2);text-decoration:none;">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function filterArticles(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const cards = document.querySelectorAll('.article-card');
+  let visible = 0;
+
+  cards.forEach(card => {
+    const show = cat === 'all' || card.dataset.cat === cat;
+    card.classList.toggle('hidden', !show);
+    if (show) visible++;
+  });
+
+  document.getElementById('article-count').textContent =
+    visible + (visible === 1 ? ' article' : ' articles');
+
+  const noResults = document.getElementById('no-results');
+  noResults.style.display = visible === 0 ? 'block' : 'none';
+}
+</script>
+
+
+<script src="/nav.js" defer></script>
+
+<script>
+(function ztc(){
+  var c=document.getElementById('ztc'); if(!c) return;
+  var ctx=c.getContext('2d');
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W,H,dpr;
+  function size(){dpr=Math.min(window.devicePixelRatio||1,2);var r=c.getBoundingClientRect();W=r.width;H=r.height;c.width=W*dpr;c.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+  size();window.addEventListener('resize',size);
+  var t=0, rings=[0.42,0.66,0.92], rot=[0,0,0], pulses=[];
+  function frame(){var cx=W/2,cy=H/2,base=Math.min(W,H)/2; ctx.clearRect(0,0,W,H); t+=0.016;
+    ctx.globalCompositeOperation='lighter';
+    var bp=0.4+0.18*Math.sin(t*2);
+    var g=ctx.createRadialGradient(cx,cy,2,cx,cy,base*0.6); g.addColorStop(0,'rgba(45,212,191,'+(0.16*bp+0.05)+')'); g.addColorStop(1,'transparent');
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cy,base*0.6,0,6.3); ctx.fill();
+    ctx.globalCompositeOperation='source-over';
+    rings.forEach(function(rf,i){var r=base*rf; if(!reduce) rot[i]+=0.0016*(i%2?-1:1);
+      ctx.strokeStyle='rgba(45,212,191,0.14)'; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(cx,cy,r,0,6.3); ctx.stroke();
+      var n=3+i; for(var k=0;k<n;k++){var a=(k/n)*6.3+rot[i]; var x=cx+Math.cos(a)*r,y=cy+Math.sin(a)*r;
+        ctx.fillStyle='#0b1016'; ctx.strokeStyle='rgba(45,212,191,0.55)'; ctx.lineWidth=1.1; ctx.beginPath(); ctx.arc(x,y,4,0,6.3); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle='rgba(94,234,212,0.9)'; ctx.lineWidth=1.1; ctx.beginPath(); ctx.moveTo(x-1.6,y); ctx.lineTo(x-0.4,y+1.3); ctx.lineTo(x+2,y-1.6); ctx.stroke();}});
+    ctx.globalCompositeOperation='lighter';
+    if(!reduce){ if(Math.random()<0.06) pulses.push({ang:Math.random()*6.3,d:base});
+      for(var i=pulses.length-1;i>=0;i--){var p=pulses[i]; p.d-=base*0.006; var x=cx+Math.cos(p.ang)*p.d,y=cy+Math.sin(p.ang)*p.d;
+        ctx.fillStyle='rgba(94,234,212,0.9)'; ctx.shadowColor='#2dd4bf'; ctx.shadowBlur=8; ctx.beginPath(); ctx.arc(x,y,2,0,6.3); ctx.fill(); ctx.shadowBlur=0;
+        if(p.d<=base*0.16) pulses.splice(i,1);} }
+    ctx.globalCompositeOperation='source-over';
+    if(!reduce) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
