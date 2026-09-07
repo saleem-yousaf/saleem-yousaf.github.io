@@ -1,1 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AWS Security Agent, Explained: What It Does, How to Deploy It, and How It Compares to a Pen Test | Saleem Yousaf</title>
+<meta name="description" content="A practitioner's guide to AWS Security Agent and AWS Continuum: what the autonomous pen-testing service does, where and how to deploy it, costs, limitations and roadmap, with high-level and low-level design diagrams, and an honest comparison to human penetration testing.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/aws-security-agent-vs-pen-test/">
+<link rel="alternate" type="application/rss+xml" title="Saleem Yousaf articles" href="https://saleemyousaf.co.uk/feed.xml">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AWS Security Agent, Explained: What It Does, How to Deploy It, and How It Compares to a Pen Test">
+<meta property="og:description" content="What AWS Security Agent does, how to deploy it, costs, limitations and roadmap, with HLD and LLD diagrams and an honest comparison to human penetration testing.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/aws-security-agent-vs-pen-test/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/articles/aws-security-agent-vs-pen-test/og-aws-security-agent.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AWS Security Agent, Explained">
+<meta name="twitter:description" content="What it does, how to deploy it, costs and limits, with HLD and LLD diagrams and a pen-test comparison.">
+<meta name="twitter:image" content="https://saleemyousaf.co.uk/articles/aws-security-agent-vs-pen-test/og-aws-security-agent.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "AWS Security Agent, Explained: What It Does, How to Deploy It, and How It Compares to a Pen Test",
+  "description": "A practitioner's guide to AWS Security Agent and AWS Continuum, its deployment, cost, limitations and roadmap, with high-level and low-level design diagrams and a comparison to human penetration testing.",
+  "image": "https://saleemyousaf.co.uk/articles/aws-security-agent-vs-pen-test/og-aws-security-agent.png",
+  "articleSection": "Cloud",
+  "datePublished": "2026-08-24",
+  "author": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk",
+    "sameAs": ["https://www.linkedin.com/in/saleemyousaf","https://github.com/saleem-yousaf","https://cyberspartans.co.uk"] },
+  "publisher": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://saleemyousaf.co.uk/articles/aws-security-agent-vs-pen-test/" }
+}
+</script>
+<style>
 
+:root{
+  --slate-0:#090c10; --slate-1:#0f1318; --slate-2:#161b22;
+  --teal:#2dd4bf; --bright:#5eead4; --amber:#f5b73c; --blue:#4aa8ff;
+  --purple:#a78bfa; --red:#f87171;
+  --ink:#f4f6f8; --muted:#aeb5bf; --faint:#6c7682; --line:rgba(255,255,255,.08);
+  --emerald:#2f9e6f; --cyan:#00d4ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--slate-0); color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif; font-size:19px; line-height:1.72; -webkit-font-smoothing:antialiased;}
+.wrap{max-width:760px; margin:0 auto; padding:0 24px}
+a{color:var(--teal); text-decoration:none}
+a:hover{text-decoration:underline}
+.hero{padding:72px 0 8px}
+.eyebrow{font-family:"DM Mono",monospace; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal)}
+h1{font-family:"Syne",sans-serif; font-weight:800; font-size:clamp(30px,5.4vw,50px); line-height:1.06; letter-spacing:-.01em; margin:18px 0 20px}
+.chips{display:flex; flex-wrap:wrap; gap:10px 18px; font-family:"DM Mono",monospace; font-size:12.5px; color:var(--faint); letter-spacing:.03em}
+.chips span{display:inline-flex; align-items:center; gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal)}
+article{padding:20px 0 8px}
+article h2{font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(23px,3.6vw,30px); line-height:1.16; margin:56px 0 14px; letter-spacing:-.01em}
+article h3{font-family:"Syne",sans-serif; font-weight:600; font-size:20px; margin:36px 0 10px}
+article p{margin:0 0 20px; color:#e7ebef}
+article ul{margin:0 0 22px; padding-left:22px; color:#e7ebef}
+article li{margin-bottom:10px}
+.lead{font-size:21px; color:#eef1f4}
+code{font-family:"DM Mono",monospace; font-size:.86em; background:var(--slate-2); padding:2px 7px; border-radius:6px; color:var(--bright); word-break:break-word}
+strong{color:#fff; font-weight:600}
+.part{display:flex; align-items:center; gap:14px; margin:64px 0 6px}
+.part-num{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); border:1px solid rgba(45,212,191,.35); border-radius:999px; padding:5px 14px; white-space:nowrap}
+.part-rule{height:1px; background:linear-gradient(90deg,rgba(45,212,191,.4),transparent); flex:1}
+.callout{border:1px solid rgba(45,212,191,.32); background:linear-gradient(180deg, rgba(45,212,191,.08),rgba(45,212,191,.02)); border-radius:14px; padding:22px 24px; margin:30px 0; font-size:18px}
+.callout .k{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px}
+.callout.warn{border-color:rgba(245,183,60,.35); background:linear-gradient(180deg,rgba(245,183,60,.09),rgba(245,183,60,.02))}
+.callout.warn .k{color:var(--amber)}
+table{width:100%; border-collapse:collapse; margin:26px 0; font-size:15.5px}
+th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-family:"DM Mono",monospace; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal); font-weight:400}
+td{color:#e0e5ea}
+figure{margin:38px 0}
+.figframe{border:1px solid var(--line); border-radius:16px; background: radial-gradient(120% 140% at 80% 0%, rgba(45,212,191,.06), transparent 60%),var(--slate-1); padding:20px; cursor:zoom-in; position:relative}
+.figframe::after{content:"click to expand"; position:absolute; top:12px; right:16px; font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; color:var(--faint)}
+.figframe svg{width:100%; height:auto; display:block}
+figcaption{font-size:14px; color:var(--faint); margin-top:12px; text-align:center; font-family:"DM Mono",monospace; letter-spacing:.02em}
+.d-box{fill:var(--slate-2); stroke:rgba(45,212,191,.45); stroke-width:1.4}
+.d-box-soft{fill:var(--slate-1); stroke:var(--line); stroke-width:1.2}
+.d-t{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:15px}
+.d-t-s{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:13.5px}
+.d-s{fill:var(--muted); font-family:"Inter",sans-serif; font-size:12px}
+.d-lab{fill:var(--teal); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-a{fill:var(--amber); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-p{fill:var(--purple); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-b{fill:var(--blue); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-mono{fill:var(--bright); font-family:"DM Mono",monospace; font-size:11.5px}
+.related{margin:60px 0 20px}
+.related h2{font-size:20px; margin-bottom:18px}
+.rgrid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.rcard{border:1px solid var(--line); border-radius:14px; padding:18px 18px 20px; background:var(--slate-1); transition:border-color .2s}
+.rcard:hover{border-color:rgba(45,212,191,.4)}
+.rcard .c{font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal)}
+.rcard .t{font-family:"Syne",sans-serif; font-weight:600; font-size:16px; margin-top:8px; color:#fff; line-height:1.25}
+footer{border-top:1px solid var(--line); margin-top:60px; padding:40px 0 60px; color:var(--faint); font-size:14px}
+.footer-links{display:flex; flex-wrap:wrap; gap:16px; margin-bottom:22px; font-family:"DM Mono",monospace; font-size:13px}
+.pills{display:flex; gap:12px; margin:22px 0}
+.pill{border-radius:999px; padding:8px 16px; font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.04em; border:1px solid}
+.pill.cs{color:var(--emerald); border-color:rgba(47,158,111,.5)}
+.pill.bf{color:var(--cyan); border-color:rgba(0,212,255,.5)}
+.legal{font-size:12.5px; color:var(--faint)}
+/* collision-proof lightbox */
+.syx-lb{position:fixed; inset:0; z-index:2147483000; background:rgba(4,6,9,.95); display:none; align-items:center; justify-content:center; padding:64px 3vw 3vw; cursor:zoom-out}
+.syx-lb.syx-open{display:flex}
+.syx-lb-stage{max-width:96vw; max-height:88vh; display:flex; align-items:center; justify-content:center}
+.syx-lb-stage svg{width:96vw; max-height:88vh; height:auto}
+.syx-lb-x{position:fixed; top:16px; right:16px; z-index:2147483001; font-family:"DM Mono",monospace; font-size:14px; letter-spacing:.08em; color:var(--ink); background:var(--slate-2); border:1px solid var(--line); border-radius:999px; padding:10px 18px; cursor:pointer}
+.syx-lb-x:hover{border-color:var(--teal); color:var(--teal)}
+@media(max-width:560px){.rgrid{grid-template-columns:1fr} table{font-size:14px} th,td{padding:9px 8px}}
+
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+<script src="/nav.js" defer></script>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">// agentic security</div>
+    <h1>AWS Security Agent, explained: what it does, how to deploy it, and how it compares to a pen test</h1>
+    <div class="chips">
+      <span><span class="dot"></span>Saleem Yousaf</span>
+      <span>24 Aug 2026</span>
+      <span>18 min read</span>
+    </div>
+  </header>
+
+  <article>
+    <p class="lead">For most of its history, the penetration test has been a periodic event: a specialist firm is booked, spends a couple of weeks, and hands back a report, once or twice a year, while your developers ship dozens of releases in between. AWS Security Agent sets out to change that rhythm by putting an autonomous agent where the quarterly pen test used to be. It is a genuinely capable service and a signal of where the market is heading. It also answers a narrower question than the branding implies, and understanding exactly which question is the difference between deploying it well and mistaking it for something it is not.</p>
+
+    <p>This is a practitioner's walk through the service: what it actually does, where and how you deploy it, what it costs, where it stops, and where it is going, with high-level and low-level designs so you can see the flows. Then an honest comparison to a human penetration test, because the two are complementary, not interchangeable.</p>
+
+    <div class="part"><span class="part-num">Part one</span><span class="part-rule"></span></div>
+    <h2>What AWS Security Agent actually is</h2>
+
+    <p>AWS Security Agent is one of AWS's "frontier agents," a class of autonomous systems announced at re:Invent 2025 that work independently towards a goal, run for hours without supervision, and scale across many concurrent tasks. Its on-demand penetration testing capability reached general availability on 31 March 2026. Since the New York summit, the agent has been folded into a wider platform AWS calls Continuum, which wraps continuous threat modelling, code-vulnerability monitoring and automated remediation around the same core.</p>
+
+    <p>Underneath the branding, it does four related things across the development lifecycle. It performs <strong>design security review</strong>, reading architecture documents against a set of security requirements you define. It performs <strong>code security review</strong>, scanning pull requests in connected repositories for vulnerabilities and policy violations. It performs <strong>on-demand penetration testing</strong>, running multi-step attack scenarios against a live, verified target to find exploitable flaws. And it closes the loop with <strong>remediation</strong>, returning validated findings with exploit paths and, where possible, opening remediation pull requests, then revalidating that a fix actually resolved the issue.</p>
+
+    <p>The important framing: this is an application-security service. It reasons over your design, your code, and your running application to find vulnerabilities in the software you build and operate. It tests against the OWASP Top 10 and, notably, business-logic flaws that pattern-based scanners miss, because the agent reasons about application context rather than matching signatures. That context-awareness is the real advance over traditional static and dynamic scanners.</p>
+
+    <figure>
+      <div class="figframe" onclick="syxLbOpen(this)">
+        <svg role="img" viewBox="0 0 1240 620" xmlns="http://www.w3.org/2000/svg" aria-label="High-level design: AWS Security Agent across the development lifecycle, from design review and code review through on-demand penetration testing to remediation, spanning multicloud and on-premises targets.">
+          <text x="34" y="40" class="d-lab">// HIGH-LEVEL DESIGN: THE LIFECYCLE FLOW</text>
+
+          <rect class="d-box-soft" x="34" y="70" width="250" height="96" rx="12"/>
+          <text x="52" y="100" class="d-lab">DESIGN TIME</text>
+          <text x="52" y="126" class="d-t-s">Design review</text>
+          <text x="52" y="150" class="d-s">Architecture docs vs your</text>
+          <text x="52" y="168" class="d-s" style="display:none"></text>
+          <text x="52" y="150" class="d-s">requirement packs</text>
+
+          <path d="M284 118 H326" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+          <rect class="d-box-soft" x="326" y="70" width="250" height="96" rx="12"/>
+          <text x="344" y="100" class="d-lab">BUILD TIME</text>
+          <text x="344" y="126" class="d-t-s">Code review</text>
+          <text x="344" y="150" class="d-s">Pull requests scanned on</text>
+          <text x="344" y="168" class="d-s">the connected repo</text>
+
+          <path d="M576 118 H618" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+          <rect class="d-box" x="618" y="70" width="250" height="96" rx="12"/>
+          <text x="636" y="100" class="d-lab">RUN TIME</text>
+          <text x="636" y="126" class="d-t-s">Penetration test</text>
+          <text x="636" y="150" class="d-s">Multi-step attacks on a</text>
+          <text x="636" y="168" class="d-s">verified live target</text>
+
+          <path d="M868 118 H910" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+          <rect x="910" y="70" width="296" height="96" rx="12" fill="rgba(45,212,191,.10)" stroke="rgba(45,212,191,.4)" stroke-width="1.4"/>
+          <text x="928" y="100" class="d-lab">CLOSE THE LOOP</text>
+          <text x="928" y="126" class="d-t-s" style="fill:#5eead4">Remediate</text>
+          <text x="928" y="150" class="d-s">Findings, exploit paths,</text>
+          <text x="928" y="168" class="d-s">fix PRs, then revalidate</text>
+
+          <path d="M1058 166 V210 H120 V166" stroke="#5a6675" stroke-width="1.4" fill="none" stroke-dasharray="4 4" marker-end="url(#a)"/>
+          <text x="470" y="205" class="d-mono" style="fill:#8a96a8">revalidation loop: confirm the fix actually resolved the finding</text>
+
+          <text x="34" y="270" class="d-lab-b">// WHERE THE AGENT REACHES</text>
+          <rect class="d-box-soft" x="34" y="290" width="366" height="150" rx="12"/>
+          <text x="54" y="320" class="d-lab-b">CONTROL PLANE</text>
+          <text x="54" y="348" class="d-t-s">AWS account</text>
+          <text x="54" y="372" class="d-s">Console, API and the AWS Labs</text>
+          <text x="54" y="390" class="d-s">MCP server drive the agent.</text>
+          <text x="54" y="414" class="d-s">Billing and identity live here.</text>
+
+          <rect class="d-box-soft" x="418" y="290" width="366" height="150" rx="12"/>
+          <text x="438" y="320" class="d-lab-b">TARGET PLANE</text>
+          <text x="438" y="348" class="d-t-s">Anywhere the app runs</text>
+          <text x="438" y="372" class="d-s">AWS, Azure, GCP, on-premises.</text>
+          <text x="438" y="390" class="d-s">VPC access for private apps.</text>
+          <text x="438" y="414" class="d-s">Only verified domains are tested.</text>
+
+          <rect x="802" y="290" width="404" height="150" rx="12" fill="rgba(74,168,255,.06)" stroke="rgba(74,168,255,.3)" stroke-width="1.3"/>
+          <text x="822" y="320" class="d-lab-b">GUARDRAILS</text>
+          <text x="822" y="348" class="d-t-s">You set the boundaries</text>
+          <text x="822" y="372" class="d-s">Requirement packs, domain</text>
+          <text x="822" y="390" class="d-s">verification, budget caps,</text>
+          <text x="822" y="414" class="d-s">CloudWatch logging.</text>
+
+          <text x="34" y="490" class="d-lab-a">// WHAT IT IS NOT</text>
+          <rect x="34" y="508" width="1172" height="74" rx="12" fill="rgba(245,183,60,.07)" stroke="rgba(245,183,60,.3)" stroke-width="1.3"/>
+          <text x="54" y="538" class="d-t-s" style="fill:#f5b73c">An application and code tester, not a controls validator</text>
+          <text x="54" y="564" class="d-s">It asks whether your app is exploitable. It does not emulate an adversary against your detection and response stack. That is a different tool.</text>
+
+          <defs><marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#2dd4bf"/></marker></defs>
+        </svg>
+      </div>
+      <figcaption>High-level design: the lifecycle flow, the control and target planes, and the guardrails. Click to expand.</figcaption>
+    </figure>
+
+    <div class="part"><span class="part-num">Part two</span><span class="part-rule"></span></div>
+    <h2>Where and how you deploy it</h2>
+
+    <p>Deployment is more structured than "point it at a URL," and the structure is worth understanding because it is also your safety model. The service uses a three-layer resource hierarchy, and each layer exists to keep testing scoped and authorised.</p>
+
+    <p>At the top sits the <strong>Application</strong>, which is the per-region configuration of the service, created once when you first set it up in the console. Inside it you create one or more <strong>Agent Spaces</strong>. An Agent Space is a logical container, ideally one per application you want to test, that groups the things a test needs: the target domains, the IAM service role the agent assumes, and any VPC configuration for reaching private applications. Beneath that is the <strong>Target Domain</strong>, a domain you have proven you control and are therefore authorised to test.</p>
+
+    <p>That domain-verification step is the linchpin of the whole safety model, and it is not optional. Before the agent will test anything, you verify ownership of the target domain either by adding a DNS TXT record or by serving an HTTP verification route. For a Route 53 domain in the same account, this is one click; for a domain on another DNS provider, you copy a token and add the TXT record yourself. The agent will only run against verified domains, which is the mechanism that stops it, and stops anyone using your account, from pointing autonomous attack traffic at systems you do not own.</p>
+
+    <p>From there you configure the optional pieces per Agent Space: VPC, subnet and security-group access so the agent can reach a private application; CloudWatch logging so every test run is recorded; AWS Secrets Manager or a Lambda function to supply test credentials for authenticated testing; and an S3 bucket to hand the agent extra application context. Code review is wired up separately by connecting a repository, which at present means GitHub, so the agent can comment on pull requests and open remediation PRs.</p>
+
+    <p>Crucially, the reach is not limited to AWS. Although the control plane, your account, billing and identity, lives in AWS, the target can be an application running in AWS, in Azure or GCP, in a hybrid setup, or on-premises. For an organisation running a multicloud estate, that means one consolidated pen-testing capability rather than one per provider, which is a genuine operational advantage.</p>
+
+    <figure>
+      <div class="figframe" onclick="syxLbOpen(this)">
+        <svg role="img" viewBox="0 0 1240 700" xmlns="http://www.w3.org/2000/svg" aria-label="Low-level design: the resource hierarchy and execution sequence for an AWS Security Agent penetration test, from IAM role and Agent Space creation through domain verification, VPC configuration, pentest job execution, and findings retrieval.">
+          <text x="34" y="40" class="d-lab">// LOW-LEVEL DESIGN: A PENTEST, STEP BY STEP</text>
+
+          <text x="34" y="76" class="d-lab-b">RESOURCE HIERARCHY</text>
+          <rect class="d-box-soft" x="34" y="90" width="340" height="52" rx="9"/>
+          <text x="52" y="122" class="d-t-s">Application <tspan class="d-s">one per region, auto-created</tspan></text>
+          <rect class="d-box-soft" x="74" y="150" width="340" height="52" rx="9"/>
+          <text x="92" y="182" class="d-t-s">Agent Space <tspan class="d-s">groups targets, IAM, VPC</tspan></text>
+          <rect class="d-box-soft" x="114" y="210" width="340" height="52" rx="9"/>
+          <text x="132" y="242" class="d-t-s">Target Domain <tspan class="d-s">verified, authorised only</tspan></text>
+          <path d="M204 142 V150" stroke="#5a6675" stroke-width="1.4" fill="none"/>
+          <path d="M244 202 V210" stroke="#5a6675" stroke-width="1.4" fill="none"/>
+
+          <text x="640" y="76" class="d-lab">EXECUTION SEQUENCE</text>
+          <rect class="d-box-soft" x="640" y="90" width="566" height="40" rx="8"/>
+          <text x="658" y="115" class="d-mono">1   create IAM service role for the agent</text>
+          <rect class="d-box-soft" x="640" y="136" width="566" height="40" rx="8"/>
+          <text x="658" y="161" class="d-mono">2   create Agent Space</text>
+          <rect class="d-box-soft" x="640" y="182" width="566" height="40" rx="8"/>
+          <text x="658" y="207" class="d-mono">3   register + verify Target Domain (DNS TXT / HTTP)</text>
+          <rect class="d-box-soft" x="640" y="228" width="566" height="40" rx="8"/>
+          <text x="658" y="253" class="d-mono">4   attach VPC, subnets, security groups, secrets</text>
+          <rect class="d-box" x="640" y="274" width="566" height="40" rx="8"/>
+          <text x="658" y="299" class="d-mono" style="fill:#5eead4">5   CreatePentest → StartPentestJob</text>
+          <rect class="d-box-soft" x="640" y="320" width="566" height="40" rx="8"/>
+          <text x="658" y="345" class="d-mono">6   poll BatchGetPentestJobs until COMPLETE</text>
+          <rect class="d-box-soft" x="640" y="366" width="566" height="40" rx="8"/>
+          <text x="658" y="391" class="d-mono">7   ListFindings → exploit paths + fix PRs</text>
+
+          <text x="34" y="316" class="d-lab-a">DATA IN</text>
+          <rect x="34" y="330" width="420" height="150" rx="12" fill="rgba(245,183,60,.06)" stroke="rgba(245,183,60,.3)" stroke-width="1.3"/>
+          <text x="54" y="360" class="d-s">Target URLs and endpoints</text>
+          <text x="54" y="384" class="d-s">Authentication details (via Secrets Manager)</text>
+          <text x="54" y="408" class="d-s">Documentation and app context (via S3)</text>
+          <text x="54" y="432" class="d-s">Security requirement packs</text>
+          <text x="54" y="456" class="d-s">Scope: verified domains only</text>
+
+          <text x="34" y="524" class="d-lab">THREE WAYS TO DRIVE IT</text>
+          <rect class="d-box-soft" x="34" y="538" width="380" height="120" rx="12"/>
+          <text x="54" y="568" class="d-t-s">Console</text>
+          <text x="54" y="592" class="d-s">Guided setup, one-click Route 53</text>
+          <text x="54" y="610" class="d-s">verification, human in the loop.</text>
+          <text x="54" y="640" class="d-mono">for first runs and review</text>
+
+          <rect class="d-box-soft" x="430" y="538" width="380" height="120" rx="12"/>
+          <text x="450" y="568" class="d-t-s">API / CLI</text>
+          <text x="450" y="592" class="d-s">securityagent create-pentest,</text>
+          <text x="450" y="610" class="d-s">start, poll, list findings.</text>
+          <text x="450" y="640" class="d-mono">for CI/CD integration</text>
+
+          <rect x="826" y="538" width="380" height="120" rx="12" fill="rgba(45,212,191,.1)" stroke="rgba(45,212,191,.4)" stroke-width="1.3"/>
+          <text x="846" y="568" class="d-t-s" style="fill:#5eead4">MCP server</text>
+          <text x="846" y="592" class="d-s">AWS Labs MCP server exposes</text>
+          <text x="846" y="610" class="d-s">every operation to an agent.</text>
+          <text x="846" y="640" class="d-mono">for agent-driven runs</text>
+        </svg>
+      </div>
+      <figcaption>Low-level design: the resource hierarchy, the execution sequence, the inputs, and the three ways to drive a test. Click to expand.</figcaption>
+    </figure>
+
+    <p>Three ways to run it, matched to three needs. The <strong>console</strong> gives a guided, human-in-the-loop setup, ideal for your first runs and for reviewing findings. The <strong>API and CLI</strong>, with operations like <code>create-pentest</code>, <code>start-pentest-job</code> and <code>list-findings</code>, are how you wire a test into a CI/CD pipeline so a release can trigger one. And the <strong>AWS Labs MCP server</strong> exposes the full operation set to any MCP-compatible agent, which is how you let an autonomous workflow scan code, run a pen test and apply fixes without a human driving each step. That last option is powerful and, as I will come to, the one to treat with the most care.</p>
+
+    <div class="part"><span class="part-num">Part three</span><span class="part-rule"></span></div>
+    <h2>What it costs</h2>
+
+    <p>Pricing is consumption-based and, deliberately, aimed at making the ROI conversation against manual testing unavoidable. On-demand penetration testing is billed at roughly $50 per task-hour, measured across the cumulative time of the parallel testing tasks a run spins up. In practice, a typical full evaluation running up to around 24 hours costs on the order of $1,200. Against a human engagement that runs into the thousands and takes weeks, the headline economics are stark, and that is the point AWS is making.</p>
+
+    <p>Two recent additions matter for controlling that spend. AWS added <strong>budget controls</strong>, so security teams can cap what a test is allowed to consume rather than discovering the bill afterwards, and <strong>finding revalidation</strong>, so you can efficiently confirm a remediated vulnerability is actually resolved without paying for a fresh full run. Both address real gaps that early users hit, and both signal a service being hardened for routine operational use rather than experimentation.</p>
+
+    <p>The honest way to think about cost is not "cheaper than a pen test" in isolation, but cost-per-coverage over time. The agent's economics make sense when you want frequent, broad testing across a portfolio, running on every significant release. They make less sense as a one-off, where a scoped human test may give you more actionable depth for comparable money.</p>
+
+    <div class="part"><span class="part-num">Part four</span><span class="part-rule"></span></div>
+    <h2>How it compares to a human penetration test</h2>
+
+    <p>This is where clear thinking matters most, because the two are easy to conflate and genuinely different in what they deliver. The comparison is not "which is better," it is "which question are you answering."</p>
+
+    <table>
+      <thead><tr><th>Dimension</th><th>AWS Security Agent</th><th>Human penetration test</th></tr></thead>
+      <tbody>
+        <tr><td>Cadence</td><td>On demand, every release, hours to complete</td><td>Periodic, weeks to schedule and run</td></tr>
+        <tr><td>Coverage</td><td>Broad and consistent: OWASP Top 10 and business-logic flaws, across a whole portfolio</td><td>Deep and creative: chained exploits, novel logic abuse, judgement about what matters</td></tr>
+        <tr><td>Context</td><td>Reasons over design, code and behaviour together</td><td>Reasons over the business, the people and the intent behind the system</td></tr>
+        <tr><td>Cost</td><td>~$50 per task-hour, ~$1,200 per full run</td><td>Thousands per engagement</td></tr>
+        <tr><td>Assurance</td><td>Fast, machine-validated findings</td><td>Signed, accountable, often required for audits and compliance</td></tr>
+        <tr><td>Best at</td><td>Continuous coverage in the gaps between human tests</td><td>The subtle, high-impact findings a machine still misses</td></tr>
+      </tbody>
+    </table>
+
+    <p>The pattern that emerges is a division of labour rather than a replacement. The agent is superb at breadth and frequency: it can test your entire application estate on every release and catch the regressions and common classes that would otherwise slip through between annual tests. A skilled human tester remains better at the creative, chained, deeply context-dependent findings, the business-logic abuse that only makes sense once you understand what the application is for, and the judgement to say which of a hundred findings is the one that will actually hurt you. And for compliance, a certified human test carries an accountability and sign-off that an autonomous run does not yet replace, which auditors in many regimes will still require.</p>
+
+    <p>The right model for most organisations is the agent as the continuous layer and the human test as the periodic deep dive, each doing what it is best at. Used that way, the agent does not devalue the human test; it frees the human tester to spend their limited, expensive time on the problems that need a human, instead of re-checking the OWASP Top 10 for the tenth time.</p>
+
+    <div class="part"><span class="part-num">Part five</span><span class="part-rule"></span></div>
+    <h2>The limitations worth stating plainly</h2>
+
+    <p>A fair assessment has to name the boundaries, and there are several that matter for how you deploy and rely on it.</p>
+
+    <p>First, and most important for a security programme: <strong>it tests applications, not your defensive controls.</strong> It answers "is my application exploitable," not "did my detection and response actually catch an attacker." Those are different assurance questions requiring different tooling, and I will come back to that distinction because it is the one most likely to cause a false sense of coverage.</p>
+
+    <p>Second, <strong>autonomous penetration testing is still a nascent category.</strong> It outperforms traditional scanners by understanding context, but it is early, and it will miss classes of issue that a good human finds. Treat its clean result as "no common exploitable issues found by an automated agent," not as "this application is secure."</p>
+
+    <p>Third, <strong>compliance often still needs a human.</strong> Many audit and regulatory regimes require a penetration test conducted and signed by certified professionals. The agent supplements that obligation; in most regimes it does not currently satisfy it on its own.</p>
+
+    <p>Fourth, <strong>authorisation is your responsibility.</strong> The domain-verification model enforces that you can only test what you own, which is exactly right, but the corollary is that you must be certain of your authority to test a target, especially for applications shared across teams or tenants.</p>
+
+    <p>Fifth, <strong>the MCP path adds attack surface.</strong> Letting an autonomous agent drive the service via the MCP server is powerful, but AWS itself notes that custom MCP server connections can introduce prompt-injection risk, and that anyone with access to the connected data sources inherits reach into the workflow. Agentic convenience and agentic risk arrive together.</p>
+
+    <p>Sixth, and more strategic, <strong>it is native to AWS.</strong> The multicloud target reach is real, but the control plane, billing and identity anchor you to AWS, and Continuum's direction is to absorb more of the testing-and-remediation lifecycle under one provider's platform. That is a legitimate convenience and a quiet form of lock-in at the same time, and it is worth weighing deliberately rather than by default.</p>
+
+    <div class="part"><span class="part-num">Part six</span><span class="part-rule"></span></div>
+    <h2>Where it is heading</h2>
+
+    <p>The roadmap signal is clear from the moves AWS has already made. The standalone agent is being subsumed into <strong>AWS Continuum</strong>, a broader AI-native security platform that pairs the pen-testing and code-review capabilities with continuous threat modelling and automated patching, positioned to shift the majority of security scanning, vulnerability management and remediation as early into the development process as possible. The recent budget-control and revalidation additions show a service being tuned for continuous, cost-governed operation rather than novelty.</p>
+
+    <p>The broader trajectory is the one to plan around: security testing is moving towards autonomous, agentic and continuous, priced to displace manual effort where the work is repeatable. AWS has a genuine lead here; at the time of writing no other hyperscaler offers an equivalent autonomous pen-testing capability. That lead will not last, and the sensible assumption is that this becomes a standard platform capability across providers, which makes the strategic question less "should I use this one" and more "how do I build a testing programme that uses autonomous coverage well without becoming dependent on a single vendor's version of it."</p>
+
+    <h2>The honest summary, and where it leaves your programme</h2>
+
+    <p>AWS Security Agent is a strong, genuinely useful service that does exactly what it says: autonomous, context-aware application penetration testing and code review, fast, multicloud in reach, and priced to run continuously. Deploy it as the continuous application-testing layer, wire it into CI/CD, set budget caps, verify your domains, and treat the MCP integration with the caution any autonomous, credential-bearing workflow deserves. Keep a periodic human penetration test for depth and for the compliance sign-off it does not replace.</p>
+
+    <p>But hold onto the one distinction that the branding blurs. This tool tests whether your applications are exploitable. It does not tell you whether your defences work, whether your EDR caught the technique, whether your SIEM alerted, whether your segmentation held. That is the job of breach and attack simulation and adversary emulation, a different question entirely, and one an application pen-testing agent, however capable, does not answer. A mature programme runs both: the agent to find the holes in what you build, and controls validation to prove that what you deployed to defend it actually fires. Confuse the two and you will have tested one layer thoroughly while assuming the other, which is precisely the gap a real attacker looks for.</p>
+
+    <p class="lead">If you want help placing autonomous testing and controls validation correctly in your security programme, across AWS, Azure and beyond, that is the kind of work I do through <a href="https://cyberspartans.co.uk">Cyber Spartans</a>.</p>
+  </article>
+
+  <section class="related">
+    <h2>Related reading</h2>
+    <div class="rgrid">
+      <a class="rcard" href="/articles/securing-the-cicd-pipeline/"><div class="c">Cloud</div><div class="t">Securing the CI/CD pipeline</div></a>
+      <a class="rcard" href="/articles/bug-bounty-programme-defender-guide/"><div class="c">Threat</div><div class="t">Open the door, not the floodgates: running a bug bounty</div></a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf">GitHub</a>
+      <a href="https://saleemyousaf.medium.com">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf">Dev.to</a>
+      <a href="https://cyberspartans.co.uk">Cyber Spartans</a>
+    </div>
+    <div class="pills">
+      <span class="pill bf">breachforge.co.uk</span>
+      <span class="pill cs">cyberspartans.co.uk</span>
+    </div>
+    <div class="legal">&copy; 2026 Saleem Yousaf. All rights reserved.  &middot; 
+      <a href="https://saleemyousaf.co.uk/privacy-policy/">Privacy</a></div>
+  </footer>
+</div>
+
+<div class="syx-lb" id="syxLb" onclick="syxLbClose()">
+  <button type="button" class="syx-lb-x" onclick="event.stopPropagation();syxLbClose();">&#10005; close</button>
+  <div class="syx-lb-stage" id="syxLbStage"></div>
+</div>
+<script>
+function syxLbOpen(fr){var s=fr.querySelector('svg[role="img"]');if(!s)return;
+  var st=document.getElementById('syxLbStage');st.innerHTML='';
+  st.appendChild(s.cloneNode(true));document.getElementById('syxLb').classList.add('syx-open');}
+function syxLbClose(){document.getElementById('syxLb').classList.remove('syx-open');}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'||e.key==='Esc')syxLbClose();});
+</script>
+
+</body>
+</html>
