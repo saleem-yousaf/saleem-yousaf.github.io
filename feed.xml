@@ -6,7 +6,15 @@
     <atom:link href="https://saleemyousaf.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Cloud and cyber security architecture, threat analysis and governance by Saleem Yousaf.</description>
     <language>en-gb</language>
-    <lastBuildDate>Thu, 27 Aug 2026 09:52:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 07 Sep 2026 10:24:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS Security Agent, Explained: What It Does, How to Deploy It, and How It Compares to a Pen Test</title>
+      <link>https://saleemyousaf.co.uk/articles/aws-security-agent-vs-pen-test/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/aws-security-agent-vs-pen-test/</guid>
+      <pubDate>Mon, 24 Aug 2026 09:00:00 +0000</pubDate>
+      <category>Cloud</category>
+      <description>A practitioner&#x27;s guide to AWS Security Agent and AWS Continuum: what the autonomous pen-testing service does, where and how to deploy it, costs, limitations and roadmap, with high-level and low-level design diagrams, and an honest comparison to human penetration testing.</description>
+    </item>
     <item>
       <title>A Curtain, Not a Cloak: What a VPN Actually Hides, and What It Leaves Wide Open</title>
       <link>https://saleemyousaf.co.uk/articles/vpn-anonymity-network-account-device/</link>
