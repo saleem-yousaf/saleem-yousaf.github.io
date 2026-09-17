@@ -6,7 +6,15 @@
     <atom:link href="https://saleemyousaf.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Cloud and cyber security architecture, threat analysis and governance by Saleem Yousaf.</description>
     <language>en-gb</language>
-    <lastBuildDate>Mon, 07 Sep 2026 10:24:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 17 Sep 2026 06:31:00 +0000</lastBuildDate>
+    <item>
+      <title>Cloudflare as a SaaS Enabler: Ship the Platform, Skip the Plumbing</title>
+      <link>https://saleemyousaf.co.uk/articles/cloudflare-saas-enabler/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/cloudflare-saas-enabler/</guid>
+      <pubDate>Tue, 15 Sep 2026 09:00:00 +0000</pubDate>
+      <category>Cloud</category>
+      <description>How Cloudflare lets a small team stand up a SaaS fast, as a CDN and WAF front door for an app you already run, or as the whole build platform. The enabler stack, how to add and manage WAF and edge rules, and an honest comparison to AWS and Azure.</description>
+    </item>
     <item>
       <title>AWS Security Agent, Explained: What It Does, How to Deploy It, and How It Compares to a Pen Test</title>
       <link>https://saleemyousaf.co.uk/articles/aws-security-agent-vs-pen-test/</link>
