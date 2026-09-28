@@ -1,1 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Queue Empties, a Log Remembers: Choosing Between Message Queues and Event Streams | Saleem Yousaf</title>
+<meta name="description" content="Message queues and event streams look alike and solve different problems. A practitioner's guide to the landscape: RabbitMQ, Azure Service Bus and SQS versus Kafka, Event Hubs and Kinesis, the delivery-guarantee and ordering mechanics that bite regardless of tool, the AWS and Azure native picks, and how to choose.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/message-queues-vs-event-streams/">
+<link rel="alternate" type="application/rss+xml" title="Saleem Yousaf articles" href="https://saleemyousaf.co.uk/feed.xml">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A Queue Empties, a Log Remembers: Choosing Between Message Queues and Event Streams">
+<meta property="og:description" content="The one distinction that decides the tool, the landscape from RabbitMQ to Kafka, the mechanics that bite regardless, and the AWS and Azure native picks.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/message-queues-vs-event-streams/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/articles/message-queues-vs-event-streams/og-message-queues-event-streams.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="A Queue Empties, a Log Remembers">
+<meta name="twitter:description" content="Message queues vs event streams: the distinction that decides the tool, and the mechanics that bite regardless.">
+<meta name="twitter:image" content="https://saleemyousaf.co.uk/articles/message-queues-vs-event-streams/og-message-queues-event-streams.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "A Queue Empties, a Log Remembers: Choosing Between Message Queues and Event Streams",
+  "description": "A practitioner's guide to messaging architecture: message queues versus event streams, the platforms in each camp, the delivery and ordering mechanics that bite regardless of tool, and the AWS and Azure native picks.",
+  "image": "https://saleemyousaf.co.uk/articles/message-queues-vs-event-streams/og-message-queues-event-streams.png",
+  "articleSection": "Cloud",
+  "datePublished": "2026-09-18",
+  "author": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk",
+    "sameAs": ["https://www.linkedin.com/in/saleemyousaf","https://github.com/saleem-yousaf","https://cyberspartans.co.uk"] },
+  "publisher": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://saleemyousaf.co.uk/articles/message-queues-vs-event-streams/" }
+}
+</script>
+<style>
 
+:root{
+  --slate-0:#090c10; --slate-1:#0f1318; --slate-2:#161b22;
+  --teal:#2dd4bf; --bright:#5eead4; --amber:#f5b73c; --blue:#4aa8ff;
+  --purple:#a78bfa; --red:#f87171;
+  --ink:#f4f6f8; --muted:#aeb5bf; --faint:#6c7682; --line:rgba(255,255,255,.08);
+  --emerald:#2f9e6f; --cyan:#00d4ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--slate-0); color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif; font-size:19px; line-height:1.72; -webkit-font-smoothing:antialiased;}
+.wrap{max-width:760px; margin:0 auto; padding:0 24px}
+a{color:var(--teal); text-decoration:none}
+a:hover{text-decoration:underline}
+.hero{padding:72px 0 8px}
+.eyebrow{font-family:"DM Mono",monospace; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal)}
+h1{font-family:"Syne",sans-serif; font-weight:800; font-size:clamp(30px,5.4vw,50px); line-height:1.06; letter-spacing:-.01em; margin:18px 0 20px}
+.chips{display:flex; flex-wrap:wrap; gap:10px 18px; font-family:"DM Mono",monospace; font-size:12.5px; color:var(--faint); letter-spacing:.03em}
+.chips span{display:inline-flex; align-items:center; gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal)}
+article{padding:20px 0 8px}
+article h2{font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(23px,3.6vw,30px); line-height:1.16; margin:56px 0 14px; letter-spacing:-.01em}
+article h3{font-family:"Syne",sans-serif; font-weight:600; font-size:20px; margin:36px 0 10px}
+article p{margin:0 0 20px; color:#e7ebef}
+article ul{margin:0 0 22px; padding-left:22px; color:#e7ebef}
+article li{margin-bottom:10px}
+.lead{font-size:21px; color:#eef1f4}
+code{font-family:"DM Mono",monospace; font-size:.86em; background:var(--slate-2); padding:2px 7px; border-radius:6px; color:var(--bright); word-break:break-word}
+strong{color:#fff; font-weight:600}
+.part{display:flex; align-items:center; gap:14px; margin:64px 0 6px}
+.part-num{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); border:1px solid rgba(45,212,191,.35); border-radius:999px; padding:5px 14px; white-space:nowrap}
+.part-rule{height:1px; background:linear-gradient(90deg,rgba(45,212,191,.4),transparent); flex:1}
+.callout{border:1px solid rgba(45,212,191,.32); background:linear-gradient(180deg, rgba(45,212,191,.08),rgba(45,212,191,.02)); border-radius:14px; padding:22px 24px; margin:30px 0; font-size:18px}
+.callout .k{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px}
+.callout.warn{border-color:rgba(245,183,60,.35); background:linear-gradient(180deg,rgba(245,183,60,.09),rgba(245,183,60,.02))}
+.callout.warn .k{color:var(--amber)}
+table{width:100%; border-collapse:collapse; margin:26px 0; font-size:15.5px}
+th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-family:"DM Mono",monospace; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal); font-weight:400}
+td{color:#e0e5ea}
+figure{margin:38px 0}
+.figframe{border:1px solid var(--line); border-radius:16px; background: radial-gradient(120% 140% at 80% 0%, rgba(45,212,191,.06), transparent 60%),var(--slate-1); padding:20px; cursor:zoom-in; position:relative}
+.figframe::after{content:"click to expand"; position:absolute; top:12px; right:16px; font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; color:var(--faint)}
+.figframe svg{width:100%; height:auto; display:block}
+figcaption{font-size:14px; color:var(--faint); margin-top:12px; text-align:center; font-family:"DM Mono",monospace; letter-spacing:.02em}
+.d-box{fill:var(--slate-2); stroke:rgba(45,212,191,.45); stroke-width:1.4}
+.d-box-soft{fill:var(--slate-1); stroke:var(--line); stroke-width:1.2}
+.d-t{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:15px}
+.d-t-s{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:13.5px}
+.d-s{fill:var(--muted); font-family:"Inter",sans-serif; font-size:12px}
+.d-lab{fill:var(--teal); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-a{fill:var(--amber); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-p{fill:var(--purple); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-b{fill:var(--blue); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-mono{fill:var(--bright); font-family:"DM Mono",monospace; font-size:11.5px}
+.related{margin:60px 0 20px}
+.related h2{font-size:20px; margin-bottom:18px}
+.rgrid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.rcard{border:1px solid var(--line); border-radius:14px; padding:18px 18px 20px; background:var(--slate-1); transition:border-color .2s}
+.rcard:hover{border-color:rgba(45,212,191,.4)}
+.rcard .c{font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal)}
+.rcard .t{font-family:"Syne",sans-serif; font-weight:600; font-size:16px; margin-top:8px; color:#fff; line-height:1.25}
+footer{border-top:1px solid var(--line); margin-top:60px; padding:40px 0 60px; color:var(--faint); font-size:14px}
+.footer-links{display:flex; flex-wrap:wrap; gap:16px; margin-bottom:22px; font-family:"DM Mono",monospace; font-size:13px}
+.pills{display:flex; gap:12px; margin:22px 0}
+.pill{border-radius:999px; padding:8px 16px; font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.04em; border:1px solid}
+.pill.cs{color:var(--emerald); border-color:rgba(47,158,111,.5)}
+.pill.bf{color:var(--cyan); border-color:rgba(0,212,255,.5)}
+.legal{font-size:12.5px; color:var(--faint)}
+/* collision-proof lightbox */
+.syx-lb{position:fixed; inset:0; z-index:2147483000; background:rgba(4,6,9,.95); display:none; align-items:center; justify-content:center; padding:64px 3vw 3vw; cursor:zoom-out}
+.syx-lb.syx-open{display:flex}
+.syx-lb-stage{max-width:96vw; max-height:88vh; display:flex; align-items:center; justify-content:center}
+.syx-lb-stage svg{width:96vw; max-height:88vh; height:auto}
+.syx-lb-x{position:fixed; top:16px; right:16px; z-index:2147483001; font-family:"DM Mono",monospace; font-size:14px; letter-spacing:.08em; color:var(--ink); background:var(--slate-2); border:1px solid var(--line); border-radius:999px; padding:10px 18px; cursor:pointer}
+.syx-lb-x:hover{border-color:var(--teal); color:var(--teal)}
+@media(max-width:560px){.rgrid{grid-template-columns:1fr} table{font-size:14px} th,td{padding:9px 8px}}
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+<script src="/nav.js" defer></script>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">// messaging architecture</div>
+    <h1>A queue empties, a log remembers: choosing between message queues and event streams</h1>
+    <div class="chips">
+      <span><span class="dot"></span>Saleem Yousaf</span>
+      <span>18 Sep 2026</span>
+      <span>16 min read</span>
+    </div>
+  </header>
+
+  <article>
+    <p class="lead">Almost every distributed system reaches a point where two components need to talk without waiting for each other, and the answer is some form of asynchronous messaging. What follows is usually a debate about products, RabbitMQ or Kafka, Service Bus or Event Hubs, as if the question were which is best. It is not. The products fall into two paradigms that look similar and behave completely differently, and the single most useful thing you can do before choosing a tool is work out which paradigm your problem actually is. Get that right and the shortlist writes itself. Get it wrong and you will spend the life of the system fighting a platform that was never built for what you are asking of it.</p>
+
+    <p>This is a practitioner's tour of the landscape: the distinction that matters, the platforms in each camp including the ones people forget, the mechanics that will bite you regardless of which you pick, and the native choices in AWS and Azure.</p>
+
+    <div class="part"><span class="part-num">Part one</span><span class="part-rule"></span></div>
+    <h2>The one distinction that decides everything</h2>
+
+    <p>Here is the whole article in two sentences. A <strong>message queue</strong> is a post office: a message is an instruction, it is routed to a worker, the worker acknowledges it, and it is deleted. An <strong>event log</strong> is a journal: an event is a fact that happened, it is appended to a durable log and retained, and many independent consumers can read it, at their own pace, and rewind to re-read the past. That difference, delivered-then-deleted versus appended-and-retained, drives everything else: how you scale, how you route, how many consumers you can have, and whether you can ever replay history.</p>
+
+    <p>The tell is in the payload. If the thing you are sending is an <em>instruction</em>, do this piece of work once, send this email, resize this image, take this payment, you want a queue, because once the work is done the instruction has no further value. If the thing you are sending is a <em>fact</em>, an order was placed, a user logged in, a sensor read 21 degrees, you may want a stream, because that fact can matter to several parts of the system, now and later, and losing it after the first reader would be a mistake. Instructions empty out of a queue. Facts accumulate in a log.</p>
+
+    <figure>
+      <div class="figframe" onclick="syxLbOpen(this)">
+        <svg role="img" viewBox="0 0 1240 560" xmlns="http://www.w3.org/2000/svg" aria-label="Message queue versus event stream: a queue routes a message to a worker and deletes it after acknowledgement, while a log retains events for many consumers to read and replay.">
+          <text x="34" y="40" class="d-lab">// QUEUE VERSUS LOG</text>
+
+          <rect x="34" y="66" width="560" height="200" rx="12" fill="rgba(45,212,191,.06)" stroke="rgba(45,212,191,.35)" stroke-width="1.3"/>
+          <text x="54" y="96" class="d-lab">MESSAGE QUEUE &#183; THE POST OFFICE</text>
+          <rect class="d-box-soft" x="54" y="116" width="120" height="50" rx="8"/><text x="114" y="146" class="d-mono" text-anchor="middle">producer</text>
+          <path d="M174 141 H206" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+          <rect class="d-box" x="206" y="116" width="150" height="50" rx="8"/><text x="281" y="146" class="d-mono" text-anchor="middle" style="fill:#5eead4">queue</text>
+          <path d="M356 141 H388" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+          <rect class="d-box-soft" x="388" y="116" width="120" height="50" rx="8"/><text x="448" y="146" class="d-mono" text-anchor="middle">worker</text>
+          <text x="54" y="200" class="d-s">One message, one worker. Acknowledged, then deleted.</text>
+          <text x="54" y="222" class="d-s">Flexible routing, per-message guarantees, low latency.</text>
+          <text x="54" y="250" class="d-mono" style="fill:#5eead4">good for instructions: do this work once</text>
+
+          <rect x="646" y="66" width="560" height="200" rx="12" fill="rgba(74,168,255,.06)" stroke="rgba(74,168,255,.3)" stroke-width="1.3"/>
+          <text x="666" y="96" class="d-lab-b">EVENT STREAM &#183; THE JOURNAL</text>
+          <rect class="d-box-soft" x="666" y="116" width="110" height="50" rx="8"/><text x="721" y="146" class="d-mono" text-anchor="middle">producer</text>
+          <path d="M776 141 H808" stroke="#4aa8ff" stroke-width="1.6" fill="none" marker-end="url(#b)"/>
+          <rect x="808" y="112" width="150" height="58" rx="8" fill="rgba(74,168,255,.10)" stroke="rgba(74,168,255,.4)" stroke-width="1.3"/><text x="883" y="138" class="d-mono" text-anchor="middle" style="fill:#8fc4ff">append-only log</text><text x="883" y="156" class="d-s" text-anchor="middle" style="font-size:10px">retained, ordered</text>
+          <path d="M958 132 H990" stroke="#4aa8ff" stroke-width="1.4" fill="none" marker-end="url(#b)"/>
+          <path d="M958 150 H990" stroke="#4aa8ff" stroke-width="1.4" fill="none" marker-end="url(#b)"/>
+          <rect class="d-box-soft" x="990" y="112" width="95" height="24" rx="6"/><text x="1037" y="129" class="d-s" text-anchor="middle" style="font-size:10px">consumer A</text>
+          <rect class="d-box-soft" x="990" y="146" width="95" height="24" rx="6"/><text x="1037" y="163" class="d-s" text-anchor="middle" style="font-size:10px">consumer B</text>
+          <text x="666" y="200" class="d-s">Many consumers, each at its own position. Nothing is</text>
+          <text x="666" y="220" class="d-s">deleted on read. Rewind and replay any time.</text>
+          <text x="666" y="250" class="d-mono" style="fill:#8fc4ff">good for facts: an event many parts may care about</text>
+
+          <text x="34" y="316" class="d-lab-a">// THE MECHANICS THAT BITE EITHER WAY</text>
+          <rect x="34" y="334" width="380" height="150" rx="12" fill="rgba(245,183,60,.06)" stroke="rgba(245,183,60,.3)" stroke-width="1.3"/>
+          <text x="54" y="362" class="d-t-s">Delivery is at-least-once</text>
+          <text x="54" y="386" class="d-s">Exactly-once is largely a myth in</text>
+          <text x="54" y="406" class="d-s">practice, so consumers must be</text>
+          <text x="54" y="426" class="d-s">idempotent: a repeat does no harm.</text>
+          <text x="54" y="456" class="d-mono" style="fill:#f5b73c">design for the retry</text>
+
+          <rect x="430" y="334" width="380" height="150" rx="12" fill="rgba(245,183,60,.06)" stroke="rgba(245,183,60,.3)" stroke-width="1.3"/>
+          <text x="450" y="362" class="d-t-s">Ordering is local</text>
+          <text x="450" y="386" class="d-s">Order holds within one queue or</text>
+          <text x="450" y="406" class="d-s">one partition, not across the whole</text>
+          <text x="450" y="426" class="d-s">topic. Global ordering is your work.</text>
+          <text x="450" y="456" class="d-mono" style="fill:#f5b73c">do not assume global order</text>
+
+          <rect x="826" y="334" width="380" height="150" rx="12" fill="rgba(245,183,60,.06)" stroke="rgba(245,183,60,.3)" stroke-width="1.3"/>
+          <text x="846" y="362" class="d-t-s">Poison messages</text>
+          <text x="846" y="386" class="d-s">One un-processable message can</text>
+          <text x="846" y="406" class="d-s">block a queue forever. A dead-letter</text>
+          <text x="846" y="426" class="d-s">queue is not optional.</text>
+          <text x="846" y="456" class="d-mono" style="fill:#f5b73c">always have a dead-letter path</text>
+
+          <defs>
+            <marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#2dd4bf"/></marker>
+            <marker id="b" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#4aa8ff"/></marker>
+          </defs>
+        </svg>
+      </div>
+      <figcaption>Queue versus log, and the three mechanics that bite whichever you choose. Click to expand.</figcaption>
+    </figure>
+
+    <div class="part"><span class="part-num">Part two</span><span class="part-rule"></span></div>
+    <h2>The message queues, and where each earns its place</h2>
+
+    <p><strong>RabbitMQ</strong> is the reference message broker. Its strength is flexible routing through exchanges and bindings, so you can send a message to exactly the right queues based on content or headers, and per-message acknowledgement with dead-lettering built in. It speaks several protocols, AMQP, MQTT and STOMP, which makes it a natural fit for mixed clients including IoT. It is comparatively easy to run, a single Erlang binary with a genuinely useful management UI. Modern versions added quorum queues for stronger durability and even a native streams feature that borrows the retention idea, but its heart is still the classic task queue. Reach for it when you need sophisticated routing, RPC-style request and reply, priorities, and reliable per-message delivery at moderate volume.</p>
+
+    <p><strong>Azure Service Bus</strong> is the enterprise broker of the Azure world, and the natural queue choice if you are already there. It offers queues and topics with subscriptions for publish and subscribe, sessions for ordered processing, dead-letter queues, scheduled and deferred messages, duplicate detection and transactions. It is fully managed, so you are not operating a broker, and it integrates cleanly with the rest of Azure. Reach for it for line-of-business workflows, coordination between services, and anywhere you want enterprise messaging features without running the infrastructure yourself.</p>
+
+    <p><strong>Amazon SQS</strong> is the queue you reach for on AWS when you want the least possible operational burden. It is fully managed, effectively infinitely scalable, and cheap, with standard queues for maximum throughput and FIFO queues when you need ordering and exactly-once processing within the queue. It is deliberately simple: no complex routing, which is what SNS (fan-out publish and subscribe) and EventBridge (event routing) are for alongside it. Reach for SQS for straightforward asynchronous work distribution on AWS where simplicity and zero operations matter more than routing sophistication.</p>
+
+    <p>Worth knowing beyond the big three: <strong>ActiveMQ</strong>, and its managed form <strong>Amazon MQ</strong>, when you need a standards-based broker (JMS, AMQP) often to migrate an existing Java or enterprise system without rewriting it; <strong>IBM MQ</strong>, still the backbone of a great deal of banking and enterprise integration, where it is chosen for pedigree and guarantees rather than novelty; and <strong>NATS</strong> with its JetStream persistence, a lightweight, very fast, cloud-native option popular in Kubernetes and microservice environments.</p>
+
+    <div class="part"><span class="part-num">Part three</span><span class="part-rule"></span></div>
+    <h2>The event streams, and what the log buys you</h2>
+
+    <p><strong>Apache Kafka</strong> is the reference event streaming platform and, for high-volume event-driven systems, close to a default. It is a distributed, partitioned, append-only log: events are retained for a configured time or size, consumers track their own position, and a single cluster comfortably handles enormous throughput. That retention is the superpower, it is what lets you replay history to backfill a new service, feed several independent consumers the same events, and use the stream itself as a system of record in event sourcing. It also carries a real operational cost: partitions, consumer groups and cluster management take expertise, though modern Kafka has removed the old ZooKeeper dependency in favour of its own KRaft consensus. Reach for Kafka when throughput is high, when events must be retained and replayable, when many teams consume the same data, or when you are building stream processing with Kafka Streams or Flink.</p>
+
+    <p><strong>Azure Event Hubs</strong> is the Azure answer to streaming, and importantly it exposes a Kafka-compatible endpoint, so Kafka clients can often point at it with minimal change while Azure runs the platform for you. It is built for massive ingestion, telemetry, logs and event pipelines, and integrates with the Azure analytics stack. Reach for it when you want Kafka-style streaming on Azure without operating a Kafka cluster. Its sibling <strong>Event Grid</strong> is a different thing worth not confusing with it: a reactive event-routing service for discrete events (a blob was created, a resource changed), not a high-throughput stream.</p>
+
+    <p><strong>Amazon Kinesis</strong> is the AWS-native streaming service for real-time data at scale, and <strong>Amazon MSK</strong> is managed Kafka for teams that specifically want Kafka on AWS without running it. Beyond the hyperscalers, <strong>Apache Pulsar</strong> separates serving from storage and has strong multi-tenant and geo-replication stories, which appeal at large scale; <strong>Redpanda</strong> is Kafka-compatible but written without the JVM for lower latency and simpler operations; and <strong>Redis Streams</strong> is a pragmatic middle option when you already run Redis and need lightweight streaming without standing up Kafka. <strong>Google Cloud Pub/Sub</strong> sits across the line as a scalable, fully managed hybrid that behaves like both for many use cases.</p>
+
+    <div class="callout">
+      <span class="k">The pattern to hold onto</span>
+      The queue camp optimises for routing and per-message control at moderate scale. The stream camp optimises for throughput, retention and fan-out at large scale. Every product above is a variation on one of those two ideas, plus a choice about who operates it. Name the paradigm first, then pick within it.
+    </div>
+
+    <div class="part"><span class="part-num">Part four</span><span class="part-rule"></span></div>
+    <h2>The native picks in your cloud</h2>
+
+    <p>If you are on AWS or Azure, the honest default is to start with the managed native service and only reach for self-hosted Kafka or RabbitMQ when you have a reason the native option cannot meet, because the operational saving is large and real.</p>
+
+    <table>
+      <thead><tr><th>You need</th><th>On AWS</th><th>On Azure</th></tr></thead>
+      <tbody>
+        <tr><td>Simple async task queue</td><td>SQS</td><td>Service Bus (or Storage queues for basic needs)</td></tr>
+        <tr><td>Publish and subscribe fan-out</td><td>SNS</td><td>Service Bus topics</td></tr>
+        <tr><td>Event routing between services</td><td>EventBridge</td><td>Event Grid</td></tr>
+        <tr><td>Enterprise messaging features</td><td>Amazon MQ (or SQS FIFO)</td><td>Service Bus</td></tr>
+        <tr><td>High-throughput event streaming</td><td>Kinesis, or MSK for Kafka</td><td>Event Hubs (Kafka-compatible)</td></tr>
+        <tr><td>Full Kafka, managed</td><td>Amazon MSK</td><td>Event Hubs, or Kafka on AKS</td></tr>
+      </tbody>
+    </table>
+
+    <div class="part"><span class="part-num">Part five</span><span class="part-rule"></span></div>
+    <h2>The mechanics that bite regardless of the tool</h2>
+
+    <p>Whichever paradigm and product you choose, a handful of realities catch teams out, and they are worth designing for from the start rather than discovering in an incident.</p>
+
+    <p><strong>Delivery is at-least-once, not exactly-once.</strong> Most systems guarantee that a message arrives at least once, which means it can arrive twice, on a retry after a consumer crashed mid-processing, for example. Some platforms advertise exactly-once, but it is narrow, conditional and easy to break the moment your processing touches an external system. The safe design is to assume at-least-once and make your consumers idempotent, so that processing the same message twice does no harm. Idempotency, not a vendor promise, is what actually protects you.</p>
+
+    <p><strong>Ordering is local, not global.</strong> Order is guaranteed within a single queue or a single partition, and not across the whole topic. If your business logic depends on strict global ordering, you have to design for it, usually by routing related messages to the same partition through a partition key, and you have to accept the throughput limits that imposes. Assuming global order and not getting it produces bugs that are maddening to reproduce.</p>
+
+    <p><strong>Poison messages need a dead-letter path.</strong> Sooner or later a message arrives that a consumer cannot process, malformed, referencing something that no longer exists, or simply triggering a bug. Without a dead-letter queue to move it aside after a few failed attempts, it sits at the head of the queue and blocks everything behind it, or loops forever consuming resources. A dead-letter queue and a retry policy are not advanced features to add later; they are part of a correct design.</p>
+
+    <p><strong>Backpressure and operational burden are real costs.</strong> A stream absorbing a traffic spike is a feature; a queue growing without bound because consumers cannot keep up is an outage in waiting. And the platform with the most power, Kafka, carries the most operational weight. Choosing self-hosted Kafka without the team to run partitions, rebalancing and cluster health is one of the most common ways a good architecture becomes a bad on-call rota. If you cannot staff it, choose the managed equivalent.</p>
+
+    <h2>The honest summary</h2>
+
+    <p>Messaging is not a contest between RabbitMQ and Kafka, and it is not really about products at all until the last step. It is about recognising whether your payload is an instruction to be done once or a fact that many parts of the system may care about, now and later. The first is a queue: RabbitMQ, Azure Service Bus, Amazon SQS, and their kin. The second is a log: Kafka, Azure Event Hubs, Kinesis, and theirs. Name the paradigm, then pick the product that fits your cloud and your team's ability to operate it, defaulting to managed unless you have a clear reason not to.</p>
+
+    <p>And whichever you choose, design from day one for the three things that bite everyone: assume at-least-once delivery and make consumers idempotent, do not assume ordering you were not promised, and always have a dead-letter path. Most messaging problems in production are not the product's fault; they are one of those three assumptions, made silently, and found the hard way. Mature systems, incidentally, usually run more than one of these, a stream for events, a queue for tasks, because the two paradigms are complements, not competitors.</p>
+
+    <p class="lead">If you are designing an event-driven architecture and want the paradigm, the platform choice and the delivery guarantees decided so they hold up under load, that is the kind of work I do through <a href="https://cyberspartans.co.uk">Cyber Spartans</a>.</p>
+  </article>
+
+  <section class="related">
+    <h2>Related reading</h2>
+    <div class="rgrid">
+      <a class="rcard" href="/articles/cloudflare-saas-enabler/"><div class="c">Cloud</div><div class="t">Cloudflare as a SaaS enabler</div></a>
+      <a class="rcard" href="/articles/on-prem-to-cloud-migration/"><div class="c">Cloud</div><div class="t">An on-premises to cloud migration playbook</div></a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf">GitHub</a>
+      <a href="https://saleemyousaf.medium.com">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf">Dev.to</a>
+      <a href="https://cyberspartans.co.uk">Cyber Spartans</a>
+    </div>
+    <div class="pills">
+      <span class="pill bf">breachforge.co.uk</span>
+      <span class="pill cs">cyberspartans.co.uk</span>
+    </div>
+    <div class="legal">&copy; 2026 Saleem Yousaf. All rights reserved. &nbsp;&middot;&nbsp;
+      <a href="https://saleemyousaf.co.uk/privacy-policy/">Privacy</a></div>
+  </footer>
+</div>
+
+<div class="syx-lb" id="syxLb" onclick="syxLbClose()">
+  <button type="button" class="syx-lb-x" onclick="event.stopPropagation();syxLbClose();">&#10005; close</button>
+  <div class="syx-lb-stage" id="syxLbStage"></div>
+</div>
+<script>
+function syxLbOpen(fr){var s=fr.querySelector('svg[role="img"]');if(!s)return;
+  var st=document.getElementById('syxLbStage');st.innerHTML='';
+  st.appendChild(s.cloneNode(true));document.getElementById('syxLb').classList.add('syx-open');}
+function syxLbClose(){document.getElementById('syxLb').classList.remove('syx-open');}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'||e.key==='Esc')syxLbClose();});
+</script>
+
+</body>
+</html>
