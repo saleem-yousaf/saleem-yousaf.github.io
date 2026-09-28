@@ -6,7 +6,23 @@
     <atom:link href="https://saleemyousaf.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Cloud and cyber security architecture, threat analysis and governance by Saleem Yousaf.</description>
     <language>en-gb</language>
-    <lastBuildDate>Thu, 17 Sep 2026 06:31:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 28 Sep 2026 08:54:00 +0000</lastBuildDate>
+    <item>
+      <title>A Queue Empties, a Log Remembers: Choosing Between Message Queues and Event Streams</title>
+      <link>https://saleemyousaf.co.uk/articles/message-queues-vs-event-streams/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/message-queues-vs-event-streams/</guid>
+      <pubDate>Fri, 18 Sep 2026 09:00:00 +0000</pubDate>
+      <category>Cloud</category>
+      <description>Message queues and event streams look alike and solve different problems. The distinction that decides the tool, the landscape from RabbitMQ and Service Bus to Kafka, Event Hubs and Kinesis, the mechanics that bite regardless, and the AWS and Azure native picks.</description>
+    </item>
+    <item>
+      <title>The VM Started, That Is Not Success: An On-Premises to Cloud Migration Playbook</title>
+      <link>https://saleemyousaf.co.uk/articles/on-prem-to-cloud-migration/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/on-prem-to-cloud-migration/</guid>
+      <pubDate>Thu, 17 Sep 2026 09:00:00 +0000</pubDate>
+      <category>Cloud</category>
+      <description>Migration is rarely a server-move exercise. What breaks when a workload moves into a different network, identity and operational model, across Azure and AWS, from discovery and dependency mapping to cutover, observability and cost. With a downloadable checklist.</description>
+    </item>
     <item>
       <title>Cloudflare as a SaaS Enabler: Ship the Platform, Skip the Plumbing</title>
       <link>https://saleemyousaf.co.uk/articles/cloudflare-saas-enabler/</link>
