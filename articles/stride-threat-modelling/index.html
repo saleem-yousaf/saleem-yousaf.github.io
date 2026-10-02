@@ -1,1 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Practical Guide to STRIDE Threat Modelling: Six Interactive Cloud and App Scenarios | Saleem Yousaf</title>
+<meta name="description" content="An interactive guide to STRIDE threat modelling. Learn the six categories, then explore six real worked examples, WAF bypass, public S3 without a private endpoint, SSRF to instance metadata, a broken-authorisation API, an exposed Kubernetes plane and a classic login app, each with a technical diagram and its threats and mitigations.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/stride-threat-modelling/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="A Practical Guide to STRIDE Threat Modelling: Six Interactive Scenarios">
+<meta property="og:description" content="Learn STRIDE, then explore six real worked examples with technical diagrams: WAF bypass, public S3, SSRF to metadata, broken-authorisation API, exposed Kubernetes, and a classic login app.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/stride-threat-modelling/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/stride-threat-modelling/og-stride.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="A Practical Guide to STRIDE Threat Modelling">
+<meta name="twitter:description" content="Interactive: learn STRIDE, then explore six real cloud and app threat models with diagrams and mitigations.">
+<meta name="twitter:image" content="https://saleemyousaf.co.uk/stride-threat-modelling/og-stride.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e14; --panel:#0f1419; --panel2:#141b23; --border:rgba(255,255,255,.09);
+  --ink:#e6eaf0; --muted:#8a96a8; --muted2:#5a6675; --line:rgba(255,255,255,.08);
+  --teal:#2dd4bf; --teal-b:#5eead4;
+  --S:#4aa8ff; --T:#f5b73c; --R:#a78bfa; --I:#2dd4bf; --D:#f87171; --E:#f472b6;
+  --display:'Syne',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif; --mono:'DM Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+a{color:var(--teal);text-decoration:none}
+a:hover{text-decoration:underline}
+/* hero */
+.hero{padding:64px 0 22px}
+.eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(30px,5.2vw,50px);line-height:1.05;letter-spacing:-.01em;margin:16px 0 16px}
+.lede{font-size:19px;color:#eef1f4;max-width:820px}
+.byline{margin-top:18px;font-family:var(--mono);font-size:12.5px;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap}
+.byline .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal);display:inline-block;margin-right:7px}
+/* primer */
+.sec-rule{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin:44px 0 16px}
+.primer{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.pc{border:1px solid var(--border);border-radius:13px;background:var(--panel);padding:16px 18px;border-top:3px solid var(--cat)}
+.pc .l{font-family:var(--display);font-weight:800;font-size:22px;color:var(--cat)}
+.pc .n{font-family:var(--display);font-weight:700;font-size:15px;color:#fff;margin:2px 0 2px}
+.pc .p{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted2);margin-bottom:7px}
+.pc .d{font-size:13px;color:var(--muted);line-height:1.5}
+.howto{border:1px solid rgba(45,212,191,.28);background:linear-gradient(180deg,rgba(45,212,191,.08),rgba(45,212,191,.02));border-radius:13px;padding:18px 22px;margin-top:16px;font-size:15px;color:#dfe4ea}
+.howto b{color:var(--teal-b)}
+/* explorer */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.tab{border:1px solid var(--border);background:var(--panel);color:var(--muted);border-radius:999px;padding:9px 16px;font-family:var(--body);font-size:13.5px;cursor:pointer;transition:.15s;font-weight:400}
+.tab .tg{font-family:var(--mono);font-size:10px;color:var(--muted2);display:block;letter-spacing:.04em}
+.tab:hover{border-color:var(--border);color:var(--ink)}
+.tab.active{background:rgba(45,212,191,.12);border-color:rgba(45,212,191,.4);color:var(--teal-b)}
+.explorer{border:1px solid var(--border);border-radius:16px;background:var(--panel);overflow:hidden}
+.ex-head{padding:22px 24px 6px}
+.ex-head h2{font-family:var(--display);font-weight:700;font-size:23px;color:#fff;line-height:1.2}
+.ex-head .tag{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
+.ex-head p{font-size:15px;color:var(--muted);margin-top:8px;max-width:840px}
+.stage{display:grid;grid-template-columns:1.25fr 1fr;gap:0}
+.diagram{padding:18px 24px 24px;border-right:1px solid var(--border)}
+.scene{width:100%;height:auto;display:block;background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:10px}
+.scene .bnd{font-family:var(--mono);font-size:11px;letter-spacing:.04em}
+.scene .flbl{font-family:var(--mono);font-size:10px;fill:var(--muted)}
+.scene .node{cursor:pointer}
+.scene .nrect{fill:var(--panel);stroke:rgba(255,255,255,.16);stroke-width:1.3;transition:.15s}
+.scene .ntitle{font-family:var(--display);font-weight:700;font-size:13px;fill:#fff}
+.scene .nsub{font-family:var(--mono);font-size:10px;fill:var(--muted)}
+.scene .node:hover .nrect{stroke:var(--teal);fill:#12212a}
+.scene .node.sel .nrect{stroke:var(--teal-b);fill:rgba(45,212,191,.12);stroke-width:2}
+.scene.dim .node:not(.sel) .nrect{opacity:.4}
+.scene.dim .node:not(.sel) .ntitle,.scene.dim .node:not(.sel) .nsub{opacity:.45}
+.diag-hint{font-family:var(--mono);font-size:11px;color:var(--muted2);margin-top:10px;text-align:center}
+/* threat panel */
+.panel{padding:18px 22px 24px;min-width:0}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.chip{border:1px solid var(--border);background:var(--panel2);color:var(--muted);border-radius:8px;padding:6px 11px;font-family:var(--mono);font-size:11px;cursor:pointer;transition:.12s;letter-spacing:.03em}
+.chip:hover{color:var(--ink)}
+.chip[data-on="1"]{color:#0a0e14;font-weight:500}
+.chip.all[data-on="1"]{background:var(--teal);border-color:var(--teal)}
+.chip.S[data-on="1"]{background:var(--S);border-color:var(--S)}
+.chip.T[data-on="1"]{background:var(--T);border-color:var(--T)}
+.chip.R[data-on="1"]{background:var(--R);border-color:var(--R)}
+.chip.I[data-on="1"]{background:var(--I);border-color:var(--I)}
+.chip.D[data-on="1"]{background:var(--D);border-color:var(--D)}
+.chip.E[data-on="1"]{background:var(--E);border-color:var(--E)}
+.sel-note{font-family:var(--mono);font-size:11px;color:var(--teal);margin-bottom:12px;min-height:14px}
+.sel-note b{color:var(--teal-b)}
+.sel-note a{cursor:pointer}
+.threats{display:flex;flex-direction:column;gap:12px;max-height:560px;overflow-y:auto;padding-right:6px}
+.threats::-webkit-scrollbar{width:8px}.threats::-webkit-scrollbar-thumb{background:#243040;border-radius:8px}
+.tcard{border:1px solid var(--border);border-radius:11px;background:var(--panel2);padding:14px 16px;border-left:3px solid var(--cat)}
+.tcard .top{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap}
+.tcard .cat{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--cat);border:1px solid var(--cat);border-radius:5px;padding:2px 7px}
+.tcard .el{font-family:var(--mono);font-size:10.5px;color:var(--muted2)}
+.tcard .th{font-size:13.5px;color:#eaeef2;margin-bottom:9px}
+.tcard .mt{font-size:12.5px;color:var(--muted);padding-left:12px;border-left:2px solid var(--line)}
+.tcard .mt b{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:3px}
+.count{font-family:var(--mono);font-size:11px;color:var(--muted2);margin-bottom:10px}
+/* footer */
+.cta{border:1px solid rgba(45,212,191,.28);background:linear-gradient(180deg,rgba(45,212,191,.08),rgba(45,212,191,.02));border-radius:14px;padding:24px;margin:44px 0 10px;font-size:17px;color:#eef1f4}
+footer{border-top:1px solid var(--border);margin-top:40px;padding:34px 0 60px;color:var(--muted2);font-size:13.5px}
+.flinks{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:18px;font-family:var(--mono);font-size:13px}
+.legal{font-family:var(--mono);font-size:12px}
+.legal .t{color:var(--teal)}
+@media(max-width:820px){
+  .primer{grid-template-columns:1fr 1fr}
+  .stage{grid-template-columns:1fr}
+  .diagram{border-right:none;border-bottom:1px solid var(--border)}
+  .threats{max-height:none}
+}
+@media(max-width:520px){.primer{grid-template-columns:1fr}}
 
+/* landing-zone image scenarios */
+.lzimg{width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:12px;padding:8px;cursor:zoom-in}
+.acct-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.acct-chip{border:1px solid var(--border);background:var(--panel2);color:var(--muted);border-radius:8px;padding:6px 10px;font-family:var(--mono);font-size:11px;cursor:pointer;transition:.12s}
+.acct-chip:hover{color:var(--ink)}
+.acct-chip[data-on="1"]{background:rgba(45,212,191,.14);border-color:rgba(45,212,191,.4);color:var(--teal-b)}
+.lzlb{position:fixed;inset:0;background:rgba(5,8,12,.93);display:none;align-items:center;justify-content:center;z-index:9999;padding:24px;cursor:zoom-out}
+.lzlb.open{display:flex}
+.lzlb img{max-width:100%;max-height:100%;border-radius:8px;background:#fff}
+.lzlb .x{position:absolute;top:16px;right:22px;color:#cfd6de;font-family:var(--mono);font-size:13px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+<script src="/nav.js" defer></script>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">// interactive project &middot; threat modelling</div>
+    <h1>A practical guide to STRIDE threat modelling</h1>
+    <p class="lede">Threat modelling sounds abstract until you do it on something real. STRIDE gives you six lenses to hold up to a system, and most weaknesses reveal themselves the moment you ask the six questions in the right place. Learn the lenses below, then open any of the eight worked examples, click an element in its diagram, and see the threats and the fixes that element attracts.</p>
+    <div class="byline"><span><span class="dot"></span>Saleem Yousaf</span><span>Interactive</span><span>8 worked examples &middot; 64 threats</span></div>
+  </header>
+
+  <div class="sec-rule">// the six lenses</div>
+  <div id="primer" class="primer"></div>
+  <div class="howto">
+    <b>How to read a threat model.</b> Draw the system as elements and the flows between them, then mark the trust boundaries, the dashed lines where data crosses from less trusted to more trusted. At every element and every boundary, ask the six STRIDE questions. A threat is a plausible answer; a control is how you close it. The examples below are that method applied to six real designs.
+  </div>
+
+  <div class="sec-rule">// explore a worked example</div>
+  <div class="tabs" id="tabs"></div>
+
+  <div class="explorer">
+    <div class="ex-head">
+      <div class="tag" id="ex-tag"></div>
+      <h2 id="ex-title"></h2>
+      <p id="ex-summary"></p>
+    </div>
+    <div class="stage">
+      <div class="diagram">
+        <div id="ex-svg"></div>
+        <div class="diag-hint">click an element to focus its threats, or use the STRIDE filters</div>
+      </div>
+      <div class="panel">
+        <div class="filters" id="filters"></div>
+        <div class="sel-note" id="sel-note"></div>
+        <div class="count" id="count"></div>
+        <div class="threats" id="threats"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta">
+    Threat modelling is most valuable before a system is built, when a boundary or a role is still a line on a diagram rather than a production incident. If you want this done properly on your architecture, that is the kind of work I do through <a href="https://cyberspartans.co.uk">Cyber Spartans</a>.
+  </div>
+
+  <footer>
+    <div class="flinks">
+      <a href="https://www.linkedin.com/in/saleemyousaf">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf">GitHub</a>
+      <a href="https://saleemyousaf.medium.com">Medium</a>
+      <a href="https://cyberspartans.co.uk">Cyber Spartans</a>
+    </div>
+    <div class="legal">&copy; 2026 Saleem Yousaf. All rights reserved. &nbsp;&middot;&nbsp; <span class="t">saleemyousaf.co.uk</span> &nbsp;&middot;&nbsp; <span class="t">cyberspartans.co.uk</span></div>
+  </footer>
+</div>
+
+<script>window.STRIDE = {"categories": {"S": {"name": "Spoofing", "prop": "Authentication", "colour": "#4aa8ff"}, "T": {"name": "Tampering", "prop": "Integrity", "colour": "#f5b73c"}, "R": {"name": "Repudiation", "prop": "Non-repudiation", "colour": "#a78bfa"}, "I": {"name": "Information disclosure", "prop": "Confidentiality", "colour": "#2dd4bf"}, "D": {"name": "Denial of service", "prop": "Availability", "colour": "#f87171"}, "E": {"name": "Elevation of privilege", "prop": "Authorisation", "colour": "#f472b6"}}, "scenarios": [{"id": "waf", "tag": "Cloud / edge", "title": "WAF misconfiguration and origin bypass", "summary": "An edge WAF only protects you if every request is forced through it. The common failure is an origin that is still reachable directly, so an attacker who finds the origin IP skips the WAF entirely.", "svg": "<svg viewBox=\"0 0 900 380\" xmlns=\"http://www.w3.org/2000/svg\" class=\"scene\"><defs><marker id=\"ar\" markerWidth=\"8\" markerHeight=\"8\" refX=\"6\" refY=\"4\" orient=\"auto\"><path d=\"M0 0 L8 4 L0 8 Z\" fill=\"#8a96a8\"/></marker></defs><rect x=\"238\" y=\"120\" width=\"200\" height=\"130\" rx=\"12\" fill=\"none\" stroke=\"#4aa8ff\" stroke-width=\"1.3\" stroke-dasharray=\"6 6\" opacity=\"0.7\"/><text x=\"250\" y=\"142\" class=\"bnd\" fill=\"#4aa8ff\">Edge</text><rect x=\"508\" y=\"120\" width=\"372\" height=\"130\" rx=\"12\" fill=\"none\" stroke=\"#2dd4bf\" stroke-width=\"1.3\" stroke-dasharray=\"6 6\" opacity=\"0.7\"/><text x=\"520\" y=\"142\" class=\"bnd\" fill=\"#2dd4bf\">VPC</text><path d=\"M180 185.0 L250 185.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"215.0\" y=\"179.0\" class=\"flbl\" text-anchor=\"middle\">request</text><path d=\"M430 185.0 L520 185.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"475.0\" y=\"179.0\" class=\"flbl\" text-anchor=\"middle\">filtered</text><path d=\"M670 185.0 L720 185.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><path d=\"M180 185.0 L520 185.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"350.0\" y=\"179.0\" class=\"flbl\" text-anchor=\"middle\">direct to origin, WAF bypassed</text><g class=\"node\" data-el=\"client\" tabindex=\"0\" role=\"button\" aria-label=\"Client\"><rect x=\"30\" y=\"150\" width=\"150\" height=\"70\" rx=\"9\" class=\"nrect\"/><text x=\"105.0\" y=\"180.0\" class=\"ntitle\" text-anchor=\"middle\">Client</text><text x=\"105.0\" y=\"198.0\" class=\"nsub\" text-anchor=\"middle\">browser / bot</text></g><g class=\"node\" data-el=\"waf\" tabindex=\"0\" role=\"button\" aria-label=\"CloudFront + WAF\"><rect x=\"250\" y=\"140\" width=\"180\" height=\"90\" rx=\"9\" class=\"nrect\"/><text x=\"340.0\" y=\"180.0\" class=\"ntitle\" text-anchor=\"middle\">CloudFront + WAF</text><text x=\"340.0\" y=\"198.0\" class=\"nsub\" text-anchor=\"middle\">managed + custom rules</text></g><g class=\"node\" data-el=\"alb\" tabindex=\"0\" role=\"button\" aria-label=\"ALB origin\"><rect x=\"520\" y=\"150\" width=\"150\" height=\"70\" rx=\"9\" class=\"nrect\"/><text x=\"595.0\" y=\"180.0\" class=\"ntitle\" text-anchor=\"middle\">ALB origin</text><text x=\"595.0\" y=\"198.0\" class=\"nsub\" text-anchor=\"middle\">public IP</text></g><g class=\"node\" data-el=\"app\" tabindex=\"0\" role=\"button\" aria-label=\"Application\"><rect x=\"720\" y=\"150\" width=\"150\" height=\"70\" rx=\"9\" class=\"nrect\"/><text x=\"795.0\" y=\"185.0\" class=\"ntitle\" text-anchor=\"middle\">Application</text></g></svg>", "threats": [["alb", "E", "An attacker discovers the origin's public IP or DNS and connects to the ALB directly, bypassing CloudFront and the WAF completely, so every managed and custom rule is skipped.", "Lock the origin's security group to the CloudFront managed prefix list, and require a secret origin header (for example X-Origin-Verify) that the edge injects and the origin validates. For S3 origins use Origin Access Control."], ["waf", "T", "The WAF is deployed in count or log mode, not block, so attacks are recorded but never stopped. It looks protected on a dashboard and is not.", "Promote rules from count to block after tuning, and alert on any managed ruleset left in count mode in production."], ["waf", "I", "A route, subdomain or API on a different origin is not behind the WAF at all, a split-brain DNS that resolves some traffic to an unprotected host.", "Inventory every public origin and confirm each sits behind the WAF. No public DNS record should resolve to an origin the WAF does not front."], ["waf", "D", "The WAF blocks injection but has no rate-based rule, so a layer-7 flood still reaches the origin and exhausts it.", "Add rate-based rules, enable Shield, and cache aggressively so a flood is absorbed at the edge."], ["app", "S", "The origin trusts the client IP from X-Forwarded-For without checking the request actually came from the edge, so a direct caller spoofs any IP.", "Only trust forwarded headers on connections from the edge prefix list, and overwrite the client-IP header at the trust boundary."]]}, {"id": "s3", "tag": "Cloud / storage", "title": "Public S3 and the missing private endpoint", "summary": "Block Public Access being on does not make a bucket safe. A broad bucket policy can still expose data, and with no VPC endpoint the traffic leaves your network to reach S3 over the public internet.", "svg": "<svg viewBox=\"0 0 900 380\" xmlns=\"http://www.w3.org/2000/svg\" class=\"scene\"><defs><marker id=\"ar\" markerWidth=\"8\" markerHeight=\"8\" refX=\"6\" refY=\"4\" orient=\"auto\"><path d=\"M0 0 L8 4 L0 8 Z\" fill=\"#8a96a8\"/></marker></defs><rect x=\"18\" y=\"120\" width=\"372\" height=\"130\" rx=\"12\" fill=\"none\" stroke=\"#2dd4bf\" stroke-width=\"1.3\" stroke-dasharray=\"6 6\" opacity=\"0.7\"/><text x=\"30\" y=\"142\" class=\"bnd\" fill=\"#2dd4bf\">VPC</text><rect x=\"458\" y=\"120\" width=\"412\" height=\"130\" rx=\"12\" fill=\"none\" stroke=\"#f87171\" stroke-width=\"1.3\" stroke-dasharray=\"6 6\" opacity=\"0.7\"/><text x=\"470\" y=\"142\" class=\"bnd\" fill=\"#f87171\">AWS / public S3 endpoint</text><path d=\"M180 185.0 L250 185.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"215.0\" y=\"179.0\" class=\"flbl\" text-anchor=\"middle\">no VPC endpoint</text><path d=\"M390 185.0 L470 185.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"430.0\" y=\"179.0\" class=\"flbl\" text-anchor=\"middle\">over the internet</text><path d=\"M710 185.0 L650 185.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"680.0\" y=\"179.0\" class=\"flbl\" text-anchor=\"middle\">governs</text><g class=\"node\" data-el=\"app\" tabindex=\"0\" role=\"button\" aria-label=\"Application\"><rect x=\"30\" y=\"150\" width=\"150\" height=\"70\" rx=\"9\" class=\"nrect\"/><text x=\"105.0\" y=\"180.0\" class=\"ntitle\" text-anchor=\"middle\">Application</text><text x=\"105.0\" y=\"198.0\" class=\"nsub\" text-anchor=\"middle\">EC2 / Lambda</text></g><g class=\"node\" data-el=\"nat\" tabindex=\"0\" role=\"button\" aria-label=\"NAT / internet\"><rect x=\"250\" y=\"150\" width=\"140\" height=\"70\" rx=\"9\" class=\"nrect\"/><text x=\"320.0\" y=\"180.0\" class=\"ntitle\" text-anchor=\"middle\">NAT / internet</text><text x=\"320.0\" y=\"198.0\" class=\"nsub\" text-anchor=\"middle\">public egress</text></g><g class=\"node\" data-el=\"s3\" tabindex=\"0\" role=\"button\" aria-label=\"S3 bucket\"><rect x=\"470\" y=\"140\" width=\"180\" height=\"90\" rx=\"9\" class=\"nrect\"/><text x=\"560.0\" y=\"180.0\" class=\"ntitle\" text-anchor=\"middle\">S3 bucket</text><text x=\"560.0\" y=\"198.0\" class=\"nsub\" text-anchor=\"middle\">objects</text></g><g class=\"node\" data-el=\"pol\" tabindex=\"0\" role=\"button\" aria-label=\"Bucket policy\"><rect x=\"710\" y=\"150\" width=\"160\" height=\"70\" rx=\"9\" class=\"nrect\"/><text x=\"790.0\" y=\"180.0\" class=\"ntitle\" text-anchor=\"middle\">Bucket policy</text><text x=\"790.0\" y=\"198.0\" class=\"nsub\" text-anchor=\"middle\">who can access</text></g></svg>", "threats": [["pol", "I", "An over-permissive bucket policy (a wildcard principal, or all authenticated AWS accounts, or a mistaken condition) exposes objects even with Block Public Access on, because BPA's definition of public does not catch broad cross-account grants.", "Scope the bucket policy to specific principals, add an aws:PrincipalOrgID condition, and run IAM Access Analyzer to surface external access."], ["nat", "I", "There is no S3 gateway endpoint, so application-to-S3 traffic egresses through NAT to the public S3 endpoint. The data path leaves your network and the bucket is reachable from anywhere the credentials are.", "Add an S3 gateway VPC endpoint with an endpoint policy, and deny access that does not arrive through it using an aws:sourceVpce condition on the bucket policy."], ["s3", "T", "Write access is broader than needed, so an attacker can overwrite or plant objects, poisoning a static site or a data feed that other systems trust.", "Separate read and write roles, enable versioning and object lock, and constrain writes with bucket-policy conditions."], ["s3", "R", "No server access logging and no CloudTrail data events, so object reads and writes are invisible and cannot be investigated.", "Enable S3 server access logging and CloudTrail S3 data events to a separate, restricted logging account."], ["pol", "E", "The policy allows s3:PutBucketPolicy to a broad principal, so an attacker can rewrite the policy to widen their own access.", "Restrict bucket-policy writes to a small admin role and add an organisation SCP guardrail preventing public or cross-account grants."]]}, {"id": "ssrf", "tag": "Cloud / identity", "title": "SSRF to instance metadata and a role that is too broad", "summary": "A server-side request forgery in an application that fetches URLs can reach the instance metadata service, steal the machine's role credentials, and, if that role is over-permissive, turn one bug into account-wide access.", "svg": "<svg viewBox=\"0 0 900 380\" xmlns=\"http://www.w3.org/2000/svg\" class=\"scene\"><defs><marker id=\"ar\" markerWidth=\"8\" markerHeight=\"8\" refX=\"6\" refY=\"4\" orient=\"auto\"><path d=\"M0 0 L8 4 L0 8 Z\" fill=\"#8a96a8\"/></marker></defs><rect x=\"218\" y=\"120\" width=\"182\" height=\"130\" rx=\"12\" fill=\"none\" stroke=\"#4aa8ff\" stroke-width=\"1.3\" stroke-dasharray=\"6 6\" opacity=\"0.7\"/><text x=\"230\" y=\"142\" class=\"bnd\" fill=\"#4aa8ff\">Instance</text><rect x=\"458\" y=\"40\" width=\"192\" height=\"270\" rx=\"12\" fill=\"none\" stroke=\"#f472b6\" stroke-width=\"1.3\" stroke-dasharray=\"6 6\" opacity=\"0.7\"/><text x=\"470\" y=\"62\" class=\"bnd\" fill=\"#f472b6\">Privileged metadata</text><path d=\"M170 185.0 L230 185.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"200.0\" y=\"179.0\" class=\"flbl\" text-anchor=\"middle\">upload / webhook / preview</text><path d=\"M400 185.0 L470 100.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"435.0\" y=\"136.5\" class=\"flbl\" text-anchor=\"middle\">SSRF to link-local</text><path d=\"M560.0 140 L560.0 210\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"560.0\" y=\"169.0\" class=\"flbl\" text-anchor=\"middle\">returns creds</text><path d=\"M650 250.0 L720 250.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"685.0\" y=\"244.0\" class=\"flbl\" text-anchor=\"middle\">stolen creds act as the role</text><g class=\"node\" data-el=\"client\" tabindex=\"0\" role=\"button\" aria-label=\"Client\"><rect x=\"30\" y=\"150\" width=\"140\" height=\"70\" rx=\"9\" class=\"nrect\"/><text x=\"100.0\" y=\"185.0\" class=\"ntitle\" text-anchor=\"middle\">Client</text></g><g class=\"node\" data-el=\"app\" tabindex=\"0\" role=\"button\" aria-label=\"Web app\"><rect x=\"230\" y=\"140\" width=\"170\" height=\"90\" rx=\"9\" class=\"nrect\"/><text x=\"315.0\" y=\"180.0\" class=\"ntitle\" text-anchor=\"middle\">Web app</text><text x=\"315.0\" y=\"198.0\" class=\"nsub\" text-anchor=\"middle\">fetches URLs</text></g><g class=\"node\" data-el=\"imds\" tabindex=\"0\" role=\"button\" aria-label=\"IMDS\"><rect x=\"470\" y=\"60\" width=\"180\" height=\"80\" rx=\"9\" class=\"nrect\"/><text x=\"560.0\" y=\"95.0\" class=\"ntitle\" text-anchor=\"middle\">IMDS</text><text x=\"560.0\" y=\"113.0\" class=\"nsub\" text-anchor=\"middle\">169.254.169.254</text></g><g class=\"node\" data-el=\"role\" tabindex=\"0\" role=\"button\" aria-label=\"Instance role\"><rect x=\"470\" y=\"210\" width=\"180\" height=\"80\" rx=\"9\" class=\"nrect\"/><text x=\"560.0\" y=\"245.0\" class=\"ntitle\" text-anchor=\"middle\">Instance role</text><text x=\"560.0\" y=\"263.0\" class=\"nsub\" text-anchor=\"middle\">temporary creds</text></g><g class=\"node\" data-el=\"svc\" tabindex=\"0\" role=\"button\" aria-label=\"AWS services\"><rect x=\"720\" y=\"210\" width=\"150\" height=\"80\" rx=\"9\" class=\"nrect\"/><text x=\"795.0\" y=\"250.0\" class=\"ntitle\" text-anchor=\"middle\">AWS services</text></g></svg>", "threats": [["imds", "I", "The app fetches a user-supplied URL (an image, a webhook target, a link preview) and can be pointed at 169.254.169.254. With IMDSv1 the metadata service returns the instance role's temporary credentials with no token required.", "Enforce IMDSv2 (HttpTokens required) with a hop limit of 1, block outbound requests to link-local and private ranges in the app, and allowlist fetch destinations."], ["role", "E", "The instance role is over-permissive, for example s3:* or iam:*, so the stolen credentials grant wide access and one SSRF becomes a full compromise.", "Grant the role least privilege with no wildcards, and apply a permissions boundary so even a mistaken policy cannot exceed it."], ["svc", "S", "The stolen temporary credentials are used from attacker infrastructure to impersonate the role against AWS APIs.", "Least privilege limits the blast radius, and GuardDuty flags role credentials used from a new IP or network, which is a strong exfiltration signal."], ["svc", "T", "If the role can write, the attacker modifies data or infrastructure once the credentials are in hand.", "Split read and write into separate roles and keep write scope minimal."], ["role", "R", "Actions are attributed to the role, not the human attacker, so tracing is hard.", "Use CloudTrail, add source-IP conditions to sensitive policies, and use session tags to narrow what the role can do and from where."]]}, {"id": "api", "tag": "Cloud / application", "title": "A public API that authenticates but does not authorise", "summary": "A valid token proves who you are, not what you are allowed to touch. The classic API failure is broken object-level authorisation: any logged-in user can read another user's data by changing an id.", "svg": "<svg viewBox=\"0 0 900 380\" xmlns=\"http://www.w3.org/2000/svg\" class=\"scene\"><defs><marker id=\"ar\" markerWidth=\"8\" markerHeight=\"8\" refX=\"6\" refY=\"4\" orient=\"auto\"><path d=\"M0 0 L8 4 L0 8 Z\" fill=\"#8a96a8\"/></marker></defs><rect x=\"238\" y=\"120\" width=\"200\" height=\"130\" rx=\"12\" fill=\"none\" stroke=\"#4aa8ff\" stroke-width=\"1.3\" stroke-dasharray=\"6 6\" opacity=\"0.7\"/><text x=\"250\" y=\"142\" class=\"bnd\" fill=\"#4aa8ff\">Edge</text><rect x=\"508\" y=\"120\" width=\"362\" height=\"130\" rx=\"12\" fill=\"none\" stroke=\"#2dd4bf\" stroke-width=\"1.3\" stroke-dasharray=\"6 6\" opacity=\"0.7\"/><text x=\"520\" y=\"142\" class=\"bnd\" fill=\"#2dd4bf\">Backend</text><path d=\"M180 185.0 L250 185.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"215.0\" y=\"179.0\" class=\"flbl\" text-anchor=\"middle\">request + token</text><path d=\"M430 185.0 L520 185.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"475.0\" y=\"179.0\" class=\"flbl\" text-anchor=\"middle\">authenticated</text><path d=\"M680 185.0 L730 185.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"705.0\" y=\"179.0\" class=\"flbl\" text-anchor=\"middle\">query</text><g class=\"node\" data-el=\"client\" tabindex=\"0\" role=\"button\" aria-label=\"Client\"><rect x=\"30\" y=\"150\" width=\"150\" height=\"70\" rx=\"9\" class=\"nrect\"/><text x=\"105.0\" y=\"180.0\" class=\"ntitle\" text-anchor=\"middle\">Client</text><text x=\"105.0\" y=\"198.0\" class=\"nsub\" text-anchor=\"middle\">holds a JWT</text></g><g class=\"node\" data-el=\"api\" tabindex=\"0\" role=\"button\" aria-label=\"API Gateway\"><rect x=\"250\" y=\"140\" width=\"180\" height=\"90\" rx=\"9\" class=\"nrect\"/><text x=\"340.0\" y=\"180.0\" class=\"ntitle\" text-anchor=\"middle\">API Gateway</text><text x=\"340.0\" y=\"198.0\" class=\"nsub\" text-anchor=\"middle\">validates JWT</text></g><g class=\"node\" data-el=\"svc\" tabindex=\"0\" role=\"button\" aria-label=\"Service\"><rect x=\"520\" y=\"150\" width=\"160\" height=\"70\" rx=\"9\" class=\"nrect\"/><text x=\"600.0\" y=\"180.0\" class=\"ntitle\" text-anchor=\"middle\">Service</text><text x=\"600.0\" y=\"198.0\" class=\"nsub\" text-anchor=\"middle\">business logic</text></g><g class=\"node\" data-el=\"db\" tabindex=\"0\" role=\"button\" aria-label=\"Data store\"><rect x=\"730\" y=\"150\" width=\"140\" height=\"70\" rx=\"9\" class=\"nrect\"/><text x=\"800.0\" y=\"185.0\" class=\"ntitle\" text-anchor=\"middle\">Data store</text></g></svg>", "threats": [["svc", "E", "Broken object-level authorisation: the token authenticates the user, but the service never checks the user owns the requested object, so GET /orders/{id} returns anyone's order by changing the id.", "Enforce object ownership in the service on every request. A valid token is authentication, not authorisation, and the application must decide who may touch what."], ["api", "S", "Weak token validation accepts alg=none, an unverified signature, or a token with the wrong audience or issuer.", "Verify the signature, the algorithm, the audience, the issuer and expiry at the edge before the request reaches the service."], ["svc", "I", "Verbose errors and stack traces leak internal structure, library versions and query detail to the caller.", "Return generic errors to clients and keep the detail in server-side logs only."], ["api", "D", "There is no rate limiting or usage plan, so an expensive endpoint is hammered until the backend falls over.", "Apply usage plans and throttling at the gateway, and add a WAF rate-based rule for the public surface."], ["svc", "T", "Mass assignment lets a caller set fields they should not control, for example isAdmin or accountId, by adding them to the request body.", "Bind only an explicit allowlist of writable fields and validate the body against a schema."], ["db", "R", "No per-request audit of which identity accessed which record, so misuse cannot be reconstructed.", "Write structured access logs that record the identity, the object and the outcome of every sensitive call."]]}, {"id": "k8s", "tag": "Cloud / platform", "title": "An exposed Kubernetes control and data plane", "summary": "Kubernetes gives you many ways to be reachable and few of them safe by default. An exposed API server or dashboard is cluster takeover, and a flat pod network turns one compromised container into all of them.", "svg": "<svg viewBox=\"0 0 900 380\" xmlns=\"http://www.w3.org/2000/svg\" class=\"scene\"><defs><marker id=\"ar\" markerWidth=\"8\" markerHeight=\"8\" refX=\"6\" refY=\"4\" orient=\"auto\"><path d=\"M0 0 L8 4 L0 8 Z\" fill=\"#8a96a8\"/></marker></defs><rect x=\"208\" y=\"40\" width=\"192\" height=\"270\" rx=\"12\" fill=\"none\" stroke=\"#f472b6\" stroke-width=\"1.3\" stroke-dasharray=\"6 6\" opacity=\"0.7\"/><text x=\"220\" y=\"62\" class=\"bnd\" fill=\"#f472b6\">Control plane</text><rect x=\"458\" y=\"40\" width=\"412\" height=\"270\" rx=\"12\" fill=\"none\" stroke=\"#2dd4bf\" stroke-width=\"1.3\" stroke-dasharray=\"6 6\" opacity=\"0.7\"/><text x=\"470\" y=\"62\" class=\"bnd\" fill=\"#2dd4bf\">Data plane</text><path d=\"M170 185.0 L220 100.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"195.0\" y=\"136.5\" class=\"flbl\" text-anchor=\"middle\">if public</text><path d=\"M170 185.0 L220 250.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"195.0\" y=\"211.5\" class=\"flbl\" text-anchor=\"middle\">if public</text><path d=\"M400 100.0 L470 185.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"435.0\" y=\"136.5\" class=\"flbl\" text-anchor=\"middle\">schedules</text><path d=\"M640 185.0 L710 100.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"675.0\" y=\"136.5\" class=\"flbl\" text-anchor=\"middle\">reads</text><path d=\"M640 185.0 L710 250.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"675.0\" y=\"211.5\" class=\"flbl\" text-anchor=\"middle\">reaches</text><g class=\"node\" data-el=\"net\" tabindex=\"0\" role=\"button\" aria-label=\"Internet\"><rect x=\"30\" y=\"150\" width=\"140\" height=\"70\" rx=\"9\" class=\"nrect\"/><text x=\"100.0\" y=\"185.0\" class=\"ntitle\" text-anchor=\"middle\">Internet</text></g><g class=\"node\" data-el=\"api\" tabindex=\"0\" role=\"button\" aria-label=\"API server\"><rect x=\"220\" y=\"60\" width=\"180\" height=\"80\" rx=\"9\" class=\"nrect\"/><text x=\"310.0\" y=\"95.0\" class=\"ntitle\" text-anchor=\"middle\">API server</text><text x=\"310.0\" y=\"113.0\" class=\"nsub\" text-anchor=\"middle\">RBAC</text></g><g class=\"node\" data-el=\"dash\" tabindex=\"0\" role=\"button\" aria-label=\"Dashboard\"><rect x=\"220\" y=\"210\" width=\"180\" height=\"80\" rx=\"9\" class=\"nrect\"/><text x=\"310.0\" y=\"245.0\" class=\"ntitle\" text-anchor=\"middle\">Dashboard</text><text x=\"310.0\" y=\"263.0\" class=\"nsub\" text-anchor=\"middle\">web UI</text></g><g class=\"node\" data-el=\"pod\" tabindex=\"0\" role=\"button\" aria-label=\"Pods\"><rect x=\"470\" y=\"140\" width=\"170\" height=\"90\" rx=\"9\" class=\"nrect\"/><text x=\"555.0\" y=\"180.0\" class=\"ntitle\" text-anchor=\"middle\">Pods</text><text x=\"555.0\" y=\"198.0\" class=\"nsub\" text-anchor=\"middle\">workloads</text></g><g class=\"node\" data-el=\"sec\" tabindex=\"0\" role=\"button\" aria-label=\"Secrets\"><rect x=\"710\" y=\"60\" width=\"160\" height=\"80\" rx=\"9\" class=\"nrect\"/><text x=\"790.0\" y=\"95.0\" class=\"ntitle\" text-anchor=\"middle\">Secrets</text><text x=\"790.0\" y=\"113.0\" class=\"nsub\" text-anchor=\"middle\">env / base64</text></g><g class=\"node\" data-el=\"imds\" tabindex=\"0\" role=\"button\" aria-label=\"Node metadata\"><rect x=\"710\" y=\"210\" width=\"160\" height=\"80\" rx=\"9\" class=\"nrect\"/><text x=\"790.0\" y=\"245.0\" class=\"ntitle\" text-anchor=\"middle\">Node metadata</text><text x=\"790.0\" y=\"263.0\" class=\"nsub\" text-anchor=\"middle\">IRSA / role</text></g></svg>", "threats": [["api", "E", "A publicly reachable API server, or a dashboard exposed with weak or anonymous auth, grants control of the whole cluster.", "Make the API endpoint private, disable anonymous auth, enforce RBAC, and remove or lock down the dashboard. Require MFA on the kubeconfig path."], ["sec", "I", "Secrets are stored as plain environment variables or base64, not encrypted at rest, so anyone with pod exec or node access reads them.", "Encrypt secrets at rest with a KMS provider or an external secrets manager, and restrict who can exec into pods."], ["imds", "E", "There is no network policy, so a compromised pod can reach every other pod and the node metadata endpoint to steal the node or IRSA role.", "Apply default-deny network policies, block pod access to the metadata endpoint, and use IRSA with least privilege per workload."], ["pod", "D", "No resource requests or limits, so one pod exhausts a node and starves its neighbours.", "Set requests and limits and enforce namespace resource quotas."], ["pod", "S", "Over-broad service-account tokens are auto-mounted into pods that do not need them.", "Disable automount where it is not needed and scope each service account's RBAC tightly."], ["api", "R", "API-server audit logging is off, so actions against the cluster leave no trace.", "Enable audit logging and ship it off-cluster to a restricted destination."]]}, {"id": "app", "tag": "Classic app", "title": "A classic login and API app, for contrast", "summary": "The same six lenses apply to an ordinary web application, and it is the clearest place to learn them. Every STRIDE category maps to a control most teams already recognise.", "svg": "<svg viewBox=\"0 0 900 380\" xmlns=\"http://www.w3.org/2000/svg\" class=\"scene\"><defs><marker id=\"ar\" markerWidth=\"8\" markerHeight=\"8\" refX=\"6\" refY=\"4\" orient=\"auto\"><path d=\"M0 0 L8 4 L0 8 Z\" fill=\"#8a96a8\"/></marker></defs><rect x=\"238\" y=\"120\" width=\"200\" height=\"130\" rx=\"12\" fill=\"none\" stroke=\"#4aa8ff\" stroke-width=\"1.3\" stroke-dasharray=\"6 6\" opacity=\"0.7\"/><text x=\"250\" y=\"142\" class=\"bnd\" fill=\"#4aa8ff\">Application</text><rect x=\"508\" y=\"40\" width=\"362\" height=\"270\" rx=\"12\" fill=\"none\" stroke=\"#2dd4bf\" stroke-width=\"1.3\" stroke-dasharray=\"6 6\" opacity=\"0.7\"/><text x=\"520\" y=\"62\" class=\"bnd\" fill=\"#2dd4bf\">Trusted backend</text><path d=\"M180 185.0 L250 185.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"215.0\" y=\"179.0\" class=\"flbl\" text-anchor=\"middle\">login / API</text><path d=\"M430 185.0 L520 100.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"475.0\" y=\"136.5\" class=\"flbl\" text-anchor=\"middle\">session</text><path d=\"M430 185.0 L520 250.0\" stroke=\"#8a96a8\" stroke-width=\"1.6\" fill=\"none\" marker-end=\"url(#ar)\" opacity=\"0.8\"/><text x=\"475.0\" y=\"211.5\" class=\"flbl\" text-anchor=\"middle\">query</text><g class=\"node\" data-el=\"br\" tabindex=\"0\" role=\"button\" aria-label=\"Browser\"><rect x=\"30\" y=\"150\" width=\"150\" height=\"70\" rx=\"9\" class=\"nrect\"/><text x=\"105.0\" y=\"185.0\" class=\"ntitle\" text-anchor=\"middle\">Browser</text></g><g class=\"node\" data-el=\"app\" tabindex=\"0\" role=\"button\" aria-label=\"Web / app server\"><rect x=\"250\" y=\"140\" width=\"180\" height=\"90\" rx=\"9\" class=\"nrect\"/><text x=\"340.0\" y=\"185.0\" class=\"ntitle\" text-anchor=\"middle\">Web / app server</text></g><g class=\"node\" data-el=\"auth\" tabindex=\"0\" role=\"button\" aria-label=\"Auth / session\"><rect x=\"520\" y=\"60\" width=\"170\" height=\"80\" rx=\"9\" class=\"nrect\"/><text x=\"605.0\" y=\"100.0\" class=\"ntitle\" text-anchor=\"middle\">Auth / session</text></g><g class=\"node\" data-el=\"db\" tabindex=\"0\" role=\"button\" aria-label=\"Database\"><rect x=\"520\" y=\"210\" width=\"170\" height=\"80\" rx=\"9\" class=\"nrect\"/><text x=\"605.0\" y=\"250.0\" class=\"ntitle\" text-anchor=\"middle\">Database</text></g></svg>", "threats": [["app", "S", "Credential stuffing with breached passwords and no multi-factor authentication lets stolen credentials straight in.", "Require MFA, rate-limit and lock out on repeated failures, and check credentials against breached-password lists."], ["app", "T", "No anti-CSRF protection and trust in client-supplied parameters let an attacker forge state-changing requests.", "Use anti-CSRF tokens and validate and re-derive every security-relevant value on the server."], ["auth", "R", "Authentication and authorisation events are not logged, so users can deny actions and failed logins leave no trace.", "Write an immutable audit log of authentication and authorisation events, including failures."], ["auth", "I", "The session cookie lacks HttpOnly, Secure and SameSite, and TLS is not enforced, so the session is exposed to theft.", "Set HttpOnly, Secure and SameSite on the session cookie and enforce HTTPS with HSTS."], ["app", "D", "No rate limit on login and password reset enables brute force and resource abuse.", "Rate-limit sensitive endpoints and apply progressive backoff or lockout."], ["db", "E", "A missing function or object-level authorisation check lets a normal user call an admin action or read another user's record.", "Enforce authorisation on every function and object, deny by default, and never rely on the UI hiding an action."]]}, {"id": "lz-aws", "tag": "Cloud / landing zone", "title": "AWS multi-account landing zone (Control Tower)", "summary": "At landing-zone scale the account boundary is the blast-radius control, and each account holds a different crown jewel. Click an account to see the STRIDE threats that cross into or out of it. Click the diagram to enlarge.", "img": "lz-aws.jpg", "elements": [{"id": "mgmt", "label": "Management account"}, {"id": "identity", "label": "IAM Identity Center"}, {"id": "logarchive", "label": "Log Archive"}, {"id": "audit", "label": "Audit / Security"}, {"id": "network", "label": "Network hub"}, {"id": "citizen", "label": "Prod: Citizen (PII)"}, {"id": "payments", "label": "Prod: Payments"}, {"id": "data", "label": "Prod: Data platform"}], "threats": [["mgmt", "E", "The management account governs every child through Organizations and SCPs. Compromising it, or any role that can edit SCPs, weakens or disables controls across every account at once.", "No workloads in the management account, tightly restricted access, break-glass only, and SCP or guardrail changes gated by review and alerted on."], ["mgmt", "T", "Tampering with service control policies or Control Tower guardrails silently lowers the security baseline everywhere, with no single alarm unless you watch for it.", "Restrict who can modify SCPs and guardrails, require change approval, and alert on any policy modification org-wide."], ["identity", "S", "Federated SSO is the perimeter. A stolen session token or a compromised identity provider grants access across every account it federates to.", "Phishing-resistant MFA, short session lifetimes, conditional access, and monitoring for impossible-travel and new-device sign-ins."], ["identity", "E", "Over-broad permission sets let a principal assume roles far beyond their need, across account boundaries.", "Least-privilege permission sets, no standing admin, just-in-time elevation, and periodic access review."], ["logarchive", "R", "If the central log archive is mutable or reachable by account admins, cross-account actions can be deleted or altered, leaving incidents deniable and unprovable.", "A separate log-archive account, S3 Object Lock in WORM mode, no delete even for admins, and an org trail child accounts cannot stop."], ["audit", "I", "The security account holds read access across the organisation, so if it is compromised it becomes a broad information-disclosure path.", "Least-privilege read roles, strong access control on the audit account, and monitoring of its own access."], ["audit", "R", "Detections and findings that are not centrally retained can be disabled or ignored in the account where they fire.", "Delegated admin for GuardDuty and Security Hub, findings aggregated centrally, and alerting out of band."], ["network", "D", "The hub (Transit Gateway, Network Firewall, egress) is shared fate: a volumetric attack or a firewall outage degrades every spoke that routes through it.", "Shield Advanced, rate controls at the edge, a resilient firewall deployment, and capacity headroom on the hub."], ["citizen", "I", "Public ingress plus PII in the data tier means the main exposure is sensitive data reached through the application.", "WAF on CloudFront, origin locked to the CloudFront prefix list, a private data subnet with no internet egress, and KMS encryption."], ["citizen", "S", "The public authentication surface is the spoofing vector: credential stuffing and token theft.", "MFA, bot controls and rate limiting at the edge, and breached-password checks."], ["citizen", "E", "An application flaw or an over-broad instance role can escalate to the account's data.", "Least-privilege instance roles, IMDSv2 enforced, and object-level authorisation in the application."], ["payments", "I", "Cardholder data is the crown jewel; any cross-account read path or misconfigured endpoint is a PCI-scope disclosure.", "No public subnet, PrivateLink only, dedicated KMS keys, strict resource policies, and a segregated PCI account."], ["payments", "D", "Payment availability is business-critical, so a targeted denial of service has direct revenue impact.", "Edge protection, autoscaling, and circuit breakers on dependencies."], ["payments", "E", "Escalation into the payments account must be contained to its own boundary.", "Minimal cross-account trust, no shared roles, and dedicated keys per account."], ["data", "T", "The data lake aggregates sensitive data, so tampering with pipelines or datasets poisons downstream analytics and the decisions made on them.", "Integrity controls and versioning on pipelines, Lake Formation permissions, and validated inputs."], ["data", "I", "A single over-broad cross-account grant on the lake collapses the isolation the account boundaries were meant to provide.", "Explicit least-privilege Lake Formation grants, no wildcard cross-account access, and IAM Access Analyzer."], ["data", "E", "Broad analytics roles can read far beyond their purpose.", "Scoped roles per dataset and column or row-level security."]]}, {"id": "lz-azure", "tag": "Cloud / landing zone", "title": "Azure landing zone (Cloud Adoption Framework)", "summary": "The same model on Azure: management groups and subscriptions as blast-radius boundaries, hub-and-spoke networking, and a different crown jewel per subscription. Click a subscription to focus its STRIDE threats. Click the diagram to enlarge.", "img": "lz-azure.jpg", "elements": [{"id": "root", "label": "Root management group"}, {"id": "connectivity", "label": "Connectivity sub (hub)"}, {"id": "identity", "label": "Identity sub"}, {"id": "management", "label": "Management sub"}, {"id": "online", "label": "Online (citizen, PII)"}, {"id": "payments", "label": "Payments"}, {"id": "corp", "label": "Corp (internal)"}], "threats": [["root", "E", "Azure Policy and RBAC assigned at the root management group apply to every child, so control of it is control of the whole tenant's guardrails.", "Tightly restrict role assignments at management-group scope, require PIM for any such role, and alert on policy changes."], ["connectivity", "D", "Azure Firewall, the gateways and the hub vnet are shared fate: saturation or an outage degrades every spoke peered to the hub.", "A resilient firewall configuration, Azure DDoS Protection, and forced-tunnel egress with capacity headroom."], ["identity", "S", "Entra ID is the perimeter. A compromised identity or token reaches across every subscription.", "Phishing-resistant MFA, Conditional Access, PIM, and sign-in risk policies."], ["identity", "E", "HSM-backed Key Vault and privileged Entra roles are the keys to the kingdom; escalation here is tenant-wide.", "PIM, access reviews, Key Vault RBAC with purge protection, and separation of duties."], ["management", "R", "If Log Analytics or Sentinel data is purgeable, or diagnostic settings are not enforced everywhere, actions become deniable and investigations go blind.", "Immutable, no-purge storage, Azure Policy enforcing diagnostic settings on every resource, and defined Sentinel retention."], ["online", "I", "Citizen PII sits behind the WAF; the exposure is sensitive data if a private endpoint or NSG is misconfigured.", "Application Gateway WAF, an NSG allowing only Front Door, SQL reached solely via Private Endpoint, and no public data path."], ["online", "S", "The public authentication surface is the spoofing vector.", "MFA, bot protection and rate limiting."], ["online", "E", "An app flaw or an over-broad managed identity escalates to the data.", "Least-privilege managed identities and object-level authorisation."], ["payments", "I", "Cardholder data; a cross-subscription path or a public endpoint is a PCI disclosure.", "An isolated subscription, no public subnet, Private Endpoint only, HSM-backed Key Vault, and logged access."], ["payments", "D", "Payment availability is business-critical.", "Edge protection and autoscaling."], ["payments", "E", "Escalation must be contained to the subscription boundary.", "Minimal cross-subscription RBAC and dedicated keys."], ["corp", "S", "Staff reach internal apps over VPN and SASE, so stolen staff credentials are the spoofing path.", "Entra Conditional Access, device compliance, MFA, and Bastion-only administration."], ["corp", "R", "Internal actions must be attributable; without logging, staff misuse is deniable.", "Audit logging, Bastion session recording, and PIM for privileged access."], ["corp", "E", "Lateral movement from corp into more sensitive subscriptions.", "No broad peering, NSG least-path rules, and segregated data tiers."]]}]};</script>
+<script>
+(function(){
+  var D = window.STRIDE, CAT = D.categories, SC = D.scenarios;
+  var ORDER = ["S","T","R","I","D","E"];
+  var cur = 0, elFilter = null, catFilter = null;
+
+  // primer
+  var pr = document.getElementById('primer');
+  pr.innerHTML = ORDER.map(function(k){
+    var c = CAT[k];
+    return '<div class="pc" style="--cat:'+c.colour+'">'
+      + '<div class="l">'+k+'</div><div class="n">'+c.name+'</div>'
+      + '<div class="p">violates '+c.prop+'</div>'
+      + '<div class="d">'+primerText(k)+'</div></div>';
+  }).join('');
+  function primerText(k){return ({
+    S:"Pretending to be someone or something you are not: a forged token, a spoofed identity, a stolen credential.",
+    T:"Unauthorised change to data or code in transit or at rest: altering a request, a record, or an artefact.",
+    R:"Acting without a trace, so the actor can deny it and no one can prove what happened.",
+    I:"Exposing data to someone who should not see it, through a broad policy, a public path or a leak.",
+    D:"Degrading or denying availability, from a layer-7 flood to a single pod exhausting a node.",
+    E:"Gaining capabilities you should not have: from user to admin, from one tenant to another, from an app to a role."
+  })[k];}
+
+  // tabs
+  var tabs = document.getElementById('tabs');
+  tabs.innerHTML = SC.map(function(s,i){
+    return '<button class="tab'+(i===0?' active':'')+'" data-i="'+i+'">'
+      + '<span class="tg">'+s.tag+'</span>'+shortTitle(s.title)+'</button>';
+  }).join('');
+  function shortTitle(t){return t.split(':')[0];}
+  tabs.addEventListener('click', function(e){
+    var b = e.target.closest('.tab'); if(!b) return;
+    cur = +b.dataset.i; elFilter = null; catFilter = null;
+    [].forEach.call(tabs.children, function(c){c.classList.toggle('active', c===b);});
+    render();
+  });
+
+  // filter chips
+  var filters = document.getElementById('filters');
+  filters.innerHTML = '<button class="chip all" data-cat="" data-on="1">All</button>'
+    + ORDER.map(function(k){return '<button class="chip '+k+'" data-cat="'+k+'" data-on="0" title="'+CAT[k].name+'">'+k+'</button>';}).join('');
+  filters.addEventListener('click', function(e){
+    var b = e.target.closest('.chip'); if(!b) return;
+    catFilter = b.dataset.cat || null;
+    render();
+  });
+
+  function render(){
+    var s = SC[cur];
+    document.getElementById('ex-tag').textContent = s.tag;
+    document.getElementById('ex-title').textContent = s.title;
+    document.getElementById('ex-summary').textContent = s.summary;
+    var svg = null;
+    if(s.img){
+      document.getElementById('ex-svg').innerHTML =
+        '<img class="lzimg" src="'+s.img+'" alt="'+s.title+'" onclick="lzLbOpen(this.src)">'
+        + '<div class="acct-row">' + s.elements.map(function(e){
+            return '<button class="acct-chip" data-el="'+e.id+'" data-on="'+(e.id===elFilter?'1':'0')+'">'+e.label+'</button>';
+          }).join('') + '</div>';
+      [].forEach.call(document.querySelectorAll('#ex-svg .acct-chip'), function(b){
+        b.onclick = function(){ toggleEl(b.dataset.el); };
+      });
+      document.querySelector('.diag-hint').textContent = 'click an account to focus its threats, or click the diagram to enlarge';
+    } else {
+      document.getElementById('ex-svg').innerHTML = s.svg;
+      svg = document.querySelector('#ex-svg svg');
+      [].forEach.call(svg.querySelectorAll('.node'), function(n){
+        n.onclick = function(){ toggleEl(n.dataset.el); };
+        n.onkeydown = function(ev){ if(ev.key==='Enter'||ev.key===' '){ev.preventDefault(); toggleEl(n.dataset.el);} };
+      });
+      applyDiagram(svg);
+      document.querySelector('.diag-hint').textContent = 'click an element to focus its threats, or use the STRIDE filters';
+    }
+
+    // filter chips state
+    [].forEach.call(filters.children, function(c){ c.dataset.on = ((c.dataset.cat||'')===(catFilter||''))?'1':'0'; });
+
+    // selection note
+    var note = document.getElementById('sel-note');
+    if(elFilter){
+      var lbl = elLabel(svg, elFilter);
+      note.innerHTML = 'Showing threats to <b>'+lbl+'</b> &nbsp; <a id="clearel">show all elements</a>';
+      document.getElementById('clearel').onclick = function(){ elFilter=null; render(); };
+    } else { note.innerHTML = ''; }
+
+    // threats
+    var list = s.threats.filter(function(t){
+      return (!elFilter || t[0]===elFilter) && (!catFilter || t[1]===catFilter);
+    });
+    document.getElementById('count').textContent = list.length + ' of ' + s.threats.length + ' threats shown';
+    document.getElementById('threats').innerHTML = list.map(function(t){
+      var c = CAT[t[1]];
+      return '<div class="tcard" style="--cat:'+c.colour+'">'
+        + '<div class="top"><span class="cat">'+t[1]+' &middot; '+c.name+'</span>'
+        + '<span class="el">'+elLabel(svg,t[0])+'</span></div>'
+        + '<div class="th">'+t[2]+'</div>'
+        + '<div class="mt"><b>Mitigation</b>'+t[3]+'</div></div>';
+    }).join('') || '<div class="count">No threats match this filter.</div>';
+  }
+
+  function toggleEl(id){ elFilter = (elFilter===id)?null:id; catFilter=null; render(); }
+  function applyDiagram(svg){
+    var any = !!elFilter;
+    svg.classList.toggle('dim', any);
+    [].forEach.call(svg.querySelectorAll('.node'), function(n){
+      n.classList.toggle('sel', n.dataset.el===elFilter);
+    });
+  }
+  function elLabel(svg, id){
+    if(svg){ var n = svg.querySelector('.node[data-el="'+id+'"] .ntitle'); if(n) return n.textContent; }
+    var s = SC[cur];
+    if(s.elements){ for(var i=0;i<s.elements.length;i++){ if(s.elements[i].id===id) return s.elements[i].label; } }
+    return id;
+  }
+
+  render();
+})();
+</script>
+<div class="lzlb" id="lzLb" onclick="lzLbClose()"><span class="x" onclick="lzLbClose()">&#10005; close</span><img id="lzLbImg" alt=""></div>
+<script>
+function lzLbOpen(src){var l=document.getElementById('lzLb');document.getElementById('lzLbImg').src=src;l.classList.add('open');}
+function lzLbClose(){document.getElementById('lzLb').classList.remove('open');}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'||e.key==='Esc')lzLbClose();});
+</script>
+</body>
+</html>
