@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<title>On-Premises to Cloud Migration Checklist | Saleem Yousaf</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+@page{size:A4;margin:16mm 14mm}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;font-size:11px;line-height:1.5;color:#14202b;background:#fff}
+.head{border-bottom:2px solid #2dd4bf;padding-bottom:12px;margin-bottom:16px}
+.eyebrow{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#0a9d8e}
+h1{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:#0c1620;margin:4px 0 6px;line-height:1.1}
+.sub{color:#4a5b68;font-size:10.5px;max-width:150mm}
+.arc{font-family:'DM Mono',monospace;font-size:9.5px;color:#0a9d8e;margin-top:8px;letter-spacing:.05em}
+.grid{column-count:2;column-gap:10mm;margin-top:14px}
+section{break-inside:avoid;margin-bottom:11px;padding-bottom:2px}
+h2{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:#0c1620;margin-bottom:5px;padding-left:20px;position:relative}
+h2 .p{position:absolute;left:0;top:0;font-family:'DM Mono',monospace;font-size:9px;color:#0a9d8e;font-weight:500}
+ul{list-style:none}
+li{position:relative;padding-left:18px;margin-bottom:3px;font-size:10px;color:#20303c;break-inside:avoid}
+li::before{content:"";position:absolute;left:0;top:1px;width:11px;height:11px;border:1.3px solid #6b7a88;border-radius:2px}
+.foot{margin-top:14px;padding-top:8px;border-top:1px solid #dde3e8;font-family:'DM Mono',monospace;font-size:9px;color:#5a6675;display:flex;justify-content:space-between}
+.foot b{color:#0a9d8e}
+</style></head>
+<body>
+  <div class="head">
+    <div class="eyebrow">// on-premises to cloud migration</div>
+    <h1>Cloud Migration Checklist</h1>
+    <p class="sub">A provider-neutral checklist for moving on-premises workloads to Azure or AWS. Work top to bottom: assess what you have, design the network and identity, secure it before production, migrate in waves with a way back, validate that it works, and optimise cost and governance from the start.</p>
+    <div class="arc">ASSESS &#8594; DESIGN &#8594; SECURE &#8594; MIGRATE &#8594; VALIDATE &#8594; OPTIMISE</div>
+  </div>
+
+  <div class="grid">
+    <section>
+      <h2><span class="p">01</span>Discovery &amp; dependency mapping</h2>
+      <ul>
+        <li>Inventory servers, applications, databases and storage</li>
+        <li>Inventory scheduled jobs, APIs, DNS records and certificates</li>
+        <li>Inventory authentication paths and external integrations</li>
+        <li>Run dependency analysis to reveal real communication flows</li>
+        <li>Identify dependencies not visible from a server inventory</li>
+        <li>Record owners and business criticality per workload</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="p">02</span>Network &amp; connectivity</h2>
+      <ul>
+        <li>Check for IP address range overlap between on-prem and cloud</li>
+        <li>Design subnets, security groups and network ACLs</li>
+        <li>Plan route tables and confirm routing end to end</li>
+        <li>Confirm DNS resolution for internal and external names</li>
+        <li>Review firewall rules to be recreated in the target</li>
+        <li>Design on-prem connectivity: VPN, ExpressRoute or Direct Connect</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="p">03</span>Application dependencies</h2>
+      <ul>
+        <li>Map each workload to its database servers</li>
+        <li>Map directory and authentication dependencies</li>
+        <li>Map APIs, file shares and third-party services it needs</li>
+        <li>Map the other applications that depend on it</li>
+        <li>Determine the correct order to move dependent components</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="p">04</span>Migration strategy (per workload)</h2>
+      <ul>
+        <li>Rehost: lift and shift as-is</li>
+        <li>Replatform: minor changes, e.g. a managed database</li>
+        <li>Refactor: re-architect for the cloud model</li>
+        <li>Repurchase: move to a SaaS equivalent</li>
+        <li>Retire: switch off what is no longer used</li>
+        <li>Retain: leave in place for now</li>
+        <li>Decision driven by business requirement, not one policy for all</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="p">05</span>Identity &amp; security</h2>
+      <ul>
+        <li>Plan directory integration (Entra ID / IAM identity source)</li>
+        <li>Define role-based access control and least privilege</li>
+        <li>Use workload identities (managed identities / IAM roles)</li>
+        <li>Design the privileged access model</li>
+        <li>Set up secrets and key management (Key Vault / Secrets Manager, KMS)</li>
+        <li>Use private endpoints / PrivateLink for service traffic</li>
+        <li>Enforce encryption in transit and at rest</li>
+        <li>Confirm all of the above is in place before production</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="p">06</span>Data &amp; database migration</h2>
+      <ul>
+        <li>Evaluate target compatibility for each data store</li>
+        <li>Size the data volume and the time to move it</li>
+        <li>Plan replication or synchronisation to shrink downtime</li>
+        <li>Define backup and restore approach</li>
+        <li>Agree RPO and RTO with the business</li>
+        <li>Agree the acceptable downtime window</li>
+        <li>Design critical database moves around business needs, not the tool</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="p">07</span>Performance &amp; right-sizing</h2>
+      <ul>
+        <li>Measure CPU, memory, disk IOPS and network over a real period</li>
+        <li>Do not copy on-prem VM sizes into the cloud</li>
+        <li>Select resources to match measured load, with room to scale</li>
+        <li>Use provider sizing advisors to inform the choice</li>
+        <li>Right-size at migration time, before inertia sets in</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="p">08</span>Cutover &amp; rollback</h2>
+      <ul>
+        <li>Define migration waves and their order</li>
+        <li>Agree maintenance windows</li>
+        <li>Set validation checkpoints that must pass to proceed</li>
+        <li>Plan DNS changes and when they take effect</li>
+        <li>Keep data synchronised up to the switch</li>
+        <li>Document a rollback plan for a failed wave</li>
+        <li>Confirm you can describe exactly how to put a workload back</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="p">09</span>Observability after migration</h2>
+      <ul>
+        <li>Enable monitoring and logging (Azure Monitor / CloudWatch)</li>
+        <li>Enable application-level insight and tracing</li>
+        <li>Create alerts and dashboards before go-live</li>
+        <li>Validate that backups restore, do not assume they do</li>
+        <li>Confirm you can see, understand and recover from an incident</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="p">10</span>Cost &amp; governance</h2>
+      <ul>
+        <li>Apply consistent tagging for cost and ownership</li>
+        <li>Apply policy guardrails (Azure Policy / SCPs and Config)</li>
+        <li>Organise resources sensibly (subscriptions / accounts, groups)</li>
+        <li>Set budgets and cost alerts</li>
+        <li>Define the RBAC model for the environment</li>
+        <li>Turn on active cost monitoring from day one</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="p">&#10003;</span>Definition of done</h2>
+      <ul>
+        <li>The application is secure</li>
+        <li>The application is connected</li>
+        <li>The application is performant</li>
+        <li>The application is observable</li>
+        <li>The application is recoverable</li>
+        <li>The application is cost-effective</li>
+        <li>Not just: the VM started</li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="foot"><span>On-premises to cloud migration checklist</span> <span><b>saleemyousaf.co.uk</b> &nbsp; cyberspartans.co.uk</span></div>
+</body>
+</html>
