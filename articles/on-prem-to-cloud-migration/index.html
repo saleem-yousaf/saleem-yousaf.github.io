@@ -1,1 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The VM Started, That Is Not Success: An On-Premises to Cloud Migration Playbook | Saleem Yousaf</title>
+<meta name="description" content="On-premises to cloud migration is rarely a server-move exercise. A practitioner's playbook across Azure and AWS: discovery and dependency mapping, network and identity pitfalls, the migration strategies, data, right-sizing, cutover and rollback, observability and cost. With a downloadable migration checklist.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/on-prem-to-cloud-migration/">
+<link rel="alternate" type="application/rss+xml" title="Saleem Yousaf articles" href="https://saleemyousaf.co.uk/feed.xml">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The VM Started, That Is Not Success: An On-Premises to Cloud Migration Playbook">
+<meta property="og:description" content="What actually breaks when a workload moves into a different network, identity and operational model, across Azure and AWS. With a downloadable checklist.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/on-prem-to-cloud-migration/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/articles/on-prem-to-cloud-migration/og-on-prem-to-cloud-migration.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The VM Started, That Is Not Success">
+<meta name="twitter:description" content="An on-prem to cloud migration playbook across Azure and AWS, with a downloadable checklist.">
+<meta name="twitter:image" content="https://saleemyousaf.co.uk/articles/on-prem-to-cloud-migration/og-on-prem-to-cloud-migration.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "The VM Started, That Is Not Success: An On-Premises to Cloud Migration Playbook",
+  "description": "A practitioner's on-premises to cloud migration playbook across Azure and AWS, covering discovery, network, identity, strategy, data, right-sizing, cutover, observability and cost, with a downloadable checklist.",
+  "image": "https://saleemyousaf.co.uk/articles/on-prem-to-cloud-migration/og-on-prem-to-cloud-migration.png",
+  "articleSection": "Cloud",
+  "datePublished": "2026-09-17",
+  "author": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk",
+    "sameAs": ["https://www.linkedin.com/in/saleemyousaf","https://github.com/saleem-yousaf","https://cyberspartans.co.uk"] },
+  "publisher": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://saleemyousaf.co.uk/articles/on-prem-to-cloud-migration/" }
+}
+</script>
+<style>
 
+:root{
+  --slate-0:#090c10; --slate-1:#0f1318; --slate-2:#161b22;
+  --teal:#2dd4bf; --bright:#5eead4; --amber:#f5b73c; --blue:#4aa8ff;
+  --purple:#a78bfa; --red:#f87171;
+  --ink:#f4f6f8; --muted:#aeb5bf; --faint:#6c7682; --line:rgba(255,255,255,.08);
+  --emerald:#2f9e6f; --cyan:#00d4ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--slate-0); color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif; font-size:19px; line-height:1.72; -webkit-font-smoothing:antialiased;}
+.wrap{max-width:760px; margin:0 auto; padding:0 24px}
+a{color:var(--teal); text-decoration:none}
+a:hover{text-decoration:underline}
+.hero{padding:72px 0 8px}
+.eyebrow{font-family:"DM Mono",monospace; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal)}
+h1{font-family:"Syne",sans-serif; font-weight:800; font-size:clamp(30px,5.4vw,50px); line-height:1.06; letter-spacing:-.01em; margin:18px 0 20px}
+.chips{display:flex; flex-wrap:wrap; gap:10px 18px; font-family:"DM Mono",monospace; font-size:12.5px; color:var(--faint); letter-spacing:.03em}
+.chips span{display:inline-flex; align-items:center; gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal)}
+article{padding:20px 0 8px}
+article h2{font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(23px,3.6vw,30px); line-height:1.16; margin:56px 0 14px; letter-spacing:-.01em}
+article h3{font-family:"Syne",sans-serif; font-weight:600; font-size:20px; margin:36px 0 10px}
+article p{margin:0 0 20px; color:#e7ebef}
+article ul{margin:0 0 22px; padding-left:22px; color:#e7ebef}
+article li{margin-bottom:10px}
+.lead{font-size:21px; color:#eef1f4}
+code{font-family:"DM Mono",monospace; font-size:.86em; background:var(--slate-2); padding:2px 7px; border-radius:6px; color:var(--bright); word-break:break-word}
+strong{color:#fff; font-weight:600}
+.part{display:flex; align-items:center; gap:14px; margin:64px 0 6px}
+.part-num{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); border:1px solid rgba(45,212,191,.35); border-radius:999px; padding:5px 14px; white-space:nowrap}
+.part-rule{height:1px; background:linear-gradient(90deg,rgba(45,212,191,.4),transparent); flex:1}
+.callout{border:1px solid rgba(45,212,191,.32); background:linear-gradient(180deg, rgba(45,212,191,.08),rgba(45,212,191,.02)); border-radius:14px; padding:22px 24px; margin:30px 0; font-size:18px}
+.callout .k{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px}
+.callout.warn{border-color:rgba(245,183,60,.35); background:linear-gradient(180deg,rgba(245,183,60,.09),rgba(245,183,60,.02))}
+.callout.warn .k{color:var(--amber)}
+table{width:100%; border-collapse:collapse; margin:26px 0; font-size:15.5px}
+th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-family:"DM Mono",monospace; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal); font-weight:400}
+td{color:#e0e5ea}
+figure{margin:38px 0}
+.figframe{border:1px solid var(--line); border-radius:16px; background: radial-gradient(120% 140% at 80% 0%, rgba(45,212,191,.06), transparent 60%),var(--slate-1); padding:20px; cursor:zoom-in; position:relative}
+.figframe::after{content:"click to expand"; position:absolute; top:12px; right:16px; font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; color:var(--faint)}
+.figframe svg{width:100%; height:auto; display:block}
+figcaption{font-size:14px; color:var(--faint); margin-top:12px; text-align:center; font-family:"DM Mono",monospace; letter-spacing:.02em}
+.d-box{fill:var(--slate-2); stroke:rgba(45,212,191,.45); stroke-width:1.4}
+.d-box-soft{fill:var(--slate-1); stroke:var(--line); stroke-width:1.2}
+.d-t{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:15px}
+.d-t-s{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:13.5px}
+.d-s{fill:var(--muted); font-family:"Inter",sans-serif; font-size:12px}
+.d-lab{fill:var(--teal); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-a{fill:var(--amber); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-p{fill:var(--purple); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-b{fill:var(--blue); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-mono{fill:var(--bright); font-family:"DM Mono",monospace; font-size:11.5px}
+.related{margin:60px 0 20px}
+.related h2{font-size:20px; margin-bottom:18px}
+.rgrid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.rcard{border:1px solid var(--line); border-radius:14px; padding:18px 18px 20px; background:var(--slate-1); transition:border-color .2s}
+.rcard:hover{border-color:rgba(45,212,191,.4)}
+.rcard .c{font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal)}
+.rcard .t{font-family:"Syne",sans-serif; font-weight:600; font-size:16px; margin-top:8px; color:#fff; line-height:1.25}
+footer{border-top:1px solid var(--line); margin-top:60px; padding:40px 0 60px; color:var(--faint); font-size:14px}
+.footer-links{display:flex; flex-wrap:wrap; gap:16px; margin-bottom:22px; font-family:"DM Mono",monospace; font-size:13px}
+.pills{display:flex; gap:12px; margin:22px 0}
+.pill{border-radius:999px; padding:8px 16px; font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.04em; border:1px solid}
+.pill.cs{color:var(--emerald); border-color:rgba(47,158,111,.5)}
+.pill.bf{color:var(--cyan); border-color:rgba(0,212,255,.5)}
+.legal{font-size:12.5px; color:var(--faint)}
+/* collision-proof lightbox */
+.syx-lb{position:fixed; inset:0; z-index:2147483000; background:rgba(4,6,9,.95); display:none; align-items:center; justify-content:center; padding:64px 3vw 3vw; cursor:zoom-out}
+.syx-lb.syx-open{display:flex}
+.syx-lb-stage{max-width:96vw; max-height:88vh; display:flex; align-items:center; justify-content:center}
+.syx-lb-stage svg{width:96vw; max-height:88vh; height:auto}
+.syx-lb-x{position:fixed; top:16px; right:16px; z-index:2147483001; font-family:"DM Mono",monospace; font-size:14px; letter-spacing:.08em; color:var(--ink); background:var(--slate-2); border:1px solid var(--line); border-radius:999px; padding:10px 18px; cursor:pointer}
+.syx-lb-x:hover{border-color:var(--teal); color:var(--teal)}
+@media(max-width:560px){.rgrid{grid-template-columns:1fr} table{font-size:14px} th,td{padding:9px 8px}}
+.dlbox{border:1px solid rgba(45,212,191,.32);background:linear-gradient(180deg,rgba(45,212,191,.10),rgba(45,212,191,.02));border-radius:14px;padding:22px 24px;margin:30px 0;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.dlbox .k{font-family:"DM Mono",monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:6px}
+.dlbox p{margin:0;font-size:15px;color:#dfe4ea;max-width:560px}
+.dlbtn{flex-shrink:0;font-family:"Syne",sans-serif;font-weight:700;font-size:15px;color:#0a0e14;background:var(--teal);border-radius:10px;padding:13px 22px;text-decoration:none;white-space:nowrap}
+.dlbtn:hover{background:var(--bright);text-decoration:none}
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+<script src="/nav.js" defer></script>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">// cloud migration</div>
+    <h1>The VM started, that is not success: an on-premises to cloud migration playbook</h1>
+    <div class="chips">
+      <span><span class="dot"></span>Saleem Yousaf</span>
+      <span>17 Sep 2026</span>
+      <span>17 min read</span>
+    </div>
+  </header>
+
+  <article>
+    <p class="lead">One thing I have learned from years of moving workloads into Azure and AWS is that migration is rarely just a server-move exercise. Getting a virtual machine to boot in the cloud is the easy part, and it is also the part that fools people into thinking the job is done. The difficult part is understanding what breaks when an on-premises workload moves into a different network, a different identity model, a different security posture and a different operational reality. A successful migration is not measured by whether the VM started. It is measured by whether the application is secure, connected, performant, observable, recoverable and cost-effective once it is there.</p>
+
+    <p>This is the playbook I work through before moving anything, written to be provider-neutral because the shape of the problem is the same on Azure and on AWS even though the service names differ. At the end there is a checklist you can download and use on your own migrations.</p>
+
+    <div class="dlbox">
+      <div>
+        <span class="k">Free download</span>
+        <p>The full migration checklist, every consideration below as a tickable list you can take into your own assessment and cutover planning. Provider-neutral, print-ready.</p>
+      </div>
+      <a class="dlbtn" href="/articles/on-prem-to-cloud-migration/cloud-migration-checklist.pdf" download>Download the checklist (PDF)</a>
+    </div>
+
+    <p>The whole thing follows one arc, and it is the same six phases whichever cloud you are moving to: <strong>assess, design, secure, migrate, validate, optimise</strong>. Skip any of them and you do not save time, you just move the work to after the incident.</p>
+
+    <figure>
+      <div class="figframe" onclick="syxLbOpen(this)">
+        <svg role="img" viewBox="0 0 1240 560" xmlns="http://www.w3.org/2000/svg" aria-label="The migration arc of assess, design, secure, migrate, validate and optimise, the workload strategies, and the network and identity pitfalls that break a migration.">
+          <text x="34" y="40" class="d-lab">// THE MIGRATION ARC (AZURE OR AWS)</text>
+          <rect class="d-box-soft" x="34" y="66" width="180" height="70" rx="10"/><text x="124" y="96" class="d-t-s" text-anchor="middle">1 Assess</text><text x="124" y="118" class="d-s" text-anchor="middle">discover, map</text>
+          <path d="M214 101 H236" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+          <rect class="d-box-soft" x="236" y="66" width="180" height="70" rx="10"/><text x="326" y="96" class="d-t-s" text-anchor="middle">2 Design</text><text x="326" y="118" class="d-s" text-anchor="middle">network, identity</text>
+          <path d="M416 101 H438" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+          <rect class="d-box-soft" x="438" y="66" width="180" height="70" rx="10"/><text x="528" y="96" class="d-t-s" text-anchor="middle">3 Secure</text><text x="528" y="118" class="d-s" text-anchor="middle">before production</text>
+          <path d="M618 101 H640" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+          <rect class="d-box-soft" x="640" y="66" width="180" height="70" rx="10"/><text x="730" y="96" class="d-t-s" text-anchor="middle">4 Migrate</text><text x="730" y="118" class="d-s" text-anchor="middle">in waves</text>
+          <path d="M820 101 H842" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+          <rect class="d-box-soft" x="842" y="66" width="180" height="70" rx="10"/><text x="932" y="96" class="d-t-s" text-anchor="middle">5 Validate</text><text x="932" y="118" class="d-s" text-anchor="middle">prove it works</text>
+          <path d="M1022 101 H1044" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+          <rect x="1044" y="66" width="162" height="70" rx="10" fill="rgba(45,212,191,.10)" stroke="rgba(45,212,191,.4)" stroke-width="1.4"/><text x="1125" y="96" class="d-t-s" text-anchor="middle" style="fill:#5eead4">6 Optimise</text><text x="1125" y="118" class="d-s" text-anchor="middle">cost, govern</text>
+
+          <text x="34" y="196" class="d-lab-b">// PICK A STRATEGY PER WORKLOAD</text>
+          <rect class="d-box-soft" x="34" y="214" width="1172" height="88" rx="12"/>
+          <text x="54" y="244" class="d-s"><tspan class="d-t-s">Rehost</tspan>  lift and shift    <tspan class="d-t-s">Replatform</tspan>  small changes    <tspan class="d-t-s">Refactor</tspan>  re-architect</text>
+          <text x="54" y="278" class="d-s"><tspan class="d-t-s">Repurchase</tspan>  move to SaaS    <tspan class="d-t-s">Retire</tspan>  switch it off    <tspan class="d-t-s">Retain</tspan>  leave it, for now</text>
+
+          <text x="34" y="356" class="d-lab-a">// WHAT BREAKS IN THE MOVE</text>
+          <rect x="34" y="374" width="580" height="150" rx="12" fill="rgba(245,183,60,.06)" stroke="rgba(245,183,60,.3)" stroke-width="1.3"/>
+          <text x="54" y="404" class="d-lab-a">NETWORK</text>
+          <text x="54" y="430" class="d-t-s">Overlap and routing</text>
+          <text x="54" y="454" class="d-s">Overlapping IP ranges, wrong routes and broken</text>
+          <text x="54" y="474" class="d-s">DNS stop a workload that booted fine. The address</text>
+          <text x="54" y="494" class="d-s">plan matters more than the VM.</text>
+
+          <rect x="626" y="374" width="580" height="150" rx="12" fill="rgba(245,183,60,.06)" stroke="rgba(245,183,60,.3)" stroke-width="1.3"/>
+          <text x="646" y="404" class="d-lab-a">IDENTITY</text>
+          <text x="646" y="430" class="d-t-s">The trust model changes</text>
+          <text x="646" y="454" class="d-s">On-prem directories and implicit trust do not</text>
+          <text x="646" y="474" class="d-s">travel. Directory integration, roles and least</text>
+          <text x="646" y="494" class="d-s">privilege are designed, not assumed.</text>
+
+          <defs><marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#2dd4bf"/></marker></defs>
+        </svg>
+      </div>
+      <figcaption>The arc, the strategies, and the two things that break a migration. Click to expand.</figcaption>
+    </figure>
+
+    <div class="part"><span class="part-num">Assess</span><span class="part-rule"></span></div>
+    <h2>Discovery and dependency mapping</h2>
+
+    <p>Everything starts with knowing what you actually have, and it is almost always more than the spreadsheet says. Inventory the servers, the applications, the databases, the storage, the scheduled jobs, the APIs, the DNS records, the authentication paths and every external integration. The part people miss is the dependency mapping: what talks to what. A server that looks self-contained is often quietly reliant on a database elsewhere, a directory for authentication, a file share, or a third-party endpoint that no one documented. Both clouds have tooling to help here, Azure Migrate's dependency analysis and, on AWS, the Application Discovery Service feeding Migration Hub, and they surface communication flows that a server inventory will never show you. Move one thing before you understand what it depends on and you will find the dependency the hard way, in production.</p>
+
+    <div class="part"><span class="part-num">Design</span><span class="part-rule"></span></div>
+    <h2>Network and connectivity</h2>
+
+    <p>This is where more migrations break than anywhere else, and usually for unglamorous reasons. Review the IP addressing, the subnet design, the security groups and network ACLs, the route tables, DNS resolution, firewall rules and the connection back to on-premises over VPN or a dedicated link (ExpressRoute on Azure, Direct Connect on AWS). The classic failure is IP address overlap: your on-premises range and your new cloud range collide, and traffic that should route cleanly does not. Incorrect routing and DNS that resolves to the wrong place are the next two. None of these are exotic, and all of them will stop a workload that otherwise booted perfectly. The address plan and the routing design deserve more of your attention than the VM sizing.</p>
+
+    <h2>Application dependencies, in detail</h2>
+
+    <p>Before moving a single server, understand precisely what it depends on: database servers, the directory it authenticates against, the APIs it calls, the file shares it mounts, the third-party services it reaches, and the other applications that reach it. This is the same idea as discovery, taken to the level of the individual workload you are about to move. A migration wave that moves an application but leaves a dependency behind, or moves them in the wrong order, produces an app that starts and then fails the first time it tries to do real work.</p>
+
+    <h2>Choose the right migration strategy</h2>
+
+    <p>Not every workload should be lifted and shifted, and treating them all the same is how you carry your on-premises problems into the cloud and pay more for the privilege. Evaluate each workload against the recognised strategies, often called the Rs. <strong>Rehost</strong> is lift and shift, the fastest and the least benefit. <strong>Replatform</strong> makes small changes on the way, for example moving a database onto a managed service. <strong>Refactor</strong> re-architects the workload to suit the cloud model properly. <strong>Repurchase</strong> replaces it with a SaaS equivalent. <strong>Retire</strong> switches off what is no longer used, which is often the highest-value move nobody makes. And <strong>Retain</strong> leaves a workload where it is, for now, because not everything should move on this pass. The right answer is per workload and driven by the business requirement, not a blanket policy applied to the whole estate.</p>
+
+    <div class="part"><span class="part-num">Secure</span><span class="part-rule"></span></div>
+    <h2>Identity and security, before production not after</h2>
+
+    <p>The identity and trust model is the thing that changes most, and the thing most often left until last. On-premises, a great deal of trust is implicit and granted by being inside the network. In the cloud that assumption is gone, and it has to be rebuilt deliberately. Plan the directory integration (Entra ID on Azure, IAM and an identity source on AWS), the role-based access control, the workload identities (managed identities on Azure, IAM roles on AWS) so that services authenticate without stored credentials, the privileged access model, the secrets and key management (Key Vault, or Secrets Manager and KMS), private connectivity to services (private endpoints, or PrivateLink) so traffic does not traverse the public internet, encryption in transit and at rest, and least privilege throughout. All of this belongs in the design and has to be in place before the production migration, not bolted on after go-live when it is far harder to retrofit.</p>
+
+    <div class="part"><span class="part-num">Migrate</span><span class="part-rule"></span></div>
+    <h2>Data and database migration</h2>
+
+    <p>Data is where the real risk to the business lives, because it is the part you cannot simply rebuild. For each data store, evaluate compatibility with the target, the volume you have to move and how long that takes, whether you can replicate or synchronise ahead of cutover to shrink the downtime window, the backup and restore approach, and the recovery objectives, how much data you can afford to lose (RPO) and how long you can afford to be down (RTO). Both clouds have database migration services to help, but the tool is the easy choice. For a critical database, the migration approach has to be designed around the application's business requirements and its acceptable downtime, not around what the technology finds convenient.</p>
+
+    <h2>Performance and right-sizing</h2>
+
+    <p>Do not blindly replicate your on-premises VM sizes in the cloud. On-premises hardware was often bought years ago, over-provisioned for headroom, and sized for a procurement cycle rather than actual load. Copy those sizes across and you inherit that waste as a monthly bill forever. Instead, measure: CPU, memory, disk IOPS, network utilisation and the application's real behaviour over a representative period, then select cloud resources to match, with room to scale rather than a fixed over-allocation. Both providers have sizing guidance and advisors to inform this. Right-sizing at migration time is the cheapest cost optimisation you will ever do, because after go-live inertia sets in and the over-sized instances stay.</p>
+
+    <h2>Cutover and rollback</h2>
+
+    <p>The cutover is the moment of maximum risk, so it is planned, not improvised. Define the migration waves and their order, the maintenance windows, the validation checkpoints that must pass before you proceed, the DNS changes and when they take effect, the data synchronisation right up to the switch, and, critically, a documented rollback plan for when a wave fails validation. The rollback plan is the one people skip and the one that saves the weekend. If you cannot describe, in advance, exactly how you would put a workload back the way it was, you are not ready to cut it over.</p>
+
+    <div class="part"><span class="part-num">Validate</span><span class="part-rule"></span></div>
+    <h2>Observability after migration</h2>
+
+    <p>Observability is part of the migration plan, not something added after the first incident. Before the workload is live, the monitoring, logging, alerting, dashboards and backup validation should already be in place: Azure Monitor, Log Analytics and Application Insights, or CloudWatch and its tracing on AWS. The test of a good migration is not that nothing went wrong, it is that when something does, you can see it, understand it, and recover from a backup you have already proven works. A migrated workload with no observability is a workload you have lost sight of the moment it moves.</p>
+
+    <div class="part"><span class="part-num">Optimise</span><span class="part-rule"></span></div>
+    <h2>Cost and governance, from the beginning</h2>
+
+    <p>Governance applied from day one is cheap; governance applied to a sprawling, untagged environment months later is a project in itself. From the start, apply consistent tagging so you can attribute cost and ownership, policy guardrails (Azure Policy, or a combination of Service Control Policies and Config on AWS), sensible resource organisation, budgets and alerts, the role-based access model, and active cost monitoring. The goal is simple and often missed: do not migrate off one environment that became hard to manage only to build another one exactly like it in the cloud.</p>
+
+    <h2>The honest summary</h2>
+
+    <p>Successful cloud migration is not measured by whether the VM started in Azure or AWS. It is measured by whether the application is secure, connected, performant, observable, recoverable and cost-effective after the move. Everything in this playbook exists to close the gap between those two definitions of done, the easy one that fools you and the real one that holds up. Assess what you have and how it connects, design the network and identity properly, secure it before production, migrate in careful waves with a way back, validate that it truly works, and optimise the cost and governance from the start.</p>
+
+    <p>If you take one habit from this, make it dependency mapping before movement and validation after it. Almost every migration that goes badly went wrong because something moved before its dependencies were understood, or was declared done because it booted rather than because it worked.</p>
+
+    <div class="dlbox">
+      <div>
+        <span class="k">Take it with you</span>
+        <p>The full checklist covers every phase above as a tickable list for your own assessment, cutover and post-migration validation, provider-neutral so it works for Azure or AWS.</p>
+      </div>
+      <a class="dlbtn" href="/articles/on-prem-to-cloud-migration/cloud-migration-checklist.pdf" download>Download the checklist (PDF)</a>
+    </div>
+
+    <p class="lead">If you are planning an on-premises to cloud migration and want the assessment, the landing-zone design and the cutover planning done so it holds up afterwards, that is the kind of work I do through <a href="https://cyberspartans.co.uk">Cyber Spartans</a>.</p>
+  </article>
+
+  <section class="related">
+    <h2>Related reading</h2>
+    <div class="rgrid">
+      <a class="rcard" href="/articles/zero-trust-landing-zone/"><div class="c">Reference architecture</div><div class="t">Enterprise zero trust secure landing zone</div></a>
+      <a class="rcard" href="/articles/cloudflare-saas-enabler/"><div class="c">Cloud</div><div class="t">Cloudflare as a SaaS enabler</div></a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf">GitHub</a>
+      <a href="https://saleemyousaf.medium.com">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf">Dev.to</a>
+      <a href="https://cyberspartans.co.uk">Cyber Spartans</a>
+    </div>
+    <div class="pills">
+      <span class="pill bf">breachforge.co.uk</span>
+      <span class="pill cs">cyberspartans.co.uk</span>
+    </div>
+    <div class="legal">&copy; 2026 Saleem Yousaf. All rights reserved. &nbsp;&middot;&nbsp;
+      <a href="https://saleemyousaf.co.uk/privacy-policy/">Privacy</a></div>
+  </footer>
+</div>
+
+<div class="syx-lb" id="syxLb" onclick="syxLbClose()">
+  <button type="button" class="syx-lb-x" onclick="event.stopPropagation();syxLbClose();">&#10005; close</button>
+  <div class="syx-lb-stage" id="syxLbStage"></div>
+</div>
+<script>
+function syxLbOpen(fr){var s=fr.querySelector('svg[role="img"]');if(!s)return;
+  var st=document.getElementById('syxLbStage');st.innerHTML='';
+  st.appendChild(s.cloneNode(true));document.getElementById('syxLb').classList.add('syx-open');}
+function syxLbClose(){document.getElementById('syxLb').classList.remove('syx-open');}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'||e.key==='Esc')syxLbClose();});
+</script>
+
+</body>
+</html>
