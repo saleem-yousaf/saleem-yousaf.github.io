@@ -6,7 +6,15 @@
     <atom:link href="https://saleemyousaf.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Cloud and cyber security architecture, threat analysis and governance by Saleem Yousaf.</description>
     <language>en-gb</language>
-    <lastBuildDate>Mon, 28 Sep 2026 08:54:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 05 Oct 2026 10:25:00 +0000</lastBuildDate>
+    <item>
+      <title>One Anycast Edge, a Stack of Services: What Cloudflare Does Before a Request Reaches You</title>
+      <link>https://saleemyousaf.co.uk/articles/cloudflare-edge-services/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/cloudflare-edge-services/</guid>
+      <pubDate>Mon, 05 Oct 2026 09:00:00 +0000</pubDate>
+      <category>Cloud</category>
+      <description>What Cloudflare actually does, service by service, before a request reaches your origin: DNS, TLS, DDoS, WAF, cache, rules, Workers and Zero Trust, the two planes, and six worked deployment patterns with real network diagrams.</description>
+    </item>
     <item>
       <title>A Queue Empties, a Log Remembers: Choosing Between Message Queues and Event Streams</title>
       <link>https://saleemyousaf.co.uk/articles/message-queues-vs-event-streams/</link>
