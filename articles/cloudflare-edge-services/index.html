@@ -1,1 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One Anycast Edge, a Stack of Services: What Cloudflare Does Before a Request Reaches You | Saleem Yousaf</title>
+<meta name="description" content="Cloudflare is not one thing, it is a chain of services that process a request at the nearest edge location before your origin ever sees it. A service-by-service tour in processing order: DNS, TLS, DDoS, WAF, cache, rules, Workers and Zero Trust, the core service groups, the network-layer services, the control-plane and data-plane split, and six worked deployment patterns.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/cloudflare-edge-services/">
+<link rel="alternate" type="application/rss+xml" title="Saleem Yousaf articles" href="https://saleemyousaf.co.uk/feed.xml">
+<meta property="og:type" content="article">
+<meta property="og:title" content="One Anycast Edge, a Stack of Services: What Cloudflare Does Before a Request Reaches You">
+<meta property="og:description" content="A service-by-service tour of the Cloudflare edge in processing order, the service groups, the two planes, and six worked deployment patterns.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/cloudflare-edge-services/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/articles/cloudflare-edge-services/og-cloudflare-edge-services.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="One Anycast Edge, a Stack of Services">
+<meta name="twitter:description" content="What Cloudflare actually does, service by service, before a request reaches your origin.">
+<meta name="twitter:image" content="https://saleemyousaf.co.uk/articles/cloudflare-edge-services/og-cloudflare-edge-services.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "One Anycast Edge, a Stack of Services: What Cloudflare Does Before a Request Reaches You",
+  "description": "A service-by-service tour of the Cloudflare edge in processing order, the core service groups, the network-layer services, the control-plane and data-plane split, and six worked deployment patterns.",
+  "image": "https://saleemyousaf.co.uk/articles/cloudflare-edge-services/og-cloudflare-edge-services.png",
+  "articleSection": "Cloud",
+  "datePublished": "2026-09-16",
+  "author": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk",
+    "sameAs": ["https://www.linkedin.com/in/saleemyousaf","https://github.com/saleem-yousaf","https://cyberspartans.co.uk"] },
+  "publisher": { "@type": "Person", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://saleemyousaf.co.uk/articles/cloudflare-edge-services/" }
+}
+</script>
+<style>
 
+:root{
+  --slate-0:#090c10; --slate-1:#0f1318; --slate-2:#161b22;
+  --teal:#2dd4bf; --bright:#5eead4; --amber:#f5b73c; --blue:#4aa8ff;
+  --purple:#a78bfa; --red:#f87171;
+  --ink:#f4f6f8; --muted:#aeb5bf; --faint:#6c7682; --line:rgba(255,255,255,.08);
+  --emerald:#2f9e6f; --cyan:#00d4ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--slate-0); color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif; font-size:19px; line-height:1.72; -webkit-font-smoothing:antialiased;}
+.wrap{max-width:760px; margin:0 auto; padding:0 24px}
+a{color:var(--teal); text-decoration:none}
+a:hover{text-decoration:underline}
+.hero{padding:72px 0 8px}
+.eyebrow{font-family:"DM Mono",monospace; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal)}
+h1{font-family:"Syne",sans-serif; font-weight:800; font-size:clamp(30px,5.4vw,50px); line-height:1.06; letter-spacing:-.01em; margin:18px 0 20px}
+.chips{display:flex; flex-wrap:wrap; gap:10px 18px; font-family:"DM Mono",monospace; font-size:12.5px; color:var(--faint); letter-spacing:.03em}
+.chips span{display:inline-flex; align-items:center; gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal)}
+article{padding:20px 0 8px}
+article h2{font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(23px,3.6vw,30px); line-height:1.16; margin:56px 0 14px; letter-spacing:-.01em}
+article h3{font-family:"Syne",sans-serif; font-weight:600; font-size:20px; margin:36px 0 10px}
+article p{margin:0 0 20px; color:#e7ebef}
+article ul{margin:0 0 22px; padding-left:22px; color:#e7ebef}
+article li{margin-bottom:10px}
+.lead{font-size:21px; color:#eef1f4}
+code{font-family:"DM Mono",monospace; font-size:.86em; background:var(--slate-2); padding:2px 7px; border-radius:6px; color:var(--bright); word-break:break-word}
+strong{color:#fff; font-weight:600}
+.part{display:flex; align-items:center; gap:14px; margin:64px 0 6px}
+.part-num{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); border:1px solid rgba(45,212,191,.35); border-radius:999px; padding:5px 14px; white-space:nowrap}
+.part-rule{height:1px; background:linear-gradient(90deg,rgba(45,212,191,.4),transparent); flex:1}
+.callout{border:1px solid rgba(45,212,191,.32); background:linear-gradient(180deg, rgba(45,212,191,.08),rgba(45,212,191,.02)); border-radius:14px; padding:22px 24px; margin:30px 0; font-size:18px}
+.callout .k{font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px}
+.callout.warn{border-color:rgba(245,183,60,.35); background:linear-gradient(180deg,rgba(245,183,60,.09),rgba(245,183,60,.02))}
+.callout.warn .k{color:var(--amber)}
+table{width:100%; border-collapse:collapse; margin:26px 0; font-size:15.5px}
+th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-family:"DM Mono",monospace; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal); font-weight:400}
+td{color:#e0e5ea}
+figure{margin:38px 0}
+.figframe{border:1px solid var(--line); border-radius:16px; background: radial-gradient(120% 140% at 80% 0%, rgba(45,212,191,.06), transparent 60%),var(--slate-1); padding:20px; cursor:zoom-in; position:relative}
+.figframe::after{content:"click to expand"; position:absolute; top:12px; right:16px; font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; color:var(--faint)}
+.figframe svg{width:100%; height:auto; display:block}
+figcaption{font-size:14px; color:var(--faint); margin-top:12px; text-align:center; font-family:"DM Mono",monospace; letter-spacing:.02em}
+.d-box{fill:var(--slate-2); stroke:rgba(45,212,191,.45); stroke-width:1.4}
+.d-box-soft{fill:var(--slate-1); stroke:var(--line); stroke-width:1.2}
+.d-t{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:15px}
+.d-t-s{fill:#fff; font-family:"Syne",sans-serif; font-weight:700; font-size:13.5px}
+.d-s{fill:var(--muted); font-family:"Inter",sans-serif; font-size:12px}
+.d-lab{fill:var(--teal); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-a{fill:var(--amber); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-p{fill:var(--purple); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-lab-b{fill:var(--blue); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.08em}
+.d-mono{fill:var(--bright); font-family:"DM Mono",monospace; font-size:11.5px}
+.related{margin:60px 0 20px}
+.related h2{font-size:20px; margin-bottom:18px}
+.rgrid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.rcard{border:1px solid var(--line); border-radius:14px; padding:18px 18px 20px; background:var(--slate-1); transition:border-color .2s}
+.rcard:hover{border-color:rgba(45,212,191,.4)}
+.rcard .c{font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal)}
+.rcard .t{font-family:"Syne",sans-serif; font-weight:600; font-size:16px; margin-top:8px; color:#fff; line-height:1.25}
+footer{border-top:1px solid var(--line); margin-top:60px; padding:40px 0 60px; color:var(--faint); font-size:14px}
+.footer-links{display:flex; flex-wrap:wrap; gap:16px; margin-bottom:22px; font-family:"DM Mono",monospace; font-size:13px}
+.pills{display:flex; gap:12px; margin:22px 0}
+.pill{border-radius:999px; padding:8px 16px; font-family:"DM Mono",monospace; font-size:12px; letter-spacing:.04em; border:1px solid}
+.pill.cs{color:var(--emerald); border-color:rgba(47,158,111,.5)}
+.pill.bf{color:var(--cyan); border-color:rgba(0,212,255,.5)}
+.legal{font-size:12.5px; color:var(--faint)}
+/* collision-proof lightbox */
+.syx-lb{position:fixed; inset:0; z-index:2147483000; background:rgba(4,6,9,.95); display:none; align-items:center; justify-content:center; padding:64px 3vw 3vw; cursor:zoom-out}
+.syx-lb.syx-open{display:flex}
+.syx-lb-stage{max-width:96vw; max-height:88vh; display:flex; align-items:center; justify-content:center}
+.syx-lb-stage svg{width:96vw; max-height:88vh; height:auto}
+.syx-lb-x{position:fixed; top:16px; right:16px; z-index:2147483001; font-family:"DM Mono",monospace; font-size:14px; letter-spacing:.08em; color:var(--ink); background:var(--slate-2); border:1px solid var(--line); border-radius:999px; padding:10px 18px; cursor:pointer}
+.syx-lb-x:hover{border-color:var(--teal); color:var(--teal)}
+@media(max-width:560px){.rgrid{grid-template-columns:1fr} table{font-size:14px} th,td{padding:9px 8px}}
+
+.deckcta{border:1px solid rgba(45,212,191,.28);background:linear-gradient(180deg,rgba(45,212,191,.09),rgba(45,212,191,.02));border-radius:14px;padding:22px 24px;margin:26px 0;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.deckcta .k{font-family:"DM Mono",monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:6px}
+.deckcta p{margin:0;font-size:15px;color:#dfe4ea;max-width:560px}
+.deckbtn{flex-shrink:0;font-family:"Syne",sans-serif;font-weight:700;font-size:15px;color:#0a0e14;background:var(--teal);border-radius:10px;padding:13px 22px;text-decoration:none;white-space:nowrap}
+.pattern-list{list-style:none;padding:0;margin:14px 0}
+.pattern-list li{border:1px solid var(--line,rgba(255,255,255,.08));border-radius:10px;background:var(--slate-2,#0f1419);padding:12px 16px;margin-bottom:8px;font-size:14px;color:#dfe4ea}
+.pattern-list li b{font-family:"Syne",sans-serif;font-weight:700;color:#fff;margin-right:8px}
+.pattern-list li .tag{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--teal);border:1px solid rgba(45,212,191,.3);border-radius:5px;padding:2px 7px;margin-right:8px}
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+<script src="/nav.js" defer></script>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">// the cloudflare edge, explained</div>
+    <h1>One anycast edge, a stack of services: what Cloudflare does before a request reaches you</h1>
+    <div class="chips">
+      <span><span class="dot"></span>Saleem Yousaf</span>
+      <span>16 Sep 2026</span>
+      <span>14 min read</span>
+    </div>
+  </header>
+
+  <article>
+    <p class="lead">Most people know Cloudflare does "CDN and security." Far fewer can name what actually happens to a request between a user's browser and their application: which services touch it, in what order, and why that order matters. That gap is worth closing, because once you can see the edge as a chain of distinct services rather than a single black box, you can use it deliberately. You turn on what you need, tune it with intent, and know exactly where each control sits. This is a tour of the Cloudflare edge, service by service, in the order a request meets them.</p>
+
+    <div class="part"><span class="part-num">Part one</span><span class="part-rule"></span></div>
+    <h2>The mental model: one edge, many services</h2>
+
+    <p>When a DNS record is proxied through Cloudflare, the anycast network puts the nearest edge location between the client and your origin. Every request to that hostname is then processed by a sequence of services at that location before it is ever forwarded to your servers. Your origin can be anything behind it: an AWS load balancer, an API gateway, an S3 bucket, an on-premises server, another SaaS. Cloudflare does not care what the origin is; it processes the request at the edge first and forwards only what survives. That single idea, the edge as a processing chain in front of an origin, is the key to everything else.</p>
+
+    <figure>
+      <div class="figframe" onclick="syxLbOpen(this)">
+        <svg role="img" viewBox="0 0 1240 600" xmlns="http://www.w3.org/2000/svg" aria-label="What happens to a request at the Cloudflare edge, in order: authoritative DNS, TLS termination, DDoS mitigation, WAF and rate limiting, CDN cache, rules and transforms, Workers and Zero Trust, then the origin.">
+          <text x="34" y="40" class="d-lab">// WHAT HAPPENS TO A REQUEST AT THE EDGE, IN ORDER</text>
+          <g>
+            <rect class="d-box-soft" x="34" y="66" width="1172" height="44" rx="8"/><text x="54" y="93" class="d-mono" style="fill:#5eead4">1</text><text x="88" y="93" class="d-t-s">Authoritative DNS</text><text x="320" y="93" class="d-s">resolves the name; proxied records put Cloudflare in the path</text>
+            <rect class="d-box-soft" x="34" y="118" width="1172" height="44" rx="8"/><text x="54" y="145" class="d-mono" style="fill:#5eead4">2</text><text x="88" y="145" class="d-t-s">TLS termination</text><text x="320" y="145" class="d-s">two sessions: client to edge, edge to origin; aim for Full (strict)</text>
+            <rect class="d-box-soft" x="34" y="170" width="1172" height="44" rx="8"/><text x="54" y="197" class="d-mono" style="fill:#5eead4">3</text><text x="88" y="197" class="d-t-s">DDoS mitigation</text><text x="320" y="197" class="d-s">autonomous L3, L4 and L7, always on</text>
+            <rect class="d-box-soft" x="34" y="222" width="1172" height="44" rx="8"/><text x="54" y="249" class="d-mono" style="fill:#f5b73c">4</text><text x="88" y="249" class="d-t-s">WAF &amp; rate limiting</text><text x="320" y="249" class="d-s">custom rules, managed rules, bot and API controls</text>
+            <rect class="d-box-soft" x="34" y="274" width="1172" height="44" rx="8"/><text x="54" y="301" class="d-mono" style="fill:#5eead4">5</text><text x="88" y="301" class="d-t-s">CDN cache</text><text x="320" y="301" class="d-s">serves cacheable content from the edge; cache rules decide what</text>
+            <rect class="d-box-soft" x="34" y="326" width="1172" height="44" rx="8"/><text x="54" y="353" class="d-mono" style="fill:#5eead4">6</text><text x="88" y="353" class="d-t-s">Rules &amp; transforms</text><text x="320" y="353" class="d-s">redirects, header rewrites, origin and cache rules</text>
+            <rect class="d-box-soft" x="34" y="378" width="1172" height="44" rx="8"/><text x="54" y="405" class="d-mono" style="fill:#a78bfa">7</text><text x="88" y="405" class="d-t-s">Workers &amp; Zero Trust</text><text x="320" y="405" class="d-s">edge compute; Access and Gateway enforcement</text>
+            <rect x="34" y="440" width="1172" height="48" rx="8" fill="rgba(45,212,191,.10)" stroke="rgba(45,212,191,.4)" stroke-width="1.3"/><text x="54" y="469" class="d-t-s" style="fill:#5eead4">&#8595; Origin</text><text x="320" y="469" class="d-s">reached only after the chain: your app, an ALB, S3, on-prem or SaaS</text>
+          </g>
+          <text x="34" y="528" class="d-s">A terminating action (a block, a challenge or a cache hit) ends the journey early. The origin does the least-exposed work,</text>
+          <text x="34" y="548" class="d-s">because the edge has already handled resolution, encryption, defence, caching and routing.</text>
+        </svg>
+      </div>
+      <figcaption>What happens to a request at the edge, top to bottom. Click to expand.</figcaption>
+    </figure>
+
+    <div class="part"><span class="part-num">Part two</span><span class="part-rule"></span></div>
+    <h2>What happens to a request, in order</h2>
+
+    <p><strong>1. Authoritative DNS.</strong> It starts with name resolution. Cloudflare hosts your DNS records, and when an address record is proxied, that is the moment Cloudflare inserts itself into the path. Worth knowing: only address-resolving records (A, AAAA, CNAME) can be proxied. Mail and text records stay DNS-only, which is why your email keeps working exactly as before.</p>
+
+    <p><strong>2. TLS termination.</strong> The edge terminates TLS, and the important mental shift is that there are two separate encrypted sessions, not one: client to edge, and edge to origin. You choose how strict the second leg is. Flexible, which encrypts only the first leg, should never be used in production. Full (strict), which encrypts both legs and validates the origin's certificate, is the baseline to aim for. Certificates are managed for you, which removes one of the more tedious recurring jobs in running a site.</p>
+
+    <p><strong>3. DDoS mitigation.</strong> Autonomous protection across the network and application layers runs on every plan, always on. This is the first line that does not need configuring to work, and it absorbs volumetric and protocol attacks before they cost you anything.</p>
+
+    <p><strong>4. WAF, rate limiting and bot controls.</strong> This is the security core: the web application firewall with Cloudflare's managed rulesets and your own custom rules, rate limiting for abuse-prone and expensive endpoints, and bot management from a simple on-off up to full scoring you can reference in rules. API-heavy platforms add API Shield here for mutual TLS, JWT validation and schema enforcement. This layer is where most of your ongoing edge work happens.</p>
+
+    <p><strong>5. CDN cache.</strong> Cacheable content is served straight from the edge location, close to the user, without troubling your origin. Cache rules decide what is cacheable and for how long, which is both a performance lever and a way to keep dynamic, per-user paths from ever being cached by mistake.</p>
+
+    <p><strong>6. Rules and transforms.</strong> A family of rules reshapes the request and response: redirects for HTTP-to-HTTPS or old-to-new paths, transform rules to add security headers or strip internal ones, origin rules to send certain paths to a different backend, cache rules for eligibility and TTL, and configuration rules to change settings per hostname. These interact and are order-sensitive, so they reward descriptive names and a request-path diagram.</p>
+
+    <p><strong>7. Workers and Zero Trust.</strong> At the edge you can also run your own code as Workers, and enforce Zero Trust access before a request reaches an application at all. More on the access services below.</p>
+
+    <p><strong>The origin, last.</strong> Only after all of that does the request reach your actual application, if it reaches it at all. A block, a challenge or a cache hit can end the journey earlier. That is the point: the origin does the least-exposed work, because the edge has already handled resolution, encryption, defence, caching and routing.</p>
+
+    <div class="part"><span class="part-num">Part three</span><span class="part-rule"></span></div>
+    <h2>The core edge services, grouped</h2>
+
+    <p>Read another way, those stages fall into four groups, and it helps to hold them as groups.</p>
+
+    <p><strong>Performance: DNS, CDN and cache.</strong> Fast authoritative DNS, content served from the nearest location, and cache rules that control eligibility and TTL. This is the latency win, and it applies before any security processing.</p>
+
+    <p><strong>Encryption: TLS and certificates.</strong> Managed certificates and TLS on both legs, with Full (strict) as the target so the origin leg is validated rather than merely encrypted.</p>
+
+    <p><strong>Protection: WAF, DDoS, bots and API Shield.</strong> The security layer: autonomous DDoS, the WAF with managed and custom rules, bot management, and API-specific controls for the platforms that are mostly API.</p>
+
+    <p><strong>Access: Zero Trust.</strong> Three services worth knowing by name. <strong>Access</strong> is an identity-aware reverse proxy that decides who or what can reach an application, which is how you replace a VPN for staff and contractors with per-application policy. <strong>Tunnel</strong> creates outbound-only connections from your environment to Cloudflare, so a private application can be reachable without ever exposing a public origin IP. <strong>Gateway</strong> applies secure web gateway policy to user and device traffic at the DNS, network and HTTP layers.</p>
+
+    <div class="part"><span class="part-num">Part four</span><span class="part-rule"></span></div>
+    <h2>Beyond HTTP: routing, resilience and raw protocols</h2>
+
+    <p>The edge is not only for web traffic. <strong>Load Balancing</strong> distributes requests across health-checked pools with failover and traffic steering, so a failed origin is routed around automatically. <strong>Argo Smart Routing</strong> uses Cloudflare's view of the internet to avoid congested paths between edge and origin, which helps most when your users and your origin are far apart. <strong>Magic Transit</strong> extends the protection to routed IP networks at the network layer, for organisations that own address space. And <strong>Spectrum</strong> puts the Cloudflare edge in front of non-HTTP TCP and UDP services, so the same protection model reaches protocols beyond the web.</p>
+
+    <p>Most platforms never need the last two. They are worth knowing exist, because they mark the boundary of what the edge can front: not just your website, but your network and your non-web services too.</p>
+
+    <div class="part"><span class="part-num">Part five</span><span class="part-rule"></span></div>
+    <h2>Six deployment patterns, as real diagrams</h2>
+
+    <p>The services above are the pieces. The useful question is how they fit together in a real deployment, so here are six common patterns, each as a vendor-stencil network diagram, from a standard front door to log delivery into Splunk and Microsoft Sentinel.</p>
+
+    <ul class="pattern-list">
+      <li><span class="tag">A</span><b>Standard app to an AWS ALB origin.</b> Cloudflare in front of a single origin, handling DNS, TLS, DDoS, WAF and caching, with the origin locked down so clients cannot bypass the edge and reach the ALB directly.</li>
+      <li><span class="tag">B</span><b>Multi-region with Load Balancing.</b> Traffic steered across health-checked pools in two AWS regions, failing over automatically, provided the health monitors reflect real ability to serve.</li>
+      <li><span class="tag">C</span><b>Private admin via Tunnel and Access.</b> An admin app with no public ingress, reached through an outbound-only cloudflared tunnel, with Access enforcing identity, group, MFA and device posture first.</li>
+      <li><span class="tag">D</span><b>API security deployment.</b> Edge controls plus API Shield (mTLS, JWT, schema, discovery) in front of an AWS API origin, while the application still enforces authorisation, because a valid token is not authorisation.</li>
+      <li><span class="tag">E</span><b>Cloudflare to Splunk.</b> Datasets streamed by direct Logpush into Splunk HEC as JSON, landing in an index that feeds dashboards, correlation and detections.</li>
+      <li><span class="tag">F</span><b>Cloudflare to Microsoft Sentinel.</b> Logpush to an Azure Blob container that the Cloudflare connector ingests into Sentinel, driving analytics rules, workbooks, hunting and playbooks.</li>
+    </ul>
+
+    <div class="deckcta">
+      <div>
+        <span class="k">Diagram deck</span>
+        <p>All six patterns as full network diagrams, built with real AWS and Azure stencils, one page each. Opens as a standalone deck you can read or present.</p>
+      </div>
+      <a class="deckbtn" href="/articles/cloudflare-edge-services/deployment-patterns.html">Open the six diagrams</a>
+    </div>
+
+    <div class="part"><span class="part-num">Part six</span><span class="part-rule"></span></div>
+    <h2>The two planes, and why the distinction matters</h2>
+
+    <p>One last idea that quietly matters more than any single service. Cloudflare has two planes, and they need different protection. The <strong>control plane</strong> is how you configure Cloudflare: the dashboard, the API, Terraform, your account and zone settings. The <strong>data plane</strong> is the edge processing your live traffic against that configuration.</p>
+
+    <p>A beautifully tuned data plane, every rule correct, every TLS leg strict, is undone in an instant if the control plane is weak, because anyone who reaches your dashboard or an over-scoped API token can simply turn the protection off. So the control plane earns single sign-on, multi-factor authentication, scoped tokens, audit logging and change approval, and the data plane earns the rules, TLS, DDoS and access enforcement. Least privilege applies to both. A common real-world attack is not defeating the WAF but disabling it, by flipping a proxied record to DNS-only or adding a broad skip rule, which is a control-plane event, not a data-plane one.</p>
+
+    <h2>The takeaway</h2>
+
+    <p>Cloudflare is not one thing, it is a chain of services that process a request at the nearest edge location before your origin ever sees it: resolve, encrypt, defend, cache, reshape, and route. Seeing it that way changes how you use it. You stop treating it as a magic box that is either on or off, and start treating it as a stack you configure deliberately, turning on the services you need, tuning them in the order requests meet them, and protecting the control plane as carefully as the traffic itself.</p>
+
+    <p class="lead">If you want help designing that edge deliberately, whether as a front door for an application you already run or as the platform you build on, that is the kind of work I do through <a href="https://cyberspartans.co.uk">Cyber Spartans</a>.</p>
+  </article>
+
+  <section class="related">
+    <h2>Related reading</h2>
+    <div class="rgrid">
+      <a class="rcard" href="/articles/cloudflare-saas-enabler/"><div class="c">Cloud</div><div class="t">Cloudflare as a SaaS enabler</div></a>
+      <a class="rcard" href="/articles/firewall-waf-flow-logs/"><div class="c">Threat</div><div class="t">Firewall, WAF and flow logs</div></a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/saleemyousaf">LinkedIn</a>
+      <a href="https://github.com/saleem-yousaf">GitHub</a>
+      <a href="https://saleemyousaf.medium.com">Medium</a>
+      <a href="https://hashnode.com/@saleemyousaf">Hashnode</a>
+      <a href="https://dev.to/saleem_yousaf">Dev.to</a>
+      <a href="https://cyberspartans.co.uk">Cyber Spartans</a>
+    </div>
+    <div class="pills">
+      <span class="pill bf">breachforge.co.uk</span>
+      <span class="pill cs">cyberspartans.co.uk</span>
+    </div>
+    <div class="legal">&copy; 2026 Saleem Yousaf. All rights reserved. &nbsp;&middot;&nbsp;
+      <a href="https://saleemyousaf.co.uk/privacy-policy/">Privacy</a></div>
+  </footer>
+</div>
+
+<div class="syx-lb" id="syxLb" onclick="syxLbClose()">
+  <button type="button" class="syx-lb-x" onclick="event.stopPropagation();syxLbClose();">&#10005; close</button>
+  <div class="syx-lb-stage" id="syxLbStage"></div>
+</div>
+<script>
+function syxLbOpen(fr){var s=fr.querySelector('svg[role="img"]');if(!s)return;
+  var st=document.getElementById('syxLbStage');st.innerHTML='';
+  st.appendChild(s.cloneNode(true));document.getElementById('syxLb').classList.add('syx-open');}
+function syxLbClose(){document.getElementById('syxLb').classList.remove('syx-open');}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'||e.key==='Esc')syxLbClose();});
+</script>
+
+</body>
+</html>
