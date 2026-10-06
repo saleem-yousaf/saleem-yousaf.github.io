@@ -236,8 +236,21 @@
   </url>
   <url>
     <loc>https://saleemyousaf.co.uk/millers-planet/</loc>
+    <lastmod>2026-08-02</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://saleemyousaf.co.uk/westeros-underground-map/</loc>
+    <lastmod>2026-10-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://saleemyousaf.co.uk/scene-atlas/</loc>
+    <lastmod>2026-10-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://saleemyousaf.co.uk/articles/vpn-anonymity-network-account-device/</loc>
