@@ -22,6 +22,7 @@
       { label: 'Experience',  href: 'https://saleemyousaf.co.uk/experience/' },
       { label: 'Capabilities', href: 'https://saleemyousaf.co.uk/capabilities/' },
       { label: 'Projects',    href: 'https://saleemyousaf.co.uk/projects/' },
+      { label: 'Labs',        href: 'https://saleemyousaf.co.uk/labs/' },
       { label: 'Articles',    href: 'https://saleemyousaf.co.uk/articles/', dropdown: [
         { label: 'All Articles',                href: 'https://saleemyousaf.co.uk/articles/' },
         { label: 'Assume Breach',               href: 'https://saleemyousaf.co.uk/assume-breach/' },
