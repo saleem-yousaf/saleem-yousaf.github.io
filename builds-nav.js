@@ -9,10 +9,18 @@
   SINGLE SOURCE OF TRUTH: to add a new build, add one line to BUILDS below and
   redeploy this one file. Every site that includes it updates automatically.
 
+  WHY the self-heal (MutationObserver on document): the Westeros build is a
+  self-extracting bundler that replaces the ENTIRE document via replaceWith after
+  it unpacks, which deleted the menu we had injected. The other sites do not do
+  this. Rather than special-case Westeros, inject() is idempotent and an observer
+  on the document node (which is never replaced, unlike document.documentElement)
+  re-injects the menu whenever it goes missing. Robust for any host that rebuilds
+  its DOM after load.
+
   HOW TO INCLUDE on a build's page (before </body>):
     <script src="/builds-nav.js" defer></script>
-  It is same-origin (served from the apex), so the root-absolute path resolves
-  from any /<slug>/ page. All CSS is scoped under #bn-root; nothing leaks.
+  Same-origin (served from the apex), so the root-absolute path resolves from any
+  /<slug>/ page. All CSS is scoped under #bn-root; nothing leaks.
 */
 (function () {
   if (window.__buildsNav) return;            // guard against double-include
@@ -29,7 +37,6 @@
   var HOME = 'https://saleemyousaf.co.uk';
   var LABS = HOME + '/labs/';
 
-  // which build are we on (first path segment), so we can mark it as current
   var here = (location.pathname.split('/').filter(Boolean)[0] || '').toLowerCase();
 
   function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
@@ -73,8 +80,7 @@
   var rows = '<a class="bn-item bn-hub" href="' + LABS + '"><span class="bn-ic">\u25C8</span>All builds (Labs)</a>'
            + '<div class="bn-sep"></div>';
   BUILDS.forEach(function (b) {
-    var cur = (b.slug === here);
-    if (cur) {
+    if (b.slug === here) {
       rows += '<span class="bn-item bn-current" aria-current="page"><span class="bn-dot"></span>'
             + esc(b.name) + '</span>';
     } else {
@@ -85,24 +91,60 @@
   rows += '<div class="bn-sep"></div>'
         + '<a class="bn-item bn-home" href="' + HOME + '"><span class="bn-ic">\u2197</span>Saleem Yousaf</a>';
 
-  function build() {
-    var style = document.createElement('style'); style.textContent = css;
-    document.head.appendChild(style);
+  function setOpen(root, o) {
+    root.classList.toggle('bn-open', o);
+    var btn = root.querySelector('#bn-toggle');
+    if (btn) btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+  }
 
+  // Document-level listeners attached ONCE. They live on `document`, which is
+  // never replaced (only its child <html> is), so they survive a DOM rebuild and
+  // need no re-binding when the menu is re-injected.
+  var wiredDoc = false;
+  function wireDocument() {
+    if (wiredDoc) return; wiredDoc = true;
+    document.addEventListener('click', function (e) {
+      var r = document.getElementById('bn-root');
+      if (r && !r.contains(e.target)) setOpen(r, false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        var r = document.getElementById('bn-root'); if (r) setOpen(r, false);
+      }
+    });
+  }
+
+  // Idempotent: builds the style + menu only if they are not already present.
+  function inject() {
+    if (!document.body) return;                       // nothing to attach to yet
+    if (!document.getElementById('bn-style')) {
+      var style = document.createElement('style');
+      style.id = 'bn-style'; style.textContent = css;
+      (document.head || document.documentElement).appendChild(style);
+    }
+    if (document.getElementById('bn-root')) return;   // menu already there
     var root = document.createElement('div'); root.id = 'bn-root';
     root.innerHTML =
       '<button id="bn-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Switch between interactive builds">'
       + '<span class="bn-star">\u2726</span><span class="bn-label">Builds</span><span class="bn-caret">\u25BE</span></button>'
       + '<div id="bn-panel" role="menu"><div class="bn-head">// interactive builds</div>' + rows + '</div>';
     document.body.appendChild(root);
-
-    var btn = root.querySelector('#bn-toggle');
-    function setOpen(o){ root.classList.toggle('bn-open', o); btn.setAttribute('aria-expanded', o ? 'true' : 'false'); }
-    btn.addEventListener('click', function (e) { e.stopPropagation(); setOpen(!root.classList.contains('bn-open')); });
-    document.addEventListener('click', function (e) { if (!root.contains(e.target)) setOpen(false); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' || e.key === 'Esc') setOpen(false); });
+    root.querySelector('#bn-toggle').addEventListener('click', function (e) {
+      e.stopPropagation(); setOpen(root, !root.classList.contains('bn-open'));
+    });
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', build);
-  else build();
+  function start() {
+    wireDocument();
+    inject();
+    // Self-heal: re-inject if a host rebuilds the DOM and removes the menu.
+    // Observe the document node (survives document.documentElement.replaceWith).
+    try {
+      var mo = new MutationObserver(function () { inject(); });
+      mo.observe(document, { childList: true, subtree: true });
+    } catch (e) {}
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
 })();
