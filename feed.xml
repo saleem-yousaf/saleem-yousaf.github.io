@@ -6,7 +6,15 @@
     <atom:link href="https://saleemyousaf.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Cloud and cyber security architecture, threat analysis and governance by Saleem Yousaf.</description>
     <language>en-gb</language>
-    <lastBuildDate>Mon, 05 Oct 2026 10:25:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 08 Oct 2026 10:25:00 +0000</lastBuildDate>
+    <item>
+      <title>VMware, Lifted Whole: Azure VMware Solution as a Staging Post or a Dead End</title>
+      <link>https://saleemyousaf.co.uk/articles/azure-vmware-solution/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/azure-vmware-solution/</guid>
+      <pubDate>Wed, 08 Oct 2026 09:00:00 +0000</pubDate>
+      <category>Cloud</category>
+      <description>What AVS actually is, the Broadcom licensing reality and Generation 2, the staging-versus-refactor decision made per workload, the security blind spot where native Azure tooling cannot see inside the VMware estate, and a full STRIDE threat model.</description>
+    </item>
     <item>
       <title>One Anycast Edge, a Stack of Services: What Cloudflare Does Before a Request Reaches You</title>
       <link>https://saleemyousaf.co.uk/articles/cloudflare-edge-services/</link>
