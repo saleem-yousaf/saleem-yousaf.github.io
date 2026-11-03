@@ -6,7 +6,15 @@
     <atom:link href="https://saleemyousaf.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Cloud and cyber security architecture, threat analysis and governance by Saleem Yousaf.</description>
     <language>en-gb</language>
-    <lastBuildDate>Mon, 03 Nov 2026 10:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 03 Nov 2026 12:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Microsoft Agent 365: Giving Every AI Agent an Identity, and How to Secure It</title>
+      <link>https://saleemyousaf.co.uk/articles/microsoft-agent-365-security/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/microsoft-agent-365-security/</guid>
+      <pubDate>Mon, 03 Nov 2026 11:00:00 +0000</pubDate>
+      <category>AI</category>
+      <description>Agent 365 gives every AI agent its own Entra identity and a control plane across Entra, Purview and Defender. The identity model, the controls, how agent telemetry now reaches Sentinel (the connectors just changed), and the kill switch.</description>
+    </item>
     <item>
       <title>Fifteen Attack Paths Against a Foundry Agent, and How to Close Each One</title>
       <link>https://saleemyousaf.co.uk/articles/azure-ai-foundry-attack-paths/</link>
