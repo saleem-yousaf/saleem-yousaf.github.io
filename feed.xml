@@ -6,7 +6,15 @@
     <atom:link href="https://saleemyousaf.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Cloud and cyber security architecture, threat analysis and governance by Saleem Yousaf.</description>
     <language>en-gb</language>
-    <lastBuildDate>Wed, 08 Oct 2026 10:25:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 03 Nov 2026 10:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Fifteen Attack Paths Against a Foundry Agent, and How to Close Each One</title>
+      <link>https://saleemyousaf.co.uk/articles/azure-ai-foundry-attack-paths/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/azure-ai-foundry-attack-paths/</guid>
+      <pubDate>Mon, 03 Nov 2026 09:00:00 +0000</pubDate>
+      <category>AI</category>
+      <description>The fifteen ways an attacker reaches a Foundry agent, from internet exposure and planted credentials to indirect prompt injection, the confused deputy and egress bypass, each with how it works and the control that closes it. With a downloadable 36-page field guide.</description>
+    </item>
     <item>
       <title>VMware, Lifted Whole: Azure VMware Solution as a Staging Post or a Dead End</title>
       <link>https://saleemyousaf.co.uk/articles/azure-vmware-solution/</link>

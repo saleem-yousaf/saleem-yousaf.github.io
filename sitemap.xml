@@ -308,6 +308,17 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://saleemyousaf.co.uk/articles/azure-ai-foundry-attack-paths/</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://saleemyousaf.co.uk/articles/ai-foundry/foundry-attack-paths-field-guide.pdf</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://saleemyousaf.co.uk/articles/azure-vmware-solution/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
