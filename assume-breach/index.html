@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><script>try{if(localStorage.getItem('sy-theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Assume Breach: The Framework | BAS, MITRE ATT&amp;CK, SABSA &amp; Continuous Security Validation | Saleem Yousaf</title>
@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="/fonts/fonts.css">
 
 <style>
-:root {
+:root{
   --bg:         #f5f7fa;
   --bg2:        #eef1f6;
   --bg3:        #ffffff;
@@ -30,7 +30,7 @@
   --mono:       'DM Mono', monospace;
   --display:    'Syne', sans-serif;
   --body:       'Inter', sans-serif;
-}
+;--c-ink:#0e1822;--c-txt:#17222e;--c-bf:#0e7490;--c-cs:#1f7a52;}
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
@@ -130,7 +130,7 @@ nav {
 .eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
 .eyebrow-line { width: 32px; height: 1px; background: var(--red); }
 .eyebrow-text { font-family: var(--mono); font-size: 12px; color: var(--red); letter-spacing: 0.12em; text-transform: uppercase; }
-h1 { font-family: var(--display); font-size: clamp(34px, 4.2vw, 54px); font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; color:#0e1822; margin-bottom: 22px; }
+h1 { font-family: var(--display); font-size: clamp(34px, 4.2vw, 54px); font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; color:var(--c-ink); margin-bottom: 22px; }
 h1 em { font-style: normal; color: var(--red); }
 .hero-sub { font-size: 17px; line-height: 1.75; color: var(--muted); margin-bottom: 36px; max-width: 520px; }
 .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
@@ -172,7 +172,7 @@ h1 em { font-style: normal; color: var(--red); }
 .section-eyebrow-line.red { background: var(--red); }
 .section-eyebrow-text { font-family: var(--mono); font-size: 11px; color: var(--teal); letter-spacing: 0.12em; text-transform: uppercase; }
 .section-eyebrow-text.red { color: var(--red); }
-h2 { font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color:#0e1822; margin-bottom: 14px; }
+h2 { font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color:var(--c-ink); margin-bottom: 14px; }
 .section-sub { font-size: 16px; color: var(--muted); max-width: 600px; line-height: 1.7; margin-bottom: 48px; }
 
 /* ── MINDSET SECTION ── */
@@ -191,7 +191,7 @@ h2 { font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); font-weig
 /* ── NARRATIVE / PROSE ── */
 .narrative { padding: 64px 0; }
 .prose-block { margin-bottom: 40px; }
-.prose-heading { font-family: var(--display); font-size: 20px; font-weight: 700; color:#0e1822; margin-bottom: 12px; }
+.prose-heading { font-family: var(--display); font-size: 20px; font-weight: 700; color:var(--c-ink); margin-bottom: 12px; }
 .prose-body { font-size: 15px; color: var(--muted); line-height: 1.8; }
 .prose-body + .prose-body { margin-top: 12px; }
 .pull-quote {
@@ -215,7 +215,7 @@ h2 { font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); font-weig
 }
 .pipeline-step:last-child::after { display: none; }
 .ps-num { font-family: var(--mono); font-size: 10px; color: var(--muted2); letter-spacing: 0.1em; margin-bottom: 10px; }
-.ps-title { font-family: var(--display); font-size: 14px; font-weight: 700; color:#0e1822; margin-bottom: 8px; line-height: 1.25; }
+.ps-title { font-family: var(--display); font-size: 14px; font-weight: 700; color:var(--c-ink); margin-bottom: 8px; line-height: 1.25; }
 .ps-body { font-size: 12px; color: var(--muted); line-height: 1.55; }
 .ps-tag { display: inline-block; font-family: var(--mono); font-size: 10px; padding: 2px 7px; border-radius: 3px; margin-top: 8px; }
 .ps-tag.red    { background: var(--red-dim);    color: var(--red); }
@@ -232,7 +232,7 @@ h2 { font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); font-weig
 }
 .mitre-card:hover { border-color: var(--border2); }
 .mc-tactic { font-family: var(--mono); font-size: 10px; color: var(--red); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
-.mc-title { font-family: var(--display); font-size: 14px; font-weight: 700; color:#0e1822; margin-bottom: 10px; line-height: 1.25; }
+.mc-title { font-family: var(--display); font-size: 14px; font-weight: 700; color:var(--c-ink); margin-bottom: 10px; line-height: 1.25; }
 .mc-techniques { display: flex; flex-direction: column; gap: 5px; }
 .mc-technique { font-size: 12px; color: var(--muted); display: flex; align-items: flex-start; gap: 7px; line-height: 1.4; }
 .mc-technique::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--red); flex-shrink: 0; margin-top: 6px; opacity: 0.6; }
@@ -252,7 +252,7 @@ h2 { font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); font-weig
 .sc-layer.logical     { color: var(--purple); }
 .sc-layer.physical    { color: var(--red); }
 .sc-layer.component   { color: #60a5fa; }
-.sc-title { font-family: var(--display); font-size: 15px; font-weight: 700; color:#0e1822; }
+.sc-title { font-family: var(--display); font-size: 15px; font-weight: 700; color:var(--c-ink); }
 .sc-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
 .sc-controls { display: flex; flex-wrap: wrap; gap: 5px; }
 .sc-control { font-family: var(--mono); font-size: 10px; padding: 3px 8px; background: var(--bg3); border: 1px solid var(--border); color: var(--muted2); border-radius: 3px; }
@@ -273,7 +273,7 @@ h2 { font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); font-weig
 .vc-type.bas    { color: var(--teal); }
 .vc-type.red    { color: var(--red); }
 .vc-type.purple { color: var(--purple); }
-.vc-title { font-family: var(--display); font-size: 17px; font-weight: 700; color:#0e1822; margin-bottom: 10px; }
+.vc-title { font-family: var(--display); font-size: 17px; font-weight: 700; color:var(--c-ink); margin-bottom: 10px; }
 .vc-body { font-size: 13px; color: var(--muted); line-height: 1.65; margin-bottom: 16px; }
 .vc-pros { display: flex; flex-direction: column; gap: 6px; }
 .vc-pro { font-size: 12px; color: var(--muted); display: flex; gap: 8px; align-items: flex-start; line-height: 1.4; }
@@ -289,7 +289,7 @@ h2 { font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); font-weig
   background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 28px;
 }
 .cc-platform { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted2); margin-bottom: 14px; }
-.cc-title { font-family: var(--display); font-size: 16px; font-weight: 700; color:#0e1822; margin-bottom: 14px; }
+.cc-title { font-family: var(--display); font-size: 16px; font-weight: 700; color:var(--c-ink); margin-bottom: 14px; }
 .cc-question { font-size: 13px; color: var(--muted); padding: 8px 0; border-bottom: 1px solid var(--border); display: flex; gap: 8px; align-items: flex-start; line-height: 1.5; }
 .cc-question:last-child { border-bottom: none; }
 .cc-q-icon { font-family: var(--mono); font-size: 10px; color: var(--amber); flex-shrink: 0; margin-top: 2px; }
@@ -303,7 +303,7 @@ h2 { font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); font-weig
 }
 .ta-card:hover { border-color: var(--border2); }
 .ta-num { font-family: var(--mono); font-size: 28px; font-weight: 800; color: rgba(248,113,113,0.2); line-height: 1; margin-bottom: 10px; }
-.ta-title { font-family: var(--display); font-size: 14px; font-weight: 700; color:#0e1822; margin-bottom: 8px; }
+.ta-title { font-family: var(--display); font-size: 14px; font-weight: 700; color:var(--c-ink); margin-bottom: 8px; }
 .ta-body { font-size: 12px; color: var(--muted); line-height: 1.6; }
 
 /* ── RELATED ARTICLES ── */
@@ -320,20 +320,20 @@ h2 { font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); font-weig
 .rel-tag.red    { background: var(--red-dim);   color: var(--red); }
 .rel-tag.teal   { background: var(--teal-dim);  color: var(--teal); }
 .rel-tag.amber  { background: var(--amber-dim); color: var(--amber); }
-.rel-title { font-family: var(--display); font-size: 15px; font-weight: 700; color:#0e1822; line-height: 1.3; }
+.rel-title { font-family: var(--display); font-size: 15px; font-weight: 700; color:var(--c-ink); line-height: 1.3; }
 .rel-meta { font-family: var(--mono); font-size: 11px; color: var(--muted2); margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border); }
 
 /* ── CTA STRIP ── */
 .cta-strip { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 80px 0; }
 .cta-inner { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
-.cta-heading { font-family: var(--display); font-size: clamp(20px, 2.2vw, 28px); font-weight: 700; color:#0e1822; margin-bottom: 10px; }
+.cta-heading { font-family: var(--display); font-size: clamp(20px, 2.2vw, 28px); font-weight: 700; color:var(--c-ink); margin-bottom: 10px; }
 .cta-sub { font-size: 15px; color: var(--muted); line-height: 1.6; }
 .cta-actions { display: flex; gap: 12px; flex-shrink: 0; align-items: center; }
 
 /* ── FOOTER ── */
 footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
 .footer-inner { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
-.footer-logo { font-family: var(--display); font-size: 16px; font-weight: 700; color:#0e1822; margin-bottom: 8px; }
+.footer-logo { font-family: var(--display); font-size: 16px; font-weight: 700; color:var(--c-ink); margin-bottom: 8px; }
 .footer-logo span { color: var(--teal); }
 .footer-desc { font-size: 13px; color: var(--muted); max-width: 380px; line-height: 1.6; }
 .footer-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
@@ -371,7 +371,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
   .related-grid { grid-template-columns: 1fr; }
 }
 </style>
-<style>.ig-modal-close,.ig-modal-close:hover{color:#fff}</style><style>.figframe{background:#0e1116;border:1px solid rgba(16,34,51,.14);border-radius:14px;box-shadow:0 16px 40px rgba(16,34,51,.12)}.d-box{fill:#141b23;stroke:rgba(255,255,255,.12)}.d-box-soft{fill:#0f1419;stroke:rgba(255,255,255,.1)}.d-t-s{fill:#fff}.d-s{fill:#8a96a8}.d-lab,.d-lab-a{fill:#2dd4bf}</style></head>
+<style>.ig-modal-close,.ig-modal-close:hover{color:#fff}</style><style>.figframe{background:#0e1116;border:1px solid rgba(16,34,51,.14);border-radius:14px;box-shadow:0 16px 40px rgba(16,34,51,.12)}.d-box{fill:#141b23;stroke:rgba(255,255,255,.12)}.d-box-soft{fill:#0f1419;stroke:rgba(255,255,255,.1)}.d-t-s{fill:#fff}.d-s{fill:#8a96a8}.d-lab,.d-lab-a{fill:#2dd4bf}</style><style>:root[data-theme="dark"]{--bg:#090c10;--bg2:#0f1318;--bg3:#161b22;--border2:rgba(255,255,255,0.12);--text:#e6eaf0;--muted:#7a8694;--teal:#2dd4bf;--teal-dim:rgba(45,212,191,0.12);--c-ink:#f4f6f8;--c-txt:#e6eaf0;--c-bf:#00d4ff;--c-cs:#2f9e6f}[data-theme="dark"] .footer-prop-link.bf{background:rgba(0,212,255,0.1);border-color:rgba(0,212,255,0.25)}[data-theme="dark"] .footer-prop-link.cs{background:rgba(47,158,111,0.1);border-color:rgba(47,158,111,0.25)}[data-theme="dark"]{color-scheme:dark}</style></head>
 <body>
 
 <!-- NAV -->
@@ -827,7 +827,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
       </div>
       <div style="display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;">
         <div>
-          <div style="font-family:var(--display);font-size:28px;font-weight:800;color:#0e1822;margin-bottom:10px;letter-spacing:-0.02em;">BreachForge BAS</div>
+          <div style="font-family:var(--display);font-size:28px;font-weight:800;color:var(--c-ink);margin-bottom:10px;letter-spacing:-0.02em;">BreachForge BAS</div>
           <div style="font-size:15px;color:var(--muted);line-height:1.7;max-width:520px;margin-bottom:16px;">Everything on this page as a live interactive platform. Run the ransomware kill chain, cloud control-plane pivot, or Active Directory compromise scenarios. Get a gap report in under an hour   no sales call required.</div>
           <div style="display:flex;gap:24px;flex-wrap:wrap;">
             <div style="display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;color:var(--muted2);">
@@ -845,7 +845,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:10px;flex-shrink:0;">
-          <a href="https://breachforge.co.uk" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:#e63946;color:#0e1822;font-size:14px;font-weight:700;padding:13px 26px;border-radius:4px;text-decoration:none;font-family:var(--body);white-space:nowrap;">
+          <a href="https://breachforge.co.uk" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:#e63946;color:var(--c-ink);font-size:14px;font-weight:700;padding:13px 26px;border-radius:4px;text-decoration:none;font-family:var(--body);white-space:nowrap;">
             ⦡ Visit BreachForge ↗
           </a>
         </div>
@@ -861,7 +861,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); }
       <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red),var(--amber),var(--teal));"></div>
       <div>
         <div style="font-family:var(--mono);font-size:10px;color:var(--red);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">// Technical paper and infographic</div>
-        <div style="font-family:var(--display);font-size:22px;font-weight:800;color:#0e1822;margin-bottom:10px;">BAS Framework: The Complete Reference</div>
+        <div style="font-family:var(--display);font-size:22px;font-weight:800;color:var(--c-ink);margin-bottom:10px;">BAS Framework: The Complete Reference</div>
         <div style="font-size:14px;color:var(--muted);line-height:1.65;max-width:560px;">The full technical paper covering the BAS validation pipeline, MITRE ATT&CK integration, SABSA alignment, and cloud-specific validation across AWS and Azure.</div>
         <a href="https://saleemyousaf.co.uk/assume-breach/bas-infographic/" style="display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;color:#f87171;text-decoration:none;margin-top:10px;">
           View the infographic

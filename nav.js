@@ -79,6 +79,10 @@
     const internalItems = NAV_CONFIG.items.map(renderItem).join('');
     const externalItems = NAV_CONFIG.external.map(renderExternal).join('');
     const cta = `<li><a href="${escapeHtml(NAV_CONFIG.cta.href)}" class="nav-cta">${escapeHtml(NAV_CONFIG.cta.label)}</a></li>`;
+      const themeToggle = `<li><button type="button" class="sy-theme-btn" aria-label="Toggle light or dark mode" title="Light / dark">`
+        + `<svg class="sy-ic-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>`
+        + `<svg class="sy-ic-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>`
+        + `</button></li>`;
 
     return `
       <nav class="site-nav-injected" aria-label="Primary">
@@ -130,6 +134,12 @@
 
     .site-nav-injected .nav-cta { font-size: 13px !important; font-weight: 500; color: #0f8a74 !important; border: 1px solid rgba(15,138,116,0.28); padding: 6px 16px !important; border-radius: 4px; }
     .site-nav-injected .nav-cta:hover { background: rgba(15,138,116,0.09); border-color: #0f8a74; }
+    .site-nav-injected .sy-theme-btn { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; margin-left:4px; padding:0; border-radius:8px; border:1px solid rgba(16,34,51,0.12); background:transparent; color:inherit; cursor:pointer; }
+    .site-nav-injected .sy-theme-btn:hover { background: rgba(15,138,116,0.09); }
+    .site-nav-injected .sy-ic-sun { display:none; }
+    [data-theme="dark"] .site-nav-injected .sy-theme-btn { border-color: rgba(255,255,255,0.14); }
+    [data-theme="dark"] .site-nav-injected .sy-ic-sun { display:block; }
+    [data-theme="dark"] .site-nav-injected .sy-ic-moon { display:none; }
 
     @media (max-width: 720px) {
       .site-nav-injected .nav-links { display: none; }
@@ -193,7 +203,15 @@
     } else {
       // Fallback: prepend to body so pages that forgot the placeholder still get a nav
       const wrapper = document.createElement('div');
-      wrapper.innerHTML = render();
+      window.syToggleTheme = function(){
+      var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (dark) { document.documentElement.removeAttribute('data-theme'); }
+      else { document.documentElement.setAttribute('data-theme','dark'); }
+      try { localStorage.setItem('sy-theme', dark ? 'light' : 'dark'); } catch(e) {}
+    };
+    wrapper.innerHTML = render();
+    var _tb = wrapper.querySelector('.sy-theme-btn');
+    if (_tb) _tb.addEventListener('click', window.syToggleTheme);
       document.body.insertBefore(wrapper.firstElementChild, document.body.firstChild);
     }
 
