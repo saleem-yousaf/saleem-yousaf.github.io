@@ -40,7 +40,7 @@
 <style>.ig-modal-close,.ig-modal-close:hover{color:#fff}</style></head>
 <body>
 <div id="site-nav"></div>
-<div style="background:#f5f7fa;color:#c3c9d2;font-family:'IBM Plex Sans',sans-serif;min-height:100vh;">
+<div style="background:#f5f7fa;color:#17222e;font-family:'IBM Plex Sans',sans-serif;min-height:100vh;">
 
   <!-- hero -->
   <header style="max-width:900px;margin:0 auto;padding:96px 40px 60px;">
@@ -48,45 +48,45 @@
     <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:76px;line-height:1.02;letter-spacing:-0.025em;color:#0e1822;margin:0 0 32px;">From risk to defense: securing the LLM stack with open source.</h1>
     <p style="font-size:26px;line-height:1.55;color:#53627a;margin:0 0 40px;max-width:800px;">Every team shipping AI now owns a new attack surface. Here is a practitioner's map of the OWASP LLM Top 10 and the open-source tools that let you test, guard, and govern your models, without a single vendor licence.</p>
     <div style="display:flex;gap:28px;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:15px;color:#6b7480;border-top:1px solid #e6e9ef;padding-top:26px;">
-      <span style="color:#c3c9d2;">Saleem Yousaf</span>
+      <span style="color:#17222e;">Saleem Yousaf</span>
       <span>Cloud &amp; Cyber Security Architect</span>
       <span>· ~9 min read</span>
     </div>
   </header>
 
   <!-- body -->
-  <article style="max-width:760px;margin:0 auto;padding:20px 40px 40px;font-size:21px;line-height:1.72;color:#c3c9d2;">
+  <article style="max-width:760px;margin:0 auto;padding:20px 40px 40px;font-size:21px;line-height:1.72;color:#17222e;">
 
     <p style="margin:0 0 28px;">For twenty years, application security rested on a comfortable assumption: there is a line between <em>code</em> (the instructions a system executes) and <em>data</em> (the untrusted content it merely processes). Firewalls, input validation, and access control all police that line. Large language models erase it. To an LLM, the instructions you wrote and the text it reads from a web page, an email, or a PDF are the same thing: language, to be interpreted and acted upon.</p>
 
-    <p style="margin:0 0 28px;">That single property is why AI security is not just "AppSec with a chatbot on top." It is a genuinely new discipline. And, encouragingly, the open-source community has already built a mature toolkit for it. This guide organises that toolkit around a simple lifecycle you can actually run: <strong style="color:#eef0f3;">map the risk, attack it, defend it, and govern it</strong>.</p>
+    <p style="margin:0 0 28px;">That single property is why AI security is not just "AppSec with a chatbot on top." It is a genuinely new discipline. And, encouragingly, the open-source community has already built a mature toolkit for it. This guide organises that toolkit around a simple lifecycle you can actually run: <strong style="color:#17222e;">map the risk, attack it, defend it, and govern it</strong>.</p>
 
     <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:40px;line-height:1.15;letter-spacing:-0.02em;color:#0e1822;margin:60px 0 8px;">01, Map the risk</h2>
     <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;letter-spacing:0.06em;color:#0f8a74;margin-bottom:24px;">// a shared language for AI risk</div>
 
-    <p style="margin:0 0 28px;">You cannot secure what you cannot name. The <strong style="color:#eef0f3;">OWASP LLM Top 10</strong>, maintained by the OWASP GenAI Security Project, is the industry's shared vocabulary for the risks specific to generative AI. It gives an engineer and a CISO the same words for the same problem, which is half the battle in any security programme.</p>
+    <p style="margin:0 0 28px;">You cannot secure what you cannot name. The <strong style="color:#17222e;">OWASP LLM Top 10</strong>, maintained by the OWASP GenAI Security Project, is the industry's shared vocabulary for the risks specific to generative AI. It gives an engineer and a CISO the same words for the same problem, which is half the battle in any security programme.</p>
 
     <div style="background:#eef1f6;border:1px solid #e6e9ef;border-radius:14px;padding:34px 38px;margin:0 0 32px;">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:0.08em;color:#6b7480;text-transform:uppercase;margin-bottom:18px;">OWASP LLM Top 10 · 2025</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 30px;font-size:18px;line-height:1.4;">
-        <div style="color:#c3c9d2;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM01</span> Prompt Injection</div>
-        <div style="color:#c3c9d2;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM06</span> Excessive Agency</div>
-        <div style="color:#c3c9d2;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM02</span> Sensitive Info Disclosure</div>
-        <div style="color:#c3c9d2;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM07</span> System Prompt Leakage</div>
-        <div style="color:#c3c9d2;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM03</span> Supply Chain</div>
-        <div style="color:#c3c9d2;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM08</span> Vector &amp; Embedding Weaknesses</div>
-        <div style="color:#c3c9d2;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM04</span> Data &amp; Model Poisoning</div>
-        <div style="color:#c3c9d2;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM09</span> Misinformation</div>
-        <div style="color:#c3c9d2;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM05</span> Improper Output Handling</div>
-        <div style="color:#c3c9d2;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM10</span> Unbounded Consumption</div>
+        <div style="color:#17222e;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM01</span> Prompt Injection</div>
+        <div style="color:#17222e;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM06</span> Excessive Agency</div>
+        <div style="color:#17222e;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM02</span> Sensitive Info Disclosure</div>
+        <div style="color:#17222e;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM07</span> System Prompt Leakage</div>
+        <div style="color:#17222e;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM03</span> Supply Chain</div>
+        <div style="color:#17222e;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM08</span> Vector &amp; Embedding Weaknesses</div>
+        <div style="color:#17222e;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM04</span> Data &amp; Model Poisoning</div>
+        <div style="color:#17222e;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM09</span> Misinformation</div>
+        <div style="color:#17222e;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM05</span> Improper Output Handling</div>
+        <div style="color:#17222e;"><span style="font-family:'IBM Plex Mono',monospace;color:#0f8a74;">LLM10</span> Unbounded Consumption</div>
       </div>
     </div>
 
-    <p style="margin:0 0 28px;">Sitting at the top of that list, for good reason, is <strong style="color:#eef0f3;">prompt injection</strong>. It is the SQL injection of the AI era. In its <em>direct</em> form, a user simply types a jailbreak into the chat. The more dangerous <em>indirect</em> form hides the payload inside content the model will later read: a comment in a support document, invisible text on a web page, a line in an email. When that model powers a retrieval pipeline or an agent with real tools, an attacker's instruction hidden in a document becomes an instruction your system obeys.</p>
+    <p style="margin:0 0 28px;">Sitting at the top of that list, for good reason, is <strong style="color:#17222e;">prompt injection</strong>. It is the SQL injection of the AI era. In its <em>direct</em> form, a user simply types a jailbreak into the chat. The more dangerous <em>indirect</em> form hides the payload inside content the model will later read: a comment in a support document, invisible text on a web page, a line in an email. When that model powers a retrieval pipeline or an agent with real tools, an attacker's instruction hidden in a document becomes an instruction your system obeys.</p>
 
-    <blockquote style="border-left:3px solid #0f8a74;margin:36px 0;padding:6px 0 6px 30px;font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:29px;line-height:1.35;color:#eef0f3;font-style:italic;">The model can't tell your instructions apart from instructions hidden in the content it reads. Attackers exploit exactly that gap.</blockquote>
+    <blockquote style="border-left:3px solid #0f8a74;margin:36px 0;padding:6px 0 6px 30px;font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:29px;line-height:1.35;color:#17222e;font-style:italic;">The model can't tell your instructions apart from instructions hidden in the content it reads. Attackers exploit exactly that gap.</blockquote>
 
-    <p style="margin:0 0 28px;">If you want to go deeper than the Top 10, the community-curated <strong style="color:#eef0f3;">awesome-llm-security</strong> list (by corca-ai) is the best single index of papers, tools, and attacks in the field. Start with OWASP for the language; use the list for the frontier.</p>
+    <p style="margin:0 0 28px;">If you want to go deeper than the Top 10, the community-curated <strong style="color:#17222e;">awesome-llm-security</strong> list (by corca-ai) is the best single index of papers, tools, and attacks in the field. Start with OWASP for the language; use the list for the frontier.</p>
 
     <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:40px;line-height:1.15;letter-spacing:-0.02em;color:#0e1822;margin:60px 0 8px;">02, Attack it first</h2>
     <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;letter-spacing:0.06em;color:#e8b04b;margin-bottom:24px;">// red-team before an adversary does</div>
@@ -116,10 +116,10 @@
     <p style="margin:0 0 28px;">Finding the holes is only useful if you close them. Guardrails are the controls that wrap the model in production: they scan every input, filter every output, and, critically for agents, gate the actions the model is allowed to take. Again, the open-source options layer neatly:</p>
 
     <ul style="margin:0 0 28px;padding-left:0;list-style:none;">
-      <li style="margin:0 0 18px;padding-left:26px;position:relative;"><span style="position:absolute;left:0;color:#0f8a74;">▹</span><strong style="color:#eef0f3;">NeMo Guardrails</strong> (NVIDIA): programmable rails that constrain the <em>conversation and the actions</em>: keep the assistant on-topic, and block unsafe tool calls before they run.</li>
-      <li style="margin:0 0 18px;padding-left:26px;position:relative;"><span style="position:absolute;left:0;color:#0f8a74;">▹</span><strong style="color:#eef0f3;">Llama Guard</strong> (Meta, part of PurpleLlama): a safety classifier model that labels prompts and responses against a policy, so you can catch unsafe content in either direction.</li>
-      <li style="margin:0 0 18px;padding-left:26px;position:relative;"><span style="position:absolute;left:0;color:#0f8a74;">▹</span><strong style="color:#eef0f3;">LLM Guard</strong> (Protect AI): a stack of input/output scanners: PII redaction, toxicity, secrets, injection detection, and output validation.</li>
-      <li style="margin:0 0 18px;padding-left:26px;position:relative;"><span style="position:absolute;left:0;color:#0f8a74;">▹</span><strong style="color:#eef0f3;">Rebuff</strong> (Protect AI): a dedicated prompt-injection detector combining heuristics, an LLM-based check, and a canary-token tripwire that reveals system-prompt leakage.</li>
+      <li style="margin:0 0 18px;padding-left:26px;position:relative;"><span style="position:absolute;left:0;color:#0f8a74;">▹</span><strong style="color:#17222e;">NeMo Guardrails</strong> (NVIDIA): programmable rails that constrain the <em>conversation and the actions</em>: keep the assistant on-topic, and block unsafe tool calls before they run.</li>
+      <li style="margin:0 0 18px;padding-left:26px;position:relative;"><span style="position:absolute;left:0;color:#0f8a74;">▹</span><strong style="color:#17222e;">Llama Guard</strong> (Meta, part of PurpleLlama): a safety classifier model that labels prompts and responses against a policy, so you can catch unsafe content in either direction.</li>
+      <li style="margin:0 0 18px;padding-left:26px;position:relative;"><span style="position:absolute;left:0;color:#0f8a74;">▹</span><strong style="color:#17222e;">LLM Guard</strong> (Protect AI): a stack of input/output scanners: PII redaction, toxicity, secrets, injection detection, and output validation.</li>
+      <li style="margin:0 0 18px;padding-left:26px;position:relative;"><span style="position:absolute;left:0;color:#0f8a74;">▹</span><strong style="color:#17222e;">Rebuff</strong> (Protect AI): a dedicated prompt-injection detector combining heuristics, an LLM-based check, and a canary-token tripwire that reveals system-prompt leakage.</li>
     </ul>
 
     <p style="margin:0 0 28px;">No single one of these is a silver bullet, and that is the point. A layered design uses several: a classifier at the door, scanners on input and output, and behavioural rails around what the agent can actually do.</p>
@@ -127,7 +127,7 @@
     <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:40px;line-height:1.15;letter-spacing:-0.02em;color:#0e1822;margin:60px 0 8px;">04, Evaluate &amp; govern</h2>
     <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;letter-spacing:0.06em;color:#0f8a74;margin-bottom:24px;">// turn safety into a metric you can report</div>
 
-    <p style="margin:0 0 28px;">A one-off penetration test is a snapshot, not assurance. Models drift, prompts change, and a well-meaning tweak can quietly degrade safety. The final stage turns security into something continuous and measurable. <strong style="color:#eef0f3;">Giskard</strong> provides open-source testing for ML and LLM applications, automatically scanning for hallucination, harmful content, injection, and bias, and producing a report you can act on. <strong style="color:#eef0f3;">promptfoo</strong> earns a second mention here: run as a versioned test suite in CI, it makes a safety regression show up as a failing check on the very commit that caused it.</p>
+    <p style="margin:0 0 28px;">A one-off penetration test is a snapshot, not assurance. Models drift, prompts change, and a well-meaning tweak can quietly degrade safety. The final stage turns security into something continuous and measurable. <strong style="color:#17222e;">Giskard</strong> provides open-source testing for ML and LLM applications, automatically scanning for hallucination, harmful content, injection, and bias, and producing a report you can act on. <strong style="color:#17222e;">promptfoo</strong> earns a second mention here: run as a versioned test suite in CI, it makes a safety regression show up as a failing check on the very commit that caused it.</p>
 
     <p style="margin:0 0 28px;">For a leadership audience, this stage is the one that matters most. It is where AI risk stops being an anecdote and becomes a trend line you can put in front of a board or a regulator: evidence that control is not just designed, but demonstrated over time.</p>
 
@@ -137,9 +137,9 @@
     <p style="margin:0 0 28px;">You do not need to adopt everything at once. Three moves get most teams to a defensible position:</p>
 
     <ol style="margin:0 0 32px;padding-left:26px;">
-      <li style="margin:0 0 16px;line-height:1.6;"><strong style="color:#eef0f3;">Inventory and map.</strong> List every LLM-powered feature and rate each against the OWASP Top 10.</li>
-      <li style="margin:0 0 16px;line-height:1.6;"><strong style="color:#eef0f3;">Red-team your flagship.</strong> Point garak or promptfoo at your highest-risk feature, and the findings write your business case.</li>
-      <li style="margin:0 0 16px;line-height:1.6;"><strong style="color:#eef0f3;">Add one guardrail, then automate.</strong> Wrap that feature in LLM Guard, then wire the evals into CI so safety can't regress silently.</li>
+      <li style="margin:0 0 16px;line-height:1.6;"><strong style="color:#17222e;">Inventory and map.</strong> List every LLM-powered feature and rate each against the OWASP Top 10.</li>
+      <li style="margin:0 0 16px;line-height:1.6;"><strong style="color:#17222e;">Red-team your flagship.</strong> Point garak or promptfoo at your highest-risk feature, and the findings write your business case.</li>
+      <li style="margin:0 0 16px;line-height:1.6;"><strong style="color:#17222e;">Add one guardrail, then automate.</strong> Wrap that feature in LLM Guard, then wire the evals into CI so safety can't regress silently.</li>
     </ol>
 
     <p style="margin:0 0 28px;">The threats are new, but the discipline is familiar: know your risks, test against them, control what you can, and prove it continuously. The tools to do all four already exist, they are open source, and they are ready today.</p>
@@ -159,7 +159,7 @@
       <p style="font-size:22px;line-height:1.55;color:#53627a;margin:0 0 34px;">I help organisations adopt AI securely: governance frameworks, LLM security architecture, RAG pipeline security, and prompt-injection risk. Let's talk.</p>
       <div style="display:flex;gap:16px;flex-wrap:wrap;">
         <a href="https://www.linkedin.com/in/saleemyousaf" style="font-family:'IBM Plex Mono',monospace;font-size:17px;text-decoration:none;color:#f5f7fa;background:#0f8a74;border-radius:8px;padding:16px 30px;font-weight:500;">Connect on LinkedIn →</a>
-        <a href="https://saleemyousaf.co.uk" style="font-family:'IBM Plex Mono',monospace;font-size:17px;text-decoration:none;color:#c3c9d2;border:1px solid #e6e9ef;border-radius:8px;padding:16px 30px;">saleemyousaf.co.uk</a>
+        <a href="https://saleemyousaf.co.uk" style="font-family:'IBM Plex Mono',monospace;font-size:17px;text-decoration:none;color:#17222e;border:1px solid #e6e9ef;border-radius:8px;padding:16px 30px;">saleemyousaf.co.uk</a>
       </div>
       
     </div>
