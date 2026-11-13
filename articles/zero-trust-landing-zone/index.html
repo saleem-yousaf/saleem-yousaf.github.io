@@ -11,16 +11,16 @@
 
 <style>
 :root {
-  --bg:         #090c10;
-  --bg2:        #0f1318;
-  --bg3:        #161b22;
+  --bg:         #f5f7fa;
+  --bg2:        #eef1f6;
+  --bg3:        #ffffff;
   --border:     rgba(255,255,255,0.07);
-  --border2:    rgba(255,255,255,0.12);
-  --text:       #e6eaf0;
-  --muted:      #7a8694;
+  --border2:    rgba(16,34,51,0.16);
+  --text:       #17222e;
+  --muted:      #53627a;
   --muted2:     #4a5568;
-  --teal:       #2dd4bf;
-  --teal-dim:   rgba(45,212,191,0.12);
+  --teal:       #0f8a74;
+  --teal-dim:   rgba(15,138,116,0.09);
   --amber:      #f59e0b;
   --amber-dim:  rgba(245,158,11,0.10);
   --purple:     #a78bfa;
@@ -46,7 +46,7 @@ body::before {
 /* ── NAV ── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  background: rgba(9,12,16,0.88); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+  background: rgba(245,247,250,0.88); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
 }
 .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; height: 60px; display: flex; align-items: center; justify-content: space-between; }
 .nav-logo { font-family: var(--display); font-size: 15px; font-weight: 700; color: var(--text); text-decoration: none; letter-spacing: 0.02em; }
@@ -67,7 +67,7 @@ nav {
 .nav-dropdown-menu a { display: block; padding: 9px 14px; font-size: 13px; color: var(--muted); text-decoration: none; border-radius: 5px; transition: background 0.15s, color 0.15s; white-space: nowrap; }
 .nav-dropdown-menu a:hover { background: var(--bg3); color: var(--text); }
 .nav-dropdown-menu a.active { color: var(--teal); }
-.nav-cta { font-size: 13px; font-weight: 500; color: var(--teal) !important; border: 1px solid rgba(45,212,191,0.3); padding: 6px 16px; border-radius: 4px; transition: background 0.2s, border-color 0.2s !important; }
+.nav-cta { font-size: 13px; font-weight: 500; color: var(--teal) !important; border: 1px solid rgba(15,138,116,0.28); padding: 6px 16px; border-radius: 4px; transition: background 0.2s, border-color 0.2s !important; }
 .nav-cta:hover { background: var(--teal-dim); border-color: var(--teal) !important; }
 
 /* ── ARTICLE HERO ── */
@@ -90,7 +90,7 @@ nav {
 .article-tag.purple { background: var(--purple-dim); color: var(--purple); }
 .article-title {
   font-family: var(--display); font-size: clamp(28px, 3.5vw, 46px);
-  font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; color: #fff;
+  font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; color:#0e1822;
   margin-bottom: 20px;
 }
 .article-intro { font-size: 18px; line-height: 1.75; color: var(--muted); margin-bottom: 32px; }
@@ -135,7 +135,7 @@ nav {
 
 .prose h2 {
   font-family: var(--display); font-size: 26px; font-weight: 700;
-  color: #fff; line-height: 1.2; letter-spacing: -0.01em;
+  color:#0e1822; line-height: 1.2; letter-spacing: -0.01em;
   margin: 56px 0 16px; padding-top: 8px;
   border-top: 1px solid var(--border);
 }
@@ -143,7 +143,7 @@ nav {
 
 .prose h3 {
   font-family: var(--display); font-size: 18px; font-weight: 700;
-  color: #fff; line-height: 1.3; margin: 32px 0 12px;
+  color:#0e1822; line-height: 1.3; margin: 32px 0 12px;
 }
 
 .prose h4 {
@@ -182,7 +182,7 @@ nav {
 }
 .capability-card-title {
   font-family: var(--display); font-size: 14px; font-weight: 700;
-  color: #fff; margin-bottom: 10px;
+  color:#0e1822; margin-bottom: 10px;
   display: flex; align-items: center; gap: 8px;
 }
 .capability-card-title::before {
@@ -266,7 +266,7 @@ nav {
   display: flex; align-items: center; gap: 20px;
 }
 .github-callout-icon { color: var(--teal); flex-shrink: 0; }
-.github-callout-title { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.github-callout-title { font-family: var(--display); font-size: 16px; font-weight: 700; color:#0e1822; margin-bottom: 6px; }
 .github-callout-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
 .github-callout-link {
   display: inline-flex; align-items: center; gap: 6px;
@@ -308,16 +308,16 @@ nav {
 .rel-tag { font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 3px; }
 .rel-tag.teal  { background: var(--teal-dim);  color: var(--teal); }
 .rel-tag.amber { background: var(--amber-dim); color: var(--amber); }
-.rel-title { font-family: var(--display); font-size: 15px; font-weight: 700; color: #fff; line-height: 1.3; }
+.rel-title { font-family: var(--display); font-size: 15px; font-weight: 700; color:#0e1822; line-height: 1.3; }
 .rel-meta { font-family: var(--mono); font-size: 11px; color: var(--muted2); margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border); }
 
 /* CTA strip */
 .cta-strip { background: var(--bg2); border-top: 1px solid var(--border); padding: 64px 0; position: relative; z-index: 1; }
 .cta-wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
-.cta-heading { font-family: var(--display); font-size: clamp(20px, 2.2vw, 26px); font-weight: 700; color: #fff; margin-bottom: 8px; }
+.cta-heading { font-family: var(--display); font-size: clamp(20px, 2.2vw, 26px); font-weight: 700; color:#0e1822; margin-bottom: 8px; }
 .cta-sub { font-size: 15px; color: var(--muted); }
 .cta-actions { display: flex; gap: 12px; flex-shrink: 0; }
-.btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #090c10; font-size: 14px; font-weight: 600; padding: 12px 24px; border-radius: 4px; text-decoration: none; transition: opacity 0.2s, transform 0.15s; }
+.btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #f5f7fa; font-size: 14px; font-weight: 600; padding: 12px 24px; border-radius: 4px; text-decoration: none; transition: opacity 0.2s, transform 0.15s; }
 .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
 .btn-outline { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border2); color: var(--muted); font-size: 14px; padding: 11px 24px; border-radius: 4px; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
 .btn-outline:hover { border-color: var(--teal); color: var(--teal); }
@@ -325,7 +325,7 @@ nav {
 /* footer */
 footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: relative; z-index: 1; }
 .footer-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
-.footer-logo { font-family: var(--display); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.footer-logo { font-family: var(--display); font-size: 16px; font-weight: 700; color:#0e1822; margin-bottom: 8px; }
 .footer-logo span { color: var(--teal); }
 .footer-desc { font-size: 13px; color: var(--muted); max-width: 380px; line-height: 1.6; }
 .footer-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
@@ -387,7 +387,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: re
       overflow: auto;
       border-radius: 8px;
       border: 1px solid rgba(0,212,255,0.2);
-      background: #07090d;
+      background: #f5f7fa;
       padding: 0;
       cursor: default;
     }
@@ -446,7 +446,7 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: re
   "description": "A technical deep dive into enterprise Zero Trust secure landing zone design across AWS and Azure. Covering network segmentation, Palo Alto, Fortinet, Zscaler SSE, SIEM and XSOAR integration. By Saleem Yousaf."
 }
 </script>
-</head>
+<style>.ig-modal-close,.ig-modal-close:hover{color:#fff}</style><style>.figframe{background:#0e1116;border:1px solid rgba(16,34,51,.14);border-radius:14px;box-shadow:0 16px 40px rgba(16,34,51,.12)}.d-box{fill:#141b23;stroke:rgba(255,255,255,.12)}.d-box-soft{fill:#0f1419;stroke:rgba(255,255,255,.1)}.d-t-s{fill:#fff}.d-s{fill:#8a96a8}.d-lab,.d-lab-a{fill:#2dd4bf}</style></head>
 <body>
 
 <!-- NAV -->
@@ -1691,13 +1691,13 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: re
     <h4>Core Firewall Rule Requirements</h4>
     <div class="arch-image">
       <style>
-.rmt{width:100%;border-collapse:collapse;font-family:"DM Mono",monospace;font-size:11px;background:#07090d;}
-.rmt th{background:#0f1520;color:#00d4ff;padding:8px 10px;text-align:left;border:1px solid #1a2235;letter-spacing:0.06em;font-size:10px;}
-.rmt td{padding:7px 10px;border:1px solid #1a2235;color:#dde4ef;vertical-align:top;}
-.rmt tr:nth-child(even) td{background:#0c1018;}
-.rmt tr:nth-child(odd) td{background:#07090d;}
+.rmt{width:100%;border-collapse:collapse;font-family:"DM Mono",monospace;font-size:11px;background:#f5f7fa;}
+.rmt th{background:#ffffff;color:#00d4ff;padding:8px 10px;text-align:left;border:1px solid #eef1f6;letter-spacing:0.06em;font-size:10px;}
+.rmt td{padding:7px 10px;border:1px solid #eef1f6;color:#dde4ef;vertical-align:top;}
+.rmt tr:nth-child(even) td{background:#eef1f6;}
+.rmt tr:nth-child(odd) td{background:#f5f7fa;}
 .rmt .c-r{color:#ff3355;}.rmt .c-g{color:#00e87a;}.rmt .c-a{color:#ffaa00;}.rmt .c-b{color:#00d4ff;}.rmt .c-p{color:#a78bfa;}
-.rmt-wrap{overflow-x:auto;border:1px solid #1a2235;border-radius:6px;}
+.rmt-wrap{overflow-x:auto;border:1px solid #eef1f6;border-radius:6px;}
 </style><div class="rmt-wrap"><table class="rmt">
 <thead><tr><th>Rule Category</th><th>Direction</th><th>Protocol</th><th>Action</th><th>Logging</th><th>Threat Prevention</th><th>Requirement</th></tr></thead>
 <tbody>
@@ -1718,13 +1718,13 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: re
     <h4>Palo Alto NGFW Rule Matrix</h4>
     <div class="arch-image">
       <style>
-.rmt{width:100%;border-collapse:collapse;font-family:"DM Mono",monospace;font-size:11px;background:#07090d;}
-.rmt th{background:#0f1520;color:#00d4ff;padding:8px 10px;text-align:left;border:1px solid #1a2235;letter-spacing:0.06em;font-size:10px;}
-.rmt td{padding:7px 10px;border:1px solid #1a2235;color:#dde4ef;vertical-align:top;}
-.rmt tr:nth-child(even) td{background:#0c1018;}
-.rmt tr:nth-child(odd) td{background:#07090d;}
+.rmt{width:100%;border-collapse:collapse;font-family:"DM Mono",monospace;font-size:11px;background:#f5f7fa;}
+.rmt th{background:#ffffff;color:#00d4ff;padding:8px 10px;text-align:left;border:1px solid #eef1f6;letter-spacing:0.06em;font-size:10px;}
+.rmt td{padding:7px 10px;border:1px solid #eef1f6;color:#dde4ef;vertical-align:top;}
+.rmt tr:nth-child(even) td{background:#eef1f6;}
+.rmt tr:nth-child(odd) td{background:#f5f7fa;}
 .rmt .c-r{color:#ff3355;}.rmt .c-g{color:#00e87a;}.rmt .c-a{color:#ffaa00;}.rmt .c-b{color:#00d4ff;}.rmt .c-p{color:#a78bfa;}
-.rmt-wrap{overflow-x:auto;border:1px solid #1a2235;border-radius:6px;}
+.rmt-wrap{overflow-x:auto;border:1px solid #eef1f6;border-radius:6px;}
 </style><div class="rmt-wrap"><table class="rmt">
 <thead><tr><th>Rule Name</th><th>Source Zone</th><th>Destination Zone</th><th>Application</th><th>Service</th><th>Action</th><th>Security Profile</th></tr></thead>
 <tbody>
@@ -1746,13 +1746,13 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: re
     <h4>FortiGate NGFW Rule Matrix</h4>
     <div class="arch-image">
       <style>
-.rmt{width:100%;border-collapse:collapse;font-family:"DM Mono",monospace;font-size:11px;background:#07090d;}
-.rmt th{background:#0f1520;color:#00d4ff;padding:8px 10px;text-align:left;border:1px solid #1a2235;letter-spacing:0.06em;font-size:10px;}
-.rmt td{padding:7px 10px;border:1px solid #1a2235;color:#dde4ef;vertical-align:top;}
-.rmt tr:nth-child(even) td{background:#0c1018;}
-.rmt tr:nth-child(odd) td{background:#07090d;}
+.rmt{width:100%;border-collapse:collapse;font-family:"DM Mono",monospace;font-size:11px;background:#f5f7fa;}
+.rmt th{background:#ffffff;color:#00d4ff;padding:8px 10px;text-align:left;border:1px solid #eef1f6;letter-spacing:0.06em;font-size:10px;}
+.rmt td{padding:7px 10px;border:1px solid #eef1f6;color:#dde4ef;vertical-align:top;}
+.rmt tr:nth-child(even) td{background:#eef1f6;}
+.rmt tr:nth-child(odd) td{background:#f5f7fa;}
 .rmt .c-r{color:#ff3355;}.rmt .c-g{color:#00e87a;}.rmt .c-a{color:#ffaa00;}.rmt .c-b{color:#00d4ff;}.rmt .c-p{color:#a78bfa;}
-.rmt-wrap{overflow-x:auto;border:1px solid #1a2235;border-radius:6px;}
+.rmt-wrap{overflow-x:auto;border:1px solid #eef1f6;border-radius:6px;}
 </style><div class="rmt-wrap"><table class="rmt">
 <thead><tr><th>Policy Name</th><th>Incoming IF</th><th>Outgoing IF</th><th>Source</th><th>Destination</th><th>Service</th><th>Action</th><th>UTM Profile</th></tr></thead>
 <tbody>
@@ -1772,13 +1772,13 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: re
     <h4>NAT Rule Matrix</h4>
     <div class="arch-image">
       <style>
-.rmt{width:100%;border-collapse:collapse;font-family:"DM Mono",monospace;font-size:11px;background:#07090d;}
-.rmt th{background:#0f1520;color:#00d4ff;padding:8px 10px;text-align:left;border:1px solid #1a2235;letter-spacing:0.06em;font-size:10px;}
-.rmt td{padding:7px 10px;border:1px solid #1a2235;color:#dde4ef;vertical-align:top;}
-.rmt tr:nth-child(even) td{background:#0c1018;}
-.rmt tr:nth-child(odd) td{background:#07090d;}
+.rmt{width:100%;border-collapse:collapse;font-family:"DM Mono",monospace;font-size:11px;background:#f5f7fa;}
+.rmt th{background:#ffffff;color:#00d4ff;padding:8px 10px;text-align:left;border:1px solid #eef1f6;letter-spacing:0.06em;font-size:10px;}
+.rmt td{padding:7px 10px;border:1px solid #eef1f6;color:#dde4ef;vertical-align:top;}
+.rmt tr:nth-child(even) td{background:#eef1f6;}
+.rmt tr:nth-child(odd) td{background:#f5f7fa;}
 .rmt .c-r{color:#ff3355;}.rmt .c-g{color:#00e87a;}.rmt .c-a{color:#ffaa00;}.rmt .c-b{color:#00d4ff;}.rmt .c-p{color:#a78bfa;}
-.rmt-wrap{overflow-x:auto;border:1px solid #1a2235;border-radius:6px;}
+.rmt-wrap{overflow-x:auto;border:1px solid #eef1f6;border-radius:6px;}
 </style><div class="rmt-wrap"><table class="rmt">
 <thead><tr><th>NAT Rule Name</th><th>Original Src</th><th>Original Dst</th><th>Original Svc</th><th>Translated Src</th><th>Translated Dst</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
@@ -1797,13 +1797,13 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: re
     <h4>VPN Rule Matrix</h4>
     <div class="arch-image">
       <style>
-.rmt{width:100%;border-collapse:collapse;font-family:"DM Mono",monospace;font-size:11px;background:#07090d;}
-.rmt th{background:#0f1520;color:#00d4ff;padding:8px 10px;text-align:left;border:1px solid #1a2235;letter-spacing:0.06em;font-size:10px;}
-.rmt td{padding:7px 10px;border:1px solid #1a2235;color:#dde4ef;vertical-align:top;}
-.rmt tr:nth-child(even) td{background:#0c1018;}
-.rmt tr:nth-child(odd) td{background:#07090d;}
+.rmt{width:100%;border-collapse:collapse;font-family:"DM Mono",monospace;font-size:11px;background:#f5f7fa;}
+.rmt th{background:#ffffff;color:#00d4ff;padding:8px 10px;text-align:left;border:1px solid #eef1f6;letter-spacing:0.06em;font-size:10px;}
+.rmt td{padding:7px 10px;border:1px solid #eef1f6;color:#dde4ef;vertical-align:top;}
+.rmt tr:nth-child(even) td{background:#eef1f6;}
+.rmt tr:nth-child(odd) td{background:#f5f7fa;}
 .rmt .c-r{color:#ff3355;}.rmt .c-g{color:#00e87a;}.rmt .c-a{color:#ffaa00;}.rmt .c-b{color:#00d4ff;}.rmt .c-p{color:#a78bfa;}
-.rmt-wrap{overflow-x:auto;border:1px solid #1a2235;border-radius:6px;}
+.rmt-wrap{overflow-x:auto;border:1px solid #eef1f6;border-radius:6px;}
 </style><div class="rmt-wrap"><table class="rmt">
 <thead><tr><th>VPN Profile</th><th>User Group</th><th>Auth Method</th><th>Split Tunnel</th><th>Permitted Resources</th><th>Session Limit</th><th>Logging</th></tr></thead>
 <tbody>
@@ -1821,13 +1821,13 @@ footer { padding: 48px 0 40px; border-top: 1px solid var(--border); position: re
     <h4>Zscaler SSE Policy Matrix</h4>
     <div class="arch-image">
       <style>
-.rmt{width:100%;border-collapse:collapse;font-family:"DM Mono",monospace;font-size:11px;background:#07090d;}
-.rmt th{background:#0f1520;color:#00d4ff;padding:8px 10px;text-align:left;border:1px solid #1a2235;letter-spacing:0.06em;font-size:10px;}
-.rmt td{padding:7px 10px;border:1px solid #1a2235;color:#dde4ef;vertical-align:top;}
-.rmt tr:nth-child(even) td{background:#0c1018;}
-.rmt tr:nth-child(odd) td{background:#07090d;}
+.rmt{width:100%;border-collapse:collapse;font-family:"DM Mono",monospace;font-size:11px;background:#f5f7fa;}
+.rmt th{background:#ffffff;color:#00d4ff;padding:8px 10px;text-align:left;border:1px solid #eef1f6;letter-spacing:0.06em;font-size:10px;}
+.rmt td{padding:7px 10px;border:1px solid #eef1f6;color:#dde4ef;vertical-align:top;}
+.rmt tr:nth-child(even) td{background:#eef1f6;}
+.rmt tr:nth-child(odd) td{background:#f5f7fa;}
 .rmt .c-r{color:#ff3355;}.rmt .c-g{color:#00e87a;}.rmt .c-a{color:#ffaa00;}.rmt .c-b{color:#00d4ff;}.rmt .c-p{color:#a78bfa;}
-.rmt-wrap{overflow-x:auto;border:1px solid #1a2235;border-radius:6px;}
+.rmt-wrap{overflow-x:auto;border:1px solid #eef1f6;border-radius:6px;}
 </style><div class="rmt-wrap"><table class="rmt">
 <thead><tr><th>Policy Name</th><th>Component</th><th>User Group</th><th>Condition</th><th>Action</th><th>Logging</th></tr></thead>
 <tbody>
