@@ -79,7 +79,7 @@
     const internalItems = NAV_CONFIG.items.map(renderItem).join('');
     const externalItems = NAV_CONFIG.external.map(renderExternal).join('');
     const cta = `<li><a href="${escapeHtml(NAV_CONFIG.cta.href)}" class="nav-cta">${escapeHtml(NAV_CONFIG.cta.label)}</a></li>`;
-      const themeToggle = `<li><button type="button" class="sy-theme-btn" aria-label="Toggle light or dark mode" title="Light / dark">`
+      const themeToggle = `<li><button type="button" class="sy-theme-btn" onclick="syToggleTheme()" aria-label="Toggle light or dark mode" title="Light / dark">`
         + `<svg class="sy-ic-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>`
         + `<svg class="sy-ic-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>`
         + `</button></li>`;
@@ -93,6 +93,7 @@
             <li><span class="nav-divider" aria-hidden="true"></span></li>
             ${externalItems}
             ${cta}
+            ${themeToggle}
           </ul>
         </div>
       </nav>
@@ -197,6 +198,18 @@
       document.head.appendChild(style);
     }
 
+    // Define the toggle before injecting the nav. The button calls syToggleTheme
+    // via onclick, and the primary inject path below uses outerHTML which would
+    // not keep an addEventListener handler anyway. The previous version defined
+    // this only in the fallback branch, so on every page that has #site-nav the
+    // toggle rendered but did nothing.
+    window.syToggleTheme = function(){
+      var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (dark) { document.documentElement.removeAttribute('data-theme'); }
+      else { document.documentElement.setAttribute('data-theme','dark'); }
+      try { localStorage.setItem('sy-theme', dark ? 'light' : 'dark'); } catch(e) {}
+    };
+
     // Inject the nav into the placeholder
     const target = document.getElementById('site-nav');
     if (target) {
@@ -204,15 +217,7 @@
     } else {
       // Fallback: prepend to body so pages that forgot the placeholder still get a nav
       const wrapper = document.createElement('div');
-      window.syToggleTheme = function(){
-      var dark = document.documentElement.getAttribute('data-theme') === 'dark';
-      if (dark) { document.documentElement.removeAttribute('data-theme'); }
-      else { document.documentElement.setAttribute('data-theme','dark'); }
-      try { localStorage.setItem('sy-theme', dark ? 'light' : 'dark'); } catch(e) {}
-    };
-    wrapper.innerHTML = render();
-    var _tb = wrapper.querySelector('.sy-theme-btn');
-    if (_tb) _tb.addEventListener('click', window.syToggleTheme);
+      wrapper.innerHTML = render();
       document.body.insertBefore(wrapper.firstElementChild, document.body.firstChild);
     }
 
