@@ -1,1 +1,305 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agentic attacks: how to detect and respond to them | Saleem Yousaf</title>
+<meta name="description" content="Attackers are handing intrusions to AI agents that run real tools on their own. You will not win by chasing each tool. Here is how to catch the behaviour they share, and what to do when you find it.">
+<link rel="canonical" href="https://saleemyousaf.co.uk/articles/agentic-attacks-detect-respond/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agentic attacks: how to detect and respond to them">
+<meta property="og:description" content="Catch the behaviour, not the tool. A defender's guide to detecting and responding to AI agents running intrusions on their own.">
+<meta property="og:url" content="https://saleemyousaf.co.uk/articles/agentic-attacks-detect-respond/">
+<meta property="og:image" content="https://saleemyousaf.co.uk/articles/agentic-attacks-detect-respond/og-agentic-attacks.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Agentic attacks: how to detect and respond to them">
+<meta name="twitter:description" content="Catch the behaviour, not the tool. A defender's guide to AI agents running intrusions on their own.">
+<meta name="twitter:image" content="https://saleemyousaf.co.uk/articles/agentic-attacks-detect-respond/og-agentic-attacks.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Agentic attacks: how to detect and respond to them",
+  "description": "Catch the behaviour, not the tool. A defender's guide to detecting and responding to AI agents running intrusions on their own.",
+  "datePublished": "2026-11-21",
+  "inLanguage": "en-GB",
+  "author": { "@type": "Person", "@id": "https://saleemyousaf.co.uk/#saleem", "name": "Saleem Yousaf", "url": "https://saleemyousaf.co.uk" },
+  "publisher": { "@id": "https://saleemyousaf.co.uk/#saleem" },
+  "articleSection": "Threat detection",
+  "about": [
+    { "@type": "Thing", "name": "Agentic AI attack frameworks" },
+    { "@type": "Thing", "name": "Threat detection and incident response" }
+  ]
+}
+</script>
+<style>
+:root{--bg:#0a0e14;--panel:#0f1419;--panel2:#121a22;--border:rgba(255,255,255,.09);--text:#e6eaf0;--muted:#8a96a8;--muted2:#5a6675;--teal:#2dd4bf;--teal2:#5eead4;--blue:#4aa8ff;--amber:#f5b73c;--purple:#a78bfa;--display:'Syne',sans-serif;--body:'Inter',system-ui,sans-serif;--mono:'DM Mono',ui-monospace,monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-weight:400;line-height:1.7;font-size:17px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:64px 22px 96px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin-bottom:18px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(2rem,1.3rem + 3vw,3.1rem);line-height:1.04;letter-spacing:-.02em;color:#fff;margin-bottom:18px}
+.dek{font-size:1.18rem;color:var(--muted);line-height:1.55;margin-bottom:26px;font-weight:300}
+.byline{font-family:var(--mono);font-size:12.5px;color:var(--muted2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:14px 0;margin-bottom:40px}
+.byline a{color:var(--teal);text-decoration:none}
+h2{font-family:var(--display);font-weight:700;font-size:1.6rem;color:#fff;letter-spacing:-.01em;margin:46px 0 14px;line-height:1.15}
+h3{font-family:var(--body);font-weight:600;font-size:1.12rem;color:var(--teal2);margin:30px 0 8px}
+p{margin:0 0 18px}
+a{color:var(--teal)}
+strong{color:#fff;font-weight:600}
+ul,ol{margin:0 0 18px;padding-left:22px}
+li{margin:0 0 9px}
+.rule{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin:48px 0 10px;display:flex;align-items:center;gap:12px}
+.rule::after{content:"";height:1px;flex:1;background:var(--border)}
+.callout{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:10px;padding:18px 20px;margin:24px 0;font-size:16px}
+.callout.amber{border-left-color:var(--amber)}
+.callout .k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:6px}
+.callout.teal .k{color:var(--teal)}
+figure{margin:34px 0}
+.fig-btn{display:block;width:100%;padding:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--panel);cursor:zoom-in}
+.fig-btn img{display:block;width:100%;height:auto}
+figcaption{font-family:var(--mono);font-size:11.5px;color:var(--muted2);margin-top:10px;text-align:center}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel2);border:1px solid var(--border);border-radius:5px;padding:1px 6px;color:var(--teal2)}
+.behav{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin:12px 0}
+.behav .t{font-weight:600;color:#fff;margin-bottom:4px}
+.behav .s{font-size:15px;color:var(--muted)}
+.dgm{display:block;width:100%;height:auto;margin:6px 0 2px;border-radius:12px}
+.dgm .mono{font-family:var(--mono);font-size:13px;fill:var(--muted2);letter-spacing:.04em}
+.dgm .em{font-family:var(--mono);font-size:12.5px;letter-spacing:.1em}
+.dgm .bt{font-family:var(--body);font-weight:600;font-size:18px;fill:#fff}
+.dgm .nm{font-family:var(--body);font-weight:600;font-size:16px;fill:#fff}
+.dgm .bs{font-family:var(--body);font-size:13px;fill:var(--muted)}
+.dgm .tl{font-family:var(--body);font-size:13.5px;fill:var(--text)}
+.dgm .tlw{font-family:var(--body);font-size:13.5px;fill:#fff}
+.dgm .step{font-family:var(--mono);font-size:13.5px;fill:var(--teal2)}
+.src{margin-top:56px;padding-top:22px;border-top:1px solid var(--border);font-size:14px;color:var(--muted)}
+.src h2{font-size:1.1rem;margin:0 0 10px}
+.syx-lb{position:fixed;inset:0;background:rgba(5,8,12,.94);display:none;align-items:center;justify-content:center;z-index:999;padding:20px;cursor:zoom-out}
+.syx-lb.on{display:flex}
+.syx-lb img{max-width:100%;max-height:100%;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+</style>
+</head>
+<body>
+<article class="wrap">
+  <div class="eyebrow">// threat detection</div>
+  <h1>Agentic attacks: how to detect and respond to them</h1>
+  <p class="dek">Attackers have started handing whole intrusions to AI agents that plan, run real tools and keep going until they reach a goal. You will not win this by chasing each new tool. The durable move is to catch the behaviour they all share, and to have a response ready for an adversary that works at machine speed.</p>
+  <div class="byline">By <a href="/about/">Saleem Yousaf</a>, Cloud and Cyber Security Architect &nbsp;&middot;&nbsp; 21 November 2026 &nbsp;&middot;&nbsp; 12 min read</div>
 
+  <p>For most of the last decade an intrusion had a person at the keyboard. They were fast or slow, skilled or not, but they were one operator making one decision at a time. That assumption is now breaking. A class of open-source tooling has appeared that hands the keyboard to an AI agent: you give it a target and a goal, and it plans the steps, runs real attack tools, reads the output, decides what to do next, and carries on without waiting for a human. Some of these frameworks run a team of agents at once, each in its own container.</p>
+
+  <p>Security vendors have begun cataloguing them. ThreatDefence maintains an open <a href="https://github.com/ThreatDefence/agentic-attack-detections">agentic attack detections</a> repository that tracks eight so far, including ARTEX and its renamed AntiFox fork, Cairn, PentAGI, HexStrike, CyberStrikeAI, Strix, Hermes Agent and Agent Zero, each studied from its source code and the public reporting on its use. The detail of who used which tool against whom sits after my own reliable knowledge of the field, so I will point at that reporting rather than restate it as settled fact. What matters for a defender is the shape of the problem, and that is clear enough to act on.</p>
+
+  <figure>
+    <button class="fig-btn" onclick="syxOpen('agentic-attacks-behaviour-map.png')" aria-label="Open the behaviour map full size">
+      <img src="agentic-attacks-behaviour-map.png" alt="A map showing many agentic attack frameworks funnelling into the handful of behaviours they share, mapped to the telemetry that catches each one">
+    </button>
+    <figcaption>Many tools, a few behaviours, the telemetry you already have. Tap to enlarge.</figcaption>
+  </figure>
+
+  <div class="rule">Why signatures lose this race</div>
+  <h2>Chasing the tool is a treadmill</h2>
+  <p>The instinct is to write a detection for each framework: its user agents, its file paths, its command lines. Do that and you sign up for a treadmill, for three reasons.</p>
+  <p>First, volume. Eight frameworks today, more next quarter, most of them a weekend fork away from the last one. Second, renaming. ARTEX became AntiFox with the same code under a new name, and any indicator tied to the old label went stale the day that happened. Third, and most important, the model is swappable. These frameworks are mostly a planning loop wrapped around whatever large language model you point them at, a Chinese model today, a Western one tomorrow, a local one next week. Fingerprint the model and you catch nothing when it changes.</p>
+  <p>The thing that does not change is the work. Whatever planner is driving, an intrusion still has to enumerate identities, spray credentials, find a path, reach the data. An agent does that work faster and more repetitively than a person, and that very regularity is what gives it away.</p>
+
+  <div class="rule">Detect the behaviour, not the tool</div>
+  <h2>What they all do, and where you see it</h2>
+  <p>Group the tell-tale behaviours by the telemetry you already collect. None of this needs a new sensor. It needs you to look at the logs you have with the agent in mind.</p>
+
+  <h3>On the endpoint</h3>
+  <div class="behav"><div class="t">An agent CLI running with its approval prompt turned off</div><div class="s">Qwen Code, Kimi CLI, Claude Code, Codex, Pi and the like have a mode that stops asking the human before each action. A coding assistant launched in that mode, then spawning scanners, network tools and credential utilities, is not a developer at work. Watch process creation for the agent binary as a parent of attack tooling.</div></div>
+  <div class="behav"><div class="t">A web or database service spawning a shell</div><div class="s">An agent that lands through a web application behaves like any web shell, the service account suddenly has children it never had before. Old signal, still the fastest one.</div></div>
+  <div class="behav"><div class="t">Scripts written into web roots, config and backup files read in bulk</div><div class="s">Agents are thorough to a fault. They hoover configuration and backup files and drop helpers into web directories far more systematically than a human in a hurry.</div></div>
+
+  <h3>In network and DNS</h3>
+  <div class="behav"><div class="t">A server calling out to a model API</div><div class="s">The agent has to talk to its brain. A production server making calls to DeepSeek, Qwen, GLM, Kimi, MiniMax, OpenRouter or any model gateway is almost never doing legitimate work. This is one of the strongest single signals, and it survives a change of tool.</div></div>
+  <div class="behav"><div class="t">Lookups to out-of-band interaction domains</div><div class="s">When an agent tests for blind injection, SSRF or XXE it uses callback services, interactsh <code>oast.*</code>, Burp Collaborator, <code>dnslog.cn</code>. A server resolving those domains has had a payload run on it.</div></div>
+  <div class="behav"><div class="t">One target probed through hundreds of rotating proxy addresses</div><div class="s">Agents lean on proxy pools, so the same application gets hit from a wide spread of addresses in a pattern no single human session produces. Do not block one address and call it done.</div></div>
+  <div class="behav"><div class="t">A server calling back to the address that was just probing it</div><div class="s">Reconnaissance from an address, then a connection from your estate back to that same address, is a short and high-value window.</div></div>
+
+  <h3>In identity and Active Directory</h3>
+  <div class="behav"><div class="t">Kerberos user enumeration, then Kerberoasting, DCSync and WinRM or SMB fan-out from one source</div><div class="s">The classic post-foothold sequence, run end to end at machine speed from a single origin, is the agent working a domain the way a checklist would.</div></div>
+
+  <h3>In the cloud</h3>
+  <div class="behav"><div class="t">Credentials used at machine speed</div><div class="s">Several identities checked from one address in quick succession, bulk reads of user data, instance role keys suddenly used from outside the instance. In AWS, Azure, M365 and Okta the pattern is the same: an agent testing the blast radius of what it stole, far faster than a person would.</div></div>
+
+  <div class="callout teal"><span class="k">The point</span>Each of these is a behaviour, not a tool. One rule for "a server is calling a model API" catches every framework that needs a brain, including the one that ships next month. That is why the behaviour layer is where your effort pays back, and why the ThreatDefence repository keeps those cross-framework rules in their own folder, separate from the per-tool fingerprints.</div>
+
+  <div class="rule">Turn the signal into coverage</div>
+  <h2>You already have the telemetry</h2>
+  <p>Map the behaviours above to what you run. Endpoint process creation comes from your EDR or Sysmon. The model-API and out-of-band and proxy signals live in DNS logs, netflow and your proxy or firewall. The identity sequence is in your domain controller and sign-in logs. The cloud patterns are in CloudTrail, Azure and M365 audit and Okta system log. The ThreatDefence set ships the same detections as Sigma, Microsoft Sentinel analytics and KQL hunts, Splunk, Elastic, Suricata and Zeek, so whichever stack you run, the behaviour rules convert into it. Start with the model-API hunt and the auto-approve agent hunt. They are the highest signal and the hardest for an attacker to avoid.</p>
+  <div class="callout amber"><span class="k">Discipline</span>Treat address and domain indicators as perishable. Cloud and VPS addresses get reassigned, and the ThreatDefence feed puts a 180-day review date on every one for that reason. Baseline the medium-confidence rules before you alert on them, and remember the maintainer's own warning: no rule in that set has been tested against a captured intrusion yet, so each is a lead to validate on your own data, not a verdict.</div>
+
+  <div class="rule">When you find one</div>
+  <h2>Responding to an adversary that does not pause</h2>
+  <p>The hard part of an agentic intrusion is not that it is cleverer than a human one. It is that it is faster and more complete. By the time an analyst opens the ticket, the agent may have tried fifty things, touched a dozen identities and planted two ways back in. Your response has to assume breadth and move quickly, which usually means automating the first containment step rather than waiting for a person to click.</p>
+
+  <h3>Contain, and assume it moved wide</h3>
+  <ul>
+    <li><strong>Isolate the host and kill the runtime.</strong> Many of these frameworks run in a container per engagement, so stopping the process is not enough, remove the container and cut the host's egress.</li>
+    <li><strong>Cut the two lifelines.</strong> Block egress to the model API and to the proxy pool. An agent that cannot reach its model cannot plan, and an agent that cannot reach its proxies loses its cover. These are also your cleanest pivot points for finding other affected hosts.</li>
+    <li><strong>Revoke broadly, not narrowly.</strong> Because the agent tested credentials at machine speed, treat every identity and key it could have reached as exposed. Revoke sessions and rotate secrets for the whole blast radius, not only the one account on the alert.</li>
+  </ul>
+
+  <h3>Capture what the agent tells you</h3>
+  <p>An agent leaves a better account of itself than a human intruder does. Its logs, its prompts, its configuration and its tool output record what it was told to achieve and everything it tried. Preserve the container layers, the agent's working directory, <code>/tmp</code> and the web roots before you wipe. That evidence is the fastest way to scope the incident, because the agent has effectively written its own after-action report.</p>
+
+  <h3>Eradicate and recover</h3>
+  <ul>
+    <li>Close the initial access the agent came through, it will have found and noted it.</li>
+    <li>Hunt for the persistence it left, cron jobs, tunnels, new accounts, web shells, agents are methodical about leaving a way back.</li>
+    <li>Rotate everything in the blast radius, then confirm the behaviour has stopped in telemetry rather than assuming it.</li>
+  </ul>
+
+  <div class="rule">A worked example</div>
+  <h2>A sanctioned agent in a Microsoft estate</h2>
+  <p>The fair objection to all of this is that not every agent is hostile. Your own business is about to run plenty of benign ones, so does the same thinking help there? It does, it just runs in reverse. Take a concrete build. A person submits a task through Azure API Management. The call crosses an Azure Firewall into an app subnet, where a Durable Functions app orchestrates the run: it fetches from an approved web search and calls one approved Azure OpenAI deployment, then writes the result as JSON to a storage account for a human to check and for downstream systems to use. The runtime is ephemeral, it exists only for the length of the run.</p>
+
+  <figure>
+    <svg class="dgm" viewBox="0 0 940 620" role="img" aria-labelledby="d1t">
+    <title id="d1t">Sanctioned agent architecture in Azure: a human request crosses API Management and Azure Firewall into a Durable Functions app that calls the approved model and a web search, then writes JSON to a storage account for human review</title>
+    <defs>
+    <marker id="ah" markerWidth="10" markerHeight="10" refX="7.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7.5,3 L0,6 Z" fill="#6b7686"/></marker>
+    </defs>
+    <rect x="1" y="1" width="938" height="618" rx="14" fill="#0b0f16" stroke="rgba(255,255,255,.08)"/>
+    <text x="34" y="34" class="mono">// external and internet side</text>
+    <text x="566" y="34" class="mono">// app subnet</text>
+    <rect x="442" y="64" width="56" height="500" rx="10" fill="rgba(45,212,191,.07)" stroke="#2dd4bf"/>
+    <text x="470" y="314" class="em" fill="#5eead4" text-anchor="middle" transform="rotate(-90 470 314)">AZURE FIREWALL</text>
+    <rect x="40" y="70" width="290" height="56" rx="10" fill="#0f1419" stroke="rgba(255,255,255,.14)"/>
+    <text x="60" y="97" class="bt">Human request</text>
+    <text x="60" y="116" class="bs">a task to run, sent to the API</text>
+    <rect x="40" y="150" width="290" height="60" rx="10" fill="#0f1419" stroke="rgba(255,255,255,.14)"/>
+    <text x="60" y="177" class="bt">Azure API Management</text>
+    <text x="60" y="196" class="bs">authenticates, throttles, logs it</text>
+    <rect x="40" y="316" width="290" height="58" rx="10" fill="#0f1419" stroke="rgba(255,255,255,.14)"/>
+    <text x="60" y="342" class="bt">Azure OpenAI</text>
+    <text x="60" y="361" class="bs">the one approved deployment</text>
+    <rect x="40" y="404" width="290" height="58" rx="10" fill="#0f1419" stroke="#f5b73c"/>
+    <text x="60" y="430" class="bt">Web search</text>
+    <text x="60" y="449" class="bs" fill="#f5b73c">untrusted content enters here</text>
+    <rect x="560" y="120" width="340" height="220" rx="12" fill="#0d141b" stroke="rgba(255,255,255,.16)"/>
+    <text x="580" y="150" class="bt">Durable Functions app</text>
+    <text x="580" y="169" class="bs">the agent runtime, ephemeral per run</text>
+    <rect x="580" y="182" width="300" height="40" rx="8" fill="#0f1722" stroke="rgba(45,212,191,.35)"/>
+    <text x="596" y="207" class="tlw">Orchestrator, plans and runs the steps</text>
+    <rect x="580" y="236" width="148" height="92" rx="8" fill="#0f1419" stroke="rgba(255,255,255,.14)"/>
+    <text x="654" y="278" class="tl" text-anchor="middle">Web search</text>
+    <text x="654" y="298" class="tl" text-anchor="middle">activity</text>
+    <rect x="752" y="236" width="148" height="92" rx="8" fill="#0f1419" stroke="rgba(255,255,255,.14)"/>
+    <text x="826" y="278" class="tl" text-anchor="middle">Call model</text>
+    <text x="826" y="298" class="tl" text-anchor="middle">activity</text>
+    <rect x="560" y="462" width="300" height="58" rx="10" fill="#0f1419" stroke="rgba(255,255,255,.14)"/>
+    <text x="580" y="488" class="bt">Storage account (blob)</text>
+    <text x="580" y="507" class="bs">results.json lands here</text>
+    <rect x="560" y="558" width="300" height="54" rx="10" fill="#0f1419" stroke="rgba(255,255,255,.14)"/>
+    <text x="580" y="590" class="bt">Human review, then downstream</text>
+    <line x1="185" y1="126" x2="185" y2="150" stroke="#6b7686" stroke-width="2" marker-end="url(#ah)"/>
+    <line x1="330" y1="180" x2="558" y2="200" stroke="#6b7686" stroke-width="2" marker-end="url(#ah)"/>
+    <text x="352" y="172" class="step">1 request</text>
+    <polyline points="826,328 826,345 332,345" fill="none" stroke="#6b7686" stroke-width="2" marker-end="url(#ah)"/>
+    <text x="352" y="338" class="step">2 model call</text>
+    <polyline points="654,328 654,433 332,433" fill="none" stroke="#6b7686" stroke-width="2" marker-end="url(#ah)"/>
+    <text x="352" y="426" class="step">3 web fetch</text>
+    <line x1="710" y1="340" x2="710" y2="462" stroke="#6b7686" stroke-width="2" marker-end="url(#ah)"/>
+    <text x="724" y="408" class="step">4 writes JSON</text>
+    <line x1="710" y1="520" x2="710" y2="558" stroke="#6b7686" stroke-width="2" marker-end="url(#ah)"/>
+    <text x="724" y="544" class="step">5 human check</text>
+    </svg>
+    <figcaption>The sanctioned path. The firewall is the one place every hop crosses, inbound from the caller and outbound to the model and the web, which makes it your richest single vantage point.</figcaption>
+  </figure>
+
+  <p>For an attacker-run agent, a server calling a model API is rare and therefore suspicious. Here it is the normal case, so that signal inverts. You baseline this agent's legitimate behaviour, which is small and fully known, and you alert on anything outside it. Its honest footprint is four actions: take the request, call the one approved model, fetch from the approved search path, write one JSON. Everything else is a deviation worth a look.</p>
+
+  <figure>
+    <svg class="dgm" viewBox="0 0 940 540" role="img" aria-labelledby="d2t">
+    <title id="d2t">Detection and response map: what to watch at API Management, the firewall, the runtime identity and the storage gate, and what to do when a run leaves its envelope</title>
+    <rect x="1" y="1" width="938" height="538" rx="14" fill="#0b0f16" stroke="rgba(255,255,255,.08)"/>
+    <text x="34" y="34" class="mono">// detection and response map</text>
+    <g>
+    <rect x="40" y="54" width="200" height="330" rx="11" fill="#0f1419" stroke="rgba(255,255,255,.12)"/>
+    <text x="58" y="88" class="em" fill="#5eead4">INGRESS</text>
+    <text x="58" y="114" class="nm">API Management</text>
+    <line x1="58" y1="128" x2="222" y2="128" stroke="rgba(255,255,255,.1)"/>
+    <circle cx="63" cy="160" r="3" fill="#2dd4bf"/><text x="78" y="165" class="tl">Caller and task</text>
+    <circle cx="63" cy="196" r="3" fill="#2dd4bf"/><text x="78" y="201" class="tl">Rate and quota</text>
+    <circle cx="63" cy="232" r="3" fill="#2dd4bf"/><text x="78" y="237" class="tl">Streams to Sentinel</text>
+    </g>
+    <g>
+    <rect x="254" y="54" width="200" height="330" rx="11" fill="#0f1419" stroke="rgba(45,212,191,.3)"/>
+    <text x="272" y="88" class="em" fill="#5eead4">EGRESS CHOKE</text>
+    <text x="272" y="114" class="nm">Azure Firewall</text>
+    <line x1="272" y1="128" x2="436" y2="128" stroke="rgba(255,255,255,.1)"/>
+    <circle cx="277" cy="160" r="3" fill="#2dd4bf"/><text x="292" y="165" class="tl">Model + search only</text>
+    <circle cx="277" cy="196" r="3" fill="#2dd4bf"/><text x="292" y="201" class="tl">Wrong model shows</text>
+    <circle cx="277" cy="232" r="3" fill="#2dd4bf"/><text x="292" y="237" class="tl">Out-of-band lookups</text>
+    </g>
+    <g>
+    <rect x="468" y="54" width="200" height="330" rx="11" fill="#0f1419" stroke="rgba(255,255,255,.12)"/>
+    <text x="486" y="88" class="em" fill="#5eead4">RUNTIME</text>
+    <text x="486" y="114" class="nm">Functions + identity</text>
+    <line x1="486" y1="128" x2="650" y2="128" stroke="rgba(255,255,255,.1)"/>
+    <circle cx="491" cy="160" r="3" fill="#2dd4bf"/><text x="506" y="165" class="tl">Identity, two jobs</text>
+    <circle cx="491" cy="196" r="3" fill="#2dd4bf"/><text x="506" y="201" class="tl">Entra sign-in logs</text>
+    <circle cx="491" cy="232" r="3" fill="#2dd4bf"/><text x="506" y="237" class="tl">No shell, no bulk reads</text>
+    <circle cx="491" cy="268" r="3" fill="#2dd4bf"/><text x="506" y="273" class="tl">Bounded lifetime</text>
+    </g>
+    <g>
+    <rect x="682" y="54" width="218" height="330" rx="11" fill="#0f1419" stroke="rgba(245,183,60,.3)"/>
+    <text x="700" y="88" class="em" fill="#f5b73c">OUTPUT GATE</text>
+    <text x="700" y="114" class="nm">Storage (blob)</text>
+    <line x1="700" y1="128" x2="882" y2="128" stroke="rgba(255,255,255,.1)"/>
+    <circle cx="705" cy="160" r="3" fill="#f5b73c"/><text x="720" y="165" class="tl">Schema validation</text>
+    <circle cx="705" cy="196" r="3" fill="#f5b73c"/><text x="720" y="201" class="tl">Provenance per field</text>
+    <circle cx="705" cy="232" r="3" fill="#f5b73c"/><text x="720" y="237" class="tl">Human gate first</text>
+    </g>
+    <rect x="40" y="410" width="860" height="98" rx="11" fill="rgba(245,183,60,.07)" stroke="rgba(245,183,60,.45)"/>
+    <text x="60" y="440" class="em" fill="#f5b73c">RESPONSE &#183; WHEN A RUN LEAVES ITS ENVELOPE</text>
+    <text x="60" y="468" class="tlw">Kill the orchestration, block egress for that identity, revoke the managed identity,</text>
+    <text x="60" y="490" class="tlw">then quarantine the blob and anything downstream that read it.</text>
+    </svg>
+    <figcaption>Where the signals sit. Untrusted web content enters at the search step, which is the injection origin, and the storage write is the gate where the JSON is validated before anything trusts it.</figcaption>
+  </figure>
+
+  <h3>What good looks like, and what breaks it</h3>
+  <div class="behav"><div class="t">A call to any model but the approved one</div><div class="s">The function app should reach a single Azure OpenAI deployment and nothing else. A call from its identity to another gateway, or to a different deployment, stands out in the Azure Firewall egress logs and the Azure OpenAI diagnostic logs. This is the model-API signal from earlier, narrowed to one allowed destination.</div></div>
+  <div class="behav"><div class="t">The agent reaching a domain its task never needs</div><div class="s">The web search returns untrusted content, and a page can carry instructions. If a fetched page steers the agent into resolving an interactsh or <code>dnslog</code> callback, or calling back to the site that served it, the firewall and DNS logs show a lookup the task has no reason to make. In this design that is your clearest sign of a prompt injection in progress.</div></div>
+  <div class="behav"><div class="t">The runtime or its identity doing a second job</div><div class="s">The function app spawning a shell, reading files beyond its task, or the managed identity used from anywhere other than the running instance. Microsoft Defender for Cloud and the Entra sign-in logs carry it. The identity has two jobs, so a third is the tell.</div></div>
+  <div class="behav"><div class="t">An orchestration that loops or outlives its run</div><div class="s">A bounded ephemeral job that suddenly runs long, retries in a loop or re-spawns is off its own pattern. The Durable Functions status and the Application Insights traces show the shape of a normal run, so a long tail is easy to flag.</div></div>
+
+  <div class="callout teal"><span class="k">The point</span>Because the agent's legitimate behaviour is this small, the allow-list is short and the deviations are obvious. You are not hunting a tool, you are watching one known-good envelope and alerting when a run steps outside it. Every box in the diagram is somewhere you already keep the log.</div>
+
+  <h3>The risk the envelope does not catch</h3>
+  <p>There are two ways an injection plays out here. The first steers the agent off its task, and the envelope above catches it. The second changes nothing about the agent's behaviour, it only poisons the content of the JSON, so the agent performs its four actions perfectly and hands a human a file with false data in it. The envelope will not see that. The control for it lives at the storage write: validate the JSON against a strict schema, attach provenance so each value can be traced to the page it came from, and treat the human check as a gate that must pass before anything downstream reads the blob, not a courtesy after the fact. The agent is faster and more complete than the reviewer, so a poisoned file can be consumed downstream before the person opens it unless that gate is enforced.</p>
+
+  <h3>Responding in this estate</h3>
+  <ul>
+    <li><strong>Kill the orchestration and tear down the instance.</strong> It is ephemeral already, so terminating the Durable Functions run and its session is cheap and native.</li>
+    <li><strong>Block egress at the firewall for that identity,</strong> both the model endpoint and the search path. No model, no plan, and no search path to pull more poisoned content through.</li>
+    <li><strong>Revoke and rotate the managed identity,</strong> then quarantine the blob and anything downstream that read a JSON written in the suspect window. The write time on the blob gives you that window.</li>
+    <li><strong>Capture the run's own trace,</strong> the prompts, the pages it fetched and the JSON it produced, shipped by diagnostic settings to Log Analytics or Microsoft Sentinel. The agent has again written its own account of what it did.</li>
+  </ul>
+
+  <div class="rule">Prove it before you need it</div>
+  <h2>Validate with simulation</h2>
+  <p>A detection you have not fired is a hypothesis, and a runbook you have not run is a document. The way to trust either is to emulate the behaviours safely and watch what happens. Stand up a benign agent loop that calls a model API from a server, run a scripted credential check at machine speed against a test tenant, resolve an out-of-band domain from a host that should never do it. If your model-API hunt, your machine-speed-credential rule and your isolation playbook all fire and run, you have coverage. If they do not, you found the gap in a drill instead of an incident. In the Azure example above, that is a test page carrying a benign injection, then a check that the firewall alert fires, the orchestration is torn down, and a poisoned value is caught at the storage gate rather than downstream. This is the whole premise of breach and attack simulation, and it is exactly what I build toward with <a href="https://breachforge.co.uk">BreachForge</a>: validate the behaviour, not the brand of tool, because the brand will change and the behaviour will not.</p>
+
+  <div class="src">
+    <h2>Sources and credit</h2>
+    <p>The framework catalogue, the cross-framework behaviour rules and the indicator feed described here are the work of <a href="https://threatdefence.com">ThreatDefence</a>, published openly as the <a href="https://github.com/ThreatDefence/agentic-attack-detections">agentic-attack-detections</a> repository under an MIT licence, and built from each tool's source code and the public reporting the repository cites. The attributions and campaign details in that reporting post-date my own reliable knowledge, so I have kept this article on the durable detection and response concepts and credited the source for the specifics. A match is a lead, not a verdict, and absence of a match is not absence of compromise.</p>
+  </div>
+</article>
+
+<div class="syx-lb" id="syxLb" onclick="syxClose()"><img id="syxImg" src="" alt="Behaviour map, full size"></div>
+<script>
+// unique syx- prefix so this lightbox cannot collide with the site's own scripts when the article is poured into the template
+function syxOpen(src){var l=document.getElementById('syxLb');document.getElementById('syxImg').src=src;l.classList.add('on');}
+function syxClose(){document.getElementById('syxLb').classList.remove('on');}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')syxClose();});
+</script>
+</body>
+</html>
