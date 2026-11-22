@@ -6,7 +6,15 @@
     <atom:link href="https://saleemyousaf.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Cloud and cyber security architecture, threat analysis and governance by Saleem Yousaf.</description>
     <language>en-gb</language>
-    <lastBuildDate>Mon, 03 Nov 2026 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 21 Nov 2026 12:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Agentic Attacks: How to Detect and Respond to Them</title>
+      <link>https://saleemyousaf.co.uk/articles/agentic-attacks-detect-respond/</link>
+      <guid isPermaLink="true">https://saleemyousaf.co.uk/articles/agentic-attacks-detect-respond/</guid>
+      <pubDate>Sat, 21 Nov 2026 11:00:00 +0000</pubDate>
+      <category>AI</category>
+      <description>Attackers now hand whole intrusions to AI agents that plan and run real tools on their own. Why chasing each new framework fails, the behaviours they share across endpoint, network, identity and cloud, how to respond at machine speed, and a worked example in an Azure estate. Behaviour catalogue credited to ThreatDefence.</description>
+    </item>
     <item>
       <title>Microsoft Agent 365: Giving Every AI Agent an Identity, and How to Secure It</title>
       <link>https://saleemyousaf.co.uk/articles/microsoft-agent-365-security/</link>
