@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en-GB"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0e14;--panel:#0f1419;--panel2:#141c25;--border:rgba(255,255,255,.09);--text:#e6eaf0;--muted:#8a96a8;--muted2:#5a6675;--teal:#2dd4bf;--teal2:#5eead4;--blue:#4aa8ff;--amber:#f5b73c;--purple:#a78bfa;--display:'Syne','Inter',sans-serif;--body:'Inter',sans-serif;--mono:'DM Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:2400px}
+body{background:var(--bg);color:var(--text);font-family:var(--body);padding:96px 100px;position:relative;overflow:hidden}
+.bgglow{position:absolute;top:-200px;right:-200px;width:900px;height:900px;background:radial-gradient(circle,rgba(45,212,191,.10),transparent 68%);pointer-events:none}
+.eyebrow{font-family:var(--mono);font-size:26px;letter-spacing:.3em;text-transform:uppercase;color:var(--teal)}
+h1{font-family:var(--display);font-weight:800;font-size:120px;line-height:.98;letter-spacing:-.02em;color:#fff;margin:26px 0 0}
+h1 .t{color:var(--teal)}
+.sub{font-size:34px;color:var(--muted);font-weight:300;line-height:1.4;margin-top:28px;max-width:34ch}
+.srule{font-family:var(--mono);font-size:23px;letter-spacing:.22em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:22px;margin:40px 0 22px}
+.srule::after{content:"";height:2px;flex:1;background:var(--border)}
+.srule.amber{color:var(--amber)} .srule.purple{color:var(--purple)}
+.flow{display:flex;align-items:stretch;gap:0}
+.fcard{flex:1;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:30px 30px 34px}
+.farrow{display:flex;align-items:center;color:var(--muted2);font-size:46px;padding:0 20px}
+.fcard .k{font-family:var(--mono);font-size:20px;color:var(--teal);letter-spacing:.06em}
+.fcard .ti{font-family:var(--display);font-weight:700;font-size:38px;color:#fff;margin:10px 0 8px;line-height:1.05}
+.fcard .ln{font-size:25px;color:var(--muted);line-height:1.4}
+.layers{display:flex;flex-direction:column;gap:16px}
+.layer{display:flex;gap:26px;align-items:flex-start;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:26px 30px}
+.layer .tag{font-family:var(--mono);font-size:21px;color:var(--teal);min-width:230px;letter-spacing:.04em;padding-top:4px}
+.layer .body .h{font-family:var(--body);font-weight:600;font-size:31px;color:#fff;margin-bottom:5px}
+.layer .body .d{font-size:25px;color:var(--muted);line-height:1.38}
+.respond{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.rcard{background:var(--panel);border:1px solid var(--border);border-top:4px solid var(--amber);border-radius:14px;padding:26px 28px}
+.rcard .h{font-family:var(--display);font-weight:700;font-size:33px;color:#fff;margin-bottom:8px}
+.rcard .d{font-size:25px;color:var(--muted);line-height:1.38}
+.qrow{display:flex;gap:18px;margin-top:8px}
+.q{flex:1;background:var(--panel2);border:1px solid var(--border);border-radius:14px;padding:24px 26px;display:flex;gap:20px;align-items:flex-start}
+.q .n{font-family:var(--mono);font-weight:500;font-size:26px;color:#fff;background:rgba(167,139,250,.16);border:1px solid rgba(167,139,250,.4);color:var(--purple);width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 52px}
+.q .qt{font-size:26px;color:var(--text);line-height:1.34;font-weight:500}
+.foot{position:absolute;left:100px;right:100px;bottom:70px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:28px}
+.foot .brand{font-family:var(--mono);font-size:24px;color:var(--muted)}
+.foot .brand b{color:var(--teal);font-weight:400}
+.foot .mono{font-family:var(--mono);font-size:21px;color:var(--muted2)}
+</style></head>
+<body>
+<div class="bgglow"></div>
+<div class="eyebrow">// AGENTIC ATTACKS</div>
+<h1>Catch the behaviour,<br><span class="t">not the tool.</span></h1>
+<div class="sub">AI agents now run whole intrusions on their own. These are the behaviours they share, and what to do when you find one.</div>
+
+<div class="srule">Why signatures lose</div>
+<div class="flow">
+  <div class="fcard"><div class="k">many</div><div class="ti">Eight frameworks, more each quarter</div><div class="ln">A weekend fork apart from the last one.</div></div>
+  <div class="farrow">&rarr;</div>
+  <div class="fcard"><div class="k">renamed</div><div class="ti">ARTEX became AntiFox</div><div class="ln">Same code, new label, old indicators dead.</div></div>
+  <div class="farrow">&rarr;</div>
+  <div class="fcard"><div class="k">swappable</div><div class="ti">Any model behind it</div><div class="ln">Fingerprint the brain and you catch nothing when it changes.</div></div>
+</div>
+
+<div class="srule">Detect the behaviour</div>
+<div class="layers">
+  <div class="layer"><div class="tag">// ENDPOINT</div><div class="body"><div class="h">Agent CLI in auto-approve mode spawning attack tools</div><div class="d">A coding assistant with its prompts off, launching scanners and credential utilities, is not a developer.</div></div></div>
+  <div class="layer"><div class="tag">// NETWORK &amp; DNS</div><div class="body"><div class="h">A server calling a model API, or an out-of-band domain</div><div class="d">The agent has to reach its brain. Calls to model APIs, and lookups of interactsh or dnslog callbacks, survive a change of tool.</div></div></div>
+  <div class="layer"><div class="tag">// IDENTITY / AD</div><div class="body"><div class="h">Kerberos enumeration to Kerberoast, DCSync and WinRM fan-out</div><div class="d">The classic sequence, run end to end at machine speed from one source.</div></div></div>
+  <div class="layer" style="border-color:rgba(45,212,191,.45);background:linear-gradient(90deg,rgba(45,212,191,.08),var(--panel))"><div class="tag" style="color:var(--teal2)">// CLOUD</div><div class="body"><div class="h">Credentials used at machine speed</div><div class="d">Many identities checked from one address, bulk data reads, instance role keys used from outside. Same pattern in AWS, Azure, M365 and Okta.</div></div></div>
+</div>
+
+<div class="srule amber">Respond before it moves wide</div>
+<div class="respond">
+  <div class="rcard"><div class="h">Isolate and kill the runtime</div><div class="d">Remove the container, not just the process, and cut the host's egress.</div></div>
+  <div class="rcard"><div class="h">Cut the two lifelines</div><div class="d">Block the model API and the proxy pool. No brain, no plan. No proxies, no cover.</div></div>
+  <div class="rcard"><div class="h">Revoke the whole blast radius</div><div class="d">It tested credentials at machine speed. Rotate every key and session it could reach.</div></div>
+  <div class="rcard"><div class="h">Capture the agent's own logs</div><div class="d">Its prompts, config and output are a written account of intent and scope. Preserve before you wipe.</div></div>
+</div>
+
+<div class="srule purple">Three questions for your logs tonight</div>
+<div class="qrow">
+  <div class="q"><div class="n">1</div><div class="qt">Is any server calling a model API?</div></div>
+  <div class="q"><div class="n">2</div><div class="qt">Any agent CLI running with approvals off?</div></div>
+  <div class="q"><div class="n">3</div><div class="qt">Credentials used at machine speed from one source?</div></div>
+</div>
+
+<div class="foot">
+  <div class="brand"><b>saleemyousaf.co.uk</b> &nbsp;&middot;&nbsp; cyberspartans.co.uk</div>
+  <div class="mono">Behaviour catalogue: ThreatDefence</div>
+</div>
+</body></html>

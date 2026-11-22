@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en-GB"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0e14;--panel:#0f1419;--text:#e6eaf0;--muted:#8a96a8;--muted2:#5a6675;--teal:#2dd4bf;--teal2:#5eead4;--amber:#f5b73c;--body:'Inter',system-ui,sans-serif;--mono:'DM Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--body);padding:40px 22px;max-width:820px;margin:0 auto}
+.dgm{display:block;width:100%;height:auto;margin:14px 0 6px;border-radius:12px}
+.dgm .mono{font-family:var(--mono);font-size:13px;fill:var(--muted2);letter-spacing:.04em}
+.dgm .em{font-family:var(--mono);font-size:12.5px;letter-spacing:.1em}
+.dgm .bt{font-family:var(--body);font-weight:600;font-size:18px;fill:#fff}
+.dgm .nm{font-family:var(--body);font-weight:600;font-size:16px;fill:#fff}
+.dgm .bs{font-family:var(--body);font-size:13px;fill:var(--muted)}
+.dgm .tl{font-family:var(--body);font-size:13.5px;fill:var(--text)}
+.dgm .tlw{font-family:var(--body);font-size:13.5px;fill:#fff}
+.dgm .step{font-family:var(--mono);font-size:13.5px;fill:var(--teal2)}
+h3{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin:40px 0 0}
+</style></head>
+<body>
+
+<h3>Diagram 1</h3>
+<svg class="dgm" viewBox="0 0 940 620" role="img" aria-labelledby="d1t">
+<title id="d1t">Sanctioned agent architecture in Azure: a human request crosses API Management and Azure Firewall into a Durable Functions app that calls the approved model and a web search, then writes JSON to a storage account for human review</title>
+<defs>
+<marker id="ah" markerWidth="10" markerHeight="10" refX="7.5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7.5,3 L0,6 Z" fill="#6b7686"/></marker>
+</defs>
+<rect x="1" y="1" width="938" height="618" rx="14" fill="#0b0f16" stroke="rgba(255,255,255,.08)"/>
+<text x="34" y="34" class="mono">// external and internet side</text>
+<text x="566" y="34" class="mono">// app subnet</text>
+
+<rect x="442" y="64" width="56" height="500" rx="10" fill="rgba(45,212,191,.07)" stroke="#2dd4bf"/>
+<text x="470" y="314" class="em" fill="#5eead4" text-anchor="middle" transform="rotate(-90 470 314)">AZURE FIREWALL</text>
+
+<rect x="40" y="70" width="290" height="56" rx="10" fill="#0f1419" stroke="rgba(255,255,255,.14)"/>
+<text x="60" y="97" class="bt">Human request</text>
+<text x="60" y="116" class="bs">a task to run, sent to the API</text>
+
+<rect x="40" y="150" width="290" height="60" rx="10" fill="#0f1419" stroke="rgba(255,255,255,.14)"/>
+<text x="60" y="177" class="bt">Azure API Management</text>
+<text x="60" y="196" class="bs">authenticates, throttles, logs it</text>
+
+<rect x="40" y="316" width="290" height="58" rx="10" fill="#0f1419" stroke="rgba(255,255,255,.14)"/>
+<text x="60" y="342" class="bt">Azure OpenAI</text>
+<text x="60" y="361" class="bs">the one approved deployment</text>
+
+<rect x="40" y="404" width="290" height="58" rx="10" fill="#0f1419" stroke="#f5b73c"/>
+<text x="60" y="430" class="bt">Web search</text>
+<text x="60" y="449" class="bs" fill="#f5b73c">untrusted content enters here</text>
+
+<rect x="560" y="120" width="340" height="220" rx="12" fill="#0d141b" stroke="rgba(255,255,255,.16)"/>
+<text x="580" y="150" class="bt">Durable Functions app</text>
+<text x="580" y="169" class="bs">the agent runtime, ephemeral per run</text>
+<rect x="580" y="182" width="300" height="40" rx="8" fill="#0f1722" stroke="rgba(45,212,191,.35)"/>
+<text x="596" y="207" class="tlw">Orchestrator, plans and runs the steps</text>
+<rect x="580" y="236" width="148" height="92" rx="8" fill="#0f1419" stroke="rgba(255,255,255,.14)"/>
+<text x="654" y="278" class="tl" text-anchor="middle">Web search</text>
+<text x="654" y="298" class="tl" text-anchor="middle">activity</text>
+<rect x="752" y="236" width="148" height="92" rx="8" fill="#0f1419" stroke="rgba(255,255,255,.14)"/>
+<text x="826" y="278" class="tl" text-anchor="middle">Call model</text>
+<text x="826" y="298" class="tl" text-anchor="middle">activity</text>
+
+<rect x="560" y="462" width="300" height="58" rx="10" fill="#0f1419" stroke="rgba(255,255,255,.14)"/>
+<text x="580" y="488" class="bt">Storage account (blob)</text>
+<text x="580" y="507" class="bs">results.json lands here</text>
+
+<rect x="560" y="558" width="300" height="54" rx="10" fill="#0f1419" stroke="rgba(255,255,255,.14)"/>
+<text x="580" y="590" class="bt">Human review, then downstream</text>
+
+<line x1="185" y1="126" x2="185" y2="150" stroke="#6b7686" stroke-width="2" marker-end="url(#ah)"/>
+<line x1="330" y1="180" x2="558" y2="200" stroke="#6b7686" stroke-width="2" marker-end="url(#ah)"/>
+<text x="352" y="172" class="step">1 request</text>
+
+<polyline points="826,328 826,345 332,345" fill="none" stroke="#6b7686" stroke-width="2" marker-end="url(#ah)"/>
+<text x="352" y="338" class="step">2 model call</text>
+<polyline points="654,328 654,433 332,433" fill="none" stroke="#6b7686" stroke-width="2" marker-end="url(#ah)"/>
+<text x="352" y="426" class="step">3 web fetch</text>
+
+<line x1="710" y1="340" x2="710" y2="462" stroke="#6b7686" stroke-width="2" marker-end="url(#ah)"/>
+<text x="724" y="408" class="step">4 writes JSON</text>
+<line x1="710" y1="520" x2="710" y2="558" stroke="#6b7686" stroke-width="2" marker-end="url(#ah)"/>
+<text x="724" y="544" class="step">5 human check</text>
+</svg>
+
+<h3>Diagram 2</h3>
+<svg class="dgm" viewBox="0 0 940 540" role="img" aria-labelledby="d2t">
+<title id="d2t">Detection and response map: what to watch at API Management, the firewall, the runtime identity and the storage gate, and what to do when a run leaves its envelope</title>
+<rect x="1" y="1" width="938" height="538" rx="14" fill="#0b0f16" stroke="rgba(255,255,255,.08)"/>
+<text x="34" y="34" class="mono">// detection and response map</text>
+
+<!-- columns -->
+<g>
+<rect x="40" y="54" width="200" height="330" rx="11" fill="#0f1419" stroke="rgba(255,255,255,.12)"/>
+<text x="58" y="88" class="em" fill="#5eead4">INGRESS</text>
+<text x="58" y="114" class="nm">API Management</text>
+<line x1="58" y1="128" x2="222" y2="128" stroke="rgba(255,255,255,.1)"/>
+<circle cx="63" cy="160" r="3" fill="#2dd4bf"/><text x="78" y="165" class="tl">Caller and task</text>
+<circle cx="63" cy="196" r="3" fill="#2dd4bf"/><text x="78" y="201" class="tl">Rate and quota</text>
+<circle cx="63" cy="232" r="3" fill="#2dd4bf"/><text x="78" y="237" class="tl">Streams to Sentinel</text>
+</g>
+
+<g>
+<rect x="254" y="54" width="200" height="330" rx="11" fill="#0f1419" stroke="rgba(45,212,191,.3)"/>
+<text x="272" y="88" class="em" fill="#5eead4">EGRESS CHOKE</text>
+<text x="272" y="114" class="nm">Azure Firewall</text>
+<line x1="272" y1="128" x2="436" y2="128" stroke="rgba(255,255,255,.1)"/>
+<circle cx="277" cy="160" r="3" fill="#2dd4bf"/><text x="292" y="165" class="tl">Model + search only</text>
+<circle cx="277" cy="196" r="3" fill="#2dd4bf"/><text x="292" y="201" class="tl">Wrong model shows</text>
+<circle cx="277" cy="232" r="3" fill="#2dd4bf"/><text x="292" y="237" class="tl">Out-of-band lookups</text>
+</g>
+
+<g>
+<rect x="468" y="54" width="200" height="330" rx="11" fill="#0f1419" stroke="rgba(255,255,255,.12)"/>
+<text x="486" y="88" class="em" fill="#5eead4">RUNTIME</text>
+<text x="486" y="114" class="nm">Functions + identity</text>
+<line x1="486" y1="128" x2="650" y2="128" stroke="rgba(255,255,255,.1)"/>
+<circle cx="491" cy="160" r="3" fill="#2dd4bf"/><text x="506" y="165" class="tl">Identity, two jobs</text>
+<circle cx="491" cy="196" r="3" fill="#2dd4bf"/><text x="506" y="201" class="tl">Entra sign-in logs</text>
+<circle cx="491" cy="232" r="3" fill="#2dd4bf"/><text x="506" y="237" class="tl">No shell, no bulk reads</text>
+<circle cx="491" cy="268" r="3" fill="#2dd4bf"/><text x="506" y="273" class="tl">Bounded lifetime</text>
+</g>
+
+<g>
+<rect x="682" y="54" width="218" height="330" rx="11" fill="#0f1419" stroke="rgba(245,183,60,.3)"/>
+<text x="700" y="88" class="em" fill="#f5b73c">OUTPUT GATE</text>
+<text x="700" y="114" class="nm">Storage (blob)</text>
+<line x1="700" y1="128" x2="882" y2="128" stroke="rgba(255,255,255,.1)"/>
+<circle cx="705" cy="160" r="3" fill="#f5b73c"/><text x="720" y="165" class="tl">Schema validation</text>
+<circle cx="705" cy="196" r="3" fill="#f5b73c"/><text x="720" y="201" class="tl">Provenance per field</text>
+<circle cx="705" cy="232" r="3" fill="#f5b73c"/><text x="720" y="237" class="tl">Human gate first</text>
+</g>
+
+<rect x="40" y="410" width="860" height="98" rx="11" fill="rgba(245,183,60,.07)" stroke="rgba(245,183,60,.45)"/>
+<text x="60" y="440" class="em" fill="#f5b73c">RESPONSE · WHEN A RUN LEAVES ITS ENVELOPE</text>
+<text x="60" y="468" class="tlw">Kill the orchestration, block egress for that identity, revoke the managed identity,</text>
+<text x="60" y="490" class="tlw">then quarantine the blob and anything downstream that read it.</text>
+</svg>
+
+</body></html>
